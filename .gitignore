@@ -1,1 +1,11 @@
 /bin/
+.project
+.classpath
+.metadata
+.settings/
+*.iml
+.idea/
+*.ipr
+*.iws
+/out/
+.idea_modules/
