@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class GameGUI extends Application {
+public class MenuGUI extends Application {
 
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
