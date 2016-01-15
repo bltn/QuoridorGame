@@ -1,84 +1,79 @@
-import java.util.Arrays;
+
 
 public class Board {
 
-	private HumanPawn player1;
-	private HumanPawn player2;
-	private HumanPawn player3;
-	private HumanPawn player4;
+	private Player player1;
+	private Player player2;
 
-	// 2D array to keep tracks where the walls are
-	private boolean walls[][];
+	private Player play[];
+
+	// 2D array for Position
+	private Position poss[][];
+
+	private int turn = 0;
 
 	/*
 	 * Constructor for a 2 players board
 	 * 
 	 */
-	public Board(String name1, String name2) {
+	public Board() {
 
-		player1 = new HumanPawn(5, 1, 10, name1);
-		player2 = new HumanPawn(5, 9, 10, name2);
+		play = new Player[2];
 
-		walls = new boolean[9][9];
-		Arrays.fill(walls, Boolean.FALSE);
-	}
+		player1 = new Player(4, 0, 10);
+		play[0] = player1;
+		player2 = new Player(4, 8, 10);
+		play[1] = player2;
 
-	/*
-	 * Constructor for a 4 players board
-	 * 
-	 */
-	public Board(String name1, String name2, String name3, String name4) {
-
-		player1 = new HumanPawn(5, 1, 5, name1);
-		player2 = new HumanPawn(5, 9, 5, name2);
-		player3 = new HumanPawn(1, 5, 5, name3);
-		player4 = new HumanPawn(9, 5, 5, name4);
-
-		walls = new boolean[9][9];
-		Arrays.fill(walls, Boolean.FALSE);
-	}
-
-	public void moveRight(HumanPawn player) {
-		if (walls[player.getX()][player.getY()] = false) {
-			player.moveX(player.getX() + 1);
-		} else {
-			System.out.println("Cant move right. Theres a wall");
+		poss = new Position[9][9];
+		for (int x = 0; x < 10; x++) {
+			for (int y = 0; y < 10; y++) {
+				poss[x][y] = new Position(x, y);
+			}
 		}
 	}
 
-	public void moveLeft(HumanPawn player) {
-		if (walls[player.getX() - 1][player.getY()] = false) {
-			player.moveX(player.getX() - 1);
-		} else {
-			System.out.println("Cant move left. Theres a wall");
-		}
+	public void moveRight() {
+		play[turn].setX(play[turn].getX() + 1);
+		turn = (turn + 1) % 2;
 	}
 
-	public void moveUp(HumanPawn player) {
-		if (walls[player.getX()][player.getY()] = false) {
-			player.moveX(player.getY() + 1);
-		} else {
-			System.out.println("Cant move up. Theres a wall");
-		}
+	public void moveLeft() {
+		play[turn].setX(play[turn].getX() - 1);
+		turn = (turn + 1) % 2;
 	}
 
-	public void moveDown(HumanPawn player) {
-		if (walls[player.getX()][player.getY() - 1] = false) {
-			player.moveX(player.getY() + 1);
-		} else {
-			System.out.println("Cant move down. Theres a wall");
-		}
+	public void moveUp() {
+		play[turn].setY(play[turn].getY() - 1);
+		turn = (turn + 1) % 2;
 	}
 
-	public void placeWall(HumanPawn player, int x1, int y1, int x2, int y2) {
-
-		if (walls[x2][y2] == false || walls[x1][y1] == false) {
-			walls[x2][y2] = true;
-			walls[x1][y1] = true;
-			player.setWalls(player.getWalls() - 1);
-		} else {
-			System.out.println("Cant place wall there. Theres already one");
-		}
+	public void moveDown() {
+		play[turn].setY(play[turn].getY() - 1);
+		turn = (turn + 1) % 2;
 	}
 
+	public void placeTopWall(int x, int y) {
+		poss[x][y].placeTopWall();
+		if(y != 9){poss[x][y+1].placeBotWall();}
+		turn = (turn + 1) % 2;
+	}
+
+	public void placeBotWall(int x, int y) {
+		poss[x][y].placeBotWall();		
+		if(y != 0){poss[x][y-1].placeTopWall();}		
+		turn = (turn + 1) % 2;
+	}
+
+	public void placeRightWall(int x, int y) {
+		poss[x][y].placeRightWall();		
+		if(x != 9){poss[x+1][y].placeLeftWall();}		
+		turn = (turn + 1) % 2;
+	}
+
+	public void placeLefttWall(int x, int y) {
+		poss[x-1][y-1].placeLeftWall();		
+		if(x != 0){poss[x-1][y].placeRightWall();}		
+		turn = (turn + 1) % 2;
+	}
 }
