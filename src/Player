@@ -1,3 +1,10 @@
+/**
+ * Models a player.
+ * 
+ * @author Jordan Bird,Hoang Thai Khanh Con
+ * @version 2/15/2015
+ */
+
 
 public class Player extends Pawn {
 
