@@ -125,6 +125,9 @@ public abstract class Pawn
         position.setY(position.getY() + move);
     }
     
-    
+    public Position getPos(){
+    	
+    	return position;
+    }
     
 }
