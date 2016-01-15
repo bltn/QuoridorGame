@@ -6,8 +6,6 @@
  */
 public abstract class Pawn
 {
-    public int walls;
-    public String name; 
     public Position position;
     
     /**
@@ -18,10 +16,9 @@ public abstract class Pawn
      * @Param walls     the amount of walls the pawn has
      * 
      */
-    public Pawn(int posX, int posY, int walls, String name)
+    public Pawn(int posX, int posY)
     {
-        this.walls = walls;
-        this.name = name;
+
         position = new Position(posX, posY);
     }
     
@@ -35,26 +32,7 @@ public abstract class Pawn
         return name;
     }
     
-     /**
-     * Sets the amount of walls that the pawn has
-     * 
-     * @param  set   the change to be made to the X co-ordinate
-     */
-    public void setWalls(int set)
-    {
-        walls = set;
-    }
-    
-    /**
-     * Gets the amount of walls the pawn has
-     * 
-     * @return walls the int representing wall count
-     */
-    public int getWalls()
-    {
-        return walls;
-    }
-    
+     
     /**
      * Sets the X position of the Pawn
      * 
@@ -125,9 +103,5 @@ public abstract class Pawn
         position.setY(position.getY() + move);
     }
     
-    public Position getPos(){
-    	
-    	return position;
-    }
-    
+   
 }
