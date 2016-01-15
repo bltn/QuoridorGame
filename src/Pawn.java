@@ -83,25 +83,7 @@ public abstract class Pawn
         return position.getY();
     }
     
-     /**
-     * Moves the Pawn in direction X a value of move spaces
-     * 
-     * @param  move   the change to be made to the X co-ordinate
-     */
-    public void moveX(int move)
-    {
-        position.setX(position.getX() + move);
-    }
-    
-     /**
-     * Moves the Pawn in direction Y a value of move spaces
-     * 
-     * @param  move   the change to be made to the Y co-ordinate
-     */
-    public void moveY(int move)
-    {
-        position.setY(position.getY() + move);
-    }
+     
     
    
 }
