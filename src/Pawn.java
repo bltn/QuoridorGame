@@ -22,17 +22,7 @@ public abstract class Pawn
         position = new Position(posX, posY);
     }
     
-     /**
-     * Gets the name of the player
-     * 
-     * @return name the String representing pawn name
-     */
-    public String getName()
-    {
-        return name;
-    }
-    
-     
+ 
     /**
      * Sets the X position of the Pawn
      * 
@@ -53,15 +43,7 @@ public abstract class Pawn
         position.setY(set);
     }
     
-         /**
-     * Gets the position of the Pawn
-     * 
-     * @return  position   an Array containing the position
-     */
-    public int[] getPosition()
-    {
-        return position.getCoords();
-    }
+     
     
      /**
      * Gets the X position of the Pawn
@@ -83,25 +65,7 @@ public abstract class Pawn
         return position.getY();
     }
     
-     /**
-     * Moves the Pawn in direction X a value of move spaces
-     * 
-     * @param  move   the change to be made to the X co-ordinate
-     */
-    public void moveX(int move)
-    {
-        position.setX(position.getX() + move);
-    }
-    
-     /**
-     * Moves the Pawn in direction Y a value of move spaces
-     * 
-     * @param  move   the change to be made to the Y co-ordinate
-     */
-    public void moveY(int move)
-    {
-        position.setY(position.getY() + move);
-    }
+     
     
    
 }
