@@ -11,9 +11,9 @@ public class AIPawn extends Pawn
     /**
      * Constructor for objects of class AIPawn
      */
-    public AIPawn(int posX, int posY, int walls, String name)
+    public AIPawn(int posX, int posY)
     {
-        super(posX, posY, walls, name);
+        super(posX, posY);
     }
 
     /**

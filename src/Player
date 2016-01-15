@@ -8,28 +8,14 @@
 
 public class Player extends Pawn {
 
-	public Player(int posX, int posY, int walls) {
-		super(posX, posY, walls);
+	public Player(int posX, int posY) {
+		super(posX, posY);
 
 	}
 
-	@Override
-	public void setWalls(int set) {
+	
 
-		super.setWalls(set);
-	}
 
-	@Override
-	public int getWalls() {
-
-		return super.getWalls();
-	}
-
-	@Override
-	public Position getPos() {
-
-		return super.getPos();
-	}
 
 	@Override
 	public void setX(int set) {
