@@ -34,16 +34,5 @@ public class Player extends Pawn {
 		return super.getY();
 	}
 
-	@Override
-	public void moveX(int move) {
-
-		super.moveX(move);
-	}
-
-	@Override
-	public void moveY(int move) {
-
-		super.moveY(move);
-	}
-
+	
 }
