@@ -20,9 +20,9 @@ public class Board {
 
 		play = new Player[2];
 
-		player1 = new Player(4, 0, 10);
+		player1 = new Player(4, 0);
 		play[0] = player1;
-		player2 = new Player(4, 8, 10);
+		player2 = new Player(4, 8);
 		play[1] = player2;
 
 		poss = new Position[9][9];
