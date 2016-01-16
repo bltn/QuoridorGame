@@ -23,8 +23,8 @@ public class GameController<T> {
         this.board = board;
         this.gui = gui;
         
-        player1 = new Player(5, 0);
-        player2 = new Player(5, 9); 
+        player1 = new Player(4, 0);
+        player2 = new Player(4, 8); 
         currentPlayer = player1;
         
         player1WallCount = 10;
@@ -68,6 +68,9 @@ public class GameController<T> {
     		player1MoveCount++;
     		//updatePlayer1MoveCount(player1MoveCount);
     		//updatePlayer1PawnPosition(player1.getX(), player1.getY());
+    		if (currentPlayer.getPosition().isBottom()) {
+    			gameOver(currentPlayer);
+    		}
     		changePlayer();
     	}
     	else {
@@ -76,16 +79,30 @@ public class GameController<T> {
     		player2MoveCount++;
     		//updatePlayer2MoveCount(player2MoveCount);
     		//updatePlayer2PawnPosition(player2.getX(), player2.getY()); 
+    		if (currentPlayer.getPosition().isTop()) {
+    			gameOver(currentPlayer);
+    		}
     		changePlayer();
     	}
     }
-
-    public void gameOver(Player player) {
-    }
-
-    public void endGame() {
+    
+    public void resetGame() {
+    	currentPlayer = player1;
+    	player1WallCount = 10;
+    	player2WallCount = 10;
+    	player1MoveCount = 0;
+    	player2MoveCount = 0;
+    	player1.setX(4);
+    	player1.setY(0);
+    	player2.setX(4);
+    	player2.setY(8);
     }
     
+    private void gameOver(Player player) {
+    	resetGame();
+    	//gui.winner(player);
+    }
+
     private void assignWall(Position position, int borderValue) {
     	if (borderValue == -1) {
     		position.setLeftWall();
