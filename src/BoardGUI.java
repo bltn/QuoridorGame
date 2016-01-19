@@ -25,6 +25,7 @@ public class BoardGUI extends Application {
     private Circle secondPawn;
     private int width;
     private int height;
+    private boolean drawing;
 
     public BoardGUI() {
         height = 9;
@@ -34,6 +35,7 @@ public class BoardGUI extends Application {
         scene = new Scene(boardPane, 600, 400);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
+        drawing = true;
     }
 
     @Override
@@ -78,13 +80,13 @@ public class BoardGUI extends Application {
 
     //}
 
-    //public boolean isDrawing() {
-    //    return drawing;
-    //}
+    public boolean isDrawing() {
+        return drawing;
+    }
 
-    //public void setDrawing() {
-    //    drawing = true;
-    //}
+    public void setDrawing(boolean b) {
+        drawing = b;
+    }
 
     //public void highlightPositionAvailability(Position x, Position y) {
 
