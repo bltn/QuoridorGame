@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -32,57 +33,77 @@ public class GameController<T> {
         player1MoveCount = 0;
         player2MoveCount = 0;
     }
-
-    public static void main(String[] args) {}
+    
+    public static void main(String args[]) {
+    	Board board = new Board();
+    	BoardGUI gui = new BoardGUI();
+    	GameController controller = new GameController(gui, board);
+    }
 
     public void showCurrentPlayerMoves() {
-    	Position position = currentPlayer.getPosition(); 
-    	Position[] availablePositions = board.getOccupiablePositions(position);
-    	if (availablePositions.length > 0) {
+    	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY()); 
+    	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
+    	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
     			//highlightPositionAvailability(pos.getX(), pos.getY()); 
     		}
     	}
     	changePlayer(); 
     }
-
-    public void placeWall(int pos1X, int pos1Y, int pos1Border, int pos2X, int pos2Y, int pos2Border) {
-    	Position position1 = board.getPosition(pos1X, pos1Y);
-    	Position position2 = board.getPosition(pos2X, pos2Y);
+    
+    /**
+     * @param pos1X
+     * @param pos1Y
+     * @param pos1BorderSetting
+     * @param pos2X
+     * @param pos2Y
+     * @param pos2BorderSetting
+     */
+    public void placeWall(int pos1X, int pos1Y, int pos1BorderSetting, int pos2X, int pos2Y, int pos2BorderSetting) {
+    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
+    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
     	
-    	assignWall(position1, pos1Border);
-    	assignWall(position2, pos2Border); 
+    	assignWall(coveredPosition1, pos1BorderSetting);
+    	assignWall(coveredPosition2, pos2BorderSetting); 
     	
     	decrementPlayerWallCount();
     	changePlayer();
     }
-    
-    public Player getCurrentPlayer() {
-    	return currentPlayer; 
-    }
 
     public void movePawn(int posX, int posY) {
     	if (currentPlayer == player1) {
-    		player1.setX(posX);
-    		player1.setY(posY);
-    		player1MoveCount++;
-    		//updatePlayer1MoveCount(player1MoveCount);
-    		//updatePlayer1PawnPosition(player1.getX(), player1.getY());
-    		if (currentPlayer.getPosition().isBottom()) {
-    			gameOver(currentPlayer);
+    		if (posX != player2.getX() && posY != player2.getY()) {
+	    		player1.setX(posX);
+	    		player1.setY(posY);
+	    		player1MoveCount++;
+	    		//updatePlayer1MoveCount(player1MoveCount);
+	    		//updatePlayer1PawnPosition(player1.getX(), player1.getY());
+	    		if (currentPlayer.getPosition().isBottom()) {
+	    			gameOver(currentPlayer);
+	    			return;
+	    		}
+	    		changePlayer();
     		}
-    		changePlayer();
+    		else {
+    			//errorMessage("that position is occupied");
+    		}
     	}
     	else {
-    		player2.setX(posX);
-    		player2.setY(posY); 
-    		player2MoveCount++;
-    		//updatePlayer2MoveCount(player2MoveCount);
-    		//updatePlayer2PawnPosition(player2.getX(), player2.getY()); 
-    		if (currentPlayer.getPosition().isTop()) {
-    			gameOver(currentPlayer);
+    		if (posX == player1.getX() && posY == player1.getY()) {
+	    		//errorMessage("that position is occupied");
     		}
-    		changePlayer();
+    		else {
+    			player2.setX(posX);
+	    		player2.setY(posY); 
+	    		player2MoveCount++;
+	    		//updatePlayer2MoveCount(player2MoveCount);
+	    		//updatePlayer2PawnPosition(player2.getX(), player2.getY()); 
+	    		if (currentPlayer.getPosition().isTop()) {
+	    			gameOver(currentPlayer);
+	    			return;
+	    		}
+	    		changePlayer();
+    		}
     	}
     }
     
@@ -105,16 +126,16 @@ public class GameController<T> {
 
     private void assignWall(Position position, int borderValue) {
     	if (borderValue == -1) {
-    		position.setLeftWall();
+    		position.placeLeftWall();
     	}
     	else if (borderValue == 0) {
-    		position.setTopWall();
+    		position.placeTopWall();
     	}
     	else if (borderValue == 1) {
-    		position.setRightWall();
+    		position.placeRightWall();
     	}
     	else if (borderValue == 2) {
-    		position.setBottomWall();
+    		position.placeLeftWall();
     	}
     }
     
