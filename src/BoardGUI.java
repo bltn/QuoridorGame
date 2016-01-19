@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -19,6 +21,8 @@ public class BoardGUI extends Application {
     private Scene scene;
     private GridPane boardPane;
     private Button[][] button;
+    private Circle firstPawn;
+    private Circle secondPawn;
     private int width;
     private int height;
 
@@ -28,6 +32,8 @@ public class BoardGUI extends Application {
         boardPane = new GridPane();
         button = new Button[width][height];
         scene = new Scene(boardPane, 600, 400);
+        firstPawn = new Circle(15);
+        secondPawn = new Circle(15);
     }
 
     @Override
@@ -35,6 +41,8 @@ public class BoardGUI extends Application {
         primaryStage.setTitle("Quoridor");
         setBoardPane();
         setButtons();
+        setPawn(firstPawn, Color.BLUE, 4, 0);
+        setPawn(secondPawn, Color.RED, 4, 8);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -44,21 +52,27 @@ public class BoardGUI extends Application {
     }
 
     public void setButtons() {
-
         for(int x = 0; x < width; x++) {
             for (int y = 0; y < width; y++) {
                 button[x][y] = new Button();
                 button[x][y].setPrefHeight(40);
                 button[x][y].setPrefWidth(40);
-                boardPane.setConstraints(button[x][y], y, x);
+                boardPane.setConstraints(button[x][y], x, y);
                 boardPane.getChildren().add(button[x][y]);
             }
         }
     }
 
-    //public void setPawn(Position x, Position y) {
-
-    //}
+    /**
+     * draw a pawn
+     */
+    private void setPawn(Circle pawn, Color colour, int x, int y) {
+        pawn.setFill(colour);
+        pawn.setStroke(Color.BLACK);
+        pawn.setTranslateX(5);
+        boardPane.setConstraints(pawn, x, y);
+        boardPane.getChildren().add(pawn);
+    }
 
     //public void setWall(Position x, Position y) {
 
