@@ -2,25 +2,14 @@ import java.util.ArrayList;
 
 
 public class Board {
-
-	private Player player1;
-	private Player player2;
-	private Player play[];
-
+	
 	// 2D array for Positions
 	private Position positions[][];
-
-	private int turn = 0;
 
 	/**
 	 * Constructor for an object of class Board
 	 */
 	public Board() {
-		play = new Player[2];
-		player1 = new Player(4, 0);
-		play[0] = player1;
-		player2 = new Player(4, 8);
-		play[1] = player2;
 		initialiseBoard();
 	}
 
