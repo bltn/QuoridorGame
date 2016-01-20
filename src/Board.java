@@ -1,3 +1,6 @@
+/**
+ * @author Ben Lawton
+ */
 import java.util.ArrayList;
 
 
