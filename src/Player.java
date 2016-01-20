@@ -5,6 +5,8 @@ public class Player
     private int yCoord; 
     private boolean startedAtTop;
     private boolean startedAtBottom;
+    private int wallCount;
+    private int moveCount;
     
     /**
      * Constructor for objects of class Player
@@ -18,6 +20,28 @@ public class Player
     	xCoord = posX;
     	yCoord = posY;
         position = new Position(posX, posY);
+        wallCount = 10;
+        moveCount = 0;
+    }
+    
+    public int getWallCount() {
+    	return wallCount;
+    }
+    
+    public void decrementWallCount() {
+    	wallCount--;
+    }
+    
+    public int getMoveCount() {
+    	return moveCount;
+    }
+    
+    public void incrementMoveCount() {
+    	moveCount++;
+    }
+    
+    public boolean hasWalls() {
+    	return wallCount > 0;
     }
  
     /**

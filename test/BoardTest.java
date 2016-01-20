@@ -1,14 +1,15 @@
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class BoardTest {
 	
-	private Board board;
+	private static Board board;
 	
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		board = new Board();
 	}
 	
