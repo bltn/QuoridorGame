@@ -10,16 +10,16 @@ import java.util.Iterator;
  */
 public class GameController<T> {
 
-    private Board board;
-    private BoardGUI gui; 
+    private static Board board;
+    private static BoardGUI gui;
     
-    private Player player1;
-    private Player player2;
+    private static Player player1;
+    private static Player player2;
     //The player whose turn it is 
-    private Player currentPlayer;
+    private static Player currentPlayer;
 
-    private int player1MoveCount;
-    private int player2MoveCount;
+    private static int player1MoveCount;
+    private static int player2MoveCount;
 
     public GameController(BoardGUI gui, Board board) {
         this.board = board;
@@ -33,19 +33,19 @@ public class GameController<T> {
         player1MoveCount = 0;
         player2MoveCount = 0;
     }
-    
+
     public static void main(String args[]) {
     	Board board = new Board();
     	BoardGUI gui = new BoardGUI();
     	GameController controller = new GameController(gui, board);
     }
 
-    public void showCurrentPlayerMoves() {
+    public static void showCurrentPlayerMoves() {
     	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY()); 
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
-    			//highlightPositionAvailability(pos.getX(), pos.getY()); 
+    			gui.highlightPositionAvailability(pos.getX(), pos.getY());
     		}
     	}
     }
@@ -58,7 +58,7 @@ public class GameController<T> {
      * @param pos2Y
      * @param pos2BorderSetting
      */
-    public void placeWall(int pos1X, int pos1Y, int pos1BorderSetting, int pos2X, int pos2Y, int pos2BorderSetting) {
+    public static void placeWall(int pos1X, int pos1Y, int pos1BorderSetting, int pos2X, int pos2Y, int pos2BorderSetting) {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
@@ -83,7 +83,7 @@ public class GameController<T> {
     	}
     }
 
-    public void movePawn(int posX, int posY) {
+    public static void movePawn(int posX, int posY) {
     	if (currentPlayer == player1) {
     		if (posX == player2.getX() && posY == player2.getY()) {
     			//errorMessage("that position is occupied");
@@ -92,8 +92,8 @@ public class GameController<T> {
 	    		player1.setX(posX);
 	    		player1.setY(posY);
 	    		currentPlayer.incrementMoveCount();
-	    		//updatePlayer1MoveCount(currentPlayer.getMoveCount());
-	    		//updatePlayer1PawnPosition(currentPlayer.getX(), currentPlayer.getY());
+	    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
+	    		gui.updatePlayer1PawnPosition(currentPlayer.getX(), currentPlayer.getY());
 	    		if (currentPlayer.getPosition().isBottom()) {
 	    			gameOver(currentPlayer);
 	    			return;
@@ -107,10 +107,10 @@ public class GameController<T> {
     		}
     		else {
     			player2.setX(posX);
-	    		player2.setY(posY); 
+	    		player2.setY(posY);
 	    		currentPlayer.incrementMoveCount();
-	    		//updatePlayer2MoveCount(player2MoveCount);
-	    		//updatePlayer2PawnPosition(player2.getX(), player2.getY()); 
+	    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
+	    		gui.updatePlayer2PawnPosition(currentPlayer.getX(), currentPlayer.getY());
 	    		if (currentPlayer.getPosition().isTop()) {
 	    			gameOver(currentPlayer);
 	    			return;
@@ -120,16 +120,16 @@ public class GameController<T> {
     	}
     }
     
-    public void gameOver() {
+    public static void gameOver() {
     	System.exit(0);
     }
     
-    private void gameOver(Player player) {
+    private static void gameOver(Player player) {
     	//gui.winner(player);
     	System.exit(0);
     }
 
-    private void assignWall(Position position, int borderValue) {
+    private static void assignWall(Position position, int borderValue) {
     	if (borderValue == -1) {
     		position.placeLeftWall();
     	}
@@ -144,14 +144,13 @@ public class GameController<T> {
     	}
     }
     
-    private void changePlayer() {
-    	if (this.currentPlayer == player1) {
+    private static void changePlayer() {
+    	if (currentPlayer == player1) {
     		currentPlayer = player2;
     	}
     	else {
     		currentPlayer = player1;
     	}
-    	//updateCurrentPlayer(currentPlayer); 
     }
 
 }

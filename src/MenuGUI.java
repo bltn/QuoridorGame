@@ -19,7 +19,9 @@ import javafx.stage.Stage;
 
 import javax.sound.midi.SysexMessage;
 
-
+/**
+ * @author Junaid Rasheed
+ */
 public class MenuGUI extends Application {
 
     private Scene scene;

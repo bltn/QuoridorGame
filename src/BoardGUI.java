@@ -16,48 +16,47 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+/**
+ * @author Junaid Rasheed
+ */
 public class BoardGUI extends Application {
 
     private Scene scene;
     private VBox rootPane;
     private HBox player1StatsPane;
     private HBox player2StatsPane;
+    private HBox buttonPane;
     private GridPane boardPane;
     private Text player1Moves;
     private Text player1Walls;
     private Text player2Moves;
     private Text player2Walls;
     private Button[][] button;
+    private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
     private int width;
     private int height;
-    private int player1MoveCount;
-    private int player1WallCount;
-    private int player2MoveCount;
-    private int player2WallCount;
     private boolean drawing;
 
     public BoardGUI() {
         height = 9;
         width = 9;
         rootPane = new VBox();
-        player1StatsPane = new HBox(265);
-        player2StatsPane = new HBox(265);
+        player1StatsPane = new HBox(260);
+        player2StatsPane = new HBox(260);
+        buttonPane = new HBox(10);
         boardPane = new GridPane();
         button = new Button[width][height];
+        highlightPositionsButton = new Button("Hint");
         scene = new Scene(rootPane, 600, 600);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         drawing = true;
-        player1MoveCount = 0;
-        player1WallCount = 10;
-        player1Moves = new Text("Moves: " + player1MoveCount);
-        player1Walls = new Text("Walls: " + player1WallCount);
-        player2MoveCount = 0;
-        player2WallCount = 10;
-        player2Moves = new Text("Moves: " + player2MoveCount);
-        player2Walls = new Text("Walls: " + player2WallCount);
+        player1Moves = new Text("Moves: " + 0);
+        player1Walls = new Text("Walls: " + 10);
+        player2Moves = new Text("Moves: " + 0);
+        player2Walls = new Text("Walls: " + 10);
     }
 
     @Override
@@ -76,10 +75,11 @@ public class BoardGUI extends Application {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
+        buttonPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         boardPane.setHgap(5);
         boardPane.setVgap(5);
-        rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane);
+        rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane, buttonPane);
     }
 
     public void setButtons() {
@@ -88,10 +88,28 @@ public class BoardGUI extends Application {
                 button[x][y] = new Button();
                 button[x][y].setPrefHeight(40);
                 button[x][y].setPrefWidth(40);
+                button[x][y].setStyle("-fx-base: #FFFFFF");
                 boardPane.setConstraints(button[x][y], x, y);
                 boardPane.getChildren().add(button[x][y]);
+                final int X = x;
+                final int Y = y;
+                button[x][y].setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        GameController.movePawn(X, Y);
+                    };
+                });
             }
         }
+
+        highlightPositionsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GameController.showCurrentPlayerMoves();
+            }
+        });
+        buttonPane.getChildren().add(highlightPositionsButton);
+
     }
 
     public void setPlayerStats() {
@@ -118,7 +136,7 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(pawn);
     }
 
-    //public void setWall(Position x, Position y) {
+    //public void setWall(int x, int y) {
 
     //}
 
@@ -130,29 +148,38 @@ public class BoardGUI extends Application {
         drawing = b;
     }
 
-    //public void highlightPositionAvailability(Position x, Position y) {
-
-    //}
-
-    public void updatePlayer1MoveCount(int moveCount) {
-
+    public void highlightPositionAvailability(int x, int y) {
+        button[x][y].setStyle("-fx-base: #FFFF00;");
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        button[x][y].setStyle("-fx-base: #FFFFFF");
+                    }
+                },
+                1000
+        );
     }
 
-    //public void updatePlayer2MoveCount(int moveCount) {
+    public void updatePlayer1MoveCount(int moveCount) {
+        player1Moves.setText("Moves: " + moveCount);
+    }
 
-    //}
+    public void updatePlayer2MoveCount(int moveCount) {
+        player2Moves.setText("Moves: " + moveCount);
+    }
 
-    //public void updatePlayer1PawnPosition(Position x, Position y) {
+    public void updatePlayer1PawnPosition(int x, int y) {
+        boardPane.getChildren().remove(firstPawn);
+        boardPane.setConstraints(firstPawn, x, y);
+        boardPane.getChildren().add(firstPawn);
+    }
 
-    //}
-
-    //public void updatePlayer2PawnPosition(Position x, Position y) {
-
-    //}
-
-    //public void updateCurrentPlayer(Player currentPlayer) {
-
-    //}
+    public void updatePlayer2PawnPosition(int x, int y) {
+        boardPane.getChildren().remove(secondPawn);
+        boardPane.setConstraints(secondPawn, x, y);
+        boardPane.getChildren().add(secondPawn);
+    }
 
     public static void main(String[] args) {
         launch(args);
