@@ -69,12 +69,12 @@ public class GameController<T> {
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
 	    	if (currentPlayer == player1) {
-	    		//updatePlayer1MoveCount(currentPlayer.getMoveCount());
-	    		//updatePlayerWallCount(currentPlayer.getWallCount());
+	    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
+	    		gui.updatePlayer1WallCount(currentPlayer.getWallCount());
 	    	}
 	    	else {
-	    		//updatePlayer2MoveCount(currentPlayer.getMoveCount());
-	    		//updatePlayer2WallCount(currentPlayer.getWallCount());
+	    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
+	    		gui.updatePlayer2WallCount(currentPlayer.getWallCount());
 	    	}
 	    	changePlayer();
     	}

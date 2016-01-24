@@ -136,9 +136,9 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(pawn);
     }
 
-    //public void setWall(int x, int y) {
+    public void setWall(int x, int y) {
 
-    //}
+    }
 
     public boolean isDrawing() {
         return drawing;
@@ -167,6 +167,14 @@ public class BoardGUI extends Application {
 
     public void updatePlayer2MoveCount(int moveCount) {
         player2Moves.setText("Moves: " + moveCount);
+    }
+
+    public void updatePlayer1WallCount(int wallCount) {
+        player1Walls.setText("Walls: " + wallCount);
+    }
+
+    public void updatePlayer2WallCount(int wallCount) {
+        player2Walls.setText("Walls: " + wallCount);
     }
 
     public void updatePlayer1PawnPosition(int x, int y) {
