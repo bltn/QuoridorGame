@@ -19,38 +19,67 @@ import javafx.stage.Stage;
 public class BoardGUI extends Application {
 
     private Scene scene;
+    private VBox rootPane;
+    private HBox player1StatsPane;
+    private HBox player2StatsPane;
     private GridPane boardPane;
+    private Text player1Moves;
+    private Text player1Walls;
+    private Text player2Moves;
+    private Text player2Walls;
     private Button[][] button;
     private Circle firstPawn;
     private Circle secondPawn;
     private int width;
     private int height;
+    private int player1MoveCount;
+    private int player1WallCount;
+    private int player2MoveCount;
+    private int player2WallCount;
     private boolean drawing;
 
     public BoardGUI() {
         height = 9;
         width = 9;
+        rootPane = new VBox();
+        player1StatsPane = new HBox(265);
+        player2StatsPane = new HBox(265);
         boardPane = new GridPane();
         button = new Button[width][height];
-        scene = new Scene(boardPane, 600, 400);
+        scene = new Scene(rootPane, 600, 600);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         drawing = true;
+        player1MoveCount = 0;
+        player1WallCount = 10;
+        player1Moves = new Text("Moves: " + player1MoveCount);
+        player1Walls = new Text("Walls: " + player1WallCount);
+        player2MoveCount = 0;
+        player2WallCount = 10;
+        player2Moves = new Text("Moves: " + player2MoveCount);
+        player2Walls = new Text("Walls: " + player2WallCount);
     }
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
-        setBoardPane();
+        setPanes();
         setButtons();
+        setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 4, 0);
         setPawn(secondPawn, Color.RED, 4, 8);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public void setBoardPane() {
+    public void setPanes() {
+        rootPane.setAlignment(Pos.CENTER);
+        player1StatsPane.setAlignment(Pos.CENTER);
+        player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
+        boardPane.setHgap(5);
+        boardPane.setVgap(5);
+        rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane);
     }
 
     public void setButtons() {
@@ -63,6 +92,19 @@ public class BoardGUI extends Application {
                 boardPane.getChildren().add(button[x][y]);
             }
         }
+    }
+
+    public void setPlayerStats() {
+        player1Walls.setTextAlignment(TextAlignment.CENTER);
+        player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+        player1Moves.setTextAlignment(TextAlignment.CENTER);
+        player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+        player1StatsPane.getChildren().addAll(player1Moves, player1Walls);
+        player2Walls.setTextAlignment(TextAlignment.CENTER);
+        player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+        player2Moves.setTextAlignment(TextAlignment.CENTER);
+        player2Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+        player2StatsPane.getChildren().addAll(player2Moves, player2Walls);
     }
 
     /**
@@ -92,9 +134,9 @@ public class BoardGUI extends Application {
 
     //}
 
-    //public void updatePlayer1MoveCount(int moveCount) {
+    public void updatePlayer1MoveCount(int moveCount) {
 
-    //}
+    }
 
     //public void updatePlayer2MoveCount(int moveCount) {
 

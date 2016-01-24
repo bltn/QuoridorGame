@@ -1,3 +1,5 @@
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,6 +24,7 @@ public class GameController<T> {
     public GameController(BoardGUI gui, Board board) {
         this.board = board;
         this.gui = gui;
+		gui.start(new Stage());
         
         player1 = new Player(4, 0);
         player2 = new Player(4, 8); 
