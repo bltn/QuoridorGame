@@ -1,5 +1,8 @@
+
 import java.util.ArrayList;
 import java.util.Iterator;
+
+
 
 
 /**
@@ -137,7 +140,7 @@ public class GameController<T> {
     		position.placeRightWall();
     	}
     	else if (borderValue == 2) {
-    		position.placeLeftWall();
+    		position.placeBottomWall();
     	}
     }
     
@@ -151,4 +154,15 @@ public class GameController<T> {
     	//updateCurrentPlayer(currentPlayer); 
     }
 
+    public Player getCurrentPlayer(){
+    	
+    	return currentPlayer;
+    	
+    }
+    
+    public Board getBoard(){
+    	
+    	return board;
+    	
+    }
 }
