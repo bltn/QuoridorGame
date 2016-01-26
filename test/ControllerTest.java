@@ -3,13 +3,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ControllerTest {
+	Board board = new Board();
+	BoardGUI gui = new BoardGUI();
+
+	GameController Control = new GameController<>(gui, board);
 
 	@Test
-	public void ControllerTest() {
-		Board board = new Board();
-		BoardGUI gui = new BoardGUI();
-
-		GameController Control = new GameController<>(gui, board);
+	public void placeWallTest() {
 
 		Control.placeWall(5, 5, -1, 4, 5, 1);
 		Control.placeWall(5, 5, 0, 5, 6, 2);
@@ -21,16 +21,17 @@ public class ControllerTest {
 		assertEquals(9, Control.getCurrentPlayer().getWallCount());
 		assertEquals(1, Control.getCurrentPlayer().getMoveCount());
 
-		Control.movePawn(5, 6);
-		Control.movePawn(7, 6);
-
-		assertEquals(5, Control.getCurrentPlayer().getX());
-		assertEquals(6, Control.getCurrentPlayer().getY());
-
-		Control.movePawn(1, 2);
-
-		assertEquals(7, Control.getCurrentPlayer().getX());
-		assertEquals(6, Control.getCurrentPlayer().getY());
+		
 	}
+	public void movePawnTest(){
+	Control.movePawn(5, 6);
+	Control.movePawn(7, 6);
 
+	assertEquals(5, Control.getCurrentPlayer().getX());
+	assertEquals(6, Control.getCurrentPlayer().getY());
+
+	Control.movePawn(1, 2);
+
+	assertEquals(7, Control.getCurrentPlayer().getX());
+	assertEquals(6, Control.getCurrentPlayer().getY());}
 }
