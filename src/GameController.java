@@ -45,7 +45,9 @@ public class GameController<T> {
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
-    			gui.highlightPositionAvailability(pos.getX(), pos.getY());
+				int x = pos.getX() * 2 + 1;
+				int y = pos.getY() * 2 + 1;
+    			gui.highlightPositionAvailability(x, y);
     		}
     	}
     }
@@ -84,16 +86,18 @@ public class GameController<T> {
     }
 
     public static void movePawn(int posX, int posY) {
+		int x = (posX - 1) / 2;
+		int y = (posY - 1) / 2;
     	if (currentPlayer == player1) {
-    		if (posX == player2.getX() && posY == player2.getY()) {
+    		if (x == player2.getX() && y == player2.getY()) {
     			//errorMessage("that position is occupied");
     		}
     		else {
-	    		player1.setX(posX);
-	    		player1.setY(posY);
+	    		player1.setX(x);
+	    		player1.setY(y);
 	    		currentPlayer.incrementMoveCount();
 	    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer1PawnPosition(currentPlayer.getX(), currentPlayer.getY());
+	    		gui.updatePlayer1PawnPosition(posX, posY);
 	    		if (currentPlayer.getPosition().isBottom()) {
 	    			gameOver(currentPlayer);
 	    			return;
@@ -106,11 +110,11 @@ public class GameController<T> {
 	    		//errorMessage("that position is occupied");
     		}
     		else {
-    			player2.setX(posX);
-	    		player2.setY(posY);
+    			player2.setX(x);
+	    		player2.setY(y);
 	    		currentPlayer.incrementMoveCount();
 	    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer2PawnPosition(currentPlayer.getX(), currentPlayer.getY());
+	    		gui.updatePlayer2PawnPosition(posX, posY);
 	    		if (currentPlayer.getPosition().isTop()) {
 	    			gameOver(currentPlayer);
 	    			return;
@@ -131,7 +135,7 @@ public class GameController<T> {
 
     private static void assignWall(Position position, int borderValue) {
     	if (borderValue == -1) {
-    		position.placeLeftWall();
+    		position.placeBottomWall();
     	}
     	else if (borderValue == 0) {
     		position.placeTopWall();

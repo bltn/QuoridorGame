@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -36,12 +37,16 @@ public class BoardGUI extends Application {
     private GridPane boardPane;
     //amount of move the player has make
     private Text player1Moves;
-    //amount of move the player has place the wall
+    //amount of walls the player has
+    private int player1WallCount;
     private Text player1Walls;
     //same as player one move
     private Text player2Moves;
     //same as player one place wall
+    private int player2WallCount;
     private Text player2Walls;
+    // current player
+    private int currentPlayer;
     //draw the wall and movement in the board
     private Rectangle[][] button;
     private Button highlightPositionsButton;
@@ -65,15 +70,17 @@ public class BoardGUI extends Application {
         boardPane.setGridLinesVisible(true);
         button = new Rectangle[width][height];
         highlightPositionsButton = new Button("Hint");
-        scene = new Scene(rootPane, 1200, 1200);
+        scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         drawing = true;
         player1Moves = new Text("Moves: " + 0);
-        player1Walls = new Text("Walls: " + 10);
+        player1WallCount = 10;
+        player1Walls = new Text("Walls: " + player1WallCount);
         player2Moves = new Text("Moves: " + 0);
-        player2Walls = new Text("Walls: " + 10);
-        
+        player2WallCount = 10;
+        player2Walls = new Text("Walls: " + player2WallCount);
+        currentPlayer = 1;
     }
    
     @Override
@@ -97,6 +104,7 @@ public class BoardGUI extends Application {
         player1StatsPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
+        buttonPane.setAlignment(Pos.CENTER);
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
         rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane,buttonPane);
@@ -104,6 +112,8 @@ public class BoardGUI extends Application {
     private void setButtons(){
     	for(int x=1;x<width;x++){
     		for(int y=1;y<width;y++){
+                final int X = x;
+                final int Y = y;
     			button[x][y] = new Rectangle();
     			// if it the middle point then it should just be a little 
     			if(x%2==0 && y%2==0){
@@ -123,6 +133,13 @@ public class BoardGUI extends Application {
     				button[x][y].setFill(Color.WHITE);
     				boardPane.setConstraints(button[x][y],x,y);
     				boardPane.getChildren().add(button[x][y]);
+                    button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            GameController.movePawn(X, Y);
+                            changeActivePlayer();
+                        }
+                    });
     			}
     			// if it in x axis and it a wall
     			if(x%2!=0 && y%2==0){
@@ -132,7 +149,21 @@ public class BoardGUI extends Application {
     				button[x][y].setFill(Color.WHITE);
     				boardPane.setConstraints(button[x][y],x,y);
     				boardPane.getChildren().add(button[x][y]);
-    				setWall(x,y);
+                    button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (currentPlayer == 1) {
+                                if (player1WallCount > 0) {
+                                    setWall(X, Y);
+                                    changeActivePlayer();
+                                }
+                            }
+                            else if (player2WallCount > 0) {
+                                setWall(X, Y);
+                                changeActivePlayer();
+                            }
+                        }
+                    });
     			}
     			//if it in y axis and it a wall
     			if(x%2==0 && y%2!=0){
@@ -142,106 +173,77 @@ public class BoardGUI extends Application {
     				button[x][y].setFill(Color.WHITE);
     				boardPane.setConstraints(button[x][y],x,y);
     				boardPane.getChildren().add(button[x][y]);
-    				setWall(x,y);
+                    button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (currentPlayer == 1) {
+                                if (player1WallCount > 0) {
+                                    setWall(X, Y);
+                                    changeActivePlayer();
+                                }
+                            }
+                            else if (player2WallCount > 0) {
+                                setWall(X, Y);
+                            }
+                        }
+                    });
     			}
     		}
     	}
-    	/*
- 	   highlightPositionsButton.setOnAction(new EventHandler<ActionEvent>() {
+ 	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
            @Override
-           public void handle(ActionEvent event) {
+           public void handle(MouseEvent event) {
                GameController.showCurrentPlayerMoves();
            }
        });
        buttonPane.getChildren().add(highlightPositionsButton);
-       */
+
 }
     /**
-     * this method basically set the wall that the user want to 
+     * this method basically set the wall that the user want to
      */
    private void setWall(int x, int y) {
-    	if(x%2==0){
-    		button[x][y].setOnMouseClicked(event ->{
-    			if(event.getButton() == MouseButton.PRIMARY){
-    				if(validateYWall(x,y)){
-    					// place successfully
-    				}
-    				else{
-    					//place fail.
-    				}
-    			}
-    		});
-    		}
-    	if(y%2==0){
-    		button[x][y].setOnMouseClicked(event ->{
-    			if(event.getButton() == MouseButton.PRIMARY){
-    				validateXWall(x,y);
-    				
-    			}
-    		});
-    	}
-    }
-   /**
-    * this validate whether the x-axis wall can be set fill
-    */
-   private boolean validateXWall(int x,int y){
-	   //this value used to find the previous position of wall
-	   int previousX =  x-2;
-	   //this value used to find the next position of wall
-	   int nextX  = x+2;
-	   //if the user try to place wall at the end, validate the previous wall
-	   if(x == 17){
-		   // if the previous button is fill, then do nothing
-		   if(button[previousX][y].getFill() == Color.BLUE){
-			   //you can't place wall here!
-			 return  false;
-		   }else{
-			   //if not, then change both walls to blue
-		   button[previousX][y].setFill(Color.BLUE);
-		   button[x][y].setFill(Color.BLUE);
-		   return true;
-	   }
-	   }
-	   //validate the wall next to it.
-	   if(button[x][y].getFill() == Color.BLUE || button[nextX][y].getFill() == Color.BLUE){
-		   return false;
-	   }else{
-		   //if the wall is validate, then fill
-		   button[x][y].setFill(Color.BLUE);
-		   button[nextX][y].setFill(Color.BLUE);
-		   return true;
-	   }
-   }
-   /**
-    * this validate whether the y-wall can be set fill
-    * since the wall is double colour.
-    */
-   private boolean validateYWall(int x,int y){
-	   //for more description, read validateXWall() method for more information
-	   int previousY =  y-2;
-	   int nextY  = y+2;
-	   //if the user try to place wall at the end, validate the previous wall
-	   if(y == 17){
-		   if(button[x][previousY].getFill() == Color.BLUE){
-			   //you can't place wall here!
-			 return  false;
-		   }else{
-		   button[x][previousY].setFill(Color.BLUE);
-		   button[x][y].setFill(Color.BLUE);
-		   return true;
-	   }
-	   }
-	   //validate the wall next to it.
-	   if(button[x][y].getFill() == Color.BLUE){
-		   return false;
-	   }else if(button[x][nextY].getFill() == Color.BLUE){
-		   return false;
-	   }else{
-		   button[x][y].setFill(Color.BLUE);
-		   button[x][nextY].setFill(Color.BLUE);
-		   return true;
-	   }
-	   
+       if (y % 2 == 0) {
+           if (button[x][y].getFill() == Color.WHITE) {
+               if (x != 17) {
+                   if (button[x + 2][y].getFill() == Color.WHITE) {
+                       if (button[x + 1][y - 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                           button[x][y].setFill(Color.BLUE);
+                           button[x + 2][y].setFill(Color.BLUE);
+                           int x1 = x;
+                           int y1 = y - 1;
+                           x1 = (x - 1) / 2;
+                           y1 = (y - 1) / 2;
+                           int x2 = x1 + 1;
+                           int y2 = y1;
+                           GameController.placeWall(x1, y1, -1, x2, y2, -1);
+                       }
+                   }
+               }
+           }
+       }
+
+       if (x % 2 == 0) {
+           if (button[x][y].getFill() == Color.WHITE) {
+               if (y != 17) {
+                   if (button[x + 1][y].getFill() == Color.WHITE) {
+                       if (button[x][y + 2].getFill() == Color.WHITE) {
+                           if (button[x - 1][y + 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                               button[x][y].setFill(Color.BLUE);
+                               button[x][y + 2].setFill(Color.BLUE);
+                               int x1 = x - 1;
+                               int y1 = y;
+                               x1 = (x - 1) / 2;
+                               y1 = (y - 1) / 2;
+                               int x2 = x1;
+                               int y2 = y1 + 1;
+                               GameController.placeWall(x1, y1, 1, x2, y2, 1);
+                           }
+                       }
+                   }
+               }
+           }
+       }
    }
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
@@ -259,7 +261,7 @@ public class BoardGUI extends Application {
     /**
      * draw a pawn
      */
-    private void setPawn(Circle pawn, Color colour, int x, int y) {
+    public void setPawn(Circle pawn, Color colour, int x, int y) {
         pawn.setFill(colour);
         pawn.setStroke(Color.BLACK);
         pawn.setTranslateX(5);
@@ -275,12 +277,18 @@ public class BoardGUI extends Application {
     }
 
     public void highlightPositionAvailability(int x, int y) {
-        button[x][y].setStyle("-fx-base: #FFFF00;");
+        button[x][y].setFill(Color.YELLOW);
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        button[x][y].setStyle("-fx-base: #FFFFFF");
+                        for (int x1 = 1; x1 < width; x1++) {
+                            for (int y1 = 1; y1 < width; y1++) {
+                                if(x1 % 2 != 0 && y1 % 2 != 0) {
+                                    button[x1][y1].setFill(Color.WHITE);
+                                }
+                            }
+                        }
                     }
                 },
                 1000
@@ -296,11 +304,13 @@ public class BoardGUI extends Application {
     }
 
     public void updatePlayer1WallCount(int wallCount) {
-        player1Walls.setText("Walls: " + wallCount);
+        player1WallCount = wallCount;
+        player1Walls.setText("Walls: " + player1WallCount);
     }
 
     public void updatePlayer2WallCount(int wallCount) {
-        player2Walls.setText("Walls: " + wallCount);
+        player2WallCount = wallCount;
+        player2Walls.setText("Walls: " + player2WallCount);
     }
 
     public void updatePlayer1PawnPosition(int x, int y) {
@@ -309,7 +319,7 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(firstPawn);
     }
 
-    private void updatePlayer2PawnPosition(int x, int y) {
+    public void updatePlayer2PawnPosition(int x, int y) {
         boardPane.getChildren().remove(secondPawn);
         boardPane.setConstraints(secondPawn, x, y);
         boardPane.getChildren().add(secondPawn);
@@ -317,5 +327,14 @@ public class BoardGUI extends Application {
 
     private static void main(String[] args) {
         launch(args);
+    }
+
+    public void changeActivePlayer() {
+        if (currentPlayer == 1) {
+            currentPlayer = 2;
+        }
+        else {
+            currentPlayer = 1;
+        }
     }
 }
