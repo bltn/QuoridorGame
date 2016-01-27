@@ -1,11 +1,12 @@
 /**
  * @author Ben Lawton
+ * @author Thai Hoang
  */
 import java.util.ArrayList;
 
 
 public class Board {
-	
+
 	// 2D array for Positions
 	private Position positions[][];
 
@@ -36,11 +37,11 @@ public class Board {
 	public Position getPosition(int posX, int posY) {
 		return positions[posY][posX];
 	}
-	
+
 	private void initialiseBoard() {
 		positions = new Position[9][9];
-		
-		//initialise Position objects 
+
+		//initialise Position objects
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
 				positions[y][x] = new Position(x, y);
@@ -50,11 +51,11 @@ public class Board {
 		for (int x = 0; x < 9; x++) {
 			positions[0][x].setTop();
 		}
-		//mark bottom positions as winners 
+		//mark bottom positions as winners
 		for (int x = 0; x < 9; x++) {
 			positions[8][x].setBottom();
 		}
-		
+
 		//set the board's top borders (walls)
 		for (int x = 0; x < 9; x++) {
 			positions[0][x].placeTopWall();
