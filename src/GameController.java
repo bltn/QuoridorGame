@@ -12,36 +12,24 @@ public class GameController<T> {
 
     private static Board board;
     private static BoardGUI gui;
-    
+
     private static Player player1;
     private static Player player2;
-    //The player whose turn it is 
+    //The player whose turn it is
     private static Player currentPlayer;
-
-    private static int player1MoveCount;
-    private static int player2MoveCount;
 
     public GameController(BoardGUI gui, Board board) {
         this.board = board;
         this.gui = gui;
 		gui.start(new Stage());
-        
-        player1 = new Player(4, 0);
-        player2 = new Player(4, 8); 
-        currentPlayer = player1;
-        
-        player1MoveCount = 0;
-        player2MoveCount = 0;
-    }
 
-    public static void main(String args[]) {
-    	Board board = new Board();
-    	BoardGUI gui = new BoardGUI();
-    	GameController controller = new GameController(gui, board);
+        player1 = new Player(4, 0);
+        player2 = new Player(4, 8);
+        currentPlayer = player1;
     }
 
     public static void showCurrentPlayerMoves() {
-    	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY()); 
+    	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
@@ -51,7 +39,7 @@ public class GameController<T> {
     		}
     	}
     }
-    
+
     /**
      * @param pos1X
      * @param pos1Y
@@ -64,10 +52,10 @@ public class GameController<T> {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
-	    	
+
 	    	assignWall(coveredPosition1, pos1BorderSetting);
-	    	assignWall(coveredPosition2, pos2BorderSetting); 
-	    	
+	    	assignWall(coveredPosition2, pos2BorderSetting);
+
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
 	    	if (currentPlayer == player1) {
@@ -93,41 +81,77 @@ public class GameController<T> {
     			//errorMessage("that position is occupied");
     		}
     		else {
-	    		player1.setX(x);
-	    		player1.setY(y);
-	    		currentPlayer.incrementMoveCount();
-	    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer1PawnPosition(posX, posY);
-	    		if (currentPlayer.getPosition().isBottom()) {
-	    			gameOver(currentPlayer);
-	    			return;
-	    		}
-	    		changePlayer();
+    			if (isValidMove(currentPlayer, x, y)) {
+		    		player1.setX(x);
+		    		player1.setY(y);
+		    		currentPlayer.incrementMoveCount();
+		    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
+		    		gui.updatePlayer1PawnPosition(posX, posY);
+		    		if (board.getPosition(x, y).isBottom()) {
+		    			resetGame();
+		    		}
+		    		changePlayer();
+    			}
+    			else {
+    				//errorMessage("that isn't a valid move");
+    			}
     		}
     	}
     	else {
-    		if (posX == player1.getX() && posY == player1.getY()) {
+    		if (x == player1.getX() && y == player1.getY()) {
 	    		//errorMessage("that position is occupied");
     		}
     		else {
-    			player2.setX(x);
-	    		player2.setY(y);
-	    		currentPlayer.incrementMoveCount();
-	    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer2PawnPosition(posX, posY);
-	    		if (currentPlayer.getPosition().isTop()) {
-	    			gameOver(currentPlayer);
-	    			return;
+    			if (isValidMove(currentPlayer, x, y)) {
+	    			player2.setX(x);
+		    		player2.setY(y);
+		    		currentPlayer.incrementMoveCount();
+		    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
+		    		gui.updatePlayer2PawnPosition(posX, posY);
+		    		if (board.getPosition(x, y).isTop()) {
+		    			resetGame();
+		    		}
+		    		changePlayer();
 	    		}
-	    		changePlayer();
     		}
     	}
     }
-    
+
     public static void gameOver() {
     	System.exit(0);
     }
-    
+
+    public static boolean isValidMove(Player player, int newX, int newY) {
+    	boolean isValid = false;
+    	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
+    		isValid = true;
+    	}
+    	else if (((newY == (player.getY() + 1)) || (newY == (player.getY() - 1))) && newX == player.getX()) {
+    		isValid = true;
+    	}
+    	return isValid;
+    }
+
+
+    private static void resetGame() {
+    	gui.updatePlayer1MoveCount(0);
+    	player1.setMoveCount(0);
+    	gui.updatePlayer2MoveCount(0);
+    	player2.setMoveCount(0);
+    	gui.updatePlayer1WallCount(10);
+    	player1.setWallCount(10);
+    	gui.updatePlayer2WallCount(10);
+    	player2.setWallCount(10);
+    	gui.updatePlayer1PawnPosition(9,1);
+    	player1.setX(4);
+    	player1.setY(0);
+    	gui.updatePlayer2PawnPosition(9, 17);
+    	player2.setX(4);
+    	player2.setY(8);
+    	currentPlayer = player1;
+    	gui.resetWalls();
+    }
+
     private static void gameOver(Player player) {
     	//gui.winner(player);
     	System.exit(0);
@@ -147,7 +171,7 @@ public class GameController<T> {
     		position.placeLeftWall();
     	}
     }
-    
+
     private static void changePlayer() {
     	if (currentPlayer == player1) {
     		currentPlayer = player2;

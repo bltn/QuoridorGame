@@ -1,33 +1,21 @@
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static org.junit.Assert.*;
 
+/**
+ * @author Thai Con
+ *
+ */
 public class BoardTest {
-	
-	private static Board board;
-	
-	@BeforeClass
-	public static void setUp() {
-		board = new Board();
-	}
-	
-	@Test
-	public void testInitialisation() {
-		assertEquals(true, board.getPosition(4, 0).isTop());
-	}
-	
-	@Test
-	public void testGetOccupiablePositions() {
-		Position pos = board.getPosition(4, 0);
-		assertEquals(3, board.getOccupiablePositions(pos).size());
-	}
-	
-	@Test public void testGetPosition() {
-		Position position = board.getPosition(4, 1);
-		assertEquals(4, position.getX());
-		assertEquals(1, position.getY());
-	}
 
+	@org.junit.Test
+	public void getPositionTest() {
+		Board board = new Board();
+		for (int x = 1; x < 9; x++) {
+			for (int y = 1; y < 9; y++) {
+
+				assertEquals(x, board.getPosition(x, y).getX());
+				assertEquals(y, board.getPosition(x, y).getY());
+
+			}
+		}
+	}
 }
