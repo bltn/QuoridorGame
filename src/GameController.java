@@ -1,8 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3f97b2b85c62735bfa86173f9dca732bc2abc2ac
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
+<<<<<<< HEAD
 =======
 import javafx.stage.Stage;
 
@@ -11,6 +16,10 @@ import java.util.Iterator;
 
 
 >>>>>>> 4a4702573c5b82b9bca2bc45aa5559e3d2470ff7
+=======
+
+
+>>>>>>> 3f97b2b85c62735bfa86173f9dca732bc2abc2ac
 /**
  * @author Ben Lawton
  * @author Khadija Patel
@@ -228,7 +237,7 @@ public class GameController<T> {
     		position.placeRightWall();
     	}
     	else if (borderValue == 2) {
-    		position.placeLeftWall();
+    		position.placeBottomWall();
     	}
     }
     
@@ -250,4 +259,15 @@ public class GameController<T> {
 >>>>>>> 4a4702573c5b82b9bca2bc45aa5559e3d2470ff7
     }
 
+    public Player getCurrentPlayer(){
+    	
+    	return currentPlayer;
+    	
+    }
+    
+    public Board getBoard(){
+    	
+    	return board;
+    	
+    }
 }
