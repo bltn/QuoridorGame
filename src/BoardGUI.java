@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-
-public class BoardGUI {
-
-}
-=======
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +22,8 @@ import javafx.stage.Stage;
 
 /**
  * @author Junaid Rasheed
+ * @author Jack Zhang
+ * @author Ben Lawton
  */
 public class BoardGUI extends Application {
 
@@ -88,7 +84,7 @@ public class BoardGUI extends Application {
         player2Walls = new Text("Walls: " + player2WallCount);
         currentPlayer = 1;
     }
-   
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
@@ -102,7 +98,7 @@ public class BoardGUI extends Application {
     }
 
     /**
-     * set everything into position centre 
+     * set everything into position centre
      * for the pane
      */
     private void setPanes() {
@@ -121,9 +117,9 @@ public class BoardGUI extends Application {
                 final int X = x;
                 final int Y = y;
     			button[x][y] = new Rectangle();
-    			// if it the middle point then it should just be a little 
+    			// if it the middle point then it should just be a little
     			if(x%2==0 && y%2==0){
-    				
+
     				button[x][y].setHeight(10);
     				button[x][y].setWidth(10);
     				button[x][y].setStroke(Color.BLACK);
@@ -251,6 +247,20 @@ public class BoardGUI extends Application {
            }
        }
    }
+
+   public void resetWalls() {
+	   for (int y = 1; y < 18; y += 2) {
+		   for (int x = 2; x < 18; x+= 2) {
+			   button[x][y].setFill(Color.WHITE);
+		   }
+	   }
+	   for (int y = 2; y < 18; y += 2) {
+		   for (int x = 1; x < 18; x+= 2) {
+			   button[x][y].setFill(Color.WHITE);
+		   }
+	   }
+   }
+
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -331,10 +341,6 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(secondPawn);
     }
 
-    private static void main(String[] args) {
-        launch(args);
-    }
-
     public void changeActivePlayer() {
         if (currentPlayer == 1) {
             currentPlayer = 2;
@@ -344,4 +350,3 @@ public class BoardGUI extends Application {
         }
     }
 }
->>>>>>> 4a4702573c5b82b9bca2bc45aa5559e3d2470ff7
