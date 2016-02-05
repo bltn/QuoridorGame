@@ -1,93 +1,76 @@
+/**
+ * @author Ben Lawton
+ * @author Thai Hoang
+ */
+import java.util.ArrayList;
 
-<<<<<<< HEAD
-public class Board {
-
-	public Position getPosition(int y, int x) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Position[] getOccupiablePositions(Position position) {
-		return null;
-	}
-
-=======
 
 public class Board {
 
-	private Player player1;
-	private Player player2;
+	// 2D array for Positions
+	private Position positions[][];
 
-	private Player play[];
-
-	// 2D array for Position
-	private Position poss[][];
-
-	private int turn = 0;
-
-	/*
-	 * Constructor for a 2 players board
-	 * 
+	/**
+	 * Constructor for an object of class Board
 	 */
 	public Board() {
+		initialiseBoard();
+	}
 
-		play = new Player[2];
+	public ArrayList<Position> getOccupiablePositions(Position position) {
+		ArrayList<Position> localPositions = new ArrayList<Position>();
+		if (!position.hasTopWall()) {
+			localPositions.add(positions[position.getY()-1][position.getX()]);
+		}
+		if (!position.hasRightWall()) {
+			localPositions.add(positions[position.getY()][position.getX()+1]);
+		}
+		if (!position.hasBottomWall()) {
+			localPositions.add(positions[position.getY()+1][position.getX()]);
+		}
+		if (!position.hasLeftWall()) {
+			localPositions.add(positions[position.getY()][position.getX()-1]);
+		}
+		return localPositions;
+	}
 
-		player1 = new Player(4, 0);
-		play[0] = player1;
-		player2 = new Player(4, 8);
-		play[1] = player2;
+	public Position getPosition(int posX, int posY) {
+		return positions[posY][posX];
+	}
 
-		poss = new Position[9][9];
-		for (int x = 0; x < 10; x++) {
-			for (int y = 0; y < 10; y++) {
-				poss[x][y] = new Position(x, y);
+	private void initialiseBoard() {
+		positions = new Position[9][9];
+
+		//initialise Position objects
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				positions[y][x] = new Position(x, y);
 			}
 		}
-	}
+		//mark top positions as winners
+		for (int x = 0; x < 9; x++) {
+			positions[0][x].setTop();
+		}
+		//mark bottom positions as winners
+		for (int x = 0; x < 9; x++) {
+			positions[8][x].setBottom();
+		}
 
-	public void moveRight() {
-		play[turn].setX(play[turn].getX() + 1);
-		turn = (turn + 1) % 2;
+		//set the board's top borders (walls)
+		for (int x = 0; x < 9; x++) {
+			positions[0][x].placeTopWall();
+		}
+		//set the board's right borders (walls)
+		for (int y = 0; y < 9; y++) {
+			positions[y][8].placeRightWall();
+		}
+		//set the board's bottom borders (walls)
+		for (int x = 0; x < 9; x++) {
+			positions[8][x].placeBottomWall();
+		}
+		//set the board's left borders (walls)
+		for (int y = 0; y < 9; y++) {
+			positions[y][0].placeLeftWall();
+		}
 	}
-
-	public void moveLeft() {
-		play[turn].setX(play[turn].getX() - 1);
-		turn = (turn + 1) % 2;
-	}
-
-	public void moveUp() {
-		play[turn].setY(play[turn].getY() - 1);
-		turn = (turn + 1) % 2;
-	}
-
-	public void moveDown() {
-		play[turn].setY(play[turn].getY() - 1);
-		turn = (turn + 1) % 2;
-	}
-
-	public void placeTopWall(int x, int y) {
-		poss[x][y].placeTopWall();
-		if(y != 9){poss[x][y+1].placeBotWall();}
-		turn = (turn + 1) % 2;
-	}
-
-	public void placeBotWall(int x, int y) {
-		poss[x][y].placeBotWall();		
-		if(y != 0){poss[x][y-1].placeTopWall();}		
-		turn = (turn + 1) % 2;
-	}
-
-	public void placeRightWall(int x, int y) {
-		poss[x][y].placeRightWall();		
-		if(x != 9){poss[x+1][y].placeLeftWall();}		
-		turn = (turn + 1) % 2;
-	}
-
-	public void placeLefttWall(int x, int y) {
-		poss[x-1][y-1].placeLeftWall();		
-		if(x != 0){poss[x-1][y].placeRightWall();}		
-		turn = (turn + 1) % 2;
-	}
->>>>>>> d26dae09bb6d227a803dff424d9932fccfb6fe8f
 }
