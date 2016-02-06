@@ -19,8 +19,8 @@ public class GameController<T> {
     private static Player currentPlayer;
 
     public GameController(BoardGUI gui, Board board) {
-        this.board = board;
-        this.gui = gui;
+        GameController.board = board;
+        GameController.gui = gui;
 		gui.start(new Stage());
 
         player1 = new Player(4, 0);
@@ -48,13 +48,17 @@ public class GameController<T> {
      * @param pos2Y
      * @param pos2BorderSetting
      */
-    public static void placeWall(int pos1X, int pos1Y, int pos1BorderSetting, int pos2X, int pos2Y, int pos2BorderSetting) {
+    public static void placeWall(int pos1X, int pos1Y, int pos1Border, int pos2X, int pos2Y, int pos2Border, int pos3X, int pos3Y, int pos3Border, int pos4X, int pos4Y, int pos4Border) {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
+	    	Position coveredPosition3 = board.getPosition(pos3X, pos3Y);
+	    	Position coveredPosition4 = board.getPosition(pos4X, pos4Y);
 
-	    	assignWall(coveredPosition1, pos1BorderSetting);
-	    	assignWall(coveredPosition2, pos2BorderSetting);
+	    	assignWall(coveredPosition1, pos1Border);
+	    	assignWall(coveredPosition2, pos2Border);
+	    	assignWall(coveredPosition3, pos3Border);
+	    	assignWall(coveredPosition4, pos4Border);
 
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
@@ -123,11 +127,27 @@ public class GameController<T> {
 
     public static boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
+    	// if the move is directly along the x axis
     	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
-    		isValid = true;
+    		// if the move is to the left and the player won't be blocked by a wall to the left
+    		if ((newX == (player.getX() - 1) && (!board.getPosition(player.getX(), player.getY()).hasLeftWall()))) {
+    			isValid = true;
+    		}
+    		// if the move is to the right and the player won't be blocked by a wall to the right
+    		else if ((newX == (player.getX() + 1) && (!board.getPosition(player.getX(), player.getY()).hasRightWall()))) {
+    			isValid = true;
+    		}
     	}
+    	// if the move is directly along the y axis
     	else if (((newY == (player.getY() + 1)) || (newY == (player.getY() - 1))) && newX == player.getX()) {
-    		isValid = true;
+    		// if the move is up and the player won't be blocked by a wall to the top
+    		if ((newY == (player.getY() - 1) && (!board.getPosition(player.getX(), player.getY()).hasTopWall()))) {
+    			isValid = true;
+    		}
+    		// if the move is down and the player won't be blocked by a wall to the bottom
+    		else if ((newY == (player.getY() + 1) && (!board.getPosition(player.getX(), player.getY()).hasBottomWall()))) {
+    			isValid = true;
+    		}
     	}
     	return isValid;
     }
