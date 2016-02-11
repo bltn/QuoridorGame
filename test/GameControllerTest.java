@@ -1,12 +1,20 @@
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ControllerTest {
-	Board board = new Board();
-	BoardGUI gui = new BoardGUI();
+public class GameControllerTest {
+	private static Board board;
+	private static BoardGUI gui;
+	private static GameController controller;
 
-	GameController Control = new GameController<>(gui, board);
+	@BeforeClass
+	public static void setUp() {
+
+		board = new Board();
+		gui = new BoardGUI();
+		controller = new GameController<>(gui, board);
+	}
 
 	@Test
 	public void placeWallTest() {
@@ -21,7 +29,7 @@ public class ControllerTest {
 		assertEquals(9, Control.getCurrentPlayer().getWallCount());
 		assertEquals(1, Control.getCurrentPlayer().getMoveCount());
 
-		
+
 	}
 	public void movePawnTest(){
 	Control.movePawn(5, 6);
