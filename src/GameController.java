@@ -7,6 +7,7 @@ import java.util.Iterator;
 /**
  * @author Ben Lawton
  * @author Khadija Patel
+ * @author Jordan Bird
  */
 public class GameController<T> {
 
@@ -21,12 +22,12 @@ public class GameController<T> {
     public GameController(BoardGUI gui, Board board) {
         GameController.board = board;
         GameController.gui = gui;
-		gui.start(new Stage());
 
         player1 = new Player(4, 0);
         player2 = new Player(4, 8);
         currentPlayer = player1;
     }
+    
 
     public static void showCurrentPlayerMoves() {
     	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
