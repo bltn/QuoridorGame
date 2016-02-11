@@ -1,6 +1,7 @@
 /**
  * @author Ben Lawton
  * @author Thai Hoang
+ * @author Jordan Bird (Javadoc)
  */
 import java.util.ArrayList;
 
@@ -37,7 +38,12 @@ public class Board {
 	public Position getPosition(int posX, int posY) {
 		return positions[posY][posX];
 	}
-
+	
+	/**
+	 * Initialises the board, and defines spaces to their respective categories.
+	 * The top and bottom rows are defined as winning squares
+	 * Sets boundaries to the outer edges of the board
+	 */
 	private void initialiseBoard() {
 		positions = new Position[9][9];
 
