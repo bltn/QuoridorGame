@@ -18,18 +18,23 @@ import javafx.stage.Stage;
  * @author Junaid Rasheed
  * @author Jack Zhang
  * @author Ben Lawton
+ * @author Jordan Bird
  */
 public class BoardGUI extends Application {
 
 	//the scene used to display in the window
-    private Scene scene;
+    private final Scene scene;
+    private final int width = 17;
+    private final int height = 17;
+    private final HBox player2StatsPane = new HBox(260);
+    private final HBox buttonPane = new HBox(10);
+    
+    
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
-    private HBox player1StatsPane;
+    private final HBox player1StatsPane = new HBox(260);
     // player two stats
-    private HBox player2StatsPane;
-    private HBox buttonPane;
     private GridPane boardPane;
     //amount of move the player has make
     private Text player1Moves;
@@ -48,21 +53,14 @@ public class BoardGUI extends Application {
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
-    private int width;
-    private int height;
     private boolean drawing;
 
     /**
      * declare everything in the board
      */
     public BoardGUI() {
-        height = 17;
-        width = 17;
         rootPane = new VBox();
-        player1StatsPane = new HBox(260);
-        player2StatsPane = new HBox(260);
         boardPane = new GridPane();
-        buttonPane = new HBox(10);
         boardPane.setGridLinesVisible(true);
         button = new Rectangle[width][height];
         highlightPositionsButton = new Button("Hint");
@@ -87,6 +85,7 @@ public class BoardGUI extends Application {
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
+        scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
