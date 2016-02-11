@@ -48,7 +48,7 @@ public class GameController<T> {
      * @param pos2Y
      * @param pos2BorderSetting
      */
-    public static void placeWall(int pos1X, int pos1Y, int pos1Border, int pos2X, int pos2Y, int pos2Border, int pos3X, int pos3Y, int pos3Border, int pos4X, int pos4Y, int pos4Border) {
+    public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
@@ -175,18 +175,24 @@ public class GameController<T> {
     	System.exit(0);
     }
 
-    private static void assignWall(Position position, int borderValue) {
-    	if (borderValue == -1) {
-    		position.placeBottomWall();
-    	}
-    	else if (borderValue == 0) {
-    		position.placeTopWall();
-    	}
-    	else if (borderValue == 1) {
-    		position.placeRightWall();
-    	}
-    	else if (borderValue == 2) {
-    		position.placeLeftWall();
+    private static void assignWall(Position position, PositionWallLocation location) {
+    	switch (location) {
+	    	case LEFT: {
+	    		position.placeLeftWall();
+	    		break;
+	    	}
+	    	case RIGHT: {
+	    		position.placeRightWall();
+	    		break;
+	    	}
+	    	case TOP: {
+	    		position.placeTopWall();
+	    		break;
+	    	}
+	    	case BOTTOM: {
+	    		position.placeBottomWall();
+	    		break;
+	    	}
     	}
     }
 

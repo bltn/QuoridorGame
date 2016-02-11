@@ -226,7 +226,9 @@ public class BoardGUI extends Application {
                        // coordinates of the position to the bottom right of the horizontal wall
                        int bottomRightPosX = topLeftPosX + 1;
                        int bottomRightPosY = bottomLeftPosY;
-                       GameController.placeWall(topLeftPosX, topLeftPosY, -1, topRightPosX, topRightPosY, -1, bottomLeftPosX, bottomLeftPosY, 0, bottomRightPosX, bottomRightPosY, 0);
+                       PositionWallLocation bottom = PositionWallLocation.BOTTOM;
+                       PositionWallLocation top = PositionWallLocation.TOP;
+                       GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
                    }
                }
            }
@@ -251,7 +253,9 @@ public class BoardGUI extends Application {
                            // coordinates of the position to the bottom right of the vertical wall
                            int bottomRightPosX = topLeftPosX + 1;
                            int bottomRightPosY = bottomLeftPosY;
-                           GameController.placeWall(topLeftPosX, topLeftPosY, 1, bottomLeftPosX, bottomLeftPosY, 1, topRightPosX, topRightPosY, 2, bottomRightPosX, bottomRightPosY, 2);
+                           PositionWallLocation right = PositionWallLocation.RIGHT;
+                           PositionWallLocation left = PositionWallLocation.LEFT;
+                           GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
                        }
                    }
                }
