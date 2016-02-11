@@ -62,8 +62,8 @@ public class BoardGUI extends Application {
      * declare everything in the board
      */
     public BoardGUI() {
-        height = 18;
-        width = 18;
+        height = 17;
+        width = 17;
         rootPane = new VBox();
         player1StatsPane = new HBox(260);
         player2StatsPane = new HBox(260);
@@ -91,8 +91,8 @@ public class BoardGUI extends Application {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, 9, 1);
-        setPawn(secondPawn, Color.RED, 9, 17);
+        setPawn(firstPawn, Color.BLUE, 8, 0);
+        setPawn(secondPawn, Color.RED, 8, 16);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -113,14 +113,13 @@ public class BoardGUI extends Application {
     }
 
     private void setButtons() {
-    	for(int x=1;x<width;x++){
-    		for(int y=1;y<width;y++){
+    	for(int x = 0 ; x < width; x++){
+    		for(int y = 0; y < width; y++){
                 final int X = x;
                 final int Y = y;
     			button[x][y] = new Rectangle();
     			// middle points between walls
-    			if(x%2==0 && y%2==0){
-
+    			if(x % 2 != 0 && y % 2 != 0) {
     				button[x][y].setHeight(10);
     				button[x][y].setWidth(10);
     				button[x][y].setStroke(Color.BLACK);
@@ -129,7 +128,7 @@ public class BoardGUI extends Application {
     				boardPane.getChildren().add(button[x][y]);
     			}
     			// occupiable position grids
-    			if(x%2!=0 && y%2!=0){
+    			if(x % 2 == 0 && y % 2 == 0) {
     				button[x][y].setHeight(40);
     				button[x][y].setWidth(40);
     				button[x][y].setStroke(Color.BLACK);
@@ -140,15 +139,15 @@ public class BoardGUI extends Application {
                         @Override
                         public void handle(MouseEvent event) {
                         	// convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
-                        	int nineByNineX = (X - 1) / 2;
-                        	int nineByNineY = (Y - 1) / 2;
+                        	int nineByNineX = X / 2;
+                        	int nineByNineY = Y / 2;
                             GameController.movePawn(nineByNineX, nineByNineY);
                             changeActivePlayer();
                         }
                     });
     			}
     			// wide, short walls
-    			if(x%2!=0 && y%2==0){
+    			if(x % 2 == 0 && y % 2 != 0) {
     				button[x][y].setHeight(10);
     				button[x][y].setWidth(40);
     				button[x][y].setStroke(Color.BLACK);
@@ -172,7 +171,7 @@ public class BoardGUI extends Application {
                     });
     			}
     			// tall, thin walls
-    			if(x%2==0 && y%2!=0){
+    			if(x % 2 != 0 && y % 2 == 0) {
     				button[x][y].setWidth(10);
     				button[x][y].setHeight(40);
     				button[x][y].setStroke(Color.BLACK);
@@ -208,54 +207,60 @@ public class BoardGUI extends Application {
      * this method basically set the wall that the user want to
      */
    private void setWall(int x, int y) {
-	   if (y % 2 == 0) {
+	   if (y % 2 != 0) {
            if (button[x][y].getFill() == Color.WHITE) {
-               if (x != 17) {
+               if (x != 16) {
                    if (button[x + 2][y].getFill() == Color.WHITE) {
-                       button[x][y].setFill(Color.BLUE);
-                       button[x + 2][y].setFill(Color.BLUE);
-                       // coordinates of the position to the top left of the horizontal wall
-                       int topLeftPosX = (x - 1) / 2;
-                       int topLeftPosY = (y - 1) / 2;
-                       // coordinates of the position to the bottom left of the horizontal wall
-                       int bottomLeftPosX = topLeftPosX;
-                       int bottomLeftPosY = topLeftPosY + 1;
-                       // coordinates of the position to the top right of the horizontal wall
-                       int topRightPosX = topLeftPosX + 1;
-                       int topRightPosY = topLeftPosY;
-                       // coordinates of the position to the bottom right of the horizontal wall
-                       int bottomRightPosX = topLeftPosX + 1;
-                       int bottomRightPosY = bottomLeftPosY;
-                       PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-                       PositionWallLocation top = PositionWallLocation.TOP;
-                       GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
+                       // avoid making a cross with the walls
+                       if (button[x + 1][y - 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                           button[x][y].setFill(Color.BLUE);
+                           button[x + 2][y].setFill(Color.BLUE);
+                           // coordinates of the position to the top left of the horizontal wall
+                           int topLeftPosX = x / 2;
+                           int topLeftPosY = y / 2;
+                           // coordinates of the position to the bottom left of the horizontal wall
+                           int bottomLeftPosX = topLeftPosX;
+                           int bottomLeftPosY = topLeftPosY + 1;
+                           // coordinates of the position to the top right of the horizontal wall
+                           int topRightPosX = topLeftPosX + 1;
+                           int topRightPosY = topLeftPosY;
+                           // coordinates of the position to the bottom right of the horizontal wall
+                           int bottomRightPosX = topLeftPosX + 1;
+                           int bottomRightPosY = bottomLeftPosY;
+                           PositionWallLocation bottom = PositionWallLocation.BOTTOM;
+                           PositionWallLocation top = PositionWallLocation.TOP;
+                           GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
+                       }
                    }
                }
            }
        }
 
-       if (x % 2 == 0) {
+       if (x % 2 != 0) {
            if (button[x][y].getFill() == Color.WHITE) {
-               if (y != 17) {
+               if (y != 16) {
                    if (button[x + 1][y].getFill() == Color.WHITE) {
                        if (button[x][y + 2].getFill() == Color.WHITE) {
-                           button[x][y].setFill(Color.BLUE);
-                           button[x][y + 2].setFill(Color.BLUE);
-                           // coordinates of the position to the top left of the vertical wall
-                           int topLeftPosX = (x - 1) / 2;
-                           int topLeftPosY = (y - 1) / 2;
-                           // coordinates of the position to the bottom left of the vertical wall
-                           int bottomLeftPosX = topLeftPosX;
-                           int bottomLeftPosY = topLeftPosY + 1;
-                           // coordinates of the position to the top right of the vertical wall
-                           int topRightPosX = topLeftPosX + 1;
-                           int topRightPosY = topLeftPosY;
-                           // coordinates of the position to the bottom right of the vertical wall
-                           int bottomRightPosX = topLeftPosX + 1;
-                           int bottomRightPosY = bottomLeftPosY;
-                           PositionWallLocation right = PositionWallLocation.RIGHT;
-                           PositionWallLocation left = PositionWallLocation.LEFT;
-                           GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
+                           // avoid making a cross with the walls
+                           if (button[x - 1][y + 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                               button[x][y].setFill(Color.BLUE);
+                               button[x][y + 2].setFill(Color.BLUE);
+                               // coordinates of the position to the top left of the vertical wall
+                               int topLeftPosX = x / 2;
+                               int topLeftPosY = y / 2;
+                               // coordinates of the position to the bottom left of the vertical wall
+                               int bottomLeftPosX = topLeftPosX;
+                               int bottomLeftPosY = topLeftPosY + 1;
+                               // coordinates of the position to the top right of the vertical wall
+                               int topRightPosX = topLeftPosX + 1;
+                               int topRightPosY = topLeftPosY;
+                               // coordinates of the position to the bottom right of the vertical wall
+                               int bottomRightPosX = topLeftPosX + 1;
+                               int bottomRightPosY = bottomLeftPosY;
+                               PositionWallLocation right = PositionWallLocation.RIGHT;
+                               PositionWallLocation left = PositionWallLocation.LEFT;
+                               GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
+                           }
                        }
                    }
                }
@@ -313,9 +318,9 @@ public class BoardGUI extends Application {
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        for (int x1 = 1; x1 < width; x1++) {
-                            for (int y1 = 1; y1 < width; y1++) {
-                                if(x1 % 2 != 0 && y1 % 2 != 0) {
+                        for (int x1 = 0; x1 < width; x1++) {
+                            for (int y1 = 0; y1 < width; y1++) {
+                                if(x1 % 2 == 0 && y1 % 2 == 0) {
                                     button[x1][y1].setFill(Color.WHITE);
                                 }
                             }
@@ -346,8 +351,8 @@ public class BoardGUI extends Application {
 
     public void updatePlayer1PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
-    	int eighteenByEighteenX = (x * 2) + 1;
-    	int eighteenByEighteenY = (y * 2) + 1;
+    	int eighteenByEighteenX = x * 2;
+    	int eighteenByEighteenY = y * 2;
         boardPane.getChildren().remove(firstPawn);
         boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
         boardPane.getChildren().add(firstPawn);
@@ -355,8 +360,8 @@ public class BoardGUI extends Application {
 
     public void updatePlayer2PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
-    	int eighteenByEighteenX = (x * 2) + 1;
-    	int eighteenByEighteenY = (y * 2) + 1;
+    	int eighteenByEighteenX = x * 2;
+    	int eighteenByEighteenY = y * 2;
         boardPane.getChildren().remove(secondPawn);
         boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
         boardPane.getChildren().add(secondPawn);

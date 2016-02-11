@@ -33,8 +33,8 @@ public class GameController<T> {
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
-				int x = pos.getX() * 2 + 1;
-				int y = pos.getY() * 2 + 1;
+				int x = pos.getX() * 2;
+				int y = pos.getY() * 2;
     			gui.highlightPositionAvailability(x, y);
     		}
     	}
