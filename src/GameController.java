@@ -43,10 +43,10 @@ public class GameController<T> {
     /**
      * @param pos1X
      * @param pos1Y
-     * @param pos1BorderSetting
+     * @param pos1Border
      * @param pos2X
      * @param pos2Y
-     * @param pos2BorderSetting
+     * @param pos2Border
      */
     public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
@@ -160,10 +160,10 @@ public class GameController<T> {
     	player1.setWallCount(10);
     	gui.updatePlayer2WallCount(10);
     	player2.setWallCount(10);
-    	gui.updatePlayer1PawnPosition(9,1);
+    	gui.updatePlayer1PawnPosition(4, 0);
     	player1.setX(4);
     	player1.setY(0);
-    	gui.updatePlayer2PawnPosition(9, 17);
+    	gui.updatePlayer2PawnPosition(4, 8);
     	player2.setX(4);
     	player2.setY(8);
     	currentPlayer = player1;
