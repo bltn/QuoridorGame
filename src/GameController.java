@@ -19,8 +19,8 @@ public class GameController<T> {
     private static Player currentPlayer;
 
     public GameController(BoardGUI gui, Board board) {
-        this.board = board;
-        this.gui = gui;
+        GameController.board = board;
+        GameController.gui = gui;
 		gui.start(new Stage());
 
         player1 = new Player(4, 0);
@@ -33,8 +33,8 @@ public class GameController<T> {
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
-				int x = pos.getX() * 2 + 1;
-				int y = pos.getY() * 2 + 1;
+				int x = pos.getX() * 2;
+				int y = pos.getY() * 2;
     			gui.highlightPositionAvailability(x, y);
     		}
     	}
@@ -43,18 +43,22 @@ public class GameController<T> {
     /**
      * @param pos1X
      * @param pos1Y
-     * @param pos1BorderSetting
+     * @param pos1Border
      * @param pos2X
      * @param pos2Y
-     * @param pos2BorderSetting
+     * @param pos2Border
      */
-    public static void placeWall(int pos1X, int pos1Y, int pos1BorderSetting, int pos2X, int pos2Y, int pos2BorderSetting) {
+    public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
+	    	Position coveredPosition3 = board.getPosition(pos3X, pos3Y);
+	    	Position coveredPosition4 = board.getPosition(pos4X, pos4Y);
 
-	    	assignWall(coveredPosition1, pos1BorderSetting);
-	    	assignWall(coveredPosition2, pos2BorderSetting);
+	    	assignWall(coveredPosition1, pos1Border);
+	    	assignWall(coveredPosition2, pos2Border);
+	    	assignWall(coveredPosition3, pos3Border);
+	    	assignWall(coveredPosition4, pos4Border);
 
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
@@ -74,20 +78,18 @@ public class GameController<T> {
     }
 
     public static void movePawn(int posX, int posY) {
-		int x = (posX - 1) / 2;
-		int y = (posY - 1) / 2;
     	if (currentPlayer == player1) {
-    		if (x == player2.getX() && y == player2.getY()) {
+    		if (posX == player2.getX() && posY == player2.getY()) {
     			//errorMessage("that position is occupied");
     		}
     		else {
-    			if (isValidMove(currentPlayer, x, y)) {
-		    		player1.setX(x);
-		    		player1.setY(y);
+    			if (isValidMove(currentPlayer, posX, posY)) {
+		    		player1.setX(posX);
+		    		player1.setY(posY);
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer1PawnPosition(posX, posY);
-		    		if (board.getPosition(x, y).isBottom()) {
+		    		if (board.getPosition(posX, posY).isBottom()) {
 		    			resetGame();
 		    		}
 		    		changePlayer();
@@ -98,17 +100,17 @@ public class GameController<T> {
     		}
     	}
     	else {
-    		if (x == player1.getX() && y == player1.getY()) {
+    		if (posX == player1.getX() && posY == player1.getY()) {
 	    		//errorMessage("that position is occupied");
     		}
     		else {
-    			if (isValidMove(currentPlayer, x, y)) {
-	    			player2.setX(x);
-		    		player2.setY(y);
+    			if (isValidMove(currentPlayer, posX, posY)) {
+	    			player2.setX(posX);
+		    		player2.setY(posY);
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer2PawnPosition(posX, posY);
-		    		if (board.getPosition(x, y).isTop()) {
+		    		if (board.getPosition(posX, posY).isTop()) {
 		    			resetGame();
 		    		}
 		    		changePlayer();
@@ -123,11 +125,27 @@ public class GameController<T> {
 
     public static boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
+    	// if the move is directly along the x axis
     	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
-    		isValid = true;
+    		// if the move is to the left and the player won't be blocked by a wall to the left
+    		if ((newX == (player.getX() - 1) && (!board.getPosition(player.getX(), player.getY()).hasLeftWall()))) {
+    			isValid = true;
+    		}
+    		// if the move is to the right and the player won't be blocked by a wall to the right
+    		else if ((newX == (player.getX() + 1) && (!board.getPosition(player.getX(), player.getY()).hasRightWall()))) {
+    			isValid = true;
+    		}
     	}
+    	// if the move is directly along the y axis
     	else if (((newY == (player.getY() + 1)) || (newY == (player.getY() - 1))) && newX == player.getX()) {
-    		isValid = true;
+    		// if the move is up and the player won't be blocked by a wall to the top
+    		if ((newY == (player.getY() - 1) && (!board.getPosition(player.getX(), player.getY()).hasTopWall()))) {
+    			isValid = true;
+    		}
+    		// if the move is down and the player won't be blocked by a wall to the bottom
+    		else if ((newY == (player.getY() + 1) && (!board.getPosition(player.getX(), player.getY()).hasBottomWall()))) {
+    			isValid = true;
+    		}
     	}
     	return isValid;
     }
@@ -142,10 +160,10 @@ public class GameController<T> {
     	player1.setWallCount(10);
     	gui.updatePlayer2WallCount(10);
     	player2.setWallCount(10);
-    	gui.updatePlayer1PawnPosition(9,1);
+    	gui.updatePlayer1PawnPosition(4, 0);
     	player1.setX(4);
     	player1.setY(0);
-    	gui.updatePlayer2PawnPosition(9, 17);
+    	gui.updatePlayer2PawnPosition(4, 8);
     	player2.setX(4);
     	player2.setY(8);
     	currentPlayer = player1;
@@ -157,18 +175,24 @@ public class GameController<T> {
     	System.exit(0);
     }
 
-    private static void assignWall(Position position, int borderValue) {
-    	if (borderValue == -1) {
-    		position.placeBottomWall();
-    	}
-    	else if (borderValue == 0) {
-    		position.placeTopWall();
-    	}
-    	else if (borderValue == 1) {
-    		position.placeRightWall();
-    	}
-    	else if (borderValue == 2) {
-    		position.placeLeftWall();
+    private static void assignWall(Position position, PositionWallLocation location) {
+    	switch (location) {
+	    	case LEFT: {
+	    		position.placeLeftWall();
+	    		break;
+	    	}
+	    	case RIGHT: {
+	    		position.placeRightWall();
+	    		break;
+	    	}
+	    	case TOP: {
+	    		position.placeTopWall();
+	    		break;
+	    	}
+	    	case BOTTOM: {
+	    		position.placeBottomWall();
+	    		break;
+	    	}
     	}
     }
 
