@@ -21,6 +21,7 @@ import javax.sound.midi.SysexMessage;
 
 /**
  * @author Junaid Rasheed
+ * @author Jordan Bird
  */
 public class MenuGUI extends Application {
 
@@ -38,6 +39,7 @@ public class MenuGUI extends Application {
         startButton = new Button("Start");
         quitButton = new Button("Quit");
         scene = new Scene(introPane, 600, 400);
+        scene.getStylesheets().add("Theme.css");
     }
 
     @Override
@@ -59,6 +61,9 @@ public class MenuGUI extends Application {
         introPane.add(introText, 0, 0, 1, 1);
     }
 
+    /**
+     * 
+     */
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
@@ -69,7 +74,14 @@ public class MenuGUI extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                new GameController(new BoardGUI(), new Board());
+            	
+            	BoardGUI gui = new BoardGUI();
+            	Board board = new Board();
+            	GameController controller = new GameController(gui, board);
+            	gui.start(new Stage());
+                
+                
+               
             };
         });
         quitButton.setPrefWidth(150);
