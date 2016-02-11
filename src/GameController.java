@@ -78,20 +78,18 @@ public class GameController<T> {
     }
 
     public static void movePawn(int posX, int posY) {
-		int x = (posX - 1) / 2;
-		int y = (posY - 1) / 2;
     	if (currentPlayer == player1) {
-    		if (x == player2.getX() && y == player2.getY()) {
+    		if (posX == player2.getX() && posY == player2.getY()) {
     			//errorMessage("that position is occupied");
     		}
     		else {
-    			if (isValidMove(currentPlayer, x, y)) {
-		    		player1.setX(x);
-		    		player1.setY(y);
+    			if (isValidMove(currentPlayer, posX, posY)) {
+		    		player1.setX(posX);
+		    		player1.setY(posY);
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer1PawnPosition(posX, posY);
-		    		if (board.getPosition(x, y).isBottom()) {
+		    		if (board.getPosition(posX, posY).isBottom()) {
 		    			resetGame();
 		    		}
 		    		changePlayer();
@@ -102,17 +100,17 @@ public class GameController<T> {
     		}
     	}
     	else {
-    		if (x == player1.getX() && y == player1.getY()) {
+    		if (posX == player1.getX() && posY == player1.getY()) {
 	    		//errorMessage("that position is occupied");
     		}
     		else {
-    			if (isValidMove(currentPlayer, x, y)) {
-	    			player2.setX(x);
-		    		player2.setY(y);
+    			if (isValidMove(currentPlayer, posX, posY)) {
+	    			player2.setX(posX);
+		    		player2.setY(posY);
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer2PawnPosition(posX, posY);
-		    		if (board.getPosition(x, y).isTop()) {
+		    		if (board.getPosition(posX, posY).isTop()) {
 		    			resetGame();
 		    		}
 		    		changePlayer();

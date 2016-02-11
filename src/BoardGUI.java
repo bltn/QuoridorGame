@@ -139,7 +139,10 @@ public class BoardGUI extends Application {
                     button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            GameController.movePawn(X, Y);
+                        	// convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
+                        	int nineByNineX = (X - 1) / 2;
+                        	int nineByNineY = (Y - 1) / 2;
+                            GameController.movePawn(nineByNineX, nineByNineY);
                             changeActivePlayer();
                         }
                     });
@@ -338,14 +341,20 @@ public class BoardGUI extends Application {
     }
 
     public void updatePlayer1PawnPosition(int x, int y) {
+    	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
+    	int eighteenByEighteenX = (x * 2) + 1;
+    	int eighteenByEighteenY = (y * 2) + 1;
         boardPane.getChildren().remove(firstPawn);
-        boardPane.setConstraints(firstPawn, x, y);
+        boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
         boardPane.getChildren().add(firstPawn);
     }
 
     public void updatePlayer2PawnPosition(int x, int y) {
+    	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
+    	int eighteenByEighteenX = (x * 2) + 1;
+    	int eighteenByEighteenY = (y * 2) + 1;
         boardPane.getChildren().remove(secondPawn);
-        boardPane.setConstraints(secondPawn, x, y);
+        boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
         boardPane.getChildren().add(secondPawn);
     }
 
