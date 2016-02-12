@@ -21,7 +21,7 @@ import javafx.stage.Stage;
  */
 public class BoardGUI extends Application {
 
-	//the scene used to display in the window
+    //the scene used to display in the window
     private Scene scene;
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
