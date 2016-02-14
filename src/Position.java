@@ -3,7 +3,7 @@
  * 
  * @author Jordan Bird
  * @author Ben Lawton
- * @version 02/01/2015
+ * @version 12/02/2016
  */
 public class Position
 {
