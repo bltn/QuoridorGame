@@ -242,4 +242,7 @@ public class GameController<T> {
     	}
     }
 
+   public Player getCurrentPlayer(){
+   	return currentPlayer;
+   }
 }
