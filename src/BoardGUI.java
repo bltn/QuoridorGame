@@ -16,10 +16,10 @@ import javafx.stage.Stage;
 
 /**
  * @author Junaid Rasheed
- * @author Jack Zhang 
+ * @author Jack Zhang
  * @author Ben Lawton
  * @author Jordan Bird
- * 
+ *
  * @version 12/02/2016
  */
 public class BoardGUI extends Application {
@@ -30,8 +30,8 @@ public class BoardGUI extends Application {
     private final int height = 17;
     private final HBox player2StatsPane = new HBox(260);
     private final HBox buttonPane = new HBox(10);
-    
-    
+
+
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
@@ -108,7 +108,7 @@ public class BoardGUI extends Application {
     }
 
     /**
-     * Create the board spaces and add them to the 2D array 
+     * Create the board spaces and add them to the 2D array
      */
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
@@ -142,7 +142,7 @@ public class BoardGUI extends Application {
        });
        buttonPane.getChildren().add(highlightPositionsButton);
     }
-    
+
     /**
      * Allows a user to place a wall on a wall space that is available
      */
@@ -178,7 +178,7 @@ public class BoardGUI extends Application {
    }
 
    /**
-    * Removes all of the walls on the board and gives them back to their respective players  
+    * Removes all of the walls on the board and gives them back to their respective players
     */
    public void resetWalls() {
 	   for (int y = 0; y < 17; y += 2) {
@@ -192,8 +192,8 @@ public class BoardGUI extends Application {
 		   }
 	   }
    }
-   
-   
+
+
 /**
  * Sets the player stats so they can be displayed in the UI
  */
@@ -212,7 +212,7 @@ public class BoardGUI extends Application {
 
     /**
      * Draw a player piece at a position on the board
-     * 
+     *
      * @param pawn	the Player to be drawn
      * @param colour	the colour of the piece
      * @param x		the horizontal co-ordinate of the player
@@ -225,7 +225,7 @@ public class BoardGUI extends Application {
         boardPane.setConstraints(pawn, x, y);
         boardPane.getChildren().add(pawn);
     }
-    
+
     /**
      *  Checks whether the program is currently drawing
      * @return		the value of isDrawing
@@ -275,7 +275,7 @@ public class BoardGUI extends Application {
     }
 
     /**
-     * 
+     *
      * @param moveCount		the value to change movecount to
      */
     public void updatePlayer2MoveCount(int moveCount) {
@@ -303,7 +303,7 @@ public class BoardGUI extends Application {
     /**
      * Updates the player's pawn position to the selected position
      * @param x		x co-ordinate
-     * @param y		y co-ordinate 
+     * @param y		y co-ordinate
      */
     public void updatePlayer1PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
@@ -317,7 +317,7 @@ public class BoardGUI extends Application {
     /**
      * Updates the player's pawn position to the selected position
      * @param x		x co-ordinate
-     * @param y		y co-ordinate 
+     * @param y		y co-ordinate
      */
     public void updatePlayer2PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
@@ -341,7 +341,7 @@ public class BoardGUI extends Application {
     }
 
     /**
-     * Set the occupiable positions 
+     * Set the occupiable positions
      * @param x
      * @param y
      * @param X
