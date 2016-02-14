@@ -21,7 +21,7 @@ import javax.sound.midi.SysexMessage;
 
 /**
  * @author Junaid Rasheed
- * @author Jordan Bird
+ * @author Jordan Bird 
  * 
  * @version 12/02/2016
  */
