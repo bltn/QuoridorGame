@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 /**
  * @author Junaid Rasheed
- * @author Jack Zhang
+ * @author Jack Zhang 
  * @author Ben Lawton
  * @author Jordan Bird
  * 
