@@ -46,16 +46,14 @@ public class GameController<T> {
     }
 
     /**
-     * TODO
-     * @return
+     * @return the current player
      */
     public static Player getCurrentPlayer() {
  	   return currentPlayer;
     }
 
     /**
-     * TODO
-     * @return
+     * @return the previous player
      */
     public static Player getPreviousPlayer() {
  	   if (currentPlayer == player1) {
