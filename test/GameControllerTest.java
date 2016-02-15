@@ -3,59 +3,79 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class GameControllerTest {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class GameControllerTest extends Application {
 	private static Board board;
 	private static BoardGUI gui;
 	private static GameController controller;
 
 	@BeforeClass
-	public static void setUp() {
+	public static void setUpClass() {
+		Thread t = new Thread("JavaFX initialisation") {
+			public void run() {
+				Application.launch(GameControllerTest.class, new String[0]);
+			}
+		};
+		t.setDaemon(true);
+		t.start();
 		board = new Board();
 		gui = new BoardGUI();
 		controller = new GameController<>(gui, board);
 	}
+
 	/**
 	 * Test placeWall method
 	 */
 	@Test
 	public void placeWallTest() {
 
-		GameController.placeWall(5, 5, -1, 4, 5, 1, 5, 6, -1, 4, 6, -1);
-		GameController.placeWall(5, 5, 0, 5, 6, 2, 5, 6, -1, 4, 6, -1);
+		GameController.placeWall(4, 5, PositionWallLocation.BOTTOM, 5, 5, PositionWallLocation.BOTTOM, 4, 6, PositionWallLocation.TOP, 5, 6, PositionWallLocation.TOP);
 
-		assertEquals(true, board.getPosition(5, 5).hasLeftWall());
-		assertEquals(true, board.getPosition(4, 5).hasRightWall());
-		assertEquals(true, board.getPosition(5, 5).hasTopWall());
-		assertEquals(true, board.getPosition(5, 6).hasBottomWall());
-		assertEquals(9, controller.getCurrentPlayer().getWallCount());
-		assertEquals(1, controller.getCurrentPlayer().getMoveCount());
+		assertEquals(true, board.getPosition(4, 5).hasBottomWall());
+		assertEquals(true, board.getPosition(5, 5).hasBottomWall());
+		assertEquals(true, board.getPosition(4, 6).hasTopWall());
+		assertEquals(true, board.getPosition(5, 6).hasTopWall());
+		assertEquals(9, GameController.getPreviousPlayer().getWallCount());
+		assertEquals(1, GameController.getPreviousPlayer().getMoveCount());
+
+		GameController.placeWall(3, 0, PositionWallLocation.RIGHT, 3, 1, PositionWallLocation.RIGHT, 4, 0, PositionWallLocation.LEFT, 4, 1, PositionWallLocation.LEFT);
+
+		assertEquals(true, board.getPosition(3, 0).hasRightWall());
+		assertEquals(true, board.getPosition(3, 1).hasRightWall());
+		assertEquals(true, board.getPosition(4, 0).hasLeftWall());
+		assertEquals(true, board.getPosition(4, 1).hasLeftWall());
+		assertEquals(9, GameController.getPreviousPlayer().getWallCount());
+		assertEquals(1, GameController.getPreviousPlayer().getMoveCount());
 	}
 
-	/** 
+	/**
 	 * Test movePawn method.
 	 */
 	@Test
 	public void movePawnTest() {
-		GameController.movePawn(5, 6);
-		GameController.movePawn(7, 6);
+		// move pawn across to the right
+		int oneAcross = GameController.getCurrentPlayer().getX() + 1;
+		int expectedY = GameController.getCurrentPlayer().getY();
+		int initialMoveCount = GameController.getCurrentPlayer().getMoveCount();
+		GameController.movePawn(oneAcross, GameController.getCurrentPlayer().getY());
+		assertEquals(oneAcross, GameController.getPreviousPlayer().getX());
+		assertEquals(expectedY, GameController.getPreviousPlayer().getY());
+		assertEquals((initialMoveCount + 1), GameController.getPreviousPlayer().getMoveCount());
 
-		assertEquals(5, controller.getCurrentPlayer().getX());
-		assertEquals(6, controller.getCurrentPlayer().getY());
-
-		controller.movePawn(1, 2);
-
-		assertEquals(7, controller.getCurrentPlayer().getX());
-		assertEquals(6, controller.getCurrentPlayer().getY());
+		// attempt to move pawn illegally
+		int initialX = GameController.getCurrentPlayer().getX();
+		int initialY = GameController.getCurrentPlayer().getY();
+		Player startingPlayer = GameController.getCurrentPlayer();
+		GameController.movePawn(5, 5);
+		assertEquals(initialX, GameController.getCurrentPlayer().getX());
+		assertEquals(initialY, GameController.getCurrentPlayer().getY());
+		assertEquals(startingPlayer, GameController.getCurrentPlayer());
 	}
-	
-	/**
-	 * Test isValidMove method.
-	 */
-	@Test
-	public void isValidMoveTest(){
-		GameController.placeWall(5, 0, 0, 4, 0, 0, 6, 0, 0, 7, 0, 0);
-		GameController.placeWall(5, 5, 0, 5, 6, 2, 5, 6, -1, 4, 6, -1);
 
-		assertEquals(false, GameController.isValidMove(controller.getCurrentPlayer(), 4, 1));
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		// STUB: no operation required.
 	}
 }

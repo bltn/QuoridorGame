@@ -8,7 +8,7 @@ import java.util.Iterator;
  * @author Ben Lawton
  * @author Khadija Patel
  * @author Jordan Bird
- * 
+ *
  * @version 12/02/2016
  */
 public class GameController<T> {
@@ -29,10 +29,10 @@ public class GameController<T> {
         player2 = new Player(4, 8);
         currentPlayer = player1;
     }
-    
-/**
- * Show the available positions for the player and then highlights them onscreen
- */
+
+    /**
+     * Show the available positions for the player and then highlights them onscreen
+     */
     public static void showCurrentPlayerMoves() {
     	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
@@ -46,8 +46,29 @@ public class GameController<T> {
     }
 
     /**
+     * TODO
+     * @return
+     */
+    public static Player getCurrentPlayer() {
+ 	   return currentPlayer;
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public static Player getPreviousPlayer() {
+ 	   if (currentPlayer == player1) {
+ 		   return player2;
+ 	   }
+ 	   else {
+ 		   return player1;
+ 	   }
+    }
+
+    /**
      * Allows the active player to place a wall providing they have walls
-     * 
+     *
      * @param pos1X
      * @param pos1Y
      * @param pos1Border
@@ -130,7 +151,7 @@ public class GameController<T> {
     		}
     	}
     }
-    
+
 /**
  * Process the gameover
  */
@@ -139,13 +160,13 @@ public class GameController<T> {
     }
 
     /**
-     * Check if a player is allowed to move to a position 
-     * @param player the active player to check against 
-     * @param newX the new co-ordinate to move to 
-     * @param newY the new co-ordinate to move to 
+     * Check if a player is allowed to move to a position
+     * @param player the active player to check against
+     * @param newX the new co-ordinate to move to
+     * @param newY the new co-ordinate to move to
      * @return player can or cannot move to speicified position
      */
-    public static boolean isValidMove(Player player, int newX, int newY) {
+    private static boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
     	// if the move is directly along the x axis
     	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
@@ -195,7 +216,7 @@ public class GameController<T> {
     }
 
     /**
-     * Execute the winning sequence for a player 
+     * Execute the winning sequence for a player
      * @param player	winner
      */
     private static void gameOver(Player player) {
@@ -205,7 +226,7 @@ public class GameController<T> {
 
     /**
      * Assign a wall a given position
-     * 
+     *
      * @param position the position of the wall
      * @param location Enum category of wall direction
      */
@@ -231,7 +252,7 @@ public class GameController<T> {
     }
 
     /**
-     * Make the next player the active player 
+     * Make the next player the active player
      */
     private static void changePlayer() {
     	if (currentPlayer == player1) {
@@ -241,8 +262,4 @@ public class GameController<T> {
     		currentPlayer = player1;
     	}
     }
-
-   public Player getCurrentPlayer(){
-   	return currentPlayer;
-   }
 }
