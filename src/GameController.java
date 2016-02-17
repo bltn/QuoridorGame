@@ -13,11 +13,15 @@ import java.util.Iterator;
  */
 public class GameController<T> {
 
+	// The game board and its positions' logic
     private static Board board;
+    // GUI (View) representing the game board
     private static BoardGUI gui;
 
+    //The two players in the game
     private static Player player1;
     private static Player player2;
+
     //The player whose turn it is
     private static Player currentPlayer;
 
@@ -31,7 +35,7 @@ public class GameController<T> {
     }
 
     /**
-     * Show the available positions for the player and then highlights them onscreen
+     * Get the available positions a player can move into and then highlight them in the GUI
      */
     public static void showCurrentPlayerMoves() {
     	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
@@ -46,14 +50,14 @@ public class GameController<T> {
     }
 
     /**
-     * @return the current player
+     * @return The current player
      */
     public static Player getCurrentPlayer() {
  	   return currentPlayer;
     }
 
     /**
-     * @return the previous player
+     * @return The player who made a move most recently
      */
     public static Player getPreviousPlayer() {
  	   if (currentPlayer == player1) {
@@ -65,14 +69,11 @@ public class GameController<T> {
     }
 
     /**
-     * Allows the active player to place a wall providing they have walls
+     * Place a wall as the current player's move
      *
-     * @param pos1X
-     * @param pos1Y
-     * @param pos1Border
-     * @param pos2X
-     * @param pos2Y
-     * @param pos2Border
+     * @param pos1X..pos4X x coordinates for the grid the wall will obstruct
+     * @param pos1Y..pos4Y y coordinates for the grid the wall will obstruct
+     * @param pos1Border..pos4Border location of the wall in relation to the grid it will obstruct
      */
     public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
@@ -85,6 +86,11 @@ public class GameController<T> {
 	    	assignWall(coveredPosition2, pos2Border);
 	    	assignWall(coveredPosition3, pos3Border);
 	    	assignWall(coveredPosition4, pos4Border);
+
+	    	board.addWalledOffPosition(coveredPosition1);
+	    	board.addWalledOffPosition(coveredPosition2);
+	    	board.addWalledOffPosition(coveredPosition3);
+	    	board.addWalledOffPosition(coveredPosition4);
 
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
@@ -150,19 +156,12 @@ public class GameController<T> {
     	}
     }
 
-/**
- * Process the gameover
- */
-    public static void gameOver() {
-    	System.exit(0);
-    }
-
     /**
-     * Check if a player is allowed to move to a position
-     * @param player the active player to check against
-     * @param newX the new co-ordinate to move to
-     * @param newY the new co-ordinate to move to
-     * @return player can or cannot move to speicified position
+     * Check if a player is allowed to move to the given position
+     * @param player the player looking to move
+     * @param newX the new co-ordinates of the position the player wants to occupy
+     * @param newY the new co-ordinates of the position the player wants to occupy
+     * @return whether the player can or cannot move to the specified position
      */
     private static boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
@@ -192,7 +191,7 @@ public class GameController<T> {
     }
 
 /**
- * Reset the game as a new game
+ * Reset the game's back-end state and GUI
  */
     private static void resetGame() {
     	gui.updatePlayer1MoveCount(0);
@@ -210,40 +209,32 @@ public class GameController<T> {
     	player2.setX(4);
     	player2.setY(8);
     	currentPlayer = player1;
+    	board.resetWalledOffPositions();
     	gui.resetWalls();
-    }
-
-    /**
-     * Execute the winning sequence for a player
-     * @param player	winner
-     */
-    private static void gameOver(Player player) {
-    	//gui.winner(player);
-    	System.exit(0);
     }
 
     /**
      * Assign a wall a given position
      *
      * @param position the position of the wall
-     * @param location Enum category of wall direction
+     * @param location location of the wall in relation to the position it's blocking
      */
     private static void assignWall(Position position, PositionWallLocation location) {
     	switch (location) {
 	    	case LEFT: {
-	    		position.placeLeftWall();
+	    		position.setHasLeftWall(true);
 	    		break;
 	    	}
 	    	case RIGHT: {
-	    		position.placeRightWall();
+	    		position.setHasRightWall(true);
 	    		break;
 	    	}
 	    	case TOP: {
-	    		position.placeTopWall();
+	    		position.setHasTopWall(true);
 	    		break;
 	    	}
 	    	case BOTTOM: {
-	    		position.placeBottomWall();
+	    		position.setHasBottomWall(true);
 	    		break;
 	    	}
     	}

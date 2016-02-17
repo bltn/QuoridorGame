@@ -24,7 +24,7 @@ public class PositionTest {
 	@Test
 	public void hasBottomWallTesst() {
 		assertEquals(false, pos1.hasBottomWall());
-		pos1.placeBottomWall();
+		pos1.setHasBottomWall(true);
 		assertEquals(true, pos1.hasBottomWall());
 	}
 
