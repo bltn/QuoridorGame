@@ -28,6 +28,20 @@ public class BoardTest {
 	}
 
 	@Test
+	public void testResetWalls() {
+		Position position = board.getPosition(4, 0);
+		position.setHasBottomWall(true);
+		position.setHasRightWall(true);
+		position.setHasLeftWall(true);
+		board.addWalledOffPosition(position);
+		board.resetWalledOffPositions();
+		assertEquals(true, position.hasTopWall());
+		assertEquals(false, position.hasBottomWall());
+		assertEquals(false, position.hasRightWall());
+		assertEquals(false, position.hasLeftWall());
+	}
+
+	@Test
 	public void testGetOccupiablePositions() {
 		Position topMiddle = board.getPosition(4, 0);
 		ArrayList<Position> occupiablePositions = board.getOccupiablePositions(topMiddle);

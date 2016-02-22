@@ -21,8 +21,8 @@ import javax.sound.midi.SysexMessage;
 
 /**
  * @author Junaid Rasheed
- * @author Jordan Bird 
- * 
+ * @author Jordan Bird
+ *
  * @version 12/02/2016
  */
 public class MenuGUI extends Application {
@@ -79,14 +79,11 @@ public class MenuGUI extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	
+
             	BoardGUI gui = new BoardGUI();
             	Board board = new Board();
             	GameController controller = new GameController(gui, board);
             	gui.start(new Stage());
-                
-                
-               
             };
         });
         quitButton.setPrefWidth(150);
