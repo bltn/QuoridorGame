@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -28,18 +30,20 @@ public class BoardGUI extends Application {
     private final Scene scene;
     private final int width = 17;
     private final int height = 17;
-    private final HBox player2StatsPane = new HBox(260);
+    private final HBox player2StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
+    private final HBox currentPlayerPane = new HBox();
 
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
-    private final HBox player1StatsPane = new HBox(260);
+    private final HBox player1StatsPane = new HBox(120);
     // player two stats
     private GridPane boardPane;
     //amount of move the player has make
     private Text player1Moves;
+    private Text currentPlayerText;
     //amount of walls the player has
     private int player1WallCount;
     private Text player1Walls;
@@ -72,6 +76,7 @@ public class BoardGUI extends Application {
         secondPawn = new Circle(15);
         drawing = true;
         player1Moves = new Text("Moves: " + 0);
+        currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
         player1Walls = new Text("Walls: " + player1WallCount);
         player2Moves = new Text("Moves: " + 0);
@@ -88,6 +93,7 @@ public class BoardGUI extends Application {
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
+        currentPlayerPane.setId("current-player-status");
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -99,12 +105,16 @@ public class BoardGUI extends Application {
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
+        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane,buttonPane);
+        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane);
+        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
     }
 
     /**
@@ -201,13 +211,19 @@ public class BoardGUI extends Application {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player1Moves.setTextAlignment(TextAlignment.CENTER);
+        currentPlayerText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.ITALIC, 15));
         player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        player1StatsPane.getChildren().addAll(player1Moves, player1Walls);
+        Text player1Title = new Text("Player 1");
+        player1Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        player1StatsPane.getChildren().addAll(player1Moves, player1Title, player1Walls);
+        currentPlayerPane.getChildren().addAll(currentPlayerText);
         player2Walls.setTextAlignment(TextAlignment.CENTER);
         player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player2Moves.setTextAlignment(TextAlignment.CENTER);
         player2Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        player2StatsPane.getChildren().addAll(player2Moves, player2Walls);
+        Text player2Title = new Text("Player 2");
+        player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
     }
 
     /**
@@ -334,9 +350,11 @@ public class BoardGUI extends Application {
     public void changeActivePlayer() {
         if (currentPlayer == 1) {
             currentPlayer = 2;
+            currentPlayerText.setText("Player 2's turn...");
         }
         else {
             currentPlayer = 1;
+            currentPlayerText.setText("Player 1's turn...");
         }
     }
 
