@@ -35,6 +35,9 @@ public class BoardGUI extends Application {
 
     private final HBox currentPlayerPane = new HBox();
 
+    private final HBox errorPane = new HBox();
+    private Text errorPaneText;
+
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
@@ -83,6 +86,7 @@ public class BoardGUI extends Application {
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
         currentPlayer = 1;
+        errorPaneText = new Text("");
     }
 
     @Override
@@ -93,7 +97,6 @@ public class BoardGUI extends Application {
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
-        currentPlayerPane.setId("current-player-status");
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -106,15 +109,17 @@ public class BoardGUI extends Application {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
         currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
+        errorPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane);
+        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
         currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
+        errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
 
     /**
@@ -160,7 +165,7 @@ public class BoardGUI extends Application {
        // tall, thin wall
 	   if (x % 2 != 0) {
            if (grids[y][x].getFill() == Color.GREY) {
-               if (x != 16) {
+               if (y < 16) {
                    if (grids[y + 2][x].getFill() == Color.GREY) {
                        // avoid making a cross with the walls
                        if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
@@ -173,7 +178,7 @@ public class BoardGUI extends Application {
        //short, wide wall
        if (y % 2 != 0) {
            if (grids[y][x].getFill() == Color.GREY) {
-               if (y != 16) {
+               if (x < 16) {
                        if (grids[y][x + 2].getFill() == Color.GREY) {
                            // avoid making a cross with the walls
                            if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
@@ -186,17 +191,17 @@ public class BoardGUI extends Application {
    }
 
    /**
-    * Removes all of the walls on the board and gives them back to their respective players
+    * Removes all of the walls on the board
     */
    public void resetWalls() {
 	   for (int y = 0; y < 17; y += 2) {
 		   for (int x = 1; x < 17; x+= 2) {
-			   grids[y][x].setFill(Color.WHITE);
+			   grids[y][x].setFill(Color.GREY);
 		   }
 	   }
 	   for (int y = 1; y < 17; y += 2) {
 		   for (int x = 0; x < 17; x+= 2) {
-			   grids[y][x].setFill(Color.WHITE);
+			   grids[y][x].setFill(Color.GREY);
 		   }
 	   }
    }
@@ -209,11 +214,14 @@ public class BoardGUI extends Application {
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player1Moves.setTextAlignment(TextAlignment.CENTER);
         currentPlayerText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.ITALIC, 15));
+        errorPaneText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        errorPaneText.setFill(Color.RED);
         player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         Text player1Title = new Text("Player 1");
         player1Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player1StatsPane.getChildren().addAll(player1Moves, player1Title, player1Walls);
         currentPlayerPane.getChildren().addAll(currentPlayerText);
+        errorPane.getChildren().addAll(errorPaneText);
         player2Walls.setTextAlignment(TextAlignment.CENTER);
         player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player2Moves.setTextAlignment(TextAlignment.CENTER);
@@ -377,7 +385,21 @@ public class BoardGUI extends Application {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
-                GameController.movePawn(nineByNineX, nineByNineY);
+                try {
+                	GameController.movePawn(nineByNineX, nineByNineY);
+                }
+                catch (IllegalArgumentException e) {
+                	errorPaneText.setText(e.getMessage());
+                	new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    errorPaneText.setText("");
+                                }
+                            },
+                            1000
+                    );
+                }
             }
         });
     }
@@ -392,14 +414,7 @@ public class BoardGUI extends Application {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (currentPlayer == 1) {
-                    if (player1WallCount > 0) {
-                        setWall(X, Y);
-                    }
-                }
-                else if (player2WallCount > 0) {
-                    setWall(X, Y);
-                }
+                setWall(X, Y);
             }
         });
     }
@@ -414,14 +429,7 @@ public class BoardGUI extends Application {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (currentPlayer == 1) {
-                    if (player1WallCount > 0) {
-                        setWall(X, Y);
-                    }
-                }
-                else if (player2WallCount > 0) {
-                    setWall(X, Y);
-                }
+                setWall(X, Y);
             }
         });
     }
@@ -436,12 +444,6 @@ public class BoardGUI extends Application {
     }
 
     private void placeThinWall(int x, int y) {
-        grids[y][x].setFill(Color.ORANGE);
-        grids[y + 1][x].setFill(Color.ORANGE);
-        grids[y + 2][x].setFill(Color.ORANGE);
-        grids[y][x].setStroke(Color.ORANGE);
-        grids[y + 1][x].setStroke(Color.ORANGE);
-        grids[y + 2][x].setStroke(Color.ORANGE);
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
@@ -456,16 +458,30 @@ public class BoardGUI extends Application {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
-        GameController.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        try {
+        	GameController.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	grids[y][x].setFill(Color.ORANGE);
+            grids[y + 1][x].setFill(Color.ORANGE);
+            grids[y + 2][x].setFill(Color.ORANGE);
+            grids[y][x].setStroke(Color.ORANGE);
+            grids[y + 1][x].setStroke(Color.ORANGE);
+            grids[y + 2][x].setStroke(Color.ORANGE);
+        }
+        catch (IllegalStateException e) {
+        	errorPaneText.setText(e.getMessage());
+        	new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            errorPaneText.setText("");
+                        }
+                    },
+                    1000
+            );
+        }
     }
 
     private void placeWideWall(int x, int y) {
-        grids[y][x].setFill(Color.ORANGE);
-        grids[y][x + 1].setFill(Color.ORANGE);
-        grids[y][x + 2].setFill(Color.ORANGE);
-        grids[y][x].setStroke(Color.ORANGE);
-        grids[y][x + 1].setStroke(Color.ORANGE);
-        grids[y][x + 2].setStroke(Color.ORANGE);
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
@@ -480,6 +496,26 @@ public class BoardGUI extends Application {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        GameController.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        try {
+        	GameController.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        	grids[y][x].setFill(Color.ORANGE);
+            grids[y][x + 1].setFill(Color.ORANGE);
+            grids[y][x + 2].setFill(Color.ORANGE);
+            grids[y][x].setStroke(Color.ORANGE);
+            grids[y][x + 1].setStroke(Color.ORANGE);
+            grids[y][x + 2].setStroke(Color.ORANGE);
+        }
+        catch (IllegalStateException e) {
+        	errorPaneText.setText(e.getMessage());
+        	new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            errorPaneText.setText("");
+                        }
+                    },
+                    1000
+            );
+        }
     }
 }

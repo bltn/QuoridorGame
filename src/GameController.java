@@ -105,7 +105,7 @@ public class GameController<T> {
 	    	changePlayer();
     	}
     	else {
-    		//errorMessage("you have no remaining walls");
+    		throw new IllegalStateException("You have no remaining walls");
     	}
     }
 
@@ -117,7 +117,7 @@ public class GameController<T> {
     public static void movePawn(int posX, int posY) {
     	if (currentPlayer == player1) {
     		if (posX == player2.getX() && posY == player2.getY()) {
-    			//errorMessage("that position is occupied");
+    			throw new IllegalArgumentException("Position is occupied");
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
@@ -132,13 +132,13 @@ public class GameController<T> {
 		    		changePlayer();
     			}
     			else {
-    				//errorMessage("that isn't a valid move");
+    				throw new IllegalArgumentException("That isn't a valid move");
     			}
     		}
     	}
     	else {
     		if (posX == player1.getX() && posY == player1.getY()) {
-	    		//errorMessage("that position is occupied");
+	    		throw new IllegalArgumentException("Position is occupied");
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
