@@ -246,9 +246,11 @@ public class GameController<T> {
     private static void changePlayer() {
     	if (currentPlayer == player1) {
     		currentPlayer = player2;
+    		gui.changeActivePlayer();
     	}
     	else {
     		currentPlayer = player1;
+    		gui.changeActivePlayer();
     	}
     }
 }
