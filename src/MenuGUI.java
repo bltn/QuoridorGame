@@ -102,8 +102,6 @@ public class MenuGUI extends Application {
         	public void handle(ActionEvent event){
                 ServerGUI sgui = new ServerGUI();
                 sgui.start(new Stage());
-
-				//	Server s = new Server();
         	}
         });
     }
