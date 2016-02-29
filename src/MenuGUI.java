@@ -85,7 +85,9 @@ public class MenuGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
             	BoardGUI gui = new BoardGUI();
-            	gui.start(new Stage());
+            	Board board = new Board();
+            	GameController controller = new GameController(gui, board);
+            	controller.startGame();
             };
         });
         quitButton.setPrefWidth(150);

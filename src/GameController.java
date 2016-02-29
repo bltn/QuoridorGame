@@ -281,4 +281,11 @@ public class GameController<T> {
 			server.connect(IPAddress, portAddress);
 		}
 	}
+
+    /**
+     * Starts the board game.
+     */
+	public static void startGame() {
+		gui.start(new Stage());
+	}
 }

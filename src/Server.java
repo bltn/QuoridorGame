@@ -68,7 +68,9 @@ public class Server extends Thread {
 
     public void startGame() {
         if (accepted) {
+            GameController.startGame();
         } else {
+            System.out.println("Need a player to join");
         }
     }
 }

@@ -36,8 +36,14 @@ public class ServerGUI extends Application {
     private TextField portTextField;
     private String IPAddress = "localhost";
     private int portAddress = 33333;
+    public GameController controller;
 
     public ServerGUI() {
+        try {
+            controller = new GameController(new BoardGUI(), new Board(), new Server());
+        } catch (IOException e) {
+            System.out.println("constructing error for GameController in ServerGUI");
+        }
         serverPane = new GridPane();
         serverText = new Text("Join Multiplayer");
         buttonBox = new VBox();
@@ -102,7 +108,7 @@ public class ServerGUI extends Application {
         });
     }
 
-    private void setTextFields() {
+    public void setTextFields() {
         IPTextField.setLayoutX(50);
         IPTextField.setLayoutY(50);
         IPandPortInfo.setLayoutX(50);
