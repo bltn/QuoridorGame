@@ -32,6 +32,7 @@ public class ServerGUI extends Application {
     private GridPane serverPane;
     private Text serverText;
     private VBox buttonBox;
+    private Button createButton;
     private Button connectButton;
     private Label IPandPortInfo;
     private TextField IP;
@@ -42,19 +43,27 @@ public class ServerGUI extends Application {
     private DataOutputStream dos;
     private String IPAddress = "localhost";
     private int portAddress = 33333;
+    private Server server;
     private boolean accepted;
 
     public ServerGUI() {
+        try {
+            server = new Server();
+        }
+        catch (IOException e) {
+            System.out.println("constructing error");
+        }
         serverPane = new GridPane();
         serverText = new Text("Join Multiplayer");
         buttonBox = new VBox();
+        createButton = new Button("Create");
         connectButton = new Button("Connect");
         scene = new Scene(serverPane, 600, 800);
         scene.getStylesheets().add("Theme.css");
         //set up a textfield and a button for user to enter their ip and port detail
         IPandPortInfo = new Label("Please Enter the port and IP you want to connect?");
-        IP = new TextField("Enter IP");
-        port = new TextField("Enter Port");
+        IP = new TextField(IPAddress);
+        port = new TextField("" + portAddress);
     }
 
     @Override
@@ -86,13 +95,20 @@ public class ServerGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IP, port, connectButton);
+        buttonBox.getChildren().addAll(IPandPortInfo, IP, port, createButton, connectButton);
         buttonBox.setAlignment(Pos.CENTER);
+        createButton.setPrefWidth(150);
+        createButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                server.initializeServer(IPAddress, portAddress);
+            }
+        });
         connectButton.setPrefWidth(150);
         connectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                setupIPandPort();
+                server.connect(IPAddress, portAddress);
             }
         });
     }
@@ -105,62 +121,4 @@ public class ServerGUI extends Application {
         port.setLayoutX(IP.getLayoutX());
         port.setLayoutY(IP.getLayoutY() + 30);
     }
-
-    /**
-     * setting up the server
-     * Include add ip and port text field on the right hand side for people to fill in
-     */
-    private void setupIPandPort(){
-        String tempIP = IP.getText();
-        String tempPort = port.getText();
-        //check if text field is a integer
-        // then convert from String to integer.
-        if (tempIP.matches("[0-9]*") && tempPort.matches("[0-9]*")) {
-            IPAddress = tempIP;
-            portAddress = Integer.parseInt(tempPort);
-            if(portAddress > 0 && portAddress < 65535){
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setContentText("IP and Port successfully saved!");
-                alert.showAndWait();
-                //Check if server already exist.
-                if(!connect()){
-                    initializeServer();
-                }
-            }}
-    }
-    private boolean connect(){
-        try {
-            socket = new Socket(IPAddress,portAddress);
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
-            accepted = true;
-        } catch (Exception e) {
-            System.out.println("Unable to connect to the address: " + IPAddress + ":" + portAddress + " | Starting a server");
-            return false;
-        }
-        System.out.println("Successfully connected to the server.");
-        return true;
-    }
-    private void initializeServer(){
-    	try {
-			serverSocket = new ServerSocket(portAddress, 8, InetAddress.getByName(IPAddress));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
-	private void listenForServerRequest() {
-		Socket socket = null;
-		try {
-			socket = serverSocket.accept();
-			dos = new DataOutputStream(socket.getOutputStream());
-			dis = new DataInputStream(socket.getInputStream());
-			Alert a = new Alert(AlertType.INFORMATION);
-			a.setTitle("Information");
-			a.setContentText("Client has joined the server");
-			accepted = true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

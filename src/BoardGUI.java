@@ -93,14 +93,10 @@ public class BoardGUI extends Application {
         primaryStage.setTitle("Quoridor");
         setPanes();
         setButtons();
-//      setupIPandPort();
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
         scene.getStylesheets().add("Theme.css");
-//        if(!accepted){
-//        	listenForServerRequest();
-//       }
         primaryStage.setScene(scene);
         primaryStage.show();
     }
