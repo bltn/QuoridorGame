@@ -68,12 +68,7 @@ public class Server extends Thread {
 
     public void startGame() {
         if (accepted) {
-            Board board = new Board();
-            BoardGUI boardGUI = new BoardGUI();
-            GameController gameController = new GameController(boardGUI, board);
-            boardGUI.start(new Stage());
         } else {
-            System.out.println("No player connected");
         }
     }
 }

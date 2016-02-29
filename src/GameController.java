@@ -17,6 +17,8 @@ public class GameController<T> {
     private static Board board;
     // GUI (View) representing the game board
     private static BoardGUI gui;
+	// Server in a multiplayer game
+	private static Server server;
 
     //The two players in the game
     private static Player player1;
@@ -33,6 +35,16 @@ public class GameController<T> {
         player2 = new Player(4, 8);
         currentPlayer = player1;
     }
+
+	public GameController(BoardGUI gui, Board board, Server server) {
+		GameController.board = board;
+		GameController.gui = gui;
+		GameController.server = server;
+
+		player1 = new Player(4, 0);
+		player2 = new Player(4, 8);
+		currentPlayer = player1;
+	}
 
     /**
      * Get the available positions a player can move into and then highlight them in the GUI
@@ -251,4 +263,22 @@ public class GameController<T> {
     		currentPlayer = player1;
     	}
     }
+
+	/**
+	 * Create a server
+	 */
+	public static void initializeServer(String IPAddress, int portAddress) {
+		if (portAddress <= 65535) {
+			server.initializeServer(IPAddress, portAddress);
+		}
+	}
+
+	/**
+	 * Join a server
+	 */
+	public static void connectToServer(String IPAddress, int portAddress) {
+		if (portAddress <= 65535) {
+			server.connect(IPAddress, portAddress);
+		}
+	}
 }

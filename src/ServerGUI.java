@@ -16,16 +16,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
-import java.net.InetAddress;
 
 public class ServerGUI extends Application {
     private Scene scene;
@@ -35,24 +32,12 @@ public class ServerGUI extends Application {
     private Button createButton;
     private Button connectButton;
     private Label IPandPortInfo;
-    private TextField IP;
-    private TextField port;
-    private ServerSocket serverSocket;
-    private Socket socket;
-    private DataInputStream dis;
-    private DataOutputStream dos;
+    private TextField IPTextField;
+    private TextField portTextField;
     private String IPAddress = "localhost";
     private int portAddress = 33333;
-    private Server server;
-    private boolean accepted;
 
     public ServerGUI() {
-        try {
-            server = new Server();
-        }
-        catch (IOException e) {
-            System.out.println("constructing error");
-        }
         serverPane = new GridPane();
         serverText = new Text("Join Multiplayer");
         buttonBox = new VBox();
@@ -62,8 +47,8 @@ public class ServerGUI extends Application {
         scene.getStylesheets().add("Theme.css");
         //set up a textfield and a button for user to enter their ip and port detail
         IPandPortInfo = new Label("Please Enter the port and IP you want to connect?");
-        IP = new TextField(IPAddress);
-        port = new TextField("" + portAddress);
+        IPTextField = new TextField(IPAddress);
+        portTextField = new TextField("" + portAddress);
     }
 
     @Override
@@ -95,30 +80,34 @@ public class ServerGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IP, port, createButton, connectButton);
+        buttonBox.getChildren().addAll(IPandPortInfo, IPTextField, portTextField, createButton, connectButton);
         buttonBox.setAlignment(Pos.CENTER);
         createButton.setPrefWidth(150);
         createButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                server.initializeServer(IPAddress, portAddress);
+                IPAddress = IPTextField.getText();
+                portAddress = Integer.parseInt(portTextField.getText());
+                GameController.initializeServer(IPAddress, portAddress);
             }
         });
         connectButton.setPrefWidth(150);
         connectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                server.connect(IPAddress, portAddress);
+                IPAddress = IPTextField.getText();
+                portAddress = Integer.parseInt(portTextField.getText());
+                GameController.connectToServer(IPAddress, portAddress);
             }
         });
     }
 
     private void setTextFields() {
-        IP.setLayoutX(50);
-        IP.setLayoutY(50);
+        IPTextField.setLayoutX(50);
+        IPTextField.setLayoutY(50);
         IPandPortInfo.setLayoutX(50);
-        IPandPortInfo.setLayoutY(IP.getLayoutY() - 20);
-        port.setLayoutX(IP.getLayoutX());
-        port.setLayoutY(IP.getLayoutY() + 30);
+        IPandPortInfo.setLayoutY(IPTextField.getLayoutY() - 20);
+        portTextField.setLayoutX(IPTextField.getLayoutX());
+        portTextField.setLayoutY(IPTextField.getLayoutY() + 30);
     }
 }
