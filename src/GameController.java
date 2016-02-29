@@ -30,6 +30,7 @@ public class GameController<T> {
     public GameController(BoardGUI gui, Board board) {
         GameController.board = board;
         GameController.gui = gui;
+        server = null;
 
         player1 = new Player(4, 0);
         player2 = new Player(4, 8);
@@ -133,7 +134,13 @@ public class GameController<T> {
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
-		    		player1.setX(posX);
+                    if (server != null) {
+                        server.sendXPosition(player1.getX());
+                        //server.run();
+                        server.sendYPosition(player1.getY());
+                        //server.run();
+                    }
+                    player1.setX(posX);
 		    		player1.setY(posY);
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
@@ -154,6 +161,12 @@ public class GameController<T> {
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
+                    if (server != null) {
+                        server.sendXPosition(player2.getX());
+                        //server.run();
+                        server.sendYPosition(player2.getY());
+                        //server.run();
+                    }
 	    			player2.setX(posX);
 		    		player2.setY(posY);
 		    		currentPlayer.incrementMoveCount();
@@ -165,7 +178,8 @@ public class GameController<T> {
 		    		changePlayer();
 	    		}
     		}
-    	}
+        }
+        server.run();
     }
 
     /**
@@ -287,5 +301,9 @@ public class GameController<T> {
      */
 	public static void startGame() {
 		gui.start(new Stage());
+        if (server != null) {
+            Thread thread = new Thread(server);
+            thread.start();
+        }
 	}
 }

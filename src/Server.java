@@ -1,19 +1,15 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 public class Server extends Thread {
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private DataInputStream dis;
-	private DataOutputStream dos;
+	private DataInputStream dataInputStream;
+	private DataOutputStream dataOutputStream;
+    private BufferedInputStream bufferedInputStream;
+    private BufferedOutputStream bufferedOutputStream;
 	private boolean accepted;
 	
     public Server() throws IOException {
@@ -22,13 +18,14 @@ public class Server extends Thread {
 
 
     public void run() {
+        readInput();
     }
 
     public boolean connect(String IPAddress, int portAddress){
         try {
             socket = new Socket(IPAddress, portAddress);
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataInputStream = new DataInputStream(socket.getInputStream());
             accepted = true;
             startGame();
         } catch (Exception e) {
@@ -55,14 +52,42 @@ public class Server extends Thread {
         Socket socket = null;
         try {
             socket = serverSocket.accept();
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataInputStream = new DataInputStream(socket.getInputStream());
             System.out.println("Player has joined the server");
             System.out.println("Starting game");
             accepted = true;
             startGame();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void readInput() {
+        try {
+            int x = dataInputStream.readInt();
+            int y = dataInputStream.readInt();
+            GameController.movePawn(x, y);
+        } catch (IOException e) {
+            System.out.println("Error reading input");
+        }
+    }
+
+    public void sendXPosition(int x) {
+        try {
+            dataOutputStream.writeInt(x);
+            System.out.println("X position sent");
+        } catch (IOException e) {
+            System.out.println("Error sending X position");
+        }
+    }
+
+    public void sendYPosition(int y) {
+        try {
+            dataOutputStream.writeInt(y);
+            System.out.println("Y position sent");
+        } catch (IOException e) {
+            System.out.println("Error sending Y position");
         }
     }
 
