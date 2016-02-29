@@ -36,7 +36,7 @@ public class ServerGUI extends Application {
     private TextField portTextField;
     private String IPAddress = "localhost";
     private int portAddress = 33333;
-    public GameController controller;
+    private static GameController controller;
 
     public ServerGUI() {
         try {
@@ -94,7 +94,7 @@ public class ServerGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPTextField.getText();
                 portAddress = Integer.parseInt(portTextField.getText());
-                GameController.initializeServer(IPAddress, portAddress);
+                controller.initializeServer(IPAddress, portAddress);
             }
         });
         connectButton.setPrefWidth(150);
@@ -103,7 +103,7 @@ public class ServerGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPTextField.getText();
                 portAddress = Integer.parseInt(portTextField.getText());
-                GameController.connectToServer(IPAddress, portAddress);
+                controller.connectToServer(IPAddress, portAddress);
             }
         });
     }
