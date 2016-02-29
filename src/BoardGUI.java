@@ -1,8 +1,15 @@
+
+
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -57,6 +64,7 @@ public class BoardGUI extends Application {
     private Circle secondPawn;
     private boolean drawing;
 
+
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
@@ -67,7 +75,7 @@ public class BoardGUI extends Application {
         boardPane.setGridLinesVisible(true);
         button = new Rectangle[width][height];
         highlightPositionsButton = new Button("Hint");
-        scene = new Scene(rootPane, 800, 800);
+        scene = new Scene(rootPane,1000, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         drawing = true;
@@ -85,10 +93,14 @@ public class BoardGUI extends Application {
         primaryStage.setTitle("Quoridor");
         setPanes();
         setButtons();
+//      setupIPandPort();
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
         scene.getStylesheets().add("Theme.css");
+//        if(!accepted){
+//        	listenForServerRequest();
+//       }
         primaryStage.setScene(scene);
         primaryStage.show();
     }
