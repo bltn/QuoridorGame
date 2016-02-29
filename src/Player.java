@@ -1,5 +1,8 @@
 /**
+ * @author Jordan Bird
  * @author Ben Lawton
+ * 
+ *  @version 12/02/2016
  */
 
 public class Player

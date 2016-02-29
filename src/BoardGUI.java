@@ -18,18 +18,25 @@ import javafx.stage.Stage;
  * @author Junaid Rasheed
  * @author Jack Zhang
  * @author Ben Lawton
+ * @author Jordan Bird
+ *
+ * @version 12/02/2016
  */
 public class BoardGUI extends Application {
 
-    //the scene used to display in the window
-    private Scene scene;
+	//the scene used to display in the window
+    private final Scene scene;
+    private final int width = 17;
+    private final int height = 17;
+    private final HBox player2StatsPane = new HBox(260);
+    private final HBox buttonPane = new HBox(10);
+
+
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
-    private HBox player1StatsPane;
+    private final HBox player1StatsPane = new HBox(260);
     // player two stats
-    private HBox player2StatsPane;
-    private HBox buttonPane;
     private GridPane boardPane;
     //amount of move the player has make
     private Text player1Moves;
@@ -48,21 +55,15 @@ public class BoardGUI extends Application {
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
-    private int width;
-    private int height;
     private boolean drawing;
 
     /**
-     * declare everything in the board
+     * Constructor for objects of class BoardGUI
+     * Models and creates a GUI for the game itself
      */
     public BoardGUI() {
-        height = 17;
-        width = 17;
         rootPane = new VBox();
-        player1StatsPane = new HBox(260);
-        player2StatsPane = new HBox(260);
         boardPane = new GridPane();
-        buttonPane = new HBox(10);
         boardPane.setGridLinesVisible(true);
         button = new Rectangle[width][height];
         highlightPositionsButton = new Button("Hint");
@@ -87,13 +88,13 @@ public class BoardGUI extends Application {
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, 8, 0);
         setPawn(secondPawn, Color.RED, 8, 16);
+        scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     /**
-     * set everything into position centre
-     * for the pane
+     * Set the alignment of all instantiated fields to the centre of the pane
      */
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
@@ -106,6 +107,9 @@ public class BoardGUI extends Application {
         rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane,buttonPane);
     }
 
+    /**
+     * Create the board spaces and add them to the 2D array
+     */
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
     		for(int y = 0; y < width; y++){
@@ -138,8 +142,9 @@ public class BoardGUI extends Application {
        });
        buttonPane.getChildren().add(highlightPositionsButton);
     }
+
     /**
-     * this method basically set the wall that the user want to
+     * Allows a user to place a wall on a wall space that is available
      */
    private void setWall(int x, int y) {
        // tall, thin wall
@@ -172,6 +177,9 @@ public class BoardGUI extends Application {
        }
    }
 
+   /**
+    * Removes all of the walls on the board and gives them back to their respective players
+    */
    public void resetWalls() {
 	   for (int y = 0; y < 17; y += 2) {
 		   for (int x = 1; x < 17; x+= 2) {
@@ -185,6 +193,10 @@ public class BoardGUI extends Application {
 	   }
    }
 
+
+/**
+ * Sets the player stats so they can be displayed in the UI
+ */
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -199,7 +211,12 @@ public class BoardGUI extends Application {
     }
 
     /**
-     * draw a pawn
+     * Draw a player piece at a position on the board
+     *
+     * @param pawn	the Player to be drawn
+     * @param colour	the colour of the piece
+     * @param x		the horizontal co-ordinate of the player
+     * @param y		the vertical co-ordinate of the player
      */
     public void setPawn(Circle pawn, Color colour, int x, int y) {
         pawn.setFill(colour);
@@ -208,14 +225,28 @@ public class BoardGUI extends Application {
         boardPane.setConstraints(pawn, x, y);
         boardPane.getChildren().add(pawn);
     }
+
+    /**
+     *  Checks whether the program is currently drawing
+     * @return		the value of isDrawing
+     */
     public boolean isDrawing() {
         return drawing;
     }
 
+    /**
+     * Sets the drawing boolean to the passed boolean
+     * @param b		is the program drawing or not
+     */
     public void setDrawing(boolean b) {
         drawing = b;
     }
 
+    /**
+     * Highlights all of the surrounding valid places for the player to occupy
+     * @param x		the x co-ordinate
+     * @param y		the y co-ordinate
+     */
     public void highlightPositionAvailability(int x, int y) {
         button[x][y].setFill(Color.YELLOW);
         new java.util.Timer().schedule(
@@ -235,24 +266,45 @@ public class BoardGUI extends Application {
         );
     }
 
+    /**
+     * Set the player move count to the selected value
+     * @param moveCount		the value to change movecount to
+     */
     public void updatePlayer1MoveCount(int moveCount) {
         player1Moves.setText("Moves: " + moveCount);
     }
 
+    /**
+     *
+     * @param moveCount		the value to change movecount to
+     */
     public void updatePlayer2MoveCount(int moveCount) {
         player2Moves.setText("Moves: " + moveCount);
     }
 
+    /**
+     * Set the player wall count to the selected value
+     * @param wallCount		the value to change walls to
+     */
     public void updatePlayer1WallCount(int wallCount) {
         player1WallCount = wallCount;
         player1Walls.setText("Walls: " + player1WallCount);
     }
 
+    /**
+     * Set the player wall count to the selected value
+     * @param wallCount		the value to change walls to
+     */
     public void updatePlayer2WallCount(int wallCount) {
         player2WallCount = wallCount;
         player2Walls.setText("Walls: " + player2WallCount);
     }
 
+    /**
+     * Updates the player's pawn position to the selected position
+     * @param x		x co-ordinate
+     * @param y		y co-ordinate
+     */
     public void updatePlayer1PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
@@ -262,6 +314,11 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(firstPawn);
     }
 
+    /**
+     * Updates the player's pawn position to the selected position
+     * @param x		x co-ordinate
+     * @param y		y co-ordinate
+     */
     public void updatePlayer2PawnPosition(int x, int y) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
@@ -271,6 +328,9 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(secondPawn);
     }
 
+    /**
+     * change the active player to the next player
+     */
     public void changeActivePlayer() {
         if (currentPlayer == 1) {
             currentPlayer = 2;
@@ -280,6 +340,13 @@ public class BoardGUI extends Application {
         }
     }
 
+    /**
+     * Set the occupiable positions
+     * @param x
+     * @param y
+     * @param X
+     * @param Y
+     */
     private void setOccupiablePosition(int x, int y, int X, int Y) {
         button[x][y].setHeight(40);
         button[x][y].setWidth(40);

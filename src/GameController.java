@@ -7,27 +7,36 @@ import java.util.Iterator;
 /**
  * @author Ben Lawton
  * @author Khadija Patel
+ * @author Jordan Bird
+ *
+ * @version 12/02/2016
  */
 public class GameController<T> {
 
+	// The game board and its positions' logic
     private static Board board;
+    // GUI (View) representing the game board
     private static BoardGUI gui;
 
+    //The two players in the game
     private static Player player1;
     private static Player player2;
+
     //The player whose turn it is
     private static Player currentPlayer;
 
     public GameController(BoardGUI gui, Board board) {
         GameController.board = board;
         GameController.gui = gui;
-		gui.start(new Stage());
 
         player1 = new Player(4, 0);
         player2 = new Player(4, 8);
         currentPlayer = player1;
     }
 
+    /**
+     * Get the available positions a player can move into and then highlight them in the GUI
+     */
     public static void showCurrentPlayerMoves() {
     	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
@@ -41,12 +50,30 @@ public class GameController<T> {
     }
 
     /**
-     * @param pos1X
-     * @param pos1Y
-     * @param pos1Border
-     * @param pos2X
-     * @param pos2Y
-     * @param pos2Border
+     * @return The current player
+     */
+    public static Player getCurrentPlayer() {
+ 	   return currentPlayer;
+    }
+
+    /**
+     * @return The player who made a move most recently
+     */
+    public static Player getPreviousPlayer() {
+ 	   if (currentPlayer == player1) {
+ 		   return player2;
+ 	   }
+ 	   else {
+ 		   return player1;
+ 	   }
+    }
+
+    /**
+     * Place a wall as the current player's move
+     *
+     * @param pos1X..pos4X x coordinates for the grid the wall will obstruct
+     * @param pos1Y..pos4Y y coordinates for the grid the wall will obstruct
+     * @param pos1Border..pos4Border location of the wall in relation to the grid it will obstruct
      */
     public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
@@ -59,6 +86,11 @@ public class GameController<T> {
 	    	assignWall(coveredPosition2, pos2Border);
 	    	assignWall(coveredPosition3, pos3Border);
 	    	assignWall(coveredPosition4, pos4Border);
+
+	    	board.addWalledOffPosition(coveredPosition1);
+	    	board.addWalledOffPosition(coveredPosition2);
+	    	board.addWalledOffPosition(coveredPosition3);
+	    	board.addWalledOffPosition(coveredPosition4);
 
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
@@ -77,6 +109,11 @@ public class GameController<T> {
     	}
     }
 
+    /**
+     * Move a player to a specified position
+     * @param posX the x co-ordinate of the move
+     * @param posY the y co-ordinate of the move
+     */
     public static void movePawn(int posX, int posY) {
     	if (currentPlayer == player1) {
     		if (posX == player2.getX() && posY == player2.getY()) {
@@ -119,11 +156,14 @@ public class GameController<T> {
     	}
     }
 
-    public static void gameOver() {
-    	System.exit(0);
-    }
-
-    public static boolean isValidMove(Player player, int newX, int newY) {
+    /**
+     * Check if a player is allowed to move to the given position
+     * @param player the player looking to move
+     * @param newX the new co-ordinates of the position the player wants to occupy
+     * @param newY the new co-ordinates of the position the player wants to occupy
+     * @return whether the player can or cannot move to the specified position
+     */
+    private static boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
     	// if the move is directly along the x axis
     	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
@@ -150,7 +190,9 @@ public class GameController<T> {
     	return isValid;
     }
 
-
+/**
+ * Reset the game's back-end state and GUI
+ */
     private static void resetGame() {
     	gui.updatePlayer1MoveCount(0);
     	player1.setMoveCount(0);
@@ -167,35 +209,40 @@ public class GameController<T> {
     	player2.setX(4);
     	player2.setY(8);
     	currentPlayer = player1;
+    	board.resetWalledOffPositions();
     	gui.resetWalls();
     }
 
-    private static void gameOver(Player player) {
-    	//gui.winner(player);
-    	System.exit(0);
-    }
-
+    /**
+     * Assign a wall a given position
+     *
+     * @param position the position of the wall
+     * @param location location of the wall in relation to the position it's blocking
+     */
     private static void assignWall(Position position, PositionWallLocation location) {
     	switch (location) {
 	    	case LEFT: {
-	    		position.placeLeftWall();
+	    		position.setHasLeftWall(true);
 	    		break;
 	    	}
 	    	case RIGHT: {
-	    		position.placeRightWall();
+	    		position.setHasRightWall(true);
 	    		break;
 	    	}
 	    	case TOP: {
-	    		position.placeTopWall();
+	    		position.setHasTopWall(true);
 	    		break;
 	    	}
 	    	case BOTTOM: {
-	    		position.placeBottomWall();
+	    		position.setHasBottomWall(true);
 	    		break;
 	    	}
     	}
     }
 
+    /**
+     * Make the next player the active player
+     */
     private static void changePlayer() {
     	if (currentPlayer == player1) {
     		currentPlayer = player2;
@@ -204,5 +251,4 @@ public class GameController<T> {
     		currentPlayer = player1;
     	}
     }
-
 }
