@@ -34,7 +34,6 @@ public class ServerGUI extends Application {
     private VBox buttonBox;
     private Button createButton;
     private Button connectButton;
-    private Button startButton;
     private Label IPandPortInfo;
     private TextField IP;
     private TextField port;
@@ -59,7 +58,6 @@ public class ServerGUI extends Application {
         buttonBox = new VBox();
         createButton = new Button("Create");
         connectButton = new Button("Connect");
-        startButton = new Button ("Start Game");
         scene = new Scene(serverPane, 600, 800);
         scene.getStylesheets().add("Theme.css");
         //set up a textfield and a button for user to enter their ip and port detail
@@ -97,7 +95,7 @@ public class ServerGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IP, port, createButton, connectButton, startButton);
+        buttonBox.getChildren().addAll(IPandPortInfo, IP, port, createButton, connectButton);
         buttonBox.setAlignment(Pos.CENTER);
         createButton.setPrefWidth(150);
         createButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -111,13 +109,6 @@ public class ServerGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 server.connect(IPAddress, portAddress);
-            }
-        });
-        startButton.setPrefWidth(150);
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                server.startGame();
             }
         });
     }
