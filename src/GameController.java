@@ -8,6 +8,7 @@ import java.util.Iterator;
  * @author Ben Lawton
  * @author Khadija Patel
  * @author Jordan Bird
+ * @author Junaid Rasheed
  *
  * @version 12/02/2016
  */
@@ -84,9 +85,18 @@ public class GameController<T> {
     /**
      * Place a wall as the current player's move
      *
-     * @param pos1X..pos4X x coordinates for the grid the wall will obstruct
-     * @param pos1Y..pos4Y y coordinates for the grid the wall will obstruct
-     * @param pos1Border..pos4Border location of the wall in relation to the grid it will obstruct
+     * @param pos1X x coordinates for the grid the wall will obstruct
+     * @param pos2X x coordinates for the grid the wall will obstruct
+     * @param pos3X x coordinates for the grid the wall will obstruct
+     * @param pos4X x coordinates for the grid the wall will obstruct
+     * @param pos1Y y coordinates for the grid the wall will obstruct
+     * @param pos2Y y coordinates for the grid the wall will obstruct
+     * @param pos3Y y coordinates for the grid the wall will obstruct
+     * @param pos4Y y coordinates for the grid the wall will obstruct
+     * @param pos1Border location of the wall in relation to the grid it will obstruct
+     * @param pos2Border location of the wall in relation to the grid it will obstruct
+     * @param pos3Border location of the wall in relation to the grid it will obstruct
+     * @param pos4Border location of the wall in relation to the grid it will obstruct
      */
     public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
@@ -179,7 +189,9 @@ public class GameController<T> {
 	    		}
     		}
         }
-        server.run();
+        if(server != null) {
+            server.run();
+        }
     }
 
     /**

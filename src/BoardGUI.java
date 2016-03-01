@@ -126,7 +126,7 @@ public class BoardGUI extends Application {
     			button[x][y] = new Rectangle();
     			// middle points between walls
     			if(x % 2 != 0 && y % 2 != 0) {
-                    setUnusedSquare(x, y, X, Y);
+                    setUnusedSquare(x, y);
     			}
     			// occupiable position
     			if(x % 2 == 0 && y % 2 == 0) {
@@ -350,10 +350,10 @@ public class BoardGUI extends Application {
 
     /**
      * Set the occupiable positions
-     * @param x
-     * @param y
-     * @param X
-     * @param Y
+     * @param x x position of the button
+     * @param y y position of the button
+     * @param X X position of the button to be used in the action event
+     * @param Y Y position of the button to be used in the action event
      */
     private void setOccupiablePosition(int x, int y, int X, int Y) {
         button[x][y].setHeight(40);
@@ -374,6 +374,13 @@ public class BoardGUI extends Application {
         });
     }
 
+    /**
+     * Place a wall that sits horizontally
+     * @param x x position of the wall
+     * @param y y position of the wall
+     * @param X X position of the wall to be used in the action event
+     * @param Y Y position of the wall to be used in the action event
+     */
     private void setWideWall(int x, int y, int X, int Y) {
         button[x][y].setHeight(10);
         button[x][y].setWidth(40);
@@ -398,6 +405,13 @@ public class BoardGUI extends Application {
         });
     }
 
+    /**
+     * Place a wall that sits vertically
+     * @param x x position of the wall
+     * @param y y position of the wall
+     * @param X X position of the wall to be used in the action event
+     * @param Y Y position of the wall to be used in the action event
+     */
     private void setThinWall(int x, int y, int X, int Y) {
         button[x][y].setWidth(10);
         button[x][y].setHeight(40);
@@ -421,7 +435,13 @@ public class BoardGUI extends Application {
         });
     }
 
-    private void setUnusedSquare(int x, int y, int X, int Y) {
+    /**
+     * The little unused squares which are located in the centre of four walls in a plus shape
+     *
+     * @param x x position of the square
+     * @param y y position of the square
+     */
+    private void setUnusedSquare(int x, int y) {
         button[x][y].setHeight(10);
         button[x][y].setWidth(10);
         button[x][y].setStroke(Color.BLACK);
@@ -430,6 +450,11 @@ public class BoardGUI extends Application {
         boardPane.getChildren().add(button[x][y]);
     }
 
+    /**
+     * Place a vertical wall
+     * @param x x position of the wall
+     * @param y y position of the wall
+     */
     private void placeThinWall(int x, int y) {
         button[x][y].setFill(Color.BLUE);
         button[x + 2][y].setFill(Color.BLUE);
@@ -450,6 +475,11 @@ public class BoardGUI extends Application {
         GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
     }
 
+    /**
+     * Place a horizontal wall
+     * @param x x position of the wall
+     * @param y y position of the wall
+     */
     private void placeWideWall(int x, int y) {
         button[x][y].setFill(Color.BLUE);
         button[x][y + 2].setFill(Color.BLUE);

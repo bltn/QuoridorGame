@@ -17,10 +17,19 @@ public class Server extends Thread {
     }
 
 
+    /**
+     * Create a separate thread to read input
+     */
     public void run() {
         readInput();
     }
 
+    /**
+     * Connect to a given server and start the game for the client if connection was successful
+     * @param IPAddress IP address of the server
+     * @param portAddress Port address of the server
+     * @return true if the connection attempt to the server was succesful
+     */
     public boolean connect(String IPAddress, int portAddress){
         try {
             socket = new Socket(IPAddress, portAddress);
@@ -36,6 +45,11 @@ public class Server extends Thread {
         return true;
     }
 
+    /**
+     * Create a server
+     * @param IPAddress IP address of the server
+     * @param portAddress Port address of the server
+     */
     public void initializeServer(String IPAddress, int portAddress){
         try {
             serverSocket = new ServerSocket(portAddress, 8, InetAddress.getByName(IPAddress));
@@ -48,6 +62,10 @@ public class Server extends Thread {
         listenForServerRequest();
     }
 
+    /**
+     * Listens for any incoming connection requests after creating a server and start the game for the client after
+     * a player connects to the server
+     */
     public void listenForServerRequest() {
         Socket socket = null;
         try {
@@ -63,6 +81,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Reads input from the data stream
+     */
     public void readInput() {
         try {
             int x = dataInputStream.readInt();
@@ -73,6 +94,10 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Sends the X position of a player
+     * @param x X position of a player
+     */
     public void sendXPosition(int x) {
         try {
             dataOutputStream.writeInt(x);
@@ -82,6 +107,10 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Sends the y position of a player
+     * @param y y position of a player
+     */
     public void sendYPosition(int y) {
         try {
             dataOutputStream.writeInt(y);
@@ -91,6 +120,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Starts the game if two players are connected to the server
+     */
     public void startGame() {
         if (accepted) {
             GameController.startGame();

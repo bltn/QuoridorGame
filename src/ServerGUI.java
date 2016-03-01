@@ -108,6 +108,9 @@ public class ServerGUI extends Application {
         });
     }
 
+    /**
+     * Set the properties for the text fields used for input
+     */
     public void setTextFields() {
         IPTextField.setLayoutX(50);
         IPTextField.setLayoutY(50);
