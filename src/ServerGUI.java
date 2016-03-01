@@ -53,7 +53,7 @@ public class ServerGUI extends Application {
         scene = new Scene(serverPane, 600, 800);
         scene.getStylesheets().add("Theme.css");
         //set up a textfield and a button for user to enter their ip and port detail
-        IPandPortInfo = new Label("Please Enter the port and IP you want to connect?");
+        IPandPortInfo = new Label("Enter the IP and port address that you'd like to connect to");
         IPTextField = new TextField(IPAddress);
         portTextField = new TextField("" + portAddress);
     }

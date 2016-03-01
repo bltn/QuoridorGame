@@ -170,7 +170,6 @@ public class GameController<T> {
     			if (isValidMove(currentPlayer, posX, posY)) {
                     if (server != null) {
                         server.sendPawnPosition(posX, posY);
-                        System.out.println("server not null");
                     }
                     player1.setX(posX);
 		    		player1.setY(posY);
