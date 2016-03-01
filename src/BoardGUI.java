@@ -163,7 +163,21 @@ public class BoardGUI extends Application {
                    if (button[x + 2][y].getFill() == Color.WHITE) {
                        // avoid making a cross with the walls
                        if (button[x + 1][y - 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
-                           placeThinWall(x, y);
+                           // coordinates of the position to the top left of the horizontal wall
+                           int topLeftPosX = x / 2;
+                           int topLeftPosY = y / 2;
+                           // coordinates of the position to the bottom left of the horizontal wall
+                           int bottomLeftPosX = topLeftPosX;
+                           int bottomLeftPosY = topLeftPosY + 1;
+                           // coordinates of the position to the top right of the horizontal wall
+                           int topRightPosX = topLeftPosX + 1;
+                           int topRightPosY = topLeftPosY;
+                           // coordinates of the position to the bottom right of the horizontal wall
+                           int bottomRightPosX = topLeftPosX + 1;
+                           int bottomRightPosY = bottomLeftPosY;
+                           PositionWallLocation bottom = PositionWallLocation.BOTTOM;
+                           PositionWallLocation top = PositionWallLocation.TOP;
+                           GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
                        }
                    }
                }
@@ -177,7 +191,21 @@ public class BoardGUI extends Application {
                        if (button[x][y + 2].getFill() == Color.WHITE) {
                            // avoid making a cross with the walls
                            if (button[x - 1][y + 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
-                               placeWideWall(x, y);
+                               // coordinates of the position to the top left of the vertical wall
+                               int topLeftPosX = x / 2;
+                               int topLeftPosY = y / 2;
+                               // coordinates of the position to the bottom left of the vertical wall
+                               int bottomLeftPosX = topLeftPosX;
+                               int bottomLeftPosY = topLeftPosY + 1;
+                               // coordinates of the position to the top right of the vertical wall
+                               int topRightPosX = topLeftPosX + 1;
+                               int topRightPosY = topLeftPosY;
+                               // coordinates of the position to the bottom right of the vertical wall
+                               int bottomRightPosX = topLeftPosX + 1;
+                               int bottomRightPosY = bottomLeftPosY;
+                               PositionWallLocation right = PositionWallLocation.RIGHT;
+                               PositionWallLocation left = PositionWallLocation.LEFT;
+                               GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
                            }
                        }
                    }
@@ -470,24 +498,12 @@ public class BoardGUI extends Application {
      * @param x x position of the wall
      * @param y y position of the wall
      */
-    private void placeThinWall(int x, int y) {
+    public void placeThinWall(int x, int y) {
+        x = x * 2;
+        y = y * 2;
+        y += 1;
         button[x][y].setFill(Color.BLUE);
         button[x + 2][y].setFill(Color.BLUE);
-        // coordinates of the position to the top left of the horizontal wall
-        int topLeftPosX = x / 2;
-        int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
     }
 
     /**
@@ -495,23 +511,11 @@ public class BoardGUI extends Application {
      * @param x x position of the wall
      * @param y y position of the wall
      */
-    private void placeWideWall(int x, int y) {
+    public void placeWideWall(int x, int y) {
+        x = x * 2;
+        y = y * 2;
+        x += 1;
         button[x][y].setFill(Color.BLUE);
         button[x][y + 2].setFill(Color.BLUE);
-        // coordinates of the position to the top left of the vertical wall
-        int topLeftPosX = x / 2;
-        int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
     }
 }

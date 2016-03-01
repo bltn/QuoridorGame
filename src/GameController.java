@@ -115,6 +115,13 @@ public class GameController<T> {
 	    	board.addWalledOffPosition(coveredPosition3);
 	    	board.addWalledOffPosition(coveredPosition4);
 
+            if (pos1Border == PositionWallLocation.RIGHT) {
+                gui.placeWideWall(pos1X, pos1Y);
+            }
+            else {
+                gui.placeThinWall(pos1X, pos1Y);
+            }
+
 	    	currentPlayer.decrementWallCount();
 	    	currentPlayer.incrementMoveCount();
 	    	if (currentPlayer == player1) {
