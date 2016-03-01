@@ -44,7 +44,6 @@ public class Server extends Thread {
             accepted = true;
             System.out.println("Successfully connected to the server");
             System.out.println("Starting game");
-            startGame();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +84,6 @@ public class Server extends Thread {
             System.out.println("Player has joined the server");
             System.out.println("Starting game");
             accepted = true;
-            startGame();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error when listening for requests");
