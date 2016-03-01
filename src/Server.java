@@ -103,15 +103,12 @@ public class Server extends Thread {
             String command = new String(data, "UTF-8");
             // Split the input into an array of words
             String[] commands = command.split("\\s+");
-            System.out.println(command);
-            System.out.println(commands[0]);
-            System.out.println(commands[1]);
-            System.out.println(commands[2]);
             if (commands[0].equals("move")) {
                 int x = Integer.parseInt(commands[1]);
                 int y = Integer.parseInt(commands[2]);
                 GameController.movePawn(x, y);
             }
+            System.out.println("Input read");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error reading input");
