@@ -42,6 +42,7 @@ public class ServerGUI extends Application {
         try {
             controller = new GameController(new BoardGUI(), new Board(), new Server());
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("constructing error for GameController in ServerGUI");
         }
         serverPane = new GridPane();

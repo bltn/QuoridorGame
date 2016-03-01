@@ -1,7 +1,10 @@
+import sun.misc.IOUtils;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server extends Thread {
 	private ServerSocket serverSocket;
@@ -21,7 +24,9 @@ public class Server extends Thread {
      * Create a separate thread to read input
      */
     public void run() {
-        readInput();
+        while(accepted) {
+            readInput();
+        }
     }
 
     /**
@@ -36,13 +41,15 @@ public class Server extends Thread {
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
             accepted = true;
+            System.out.println("Successfully connected to the server");
+            System.out.println("Starting game");
             startGame();
+            return true;
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Unable to connect to the address: " + IPAddress + ":" + portAddress + " | Starting a server");
             return false;
         }
-        System.out.println("Successfully connected to the server.");
-        return true;
     }
 
     /**
@@ -54,12 +61,14 @@ public class Server extends Thread {
         try {
             serverSocket = new ServerSocket(portAddress, 8, InetAddress.getByName(IPAddress));
             System.out.println("Server Created");
+            System.out.println("Listening for other players");
+            System.out.println("Program will not respond until someone joins");
+            listenForServerRequest();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error creating server");
+            System.out.println("Is the Address in use?");
         }
-        System.out.println("Listening for other players");
-        System.out.println("Program will not respond until someone joins");
-        listenForServerRequest();
     }
 
     /**
@@ -78,45 +87,53 @@ public class Server extends Thread {
             startGame();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error when listening for requests");
         }
     }
 
     /**
-     * Reads input from the data stream
+     * Reads input from the data stream and executes commands from the input
      */
     public void readInput() {
         try {
-            int x = dataInputStream.readInt();
-            int y = dataInputStream.readInt();
-            GameController.movePawn(x, y);
+            // Read input from the server
+            int length = dataInputStream.readInt();
+            byte[] data = new byte[length];
+            dataInputStream.readFully(data);
+            String command = new String(data, "UTF-8");
+            // Split the input into an array of words
+            String[] commands = command.split("\\s+");
+            System.out.println(command);
+            System.out.println(commands[0]);
+            System.out.println(commands[1]);
+            System.out.println(commands[2]);
+            if (commands[0].equals("move")) {
+                int x = Integer.parseInt(commands[1]);
+                int y = Integer.parseInt(commands[2]);
+                GameController.movePawn(x, y);
+            }
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("Error reading input");
         }
     }
 
     /**
-     * Sends the X position of a player
-     * @param x X position of a player
+     * Sends the position of the pawn to the server
+     * @param x x position of the pawn
+     * @param y y position of the pawn
      */
-    public void sendXPosition(int x) {
+    public void sendPawnPosition(int x, int y) {
         try {
-            dataOutputStream.writeInt(x);
-            System.out.println("X position sent");
+            //String command = new String("GameController.movePawn(" + x + ", " + y + ")");
+            String command = new String("move " + x + " " + y);
+            byte[] data = command.getBytes("UTF-8");
+            dataOutputStream.writeInt(data.length);
+            dataOutputStream.write(data);
+            System.out.println("Pawn position sent");
         } catch (IOException e) {
-            System.out.println("Error sending X position");
-        }
-    }
-
-    /**
-     * Sends the y position of a player
-     * @param y y position of a player
-     */
-    public void sendYPosition(int y) {
-        try {
-            dataOutputStream.writeInt(y);
-            System.out.println("Y position sent");
-        } catch (IOException e) {
-            System.out.println("Error sending Y position");
+            e.printStackTrace();
+            System.out.println("Error sending pawn position");
         }
     }
 

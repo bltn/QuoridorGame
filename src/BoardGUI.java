@@ -1,6 +1,7 @@
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -317,9 +318,16 @@ public class BoardGUI extends Application {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
     	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(firstPawn);
-        boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(firstPawn);
+        // JavaFX is single-threaded so you should not update the UI from background threads. Wrap any calls to update
+        // JavaFX with Platform.runLater()
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                boardPane.getChildren().remove(firstPawn);
+                boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
+                boardPane.getChildren().add(firstPawn);
+            }
+        });
     }
 
     /**
@@ -331,9 +339,16 @@ public class BoardGUI extends Application {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
     	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(secondPawn);
-        boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(secondPawn);
+        // JavaFX is single-threaded so you should not update the UI from background threads. Wrap any calls to update
+        // JavaFX with Platform.runLater()
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                boardPane.getChildren().remove(secondPawn);
+                boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
+                boardPane.getChildren().add(secondPawn);
+            }
+        });
     }
 
     /**

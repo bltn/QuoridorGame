@@ -145,10 +145,7 @@ public class GameController<T> {
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
                     if (server != null) {
-                        server.sendXPosition(player1.getX());
-                        //server.run();
-                        server.sendYPosition(player1.getY());
-                        //server.run();
+                        server.sendPawnPosition(posX, posY);
                     }
                     player1.setX(posX);
 		    		player1.setY(posY);
@@ -172,10 +169,7 @@ public class GameController<T> {
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
                     if (server != null) {
-                        server.sendXPosition(player2.getX());
-                        //server.run();
-                        server.sendYPosition(player2.getY());
-                        //server.run();
+                        server.sendPawnPosition(posX, posY);
                     }
 	    			player2.setX(posX);
 		    		player2.setY(posY);
@@ -188,9 +182,6 @@ public class GameController<T> {
 		    		changePlayer();
 	    		}
     		}
-        }
-        if(server != null) {
-            server.run();
         }
     }
 
