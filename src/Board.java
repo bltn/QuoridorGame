@@ -4,7 +4,6 @@
  */
 import java.util.ArrayList;
 
-
 public class Board {
 
 	// 2D array for Positions
@@ -23,7 +22,7 @@ public class Board {
 
 	/**
 	 * Return all occupiable positions to the top, bottom, right or left of the given position
-	 * @param the position (more than likey) occupied by the current player
+	 * @param position (more than likey) occupied by the current player
 	 * @return occupiable positions
 	 */
 	public ArrayList<Position> getOccupiablePositions(Position position) {
@@ -48,10 +47,22 @@ public class Board {
 	 * @param pos position with wall assigned to it
 	 */
 	public void addWalledOffPosition(Position pos) {
-		if (!walledOffPositions.contains(pos)) {
+		if (!positionHasWall(pos)) {
 			walledOffPositions.add(pos);
 		}
 	}
+
+    /**
+     * Checks if a given position has a wall or not
+     * @return true if a position has a wall assigned to it
+     */
+    public boolean positionHasWall(Position pos) {
+        if(walledOffPositions.contains(pos)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	/**
 	 * Removes all non-border walls from positions with walls assigned to them

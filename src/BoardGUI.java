@@ -205,7 +205,8 @@ public class BoardGUI extends Application {
                                int bottomRightPosY = bottomLeftPosY;
                                PositionWallLocation right = PositionWallLocation.RIGHT;
                                PositionWallLocation left = PositionWallLocation.LEFT;
-                               GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
+                               GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY,
+                                       right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
                            }
                        }
                    }
@@ -497,25 +498,38 @@ public class BoardGUI extends Application {
      * Place a vertical wall
      * @param x x position of the wall
      * @param y y position of the wall
+     * @return true if wall was successfully placed
      */
-    public void placeThinWall(int x, int y) {
+    public boolean placeThinWall(int x, int y) {
         x = x * 2;
         y = y * 2;
         y += 1;
-        button[x][y].setFill(Color.BLUE);
-        button[x + 2][y].setFill(Color.BLUE);
+        if (button[x][y].getFill().equals(Color.WHITE) || button[x + 2][y].getFill().equals(Color.WHITE)) {
+            button[x][y].setFill(Color.BLUE);
+            button[x + 2][y].setFill(Color.BLUE);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Place a horizontal wall
      * @param x x position of the wall
      * @param y y position of the wall
+     * @return true if wall was successfully placed
      */
-    public void placeWideWall(int x, int y) {
+    public boolean placeWideWall(int x, int y) {
         x = x * 2;
         y = y * 2;
         x += 1;
-        button[x][y].setFill(Color.BLUE);
-        button[x][y + 2].setFill(Color.BLUE);
+        if (button[x][y].getFill().equals(Color.WHITE) || button[x][y + 2].getFill().equals(Color.WHITE)) {
+            button[x][y].setFill(Color.BLUE);
+            button[x][y + 2].setFill(Color.BLUE);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

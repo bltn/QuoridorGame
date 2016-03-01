@@ -98,45 +98,62 @@ public class GameController<T> {
      * @param pos3Border location of the wall in relation to the grid it will obstruct
      * @param pos4Border location of the wall in relation to the grid it will obstruct
      */
-    public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+    public static void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y,
+                                 PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border,
+                                 int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	if (currentPlayer.hasWalls()) {
 	    	Position coveredPosition1 = board.getPosition(pos1X, pos1Y);
 	    	Position coveredPosition2 = board.getPosition(pos2X, pos2Y);
 	    	Position coveredPosition3 = board.getPosition(pos3X, pos3Y);
 	    	Position coveredPosition4 = board.getPosition(pos4X, pos4Y);
 
-	    	assignWall(coveredPosition1, pos1Border);
-	    	assignWall(coveredPosition2, pos2Border);
-	    	assignWall(coveredPosition3, pos3Border);
-	    	assignWall(coveredPosition4, pos4Border);
+            assignWall(coveredPosition1, pos1Border);
+            assignWall(coveredPosition2, pos2Border);
+            assignWall(coveredPosition3, pos3Border);
+            assignWall(coveredPosition4, pos4Border);
 
-	    	board.addWalledOffPosition(coveredPosition1);
-	    	board.addWalledOffPosition(coveredPosition2);
-	    	board.addWalledOffPosition(coveredPosition3);
-	    	board.addWalledOffPosition(coveredPosition4);
+            board.addWalledOffPosition(coveredPosition1);
+            board.addWalledOffPosition(coveredPosition2);
+            board.addWalledOffPosition(coveredPosition3);
+            board.addWalledOffPosition(coveredPosition4);
 
             if (pos1Border == PositionWallLocation.RIGHT) {
-                gui.placeWideWall(pos1X, pos1Y);
+                if (gui.placeWideWall(pos1X, pos1Y)) {
+                    if(server != null) {
+                        server.sendWallPosition(pos1X, pos1Y, pos1Border, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border,
+                                pos4X, pos4Y, pos4Border);
+                    }
+                    placeWallPlayerStats();
+                }
+            } else {
+                if (gui.placeThinWall(pos1X, pos1Y)) {
+                    if (server != null) {
+                        server.sendWallPosition(pos1X, pos1Y, pos1Border, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border,
+                                pos4X, pos4Y, pos4Border);
+                    }
+                    placeWallPlayerStats();
+                }
             }
-            else {
-                gui.placeThinWall(pos1X, pos1Y);
-            }
-
-	    	currentPlayer.decrementWallCount();
-	    	currentPlayer.incrementMoveCount();
-	    	if (currentPlayer == player1) {
-	    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer1WallCount(currentPlayer.getWallCount());
-	    	}
-	    	else {
-	    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
-	    		gui.updatePlayer2WallCount(currentPlayer.getWallCount());
-	    	}
-	    	changePlayer();
     	}
     	else {
     		//errorMessage("you have no remaining walls");
     	}
+    }
+
+    /**
+     * Updates the players stats after placing a wall and then changes the current player
+     */
+    private static void placeWallPlayerStats() {
+        currentPlayer.decrementWallCount();
+        currentPlayer.incrementMoveCount();
+        if (currentPlayer == player1) {
+            gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
+            gui.updatePlayer1WallCount(currentPlayer.getWallCount());
+        } else {
+            gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
+            gui.updatePlayer2WallCount(currentPlayer.getWallCount());
+        }
+        changePlayer();
     }
 
     /**
@@ -153,6 +170,7 @@ public class GameController<T> {
     			if (isValidMove(currentPlayer, posX, posY)) {
                     if (server != null) {
                         server.sendPawnPosition(posX, posY);
+                        System.out.println("server not null");
                     }
                     player1.setX(posX);
 		    		player1.setY(posY);

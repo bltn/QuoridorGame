@@ -1,3 +1,4 @@
+import javafx.scene.paint.Color;
 import sun.misc.IOUtils;
 
 import java.io.*;
@@ -108,6 +109,22 @@ public class Server extends Thread {
                 int y = Integer.parseInt(commands[2]);
                 GameController.movePawn(x, y);
             }
+            else if (commands[0].equals("wall")) {
+                int x1 = Integer.parseInt(commands[1]);
+                int y1 = Integer.parseInt(commands[2]);
+                int x2 = Integer.parseInt(commands[4]);
+                int y2 = Integer.parseInt(commands[5]);
+                int x3 = Integer.parseInt(commands[7]);
+                int y3 = Integer.parseInt(commands[8]);
+                int x4 = Integer.parseInt(commands[10]);
+                int y4 = Integer.parseInt(commands[11]);
+                PositionWallLocation b1 = PositionWallLocation.valueOf(commands[3]);
+                PositionWallLocation b2 = PositionWallLocation.valueOf(commands[6]);
+                PositionWallLocation b3 = PositionWallLocation.valueOf(commands[9]);
+                PositionWallLocation b4 = PositionWallLocation.valueOf(commands[12]);
+                GameController.placeWall(x1, y1, b1, x2, y2, b2, x3, y3, b3, x4, y4, b4);
+            }
+            System.out.println(command);
             System.out.println("Input read");
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,7 +139,6 @@ public class Server extends Thread {
      */
     public void sendPawnPosition(int x, int y) {
         try {
-            //String command = new String("GameController.movePawn(" + x + ", " + y + ")");
             String command = new String("move " + x + " " + y);
             byte[] data = command.getBytes("UTF-8");
             dataOutputStream.writeInt(data.length);
@@ -131,6 +147,26 @@ public class Server extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error sending pawn position");
+        }
+    }
+
+
+    public void sendWallPosition(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y,
+                                 PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border,
+                                 int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+        try {
+            String command = new String("wall " + pos1X + " " + pos1Y + " " + pos1Border + " " + pos2X + " " + pos2Y +
+                    " " + pos2Border + " " + pos3X + " " + pos3Y + " " + pos3Border + " " + pos4X + " " + pos4Y + " "
+                    + pos4Border);
+            byte[] data = command.getBytes("UTF-8");
+            dataOutputStream.writeInt(data.length);
+            dataOutputStream.write(data);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.out.println("Error encoding wall position command");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error sending wall position");
         }
     }
 
@@ -144,6 +180,7 @@ public class Server extends Thread {
             System.out.println("Need a player to join");
         }
     }
+
 }
 
 
