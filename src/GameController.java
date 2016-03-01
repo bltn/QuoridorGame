@@ -247,24 +247,32 @@ public class GameController<T> {
 /**
  * Reset the game's back-end state and GUI
  */
-    private static void resetGame() {
-    	gui.updatePlayer1MoveCount(0);
-    	player1.setMoveCount(0);
-    	gui.updatePlayer2MoveCount(0);
-    	player2.setMoveCount(0);
-    	gui.updatePlayer1WallCount(10);
-    	player1.setWallCount(10);
-    	gui.updatePlayer2WallCount(10);
-    	player2.setWallCount(10);
-    	gui.updatePlayer1PawnPosition(4, 0);
-    	player1.setX(4);
-    	player1.setY(0);
-    	gui.updatePlayer2PawnPosition(4, 8);
-    	player2.setX(4);
-    	player2.setY(8);
-    	currentPlayer = player1;
-    	board.resetWalledOffPositions();
-    	gui.resetWalls();
+    public static void resetGame() {
+        // Checks if the game has already been reset to prevent infinite method calls from the Server class
+        Position p1 = new Position(4, 0);
+        Position p2 = new Position(4, 8);
+        if(player1.getPosition() != p1 && player2.getPosition() != p2) {
+            gui.updatePlayer1MoveCount(0);
+            player1.setMoveCount(0);
+            gui.updatePlayer2MoveCount(0);
+            player2.setMoveCount(0);
+            gui.updatePlayer1WallCount(10);
+            player1.setWallCount(10);
+            gui.updatePlayer2WallCount(10);
+            player2.setWallCount(10);
+            gui.updatePlayer1PawnPosition(4, 0);
+            player1.setX(4);
+            player1.setY(0);
+            gui.updatePlayer2PawnPosition(4, 8);
+            player2.setX(4);
+            player2.setY(8);
+            currentPlayer = player1;
+            board.resetWalledOffPositions();
+            gui.resetWalls();
+            if (server != null) {
+                server.sendResetCommand();
+            }
+        }
     }
 
     /**

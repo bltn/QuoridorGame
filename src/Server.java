@@ -124,6 +124,9 @@ public class Server extends Thread {
                 PositionWallLocation b4 = PositionWallLocation.valueOf(commands[12]);
                 GameController.placeWall(x1, y1, b1, x2, y2, b2, x3, y3, b3, x4, y4, b4);
             }
+            else if (commands[0].equals("reset")) {
+
+            }
             System.out.println(command);
             System.out.println("Input read");
         } catch (IOException e) {
@@ -140,10 +143,13 @@ public class Server extends Thread {
     public void sendPawnPosition(int x, int y) {
         try {
             String command = new String("move " + x + " " + y);
-            byte[] data = command.getBytes("UTF-8");
+            byte[] data = command.getBytes();
             dataOutputStream.writeInt(data.length);
             dataOutputStream.write(data);
             System.out.println("Pawn position sent");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.out.println("Error encoding command");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error sending pawn position");
@@ -181,6 +187,25 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * sends a command to the server the reset the game
+     */
+    public void sendResetCommand() {
+        try {
+            String command = new String("reset");
+            byte[] data = new byte[0];
+            data = command.getBytes("UTF-8");
+            dataOutputStream.writeInt(data.length);
+            dataOutputStream.write(data);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.out.println("Error encoding command");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error sending reset command");
+        }
+
+    }
 }
 
 
