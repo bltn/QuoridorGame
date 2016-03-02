@@ -87,7 +87,7 @@ public class MenuGUI extends Application {
             	BoardGUI gui = new BoardGUI();
             	Board board = new Board();
             	GameController controller = new GameController(gui, board);
-            	controller.startGame();
+            	gui.start(new Stage());
             };
         });
         quitButton.setPrefWidth(150);
