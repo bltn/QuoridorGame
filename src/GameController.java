@@ -334,8 +334,7 @@ public class GameController<T> {
     /**
      * Starts the board game.
      */
-	public static void startGame() {
-		gui.start(new Stage());
+	public static void initialiseServerThread() {
         if (server != null) {
             Thread thread = new Thread(server);
             thread.start();

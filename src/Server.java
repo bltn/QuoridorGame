@@ -1,11 +1,8 @@
-import javafx.scene.paint.Color;
-import sun.misc.IOUtils;
-
+import javafx.stage.Stage;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Server extends Thread {
 	private ServerSocket serverSocket;
@@ -15,8 +12,10 @@ public class Server extends Thread {
     private BufferedInputStream bufferedInputStream;
     private BufferedOutputStream bufferedOutputStream;
 	private boolean accepted;
+    private BoardGUI gui;
 	
-    public Server() throws IOException {
+    public Server(BoardGUI gui) throws IOException {
+        this.gui = gui;
         accepted = false;
     }
 
@@ -181,14 +180,15 @@ public class Server extends Thread {
      */
     public void startGame() {
         if (accepted) {
-            GameController.startGame();
+            gui.start(new Stage());
+            GameController.initialiseServerThread();
         } else {
             System.out.println("Need a player to join");
         }
     }
 
     /**
-     * sends a command to the server the reset the game
+     * sends a command to the server to reset the game
      */
     public void sendResetCommand() {
         try {

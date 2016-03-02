@@ -101,7 +101,10 @@ public class MenuGUI extends Application {
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
         	public void handle(ActionEvent event){
                 try {
-                    GameController controller = new GameController(new BoardGUI(), new Board(), new Server());
+                    BoardGUI gui = new BoardGUI();
+                    Board board = new Board();
+                    Server server = new Server(gui);
+                    GameController controller = new GameController(gui, board, server);
                     ServerGUI sgui = new ServerGUI(controller);
                     sgui.start(new Stage());
                 } catch (IOException e) {
