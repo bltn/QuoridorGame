@@ -38,13 +38,8 @@ public class ServerGUI extends Application {
     private int portAddress = 33333;
     private static GameController controller;
 
-    public ServerGUI() {
-        try {
-            controller = new GameController(new BoardGUI(), new Board(), new Server());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("constructing error for GameController in ServerGUI");
-        }
+    public ServerGUI(GameController controller) {
+        this.controller = controller;
         serverPane = new GridPane();
         serverText = new Text("Join Multiplayer");
         buttonBox = new VBox();

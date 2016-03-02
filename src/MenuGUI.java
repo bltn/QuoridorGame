@@ -100,8 +100,14 @@ public class MenuGUI extends Application {
         multiplayerButton.setPrefWidth(150);
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
         	public void handle(ActionEvent event){
-                ServerGUI sgui = new ServerGUI();
-                sgui.start(new Stage());
+                try {
+                    GameController controller = new GameController(new BoardGUI(), new Board(), new Server());
+                    ServerGUI sgui = new ServerGUI(controller);
+                    sgui.start(new Stage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("constructing error for GameController in ServerGUI");
+                }
         	}
         });
     }
