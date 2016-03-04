@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -28,18 +30,23 @@ public class BoardGUI extends Application {
     private final Scene scene;
     private final int width = 17;
     private final int height = 17;
-    private final HBox player2StatsPane = new HBox(260);
+    private final HBox player2StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
+    private final HBox currentPlayerPane = new HBox();
+
+    private final HBox errorPane = new HBox();
+    private Text errorPaneText;
 
     //root pane which contain all the information from board to statistic
     private VBox rootPane;
     // player one stats
-    private final HBox player1StatsPane = new HBox(260);
+    private final HBox player1StatsPane = new HBox(120);
     // player two stats
     private GridPane boardPane;
     //amount of move the player has make
     private Text player1Moves;
+    private Text currentPlayerText;
     //amount of walls the player has
     private int player1WallCount;
     private Text player1Walls;
@@ -51,7 +58,7 @@ public class BoardGUI extends Application {
     // current player
     private int currentPlayer;
     //draw the wall and movement in the board
-    private Rectangle[][] button;
+    private Rectangle[][] grids;
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
@@ -65,19 +72,21 @@ public class BoardGUI extends Application {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
-        button = new Rectangle[width][height];
+        grids = new Rectangle[height][width];
         highlightPositionsButton = new Button("Hint");
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         drawing = true;
         player1Moves = new Text("Moves: " + 0);
+        currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
         player1Walls = new Text("Walls: " + player1WallCount);
         player2Moves = new Text("Moves: " + 0);
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
         currentPlayer = 1;
+        errorPaneText = new Text("");
     }
 
     @Override
@@ -99,12 +108,18 @@ public class BoardGUI extends Application {
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
+        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
+        errorPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane,buttonPane);
+        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
+        errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
 
     /**
@@ -115,7 +130,7 @@ public class BoardGUI extends Application {
     		for(int y = 0; y < width; y++){
                 final int X = x;
                 final int Y = y;
-    			button[x][y] = new Rectangle();
+    			grids[y][x] = new Rectangle();
     			// middle points between walls
     			if(x % 2 != 0 && y % 2 != 0) {
                     setUnusedSquare(x, y, X, Y);
@@ -148,12 +163,12 @@ public class BoardGUI extends Application {
      */
    private void setWall(int x, int y) {
        // tall, thin wall
-	   if (y % 2 != 0) {
-           if (button[x][y].getFill() == Color.WHITE) {
-               if (x != 16) {
-                   if (button[x + 2][y].getFill() == Color.WHITE) {
+	   if (x % 2 != 0) {
+           if (grids[y][x].getFill() == Color.GREY) {
+               if (y < 16) {
+                   if (grids[y + 2][x].getFill() == Color.GREY) {
                        // avoid making a cross with the walls
-                       if (button[x + 1][y - 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                       if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
                            placeThinWall(x, y);
                        }
                    }
@@ -161,38 +176,35 @@ public class BoardGUI extends Application {
            }
        }
        //short, wide wall
-       if (x % 2 != 0) {
-           if (button[x][y].getFill() == Color.WHITE) {
-               if (y != 16) {
-                   if (button[x + 1][y].getFill() == Color.WHITE) {
-                       if (button[x][y + 2].getFill() == Color.WHITE) {
+       if (y % 2 != 0) {
+           if (grids[y][x].getFill() == Color.GREY) {
+               if (x < 16) {
+                       if (grids[y][x + 2].getFill() == Color.GREY) {
                            // avoid making a cross with the walls
-                           if (button[x - 1][y + 1].getFill() == Color.WHITE || button[x + 1][y + 1].getFill() == Color.WHITE) {
+                           if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
                                placeWideWall(x, y);
                            }
                        }
-                   }
                }
            }
        }
    }
 
    /**
-    * Removes all of the walls on the board and gives them back to their respective players
+    * Removes all of the walls on the board
     */
    public void resetWalls() {
 	   for (int y = 0; y < 17; y += 2) {
 		   for (int x = 1; x < 17; x+= 2) {
-			   button[x][y].setFill(Color.WHITE);
+			   grids[y][x].setFill(Color.GREY);
 		   }
 	   }
 	   for (int y = 1; y < 17; y += 2) {
 		   for (int x = 0; x < 17; x+= 2) {
-			   button[x][y].setFill(Color.WHITE);
+			   grids[y][x].setFill(Color.GREY);
 		   }
 	   }
    }
-
 
 /**
  * Sets the player stats so they can be displayed in the UI
@@ -201,13 +213,22 @@ public class BoardGUI extends Application {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player1Moves.setTextAlignment(TextAlignment.CENTER);
+        currentPlayerText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.ITALIC, 15));
+        errorPaneText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        errorPaneText.setFill(Color.RED);
         player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        player1StatsPane.getChildren().addAll(player1Moves, player1Walls);
+        Text player1Title = new Text("Player 1");
+        player1Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        player1StatsPane.getChildren().addAll(player1Moves, player1Title, player1Walls);
+        currentPlayerPane.getChildren().addAll(currentPlayerText);
+        errorPane.getChildren().addAll(errorPaneText);
         player2Walls.setTextAlignment(TextAlignment.CENTER);
         player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player2Moves.setTextAlignment(TextAlignment.CENTER);
         player2Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        player2StatsPane.getChildren().addAll(player2Moves, player2Walls);
+        Text player2Title = new Text("Player 2");
+        player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
     }
 
     /**
@@ -220,7 +241,7 @@ public class BoardGUI extends Application {
      */
     public void setPawn(Circle pawn, Color colour, int x, int y) {
         pawn.setFill(colour);
-        pawn.setStroke(Color.BLACK);
+        pawn.setStroke(colour);
         pawn.setTranslateX(5);
         boardPane.setConstraints(pawn, x, y);
         boardPane.getChildren().add(pawn);
@@ -248,7 +269,8 @@ public class BoardGUI extends Application {
      * @param y		the y co-ordinate
      */
     public void highlightPositionAvailability(int x, int y) {
-        button[x][y].setFill(Color.YELLOW);
+        grids[y][x].setFill(Color.YELLOW);
+        grids[y][x].setStroke(Color.YELLOW);
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
@@ -256,7 +278,8 @@ public class BoardGUI extends Application {
                         for (int x1 = 0; x1 < width; x1++) {
                             for (int y1 = 0; y1 < width; y1++) {
                                 if(x1 % 2 == 0 && y1 % 2 == 0) {
-                                    button[x1][y1].setFill(Color.WHITE);
+                                    grids[y1][x1].setFill(Color.WHITE);
+                                    grids[y1][x1].setStroke(Color.WHITE);
                                 }
                             }
                         }
@@ -334,9 +357,11 @@ public class BoardGUI extends Application {
     public void changeActivePlayer() {
         if (currentPlayer == 1) {
             currentPlayer = 2;
+            currentPlayerText.setText("Player 2's turn...");
         }
         else {
             currentPlayer = 1;
+            currentPlayerText.setText("Player 1's turn...");
         }
     }
 
@@ -348,83 +373,77 @@ public class BoardGUI extends Application {
      * @param Y
      */
     private void setOccupiablePosition(int x, int y, int X, int Y) {
-        button[x][y].setHeight(40);
-        button[x][y].setWidth(40);
-        button[x][y].setStroke(Color.BLACK);
-        button[x][y].setFill(Color.WHITE);
-        boardPane.setConstraints(button[x][y],x,y);
-        boardPane.getChildren().add(button[x][y]);
-        button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        grids[y][x].setHeight(40);
+        grids[y][x].setWidth(40);
+        grids[y][x].setStroke(Color.WHITE);
+        grids[y][x].setFill(Color.WHITE);
+        boardPane.setConstraints(grids[y][x],x,y);
+        boardPane.getChildren().add(grids[y][x]);
+        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
-                GameController.movePawn(nineByNineX, nineByNineY);
-                changeActivePlayer();
+                try {
+                	GameController.movePawn(nineByNineX, nineByNineY);
+                }
+                catch (IllegalArgumentException e) {
+                	errorPaneText.setText(e.getMessage());
+                	new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    errorPaneText.setText("");
+                                }
+                            },
+                            1000
+                    );
+                }
             }
         });
     }
 
     private void setWideWall(int x, int y, int X, int Y) {
-        button[x][y].setHeight(10);
-        button[x][y].setWidth(40);
-        button[x][y].setStroke(Color.BLACK);
-        button[x][y].setFill(Color.WHITE);
-        boardPane.setConstraints(button[x][y],x,y);
-        boardPane.getChildren().add(button[x][y]);
-        button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        grids[y][x].setHeight(10);
+        grids[y][x].setWidth(40);
+        grids[y][x].setStroke(Color.GREY);
+        grids[y][x].setFill(Color.GREY);
+        boardPane.setConstraints(grids[y][x],x,y);
+        boardPane.getChildren().add(grids[y][x]);
+        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (currentPlayer == 1) {
-                    if (player1WallCount > 0) {
-                        setWall(X, Y);
-                        changeActivePlayer();
-                    }
-                }
-                else if (player2WallCount > 0) {
-                    setWall(X, Y);
-                    changeActivePlayer();
-                }
+                setWall(X, Y);
             }
         });
     }
 
     private void setThinWall(int x, int y, int X, int Y) {
-        button[x][y].setWidth(10);
-        button[x][y].setHeight(40);
-        button[x][y].setStroke(Color.BLACK);
-        button[x][y].setFill(Color.WHITE);
-        boardPane.setConstraints(button[x][y],x,y);
-        boardPane.getChildren().add(button[x][y]);
-        button[x][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        grids[y][x].setWidth(10);
+        grids[y][x].setHeight(40);
+        grids[y][x].setStroke(Color.GREY);
+        grids[y][x].setFill(Color.GREY);
+        boardPane.setConstraints(grids[y][x],x,y);
+        boardPane.getChildren().add(grids[y][x]);
+        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (currentPlayer == 1) {
-                    if (player1WallCount > 0) {
-                        setWall(X, Y);
-                        changeActivePlayer();
-                    }
-                }
-                else if (player2WallCount > 0) {
-                    setWall(X, Y);
-                }
+                setWall(X, Y);
             }
         });
     }
 
     private void setUnusedSquare(int x, int y, int X, int Y) {
-        button[x][y].setHeight(10);
-        button[x][y].setWidth(10);
-        button[x][y].setStroke(Color.BLACK);
-        button[x][y].setFill(Color.RED);
-        boardPane.setConstraints(button[x][y],x,y);
-        boardPane.getChildren().add(button[x][y]);
+        grids[y][x].setHeight(10);
+        grids[y][x].setWidth(10);
+        grids[y][x].setStroke(Color.GREY);
+        grids[y][x].setFill(Color.GREY);
+        boardPane.setConstraints(grids[y][x],x,y);
+        boardPane.getChildren().add(grids[y][x]);
     }
 
     private void placeThinWall(int x, int y) {
-        button[x][y].setFill(Color.BLUE);
-        button[x + 2][y].setFill(Color.BLUE);
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
@@ -437,14 +456,32 @@ public class BoardGUI extends Application {
         // coordinates of the position to the bottom right of the horizontal wall
         int bottomRightPosX = topLeftPosX + 1;
         int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        GameController.placeWall(topLeftPosX, topLeftPosY, bottom, topRightPosX, topRightPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, bottomRightPosX, bottomRightPosY, top);
+        PositionWallLocation left = PositionWallLocation.LEFT;
+        PositionWallLocation right = PositionWallLocation.RIGHT;
+        try {
+        	GameController.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	grids[y][x].setFill(Color.ORANGE);
+            grids[y + 1][x].setFill(Color.ORANGE);
+            grids[y + 2][x].setFill(Color.ORANGE);
+            grids[y][x].setStroke(Color.ORANGE);
+            grids[y + 1][x].setStroke(Color.ORANGE);
+            grids[y + 2][x].setStroke(Color.ORANGE);
+        }
+        catch (IllegalStateException e) {
+        	errorPaneText.setText(e.getMessage());
+        	new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            errorPaneText.setText("");
+                        }
+                    },
+                    1000
+            );
+        }
     }
 
     private void placeWideWall(int x, int y) {
-        button[x][y].setFill(Color.BLUE);
-        button[x][y + 2].setFill(Color.BLUE);
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
@@ -457,8 +494,28 @@ public class BoardGUI extends Application {
         // coordinates of the position to the bottom right of the vertical wall
         int bottomRightPosX = topLeftPosX + 1;
         int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        GameController.placeWall(topLeftPosX, topLeftPosY, right, bottomLeftPosX, bottomLeftPosY, right, topRightPosX, topRightPosY, left, bottomRightPosX, bottomRightPosY, left);
+        PositionWallLocation top = PositionWallLocation.TOP;
+        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
+        try {
+        	GameController.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        	grids[y][x].setFill(Color.ORANGE);
+            grids[y][x + 1].setFill(Color.ORANGE);
+            grids[y][x + 2].setFill(Color.ORANGE);
+            grids[y][x].setStroke(Color.ORANGE);
+            grids[y][x + 1].setStroke(Color.ORANGE);
+            grids[y][x + 2].setStroke(Color.ORANGE);
+        }
+        catch (IllegalStateException e) {
+        	errorPaneText.setText(e.getMessage());
+        	new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            errorPaneText.setText("");
+                        }
+                    },
+                    1000
+            );
+        }
     }
 }
