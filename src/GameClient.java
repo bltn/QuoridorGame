@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 public class GameClient extends Thread {
@@ -32,7 +28,7 @@ public class GameClient extends Thread {
 				System.out.println("Successfully connected to the GameServer");
 				initThread();
 			} catch (Exception e) {
-				System.out.println("Exception caught on the client side.");
+				System.out.println("Exception caught on the client side. connect to ");
 				System.out.println(e.getMessage());
 			}
 		}
