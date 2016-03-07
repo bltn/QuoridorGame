@@ -64,6 +64,8 @@ public class BoardGUI extends Application {
     private Circle secondPawn;
     private boolean drawing;
 
+    private GameController controller;
+
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
@@ -87,6 +89,10 @@ public class BoardGUI extends Application {
         player2Walls = new Text("Walls: " + player2WallCount);
         currentPlayer = 1;
         errorPaneText = new Text("");
+    }
+
+    public void setController(GameController controller) {
+    	this.controller = controller;
     }
 
     @Override
@@ -152,7 +158,7 @@ public class BoardGUI extends Application {
  	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
            @Override
            public void handle(MouseEvent event) {
-               GameController.showCurrentPlayerMoves();
+               controller.showCurrentPlayerMoves();
            }
        });
        buttonPane.getChildren().add(highlightPositionsButton);
@@ -386,7 +392,7 @@ public class BoardGUI extends Application {
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
                 try {
-                	GameController.movePawn(nineByNineX, nineByNineY);
+                	controller.movePawn(nineByNineX, nineByNineY);
                 }
                 catch (IllegalArgumentException e) {
                 	errorPaneText.setText(e.getMessage());
@@ -459,7 +465,7 @@ public class BoardGUI extends Application {
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
         try {
-        	GameController.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
         	grids[y][x].setFill(Color.ORANGE);
             grids[y + 1][x].setFill(Color.ORANGE);
             grids[y + 2][x].setFill(Color.ORANGE);
@@ -497,7 +503,7 @@ public class BoardGUI extends Application {
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
         try {
-        	GameController.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
         	grids[y][x].setFill(Color.ORANGE);
             grids[y][x + 1].setFill(Color.ORANGE);
             grids[y][x + 2].setFill(Color.ORANGE);

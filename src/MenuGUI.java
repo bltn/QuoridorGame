@@ -83,6 +83,7 @@ public class MenuGUI extends Application {
             	BoardGUI gui = new BoardGUI();
             	Board board = new Board();
             	GameController controller = new GameController(gui, board);
+            	gui.setController(controller);
             	gui.start(new Stage());
             };
         });
