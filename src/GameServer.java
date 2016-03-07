@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class GameServer {
+
+	private ServerSocket serverSocket;
+
+	private BufferedReader in;
+	private PrintWriter out;
+
+	public GameServer() {}
+
+	public void initialiseServer(String IPAddress, int portAddress) {
+		if (portAddress <= 65535) {
+			try {
+				serverSocket = new ServerSocket(portAddress, 8, InetAddress.getByName(IPAddress));
+				System.out.println("Server created");
+				listenForConnectionRequests();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("There was an error creating the server");
+			}
+		}
+	}
+
+	public void listenForConnectionRequests() {
+		try {
+			System.out.println("Trying to connect to a client socket");
+			Socket clientSocket = serverSocket.accept();
+			out = new PrintWriter(clientSocket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			System.out.println("Client socket opened");
+			listenForClientInput();
+		} catch (IOException e) {
+			System.out.println("IOException caught on the client side.");
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void listenForClientInput() {
+		try {
+			String inputLine;
+
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println("Info rec'd from the clinent: " + inputLine);
+			}
+		} catch (IOException e) {
+			System.out.println("IOException caught on the client side.");
+			System.out.println(e.getMessage());
+		}
+	}
+}

@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
+
+public class GameClient {
+
+	private Socket serverSocket;
+
+	private PrintWriter out;
+	private BufferedReader in;
+
+	public GameClient() {}
+
+	public void connectToServer(String IPAddress, int portAddress) {
+		if (portAddress <= 65535) {
+			try {
+				System.out.println("Trying to establish a connection with the GameServer");
+				serverSocket = new Socket(IPAddress, portAddress);
+				out = new PrintWriter(serverSocket.getOutputStream(), true);
+				in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+				System.out.println("Successfully connected to the GameServer");
+			} catch (Exception e) {
+				System.out.println("Exception caught on the client side.");
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+
+	public void sendMessageToServer(String message) {
+		System.out.println("Message to be sent: " + message);
+		out.println(message);
+	}
+
+	public void listenForServerInput() {
+		String fromServer;
+
+		try {
+			while ((fromServer = in.readLine()) != null) {
+				System.out.println("Server: " + fromServer);
+				if (fromServer.equals("Bye.")) {
+					break;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Exception caught on the client side.");
+			System.out.println(e.getMessage());
+		}
+	}
+}
