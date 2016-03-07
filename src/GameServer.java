@@ -13,8 +13,11 @@ public class GameServer extends Thread {
 
 	private ServerSocket serverSocket;
 
-	private BufferedReader in;
-	private PrintWriter out;
+	private BufferedReader player1Input;
+	private PrintWriter player1Output;
+
+	private BufferedReader player2Input;
+	private PrintWriter player2Output;
 
 	public GameServer() {}
 
@@ -39,11 +42,23 @@ public class GameServer extends Thread {
 
 	public void listenForConnectionRequests() {
 		try {
-			System.out.println("Trying to connect to a client socket");
-			Socket clientSocket = serverSocket.accept();
-			out = new PrintWriter(clientSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			System.out.println("Client socket opened");
+			int socketCount = 0;
+			while (socketCount < 2) {
+				System.out.println("Trying to connect to a client socket");
+				Socket clientSocket = serverSocket.accept();
+				System.out.println("Client socket opened");
+				if (socketCount == 0 && clientSocket != null) {
+					player1Output = new PrintWriter(clientSocket.getOutputStream(), true);
+					player1Input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+					System.out.println("Client socket # 1 I/O streams opened");
+				}
+				else if (socketCount == 1 && clientSocket != null) {
+					player2Output = new PrintWriter(clientSocket.getOutputStream(), true);
+					player2Input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+					System.out.println("Client socket # 2 I/O streams opened");
+				}
+				socketCount++;
+			}
 			initThread();
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
@@ -55,13 +70,11 @@ public class GameServer extends Thread {
 		try {
 			String inputLine;
 
-			while ((inputLine = in.readLine()) != null) {
+			while ((inputLine = player1Input.readLine()) != null) {
 				String[] commands = inputLine.split("\\s+");
-				if (commands[0].equals("print")) {
-					System.out.println("Printing, printing " + "second: " + commands[1]);
-				}
-				else {
-					System.out.println("It wasn't print.");
+				if (commands[0].equals("hey!")) {
+					player1Output.println("Thanks for that, player 1!");
+					player2Output.println("Thanks for that, player 2!");
 				}
 			}
 		} catch (IOException e) {
