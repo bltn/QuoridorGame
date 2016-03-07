@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class GameServer {
+public class GameServer extends Thread {
 
 	private ServerSocket serverSocket;
 
@@ -17,6 +17,12 @@ public class GameServer {
 	private PrintWriter out;
 
 	public GameServer() {}
+
+	public void run() {
+		while (true) {
+			listenForClientInput();
+		}
+	}
 
 	public void initialiseServer(String IPAddress, int portAddress) {
 		if (portAddress <= 65535) {
@@ -38,7 +44,7 @@ public class GameServer {
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			System.out.println("Client socket opened");
-			listenForClientInput();
+			initThread();
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
 			System.out.println(e.getMessage());
@@ -50,11 +56,22 @@ public class GameServer {
 			String inputLine;
 
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println("Info rec'd from the clinent: " + inputLine);
+				String[] commands = inputLine.split("\\s+");
+				if (commands[0].equals("print")) {
+					System.out.println("Printing, printing " + "second: " + commands[1]);
+				}
+				else {
+					System.out.println("It wasn't print.");
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
 			System.out.println(e.getMessage());
 		}
+	}
+
+	private void initThread() {
+		Thread thread = new Thread(this);
+		thread.start();
 	}
 }
