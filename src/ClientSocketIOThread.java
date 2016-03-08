@@ -7,9 +7,12 @@ import java.net.Socket;
 public class ClientSocketIOThread extends Thread {
 
 	private Socket socket = null;
+	private Socket sisterSocket = null;
 
-	PrintWriter out;
-	BufferedReader in;
+	private PrintWriter out;
+	private BufferedReader in;
+
+	private PrintWriter sisterOut;
 
 	public ClientSocketIOThread(Socket socket) {
 		super("ClientSocketInputThread");
@@ -23,10 +26,25 @@ public class ClientSocketIOThread extends Thread {
 
 			while ((inputLine = in.readLine()) != null) {
 				String[] commands = inputLine.split("\\s+");
-				if (commands[0].equals("hey!")) {
-					out.println("Hey, thanks****");
+				if (commands[0].equals("move")) {
+					out.println("you're my socket, " + socket);
+					sisterOut.println("hey, " + sisterSocket + " ,you're my sister!");
 				}
 			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public Socket getSocket() {
+		return this.socket;
+	}
+
+	public void setSisterSocket(Socket socket) {
+		this.sisterSocket = socket;
+
+		try {
+			this.sisterOut = new PrintWriter(sisterSocket.getOutputStream(), true);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}

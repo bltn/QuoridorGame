@@ -42,6 +42,8 @@ public class GameServer {
 				}
 				socketCount++;
 			}
+			player1IOThread.setSisterSocket(player2IOThread.getSocket());
+			player2IOThread.setSisterSocket(player1IOThread.getSocket());
 			initThreads();
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
