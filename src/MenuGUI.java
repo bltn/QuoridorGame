@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 import javax.sound.midi.SysexMessage;
 
 /**
@@ -33,6 +35,7 @@ public class MenuGUI extends Application {
     private VBox buttonBox;
     private Button startButton;
     private Button quitButton;
+    private Button multiplayerButton;
 
     public MenuGUI() {
         introPane = new GridPane();
@@ -40,6 +43,7 @@ public class MenuGUI extends Application {
         buttonBox = new VBox();
         startButton = new Button("Start");
         quitButton = new Button("Quit");
+        multiplayerButton = new Button("Multiplayer");
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
@@ -73,6 +77,7 @@ public class MenuGUI extends Application {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
         buttonBox.getChildren().add(startButton);
+        buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
         startButton.setPrefWidth(150);
@@ -93,6 +98,13 @@ public class MenuGUI extends Application {
             public void handle(ActionEvent event) {
                 System.exit(0);
             }
+        });
+        multiplayerButton.setPrefWidth(150);
+        multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				// handle event
+			}
         });
     }
 
