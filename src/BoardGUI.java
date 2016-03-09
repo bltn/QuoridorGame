@@ -276,6 +276,7 @@ public class BoardGUI extends Application {
      * @param y		the y co-ordinate
      */
     public void highlightPositionAvailability(int x, int y) {
+
         grids[y][x].setFill(Color.YELLOW);
         grids[y][x].setStroke(Color.YELLOW);
         new java.util.Timer().schedule(

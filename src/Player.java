@@ -7,6 +7,7 @@
 
 public class Player
 {
+	private int ID;
     private Position position;
     private int xCoord;
     private int yCoord;
@@ -22,8 +23,9 @@ public class Player
      * @param posY the starting Y position of the player
      * @param walls the amount of walls the player has
      */
-    public Player(int posX, int posY)
+    public Player(int posX, int posY, int ID)
     {
+    	this.ID = ID;
     	xCoord = posX;
     	yCoord = posY;
         position = new Position(posX, posY);

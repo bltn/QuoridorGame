@@ -29,8 +29,8 @@ public class GameController<T> {
         this.board = board;
         this.gui = gui;
 
-        player1 = new Player(4, 0);
-        player2 = new Player(4, 8);
+        player1 = new Player(4, 0, 1);
+        player2 = new Player(4, 8, 2);
         currentPlayer = player1;
     }
 
