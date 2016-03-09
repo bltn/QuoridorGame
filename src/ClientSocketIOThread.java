@@ -25,11 +25,7 @@ public class ClientSocketIOThread extends Thread {
 			String inputLine;
 
 			while ((inputLine = in.readLine()) != null) {
-				String[] commands = inputLine.split("\\s+");
-				if (commands[0].equals("move")) {
-					out.println("you're my socket, " + socket);
-					sisterOut.println("hey, " + sisterSocket + " ,you're my sister!");
-				}
+				// process input
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

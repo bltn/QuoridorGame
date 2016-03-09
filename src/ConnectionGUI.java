@@ -31,25 +31,8 @@ public class ConnectionGUI extends Application {
 	private GameServer server;
 	private GameClient client;
 
-	public ConnectionGUI(GameServer server) {
+	public ConnectionGUI(GameServer server, GameClient client) {
 		this.server = server;
-		this.client = null;
-		IPAddress = "localhost";
-		portNumber = 33333;
-		pane = new GridPane();
-		joinText = new Text("Join the game");
-		buttonBox = new VBox();
-		createServerButton = new Button("Create game server");
-		connectToServerButton = new Button("Connect to game");
-		scene = new Scene(pane, 600, 800);
-		scene.getStylesheets().add("Theme.css");
-		IPandPortInfo = new Label("Enter the IP and port address for your machine.");
-		IPAddressField = new TextField(IPAddress);
-		portField = new TextField("" + portNumber);
-	}
-
-	public ConnectionGUI(GameClient client) {
-		this.server = null;
 		this.client = client;
 		IPAddress = "localhost";
 		portNumber = 33333;
@@ -105,7 +88,7 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
-                //gameServer.initializeServer(IPAddress, portNumber);
+                server.initialiseServer(IPAddress, portNumber);
             }
         });
         connectToServerButton.setPrefWidth(270);
@@ -114,7 +97,7 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
-                //gameClient.connectToServer(IPAddress, portNumber);
+                client.connectToServer(IPAddress, portNumber);
             }
         });
     }

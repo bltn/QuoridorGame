@@ -44,10 +44,7 @@ public class GameClient extends Thread {
 
 		try {
 			while ((fromServer = in.readLine()) != null) {
-				System.out.println("Server: " + fromServer);
-				if (fromServer.equals("Bye.")) {
-					break;
-				}
+				// process input
 			}
 		} catch (Exception e) {
 			System.out.println("Exception caught on the client side.");

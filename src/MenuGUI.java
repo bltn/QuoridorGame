@@ -104,7 +104,8 @@ public class MenuGUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				GameClient client = new GameClient();
-				ConnectionGUI connGUI = new ConnectionGUI(client);
+				GameServer server = new GameServer();
+				ConnectionGUI connGUI = new ConnectionGUI(server, client);
 				connGUI.start(new Stage());
 			}
         });
