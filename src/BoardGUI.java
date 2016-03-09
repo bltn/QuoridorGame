@@ -55,8 +55,6 @@ public class BoardGUI extends Application {
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
-    // current player
-    private int currentPlayer;
     //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
@@ -87,7 +85,6 @@ public class BoardGUI extends Application {
         player2Moves = new Text("Moves: " + 0);
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
-        currentPlayer = 1;
         errorPaneText = new Text("");
     }
 
@@ -299,78 +296,51 @@ public class BoardGUI extends Application {
         );
     }
 
-    /**
-     * Set the player move count to the selected value
-     * @param moveCount		the value to change movecount to
-     */
-    public void updatePlayer1MoveCount(int moveCount) {
-        player1Moves.setText("Moves: " + moveCount);
+    public void updatePlayerMoveCount(int moveCount, int playerID) {
+    	if (playerID == 1) {
+    		player1Moves.setText("Moves: " + moveCount);
+    	}
+    	else if (playerID == 2) {
+    		player2Moves.setText("Moves: " + moveCount);
+    	}
     }
 
-    /**
-     *
-     * @param moveCount		the value to change movecount to
-     */
-    public void updatePlayer2MoveCount(int moveCount) {
-        player2Moves.setText("Moves: " + moveCount);
+    public void updatePlayerWallCount(int wallCount, int playerID) {
+    	if (playerID == 1) {
+    		player1WallCount = wallCount;
+            player1Walls.setText("Walls: " + player1WallCount);
+    	}
+    	else if (playerID == 2) {
+    		player2WallCount = wallCount;
+            player2Walls.setText("Walls: " + player2WallCount);
+    	}
     }
 
-    /**
-     * Set the player wall count to the selected value
-     * @param wallCount		the value to change walls to
-     */
-    public void updatePlayer1WallCount(int wallCount) {
-        player1WallCount = wallCount;
-        player1Walls.setText("Walls: " + player1WallCount);
-    }
-
-    /**
-     * Set the player wall count to the selected value
-     * @param wallCount		the value to change walls to
-     */
-    public void updatePlayer2WallCount(int wallCount) {
-        player2WallCount = wallCount;
-        player2Walls.setText("Walls: " + player2WallCount);
-    }
-
-    /**
-     * Updates the player's pawn position to the selected position
-     * @param x		x co-ordinate
-     * @param y		y co-ordinate
-     */
-    public void updatePlayer1PawnPosition(int x, int y) {
+    public void updatePlayerPawnPosition(int x, int y, int playerID) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
     	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(firstPawn);
-        boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(firstPawn);
-    }
 
-    /**
-     * Updates the player's pawn position to the selected position
-     * @param x		x co-ordinate
-     * @param y		y co-ordinate
-     */
-    public void updatePlayer2PawnPosition(int x, int y) {
-    	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
-    	int eighteenByEighteenX = x * 2;
-    	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(secondPawn);
-        boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(secondPawn);
+    	if (playerID == 1) {
+    		boardPane.getChildren().remove(firstPawn);
+            boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(firstPawn);
+    	}
+    	else if (playerID == 2) {
+    		boardPane.getChildren().remove(secondPawn);
+            boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(secondPawn);
+    	}
     }
 
     /**
      * change the active player to the next player
      */
     public void changeActivePlayer() {
-        if (currentPlayer == 1) {
-            currentPlayer = 2;
+        if (controller.getCurrentPlayer().getID() == 2) {
             currentPlayerText.setText("Player 2's turn...");
         }
-        else {
-            currentPlayer = 1;
+        else if (controller.getCurrentPlayer().getID() == 1) {
             currentPlayerText.setText("Player 1's turn...");
         }
     }

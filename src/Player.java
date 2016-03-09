@@ -22,6 +22,10 @@ public class Player
         moveCount = 0;
     }
 
+    public int getID() {
+    	return ID;
+    }
+
     public int getWallCount() {
     	return wallCount;
     }
