@@ -103,7 +103,9 @@ public class MenuGUI extends Application {
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
-				// handle event
+				GameClient client = new GameClient();
+				ConnectionGUI connGUI = new ConnectionGUI(client);
+				connGUI.start(new Stage());
 			}
         });
     }
