@@ -204,11 +204,13 @@ public class BoardGUI extends Application {
 	   for (int y = 0; y < 17; y += 2) {
 		   for (int x = 1; x < 17; x+= 2) {
 			   grids[y][x].setFill(Color.GREY);
+			   grids[y][x].setStroke(Color.GREY);
 		   }
 	   }
 	   for (int y = 1; y < 17; y += 2) {
-		   for (int x = 0; x < 17; x+= 2) {
+		   for (int x = 0; x < 17; x++) {
 			   grids[y][x].setFill(Color.GREY);
+			   grids[y][x].setStroke(Color.GREY);
 		   }
 	   }
    }
