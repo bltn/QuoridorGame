@@ -43,8 +43,7 @@ public class BoardTest {
 
 	@Test
 	public void testGetOccupiablePositions() {
-		Position topMiddle = board.getPosition(4, 0);
-		ArrayList<Position> occupiablePositions = board.getOccupiablePositions(topMiddle);
+		ArrayList<Position> occupiablePositions = board.getCurrentPlayerOccupiablePositions();
 
 		assertEquals(3, occupiablePositions.size());
 		assertEquals(true, containsCoordinates(occupiablePositions, 5, 0));

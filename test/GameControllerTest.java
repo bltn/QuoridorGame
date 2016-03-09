@@ -38,8 +38,8 @@ public class GameControllerTest extends Application {
 		assertEquals(true, board.getPosition(5, 5).hasBottomWall());
 		assertEquals(true, board.getPosition(4, 6).hasTopWall());
 		assertEquals(true, board.getPosition(5, 6).hasTopWall());
-		assertEquals(9, controller.getPreviousPlayer().getWallCount());
-		assertEquals(1, controller.getPreviousPlayer().getMoveCount());
+		assertEquals(9, board.getPreviousPlayer().getWallCount());
+		assertEquals(1, board.getPreviousPlayer().getMoveCount());
 
 		controller.placeWall(3, 0, PositionWallLocation.RIGHT, 3, 1, PositionWallLocation.RIGHT, 4, 0, PositionWallLocation.LEFT, 4, 1, PositionWallLocation.LEFT);
 
@@ -47,8 +47,8 @@ public class GameControllerTest extends Application {
 		assertEquals(true, board.getPosition(3, 1).hasRightWall());
 		assertEquals(true, board.getPosition(4, 0).hasLeftWall());
 		assertEquals(true, board.getPosition(4, 1).hasLeftWall());
-		assertEquals(9, controller.getPreviousPlayer().getWallCount());
-		assertEquals(1, controller.getPreviousPlayer().getMoveCount());
+		assertEquals(9, board.getPreviousPlayer().getWallCount());
+		assertEquals(1, board.getPreviousPlayer().getMoveCount());
 	}
 
 	/**
@@ -61,15 +61,19 @@ public class GameControllerTest extends Application {
 		int expectedY = controller.getCurrentPlayer().getPosition().getY();
 		int initialMoveCount = controller.getCurrentPlayer().getMoveCount();
 		controller.movePawn(oneAcross, controller.getCurrentPlayer().getPosition().getY());
-		assertEquals(oneAcross, controller.getPreviousPlayer().getPosition().getX());
-		assertEquals(expectedY, controller.getPreviousPlayer().getPosition().getY());
-		assertEquals((initialMoveCount + 1), controller.getPreviousPlayer().getMoveCount());
+		assertEquals(oneAcross, board.getPreviousPlayer().getPosition().getX());
+		assertEquals(expectedY, board.getPreviousPlayer().getPosition().getY());
+		assertEquals((initialMoveCount + 1), board.getPreviousPlayer().getMoveCount());
 
 		// attempt to move pawn illegally
 		int initialX = controller.getCurrentPlayer().getPosition().getX();
 		int initialY = controller.getCurrentPlayer().getPosition().getY();
 		Player startingPlayer = controller.getCurrentPlayer();
-		controller.movePawn(5, 5);
+		try {
+			controller.movePawn(5, 5);
+		} catch (IllegalArgumentException e) {
+			// do nothing
+		}
 		assertEquals(initialX, controller.getCurrentPlayer().getPosition().getX());
 		assertEquals(initialY, controller.getCurrentPlayer().getPosition().getY());
 		assertEquals(startingPlayer, controller.getCurrentPlayer());
