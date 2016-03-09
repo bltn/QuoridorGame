@@ -9,26 +9,15 @@ public class Player
 {
 	private int ID;
     private Position position;
-    private int xCoord;
-    private int yCoord;
     private boolean startedAtTop;
     private boolean startedAtBottom;
     private int wallCount;
     private int moveCount;
 
-    /**
-     * Constructor for objects of class Player
-     *
-     * @param posX the starting X position of the player
-     * @param posY the starting Y position of the player
-     * @param walls the amount of walls the player has
-     */
-    public Player(int posX, int posY, int ID)
+    public Player(Position position, int ID)
     {
     	this.ID = ID;
-    	xCoord = posX;
-    	yCoord = posY;
-        position = new Position(posX, posY);
+        this.position = position;
         wallCount = 10;
         moveCount = 0;
     }
@@ -61,44 +50,13 @@ public class Player
     	return wallCount > 0;
     }
 
-    /**
-     * Sets the player's X coordinate
-     *
-     * @param  set   the change to be made to the X co-ordinate
-     */
-    public void setX(int posX)
-    {
-        xCoord = posX;
-    }
-
-     /**
-     * Sets the player's Y coordinate
-     *
-     * @param  set   the change to be made to the Y co-ordinate
-     */
-    public void setY(int posY)
-    {
-        yCoord = posY;
-    }
-
-    public int getX()
-    {
-        return xCoord;
-    }
-
-    public int getY()
-    {
-        return yCoord;
-    }
-
-     /**
-     * Gets the position of the Player
-     *
-     * @return  position   an Array containing the position
-     */
     public Position getPosition()
     {
         return position;
+    }
+
+    public void setPosition(Position position) {
+    	this.position = position;
     }
 
     public void setStartedAtTop() {

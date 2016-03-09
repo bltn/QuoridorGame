@@ -29,8 +29,11 @@ public class GameController<T> {
         this.board = board;
         this.gui = gui;
 
-        player1 = new Player(4, 0, 1);
-        player2 = new Player(4, 8, 2);
+        Position player1Pos = board.getPosition(4, 0);
+        Position player2Pos = board.getPosition(4, 8);
+
+        player1 = new Player(player1Pos, 1);
+        player2 = new Player(player2Pos, 2);
         currentPlayer = player1;
     }
 
@@ -38,7 +41,7 @@ public class GameController<T> {
      * Get the available positions a player can move into and then highlight them in the GUI
      */
     public void showCurrentPlayerMoves() {
-    	Position position = board.getPosition(currentPlayer.getX(), currentPlayer.getY());
+    	Position position = board.getPosition(currentPlayer.getPosition().getX(), currentPlayer.getPosition().getY());
     	ArrayList<Position> availablePositions = board.getOccupiablePositions(position);
     	if (availablePositions.size() > 0) {
     		for (Position pos : availablePositions) {
@@ -116,13 +119,12 @@ public class GameController<T> {
      */
     public void movePawn(int posX, int posY) {
     	if (currentPlayer == player1) {
-    		if (posX == player2.getX() && posY == player2.getY()) {
+    		if (posX == player2.getPosition().getX() && posY == player2.getPosition().getY()) {
     			throw new IllegalArgumentException("Position is occupied");
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
-		    		player1.setX(posX);
-		    		player1.setY(posY);
+		    		player1.setPosition(board.getPosition(posX, posY));
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer1MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer1PawnPosition(posX, posY);
@@ -137,13 +139,12 @@ public class GameController<T> {
     		}
     	}
     	else {
-    		if (posX == player1.getX() && posY == player1.getY()) {
+    		if (posX == player1.getPosition().getX() && posY == player1.getPosition().getY()) {
 	    		throw new IllegalArgumentException("Position is occupied");
     		}
     		else {
     			if (isValidMove(currentPlayer, posX, posY)) {
-	    			player2.setX(posX);
-		    		player2.setY(posY);
+		    		player2.setPosition(board.getPosition(posX, posY));
 		    		currentPlayer.incrementMoveCount();
 		    		gui.updatePlayer2MoveCount(currentPlayer.getMoveCount());
 		    		gui.updatePlayer2PawnPosition(posX, posY);
@@ -165,25 +166,26 @@ public class GameController<T> {
      */
     private boolean isValidMove(Player player, int newX, int newY) {
     	boolean isValid = false;
+    	Position playerPos = player.getPosition();
     	// if the move is directly along the x axis
-    	if (((newX == (player.getX() + 1)) || (newX == (player.getX() - 1))) && newY == player.getY()) {
+    	if (((newX == (playerPos.getX() + 1)) || (newX == (playerPos.getX() - 1))) && newY == playerPos.getY()) {
     		// if the move is to the left and the player won't be blocked by a wall to the left
-    		if ((newX == (player.getX() - 1) && (!board.getPosition(player.getX(), player.getY()).hasLeftWall()))) {
+    		if ((newX == (playerPos.getX() - 1) && (!board.getPosition(playerPos.getX(), playerPos.getY()).hasLeftWall()))) {
     			isValid = true;
     		}
     		// if the move is to the right and the player won't be blocked by a wall to the right
-    		else if ((newX == (player.getX() + 1) && (!board.getPosition(player.getX(), player.getY()).hasRightWall()))) {
+    		else if ((newX == (playerPos.getX() + 1) && (!board.getPosition(playerPos.getX(), playerPos.getY()).hasRightWall()))) {
     			isValid = true;
     		}
     	}
     	// if the move is directly along the y axis
-    	else if (((newY == (player.getY() + 1)) || (newY == (player.getY() - 1))) && newX == player.getX()) {
+    	else if (((newY == (playerPos.getY() + 1)) || (newY == (playerPos.getY() - 1))) && newX == playerPos.getX()) {
     		// if the move is up and the player won't be blocked by a wall to the top
-    		if ((newY == (player.getY() - 1) && (!board.getPosition(player.getX(), player.getY()).hasTopWall()))) {
+    		if ((newY == (playerPos.getY() - 1) && (!board.getPosition(playerPos.getX(), playerPos.getY()).hasTopWall()))) {
     			isValid = true;
     		}
     		// if the move is down and the player won't be blocked by a wall to the bottom
-    		else if ((newY == (player.getY() + 1) && (!board.getPosition(player.getX(), player.getY()).hasBottomWall()))) {
+    		else if ((newY == (playerPos.getY() + 1) && (!board.getPosition(playerPos.getX(), playerPos.getY()).hasBottomWall()))) {
     			isValid = true;
     		}
     	}
@@ -203,11 +205,9 @@ public class GameController<T> {
     	gui.updatePlayer2WallCount(10);
     	player2.setWallCount(10);
     	gui.updatePlayer1PawnPosition(4, 0);
-    	player1.setX(4);
-    	player1.setY(0);
+    	player1.setPosition(board.getPosition(4, 0));
     	gui.updatePlayer2PawnPosition(4, 8);
-    	player2.setX(4);
-    	player2.setY(8);
+    	player2.setPosition(board.getPosition(4, 8));
     	currentPlayer = player1;
     	board.resetWalledOffPositions();
     	gui.resetWalls();

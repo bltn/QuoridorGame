@@ -57,21 +57,21 @@ public class GameControllerTest extends Application {
 	@Test
 	public void movePawnTest() {
 		// move pawn across to the right
-		int oneAcross = controller.getCurrentPlayer().getX() + 1;
-		int expectedY = controller.getCurrentPlayer().getY();
+		int oneAcross = controller.getCurrentPlayer().getPosition().getX() + 1;
+		int expectedY = controller.getCurrentPlayer().getPosition().getY();
 		int initialMoveCount = controller.getCurrentPlayer().getMoveCount();
-		controller.movePawn(oneAcross, controller.getCurrentPlayer().getY());
-		assertEquals(oneAcross, controller.getPreviousPlayer().getX());
-		assertEquals(expectedY, controller.getPreviousPlayer().getY());
+		controller.movePawn(oneAcross, controller.getCurrentPlayer().getPosition().getY());
+		assertEquals(oneAcross, controller.getPreviousPlayer().getPosition().getX());
+		assertEquals(expectedY, controller.getPreviousPlayer().getPosition().getY());
 		assertEquals((initialMoveCount + 1), controller.getPreviousPlayer().getMoveCount());
 
 		// attempt to move pawn illegally
-		int initialX = controller.getCurrentPlayer().getX();
-		int initialY = controller.getCurrentPlayer().getY();
+		int initialX = controller.getCurrentPlayer().getPosition().getX();
+		int initialY = controller.getCurrentPlayer().getPosition().getY();
 		Player startingPlayer = controller.getCurrentPlayer();
 		controller.movePawn(5, 5);
-		assertEquals(initialX, controller.getCurrentPlayer().getX());
-		assertEquals(initialY, controller.getCurrentPlayer().getY());
+		assertEquals(initialX, controller.getCurrentPlayer().getPosition().getX());
+		assertEquals(initialY, controller.getCurrentPlayer().getPosition().getY());
 		assertEquals(startingPlayer, controller.getCurrentPlayer());
 	}
 
