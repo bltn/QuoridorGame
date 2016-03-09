@@ -105,6 +105,7 @@ public class BoardGUI extends Application {
         setPawn(secondPawn, Color.RED, 8, 16);
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
+        primaryStage.setTitle("BOARD");
         primaryStage.show();
     }
 

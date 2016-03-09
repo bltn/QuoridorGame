@@ -32,6 +32,10 @@ public class ClientSocketIOThread extends Thread {
 		}
 	}
 
+	public void sendMessage(String message) {
+		out.println(message);
+	}
+
 	public Socket getSocket() {
 		return this.socket;
 	}

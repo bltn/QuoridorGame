@@ -98,6 +98,18 @@ public class ConnectionGUI extends Application {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 client.connectToServer(IPAddress, portNumber);
+                BoardGUI gui = new BoardGUI();
+                while (client.guiIsLaunched() == false) {
+                	try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						System.out.println(e.getMessage());
+					}
+                	if (client.guiCanBeLaunched()) {
+                		client.setGUILaunched(true);
+                		gui.start(new Stage());
+                	}
+                }
             }
         });
     }

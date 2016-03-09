@@ -3,6 +3,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javafx.stage.Stage;
+
 public class GameClient extends Thread {
 
 	private Socket serverSocket;
@@ -10,12 +12,25 @@ public class GameClient extends Thread {
 	private PrintWriter out;
 	private BufferedReader in;
 
-	public GameClient() {}
+	private BoardGUI gui;
+
+	private boolean guiCanBeLaunched;
+	private boolean guiIsLaunched;
+
+	public GameClient(BoardGUI gui) {
+		this.gui = gui;
+		guiCanBeLaunched = false;
+		guiIsLaunched = false;
+	}
 
 	public void run() {
 		while (true) {
 			listenForServerInput();
 		}
+	}
+
+	public boolean guiCanBeLaunched() {
+		return guiCanBeLaunched;
 	}
 
 	public void connectToServer(String IPAddress, int portAddress) {
@@ -28,7 +43,7 @@ public class GameClient extends Thread {
 				System.out.println("Successfully connected to the GameServer");
 				initThread();
 			} catch (Exception e) {
-				System.out.println("Exception caught on the client side. connect to ");
+				System.out.println("Exception caught on the client side.");
 				System.out.println(e.getMessage());
 			}
 		}
@@ -39,12 +54,23 @@ public class GameClient extends Thread {
 		out.println(message);
 	}
 
+	public boolean guiIsLaunched() {
+		return guiIsLaunched;
+	}
+
+	public void setGUILaunched(boolean booted) {
+		this.guiIsLaunched = booted;
+	}
+
 	public void listenForServerInput() {
 		String fromServer;
 
 		try {
 			while ((fromServer = in.readLine()) != null) {
-				// process input
+				String[] commands = fromServer.split("\\s+");
+				if (commands[0].equals("start")) {
+					guiCanBeLaunched = true;
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Exception caught on the client side.");

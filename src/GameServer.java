@@ -45,6 +45,8 @@ public class GameServer {
 			player1IOThread.setSisterSocket(player2IOThread.getSocket());
 			player2IOThread.setSisterSocket(player1IOThread.getSocket());
 			initThreads();
+			player1IOThread.sendMessage("bootGUI");
+			player2IOThread.sendMessage("bootGUI");
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
 			System.out.println(e.getMessage());
