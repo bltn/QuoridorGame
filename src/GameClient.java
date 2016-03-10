@@ -70,6 +70,12 @@ public class GameClient extends Thread {
 		out.println("move " + x + " " + y + " " + playerID);
 	}
 
+	public void sendWallMove(int topLeftX, int topLeftY, PositionWallLocation border1, int bottomLeftX, int bottomLeftY, PositionWallLocation border2,
+			int topRightX, int topRightY, PositionWallLocation border3, int bottomRightX, int bottomRightY, PositionWallLocation border4) {
+		out.println("wall " + topLeftX + " " + topLeftY + " " + border1 + " " + bottomLeftX + " " + bottomLeftY + " " + border2 + " " + topRightX + " " +
+			topRightY + " " + border3 + " " + bottomRightX + " " + bottomRightY + " " + border4 + " " + playerID);
+	}
+
 	public void requestCurrentPlayerAvailableMoves() {
 		out.println("available");
 	}
@@ -133,6 +139,33 @@ public class GameClient extends Thread {
 						message.append(commands[i] + " ");
 					}
 					gui.displayErrorMessage(message.toString());
+				}
+				else if (commands[0].equals("wall")) {
+					int x = Integer.parseInt(commands[1]);
+					int y = Integer.parseInt(commands[2]);
+					PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
+					x *= 2;
+					y *= 2;
+
+					switch (border) {
+						case LEFT: {
+							x -= 1;
+							break;
+						}
+						case RIGHT: {
+							x += 1;
+							break;
+						}
+						case TOP: {
+							y -= 1;
+							break;
+						}
+						case BOTTOM: {
+							y += 1;
+							break;
+						}
+					}
+					gui.displayWall(x, y);
 				}
 			}
 		} catch (Exception e) {

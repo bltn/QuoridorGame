@@ -38,6 +38,22 @@ public class ClientSocketIOThread extends Thread {
 				else if (commands[0].equals("available")) {
 					controller.showCurrentPlayerMoves();
 				}
+				else if (commands[0].equals("wall")) {
+					int topLeftX = Integer.parseInt(commands[1]);
+					int topLeftY = Integer.parseInt(commands[2]);
+					PositionWallLocation border1 = PositionWallLocation.valueOf(commands[3]);
+					int bottomLeftX = Integer.parseInt(commands[4]);
+					int bottomLeftY = Integer.parseInt(commands[5]);
+					PositionWallLocation border2 = PositionWallLocation.valueOf(commands[6]);
+					int topRightX = Integer.parseInt(commands[7]);
+					int topRightY = Integer.parseInt(commands[8]);
+					PositionWallLocation border3 = PositionWallLocation.valueOf(commands[9]);
+					int bottomRightX = Integer.parseInt(commands[10]);
+					int bottomRightY = Integer.parseInt(commands[11]);
+					PositionWallLocation border4 = PositionWallLocation.valueOf(commands[12]);
+					int playerID = Integer.parseInt(commands[13]);
+					controller.placeWall(topLeftX, topLeftY, border1, bottomLeftX, bottomLeftY, border2, topRightX, topRightY, border3, bottomRightX, bottomRightY, border4, playerID);
+				}
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -58,6 +74,10 @@ public class ClientSocketIOThread extends Thread {
 
 	public void sendPawnUpdate(int x, int y, int playerID) {
 		out.println("pawn " + x + " " + y + " " + playerID);
+	}
+
+	public void sendWallUpdate(int x, int y, PositionWallLocation border) {
+		out.println("wall " + x + " " + y + " " + border);
 	}
 
 	public void sendErrorMessage(String message) {

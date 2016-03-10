@@ -173,7 +173,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
     /**
      * Allows a user to place a wall on a wall space that is available
      */
-   private void setWall(int x, int y) {
+   public void setWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
            if (grids[y][x].getFill() == Color.GREY) {
@@ -429,8 +429,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private void setUnusedSquare(int x, int y, int X, int Y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
-        grids[y][x].setStroke(Color.GREY);
-        grids[y][x].setFill(Color.GREY);
+        grids[y][x].setStroke(Color.LIGHTSKYBLUE);
+        grids[y][x].setFill(Color.LIGHTSKYBLUE);
         boardPane.setConstraints(grids[y][x],x,y);
         boardPane.getChildren().add(grids[y][x]);
     }
@@ -450,27 +450,13 @@ public class NetworkedBoardGUI extends Application implements GUI {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y + 1][x].setFill(Color.ORANGE);
-            grids[y + 2][x].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y + 1][x].setStroke(Color.ORANGE);
-            grids[y + 2][x].setStroke(Color.ORANGE);
-        }
-        catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
+
+        client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+    }
+
+    public void displayWall(int x, int y) {
+    	grids[y][x].setFill(Color.ORANGE);
+    	grids[y][x].setStroke(Color.ORANGE);
     }
 
     private void placeWideWall(int x, int y) {
@@ -488,27 +474,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y][x + 1].setFill(Color.ORANGE);
-            grids[y][x + 2].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y][x + 1].setStroke(Color.ORANGE);
-            grids[y][x + 2].setStroke(Color.ORANGE);
-        }
-        catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
+
+        client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
     }
 
     public void resetBoard() {

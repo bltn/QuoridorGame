@@ -44,9 +44,52 @@ public class NetworkedGameController implements Controller {
 	@Override
 	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
 			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
-			int pos4y, PositionWallLocation pos4Border) {
-		// TODO Auto-generated method stub
+			int pos4y, PositionWallLocation pos4Border) {/*Method not implemented; player ID required. See below.*/}
 
+	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
+			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
+			int pos4y, PositionWallLocation pos4Border, int playerID) {
+		if (playerID == board.getCurrentPlayer().getID()) {
+			Position coveredPos1 = board.getPosition(pos1x, pos1y);
+			Position coveredPos2 = board.getPosition(pos2x, pos2y);
+			Position coveredPos3 = board.getPosition(pos3x, pos3y);
+			Position coveredPos4 = board.getPosition(pos4x, pos4y);
+
+			try {
+				board.placeWalls(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
+				player1IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
+				player1IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
+				player1IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
+				player1IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
+
+				player2IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
+				player2IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
+				player2IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
+				player2IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
+
+				Player prevPlayer = board.getPreviousPlayer();
+				player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+				player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+
+				player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+				player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+			} catch (IllegalStateException e) {
+				if (playerID == 1) {
+					player1IO.sendErrorMessage(e.getMessage());
+				}
+				else if (playerID == 2) {
+					player2IO.sendErrorMessage(e.getMessage());
+				}
+			}
+		}
+		else {
+			if (playerID == 1) {
+				player1IO.sendErrorMessage("It isn't your turn.");
+			}
+			else if (playerID == 2) {
+				player2IO.sendErrorMessage("It isn't your turn.");
+			}
+		}
 	}
 
 	@Override
