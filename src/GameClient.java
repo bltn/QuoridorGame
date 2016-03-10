@@ -70,6 +70,10 @@ public class GameClient extends Thread {
 		out.println("move " + x + " " + y + " " + playerID);
 	}
 
+	public void requestCurrentPlayerAvailableMoves() {
+		out.println("available");
+	}
+
 	public void sendMessageToServer(String message) {
 		System.out.println("Message to be sent: " + message);
 		out.println(message);
@@ -118,6 +122,11 @@ public class GameClient extends Thread {
 					int playerID = Integer.parseInt(commands[1]);
 					gui.updateActivePlayer(playerID);
 				}
+				else if (commands[0].equals("highlight")) {
+					int x = Integer.parseInt(commands[1]);
+					int y = Integer.parseInt(commands[2]);
+					gui.highlightPositionAvailability(x, y);
+				}
 				else if (commands[0].equals("error")) {
 					StringBuilder message = new StringBuilder();
 					for (int i = 1; i < commands.length; i++) {
@@ -127,7 +136,6 @@ public class GameClient extends Thread {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("GC");
 			System.out.println(e.getMessage());
 		}
 	}

@@ -164,7 +164,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
  	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
            @Override
            public void handle(MouseEvent event) {
-               controller.showCurrentPlayerMoves();
+               client.requestCurrentPlayerAvailableMoves();
            }
        });
        buttonPane.getChildren().add(highlightPositionsButton);

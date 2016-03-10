@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class NetworkedGameController implements Controller {
 
@@ -29,8 +30,15 @@ public class NetworkedGameController implements Controller {
 
 	@Override
 	public void showCurrentPlayerMoves() {
-		// TODO Auto-generated method stub
-
+		ArrayList<Position> availablePositions = board.getCurrentPlayerOccupiablePositions();
+    	if (availablePositions.size() > 0) {
+    		for (Position pos : availablePositions) {
+				int x = pos.getX() * 2;
+				int y = pos.getY() * 2;
+    			player1IO.sendAvailableMove(x, y);
+    			player2IO.sendAvailableMove(x, y);
+    		}
+    	}
 	}
 
 	@Override

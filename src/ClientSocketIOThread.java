@@ -35,10 +35,17 @@ public class ClientSocketIOThread extends Thread {
 					int playerID = Integer.parseInt(commands[3]);
 					controller.movePawn(x, y, playerID);
 				}
+				else if (commands[0].equals("available")) {
+					controller.showCurrentPlayerMoves();
+				}
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void sendAvailableMove(int x, int y) {
+		out.println("highlight " + x + " " + y);
 	}
 
 	public void sendMessage(String message) {
