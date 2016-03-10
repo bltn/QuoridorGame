@@ -11,7 +11,7 @@ import java.util.Iterator;
  *
  * @version 12/02/2016
  */
-public class GameController<T> {
+public class GameController<T> implements Controller {
 
 	// The game board and its positions' logic
     private Board board;
@@ -41,7 +41,8 @@ public class GameController<T> {
     	}
     }
 
-    public void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+    public void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
+    		PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
     	Position coveredPos1 = board.getPosition(pos1X, pos1Y);
     	Position coveredPos2 = board.getPosition(pos2X, pos2Y);
     	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
