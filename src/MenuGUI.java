@@ -85,9 +85,9 @@ public class MenuGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
 
-            	BoardGUI gui = new BoardGUI();
+            	LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new Board();
-            	GameController controller = new GameController(gui, board);
+            	Controller controller = new LocalGameController(gui, board);
             	gui.setController(controller);
             	gui.start(new Stage());
             };
@@ -103,7 +103,7 @@ public class MenuGUI extends Application {
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
-				BoardGUI gui = new BoardGUI();
+				GUI gui = new NetworkedBoardGUI();
 				GameClient client = new GameClient(gui);
 				GameServer server = new GameServer();
 				ConnectionGUI connGUI = new ConnectionGUI(server, client);

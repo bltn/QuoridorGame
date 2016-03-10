@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  *
  * @version 12/02/2016
  */
-public class BoardGUI extends Application implements GUI {
+public class LocalBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
     private final Scene scene;
@@ -62,13 +62,13 @@ public class BoardGUI extends Application implements GUI {
     private Circle secondPawn;
     private boolean drawing;
 
-    private GameController controller;
+    private Controller controller;
 
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
      */
-    public BoardGUI() {
+    public LocalBoardGUI() {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
@@ -88,7 +88,7 @@ public class BoardGUI extends Application implements GUI {
         errorPaneText = new Text("");
     }
 
-    public void setController(GameController controller) {
+    public void setController(Controller controller) {
     	this.controller = controller;
     }
 

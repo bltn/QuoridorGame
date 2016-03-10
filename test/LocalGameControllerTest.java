@@ -6,23 +6,23 @@ import org.junit.Test;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class GameControllerTest extends Application {
+public class LocalGameControllerTest extends Application {
 	private static Board board;
-	private static BoardGUI gui;
-	private static GameController controller;
+	private static LocalBoardGUI gui;
+	private static LocalGameController controller;
 
 	@BeforeClass
 	public static void setUpClass() {
 		Thread t = new Thread("JavaFX initialisation") {
 			public void run() {
-				Application.launch(GameControllerTest.class, new String[0]);
+				Application.launch(LocalGameControllerTest.class, new String[0]);
 			}
 		};
 		t.setDaemon(true);
 		t.start();
 		board = new Board();
-		gui = new BoardGUI();
-		controller = new GameController<>(gui, board);
+		gui = new LocalBoardGUI();
+		controller = new LocalGameController<>(gui, board);
 		gui.setController(controller);
 	}
 

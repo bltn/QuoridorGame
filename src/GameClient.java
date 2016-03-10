@@ -12,13 +12,13 @@ public class GameClient extends Thread {
 	private PrintWriter out;
 	private BufferedReader in;
 
-	private BoardGUI gui;
+	private NetworkedBoardGUI gui;
 
 	private boolean guiCanBeLaunched;
 	private boolean guiIsLaunched;
 
-	public GameClient(BoardGUI gui) {
-		this.gui = gui;
+	public GameClient(GUI gui) {
+		this.gui = (NetworkedBoardGUI) gui;
 		guiCanBeLaunched = false;
 		guiIsLaunched = false;
 	}

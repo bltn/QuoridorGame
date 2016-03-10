@@ -11,14 +11,14 @@ import java.util.Iterator;
  *
  * @version 12/02/2016
  */
-public class GameController<T> implements Controller {
+public class LocalGameController<T> implements Controller {
 
 	// The game board and its positions' logic
     private Board board;
     // GUI (View) representing the game board
-    private BoardGUI gui;
+    private LocalBoardGUI gui;
 
-    public GameController(BoardGUI gui, Board board) {
+    public LocalGameController(LocalBoardGUI gui, Board board) {
         this.board = board;
         this.gui = gui;
     }
