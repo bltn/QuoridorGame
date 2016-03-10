@@ -98,7 +98,8 @@ public class ConnectionGUI extends Application {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 client.connectToServer(IPAddress, portNumber);
-                GUI gui = new NetworkedBoardGUI();
+                GUI gui = (NetworkedBoardGUI)client.getGUI();
+                ((NetworkedBoardGUI) gui).setClient(client);
                 while (client.guiIsLaunched() == false) {
                 	try {
 						Thread.sleep(500);

@@ -17,10 +17,14 @@ public class GameClient extends Thread {
 	private boolean guiCanBeLaunched;
 	private boolean guiIsLaunched;
 
+	private int playerID;
+	private boolean idIsAssigned;
+
 	public GameClient(GUI gui) {
 		this.gui = (NetworkedBoardGUI) gui;
 		guiCanBeLaunched = false;
 		guiIsLaunched = false;
+		idIsAssigned = false;
 	}
 
 	public void run() {
@@ -29,8 +33,19 @@ public class GameClient extends Thread {
 		}
 	}
 
+	public void setPlayerID(int id) {
+		if (!idIsAssigned) {
+			this.playerID = id;
+			idIsAssigned = true;
+		}
+	}
+
 	public boolean guiCanBeLaunched() {
 		return guiCanBeLaunched;
+	}
+
+	public GUI getGUI() {
+		return gui;
 	}
 
 	public void connectToServer(String IPAddress, int portAddress) {
@@ -47,6 +62,10 @@ public class GameClient extends Thread {
 				System.out.println(e.getMessage());
 			}
 		}
+	}
+
+	public void sendMove(int x, int y) {
+		out.println("move " + x + " " + y + " " + playerID);
 	}
 
 	public void sendMessageToServer(String message) {
@@ -70,6 +89,11 @@ public class GameClient extends Thread {
 				String[] commands = fromServer.split("\\s+");
 				if (commands[0].equals("bootGUI")) {
 					guiCanBeLaunched = true;
+				}
+				else if (commands[0].equals("setID")) {
+					int id = Integer.parseInt(commands[1]);
+					setPlayerID(id);
+					System.out.println("Client ID: " + playerID);
 				}
 			}
 		} catch (Exception e) {

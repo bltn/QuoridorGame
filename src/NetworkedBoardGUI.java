@@ -62,6 +62,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private Circle secondPawn;
     private boolean drawing;
 
+    private GameClient client;
+
     private Controller controller;
 
     /**
@@ -90,6 +92,10 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
     public void setController(Controller controller) {
     	this.controller = controller;
+    }
+
+    public void setClient(GameClient client) {
+    	this.client = client;
     }
 
     @Override
@@ -366,7 +372,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
                 try {
-                	controller.movePawn(nineByNineX, nineByNineY);
+                	//controller.movePawn(nineByNineX, nineByNineY);
+                	client.sendMove(nineByNineX, nineByNineY);
                 }
                 catch (IllegalArgumentException e) {
                 	errorPaneText.setText(e.getMessage());

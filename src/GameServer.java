@@ -47,6 +47,8 @@ public class GameServer {
 			initThreads();
 			player1IOThread.sendMessage("bootGUI");
 			player2IOThread.sendMessage("bootGUI");
+			player1IOThread.sendMessage("setID " + 1);
+			player2IOThread.sendMessage("setID " + 2);
 		} catch (IOException e) {
 			System.out.println("IOException caught on the client side.");
 			System.out.println(e.getMessage());
