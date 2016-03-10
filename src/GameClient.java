@@ -68,7 +68,7 @@ public class GameClient extends Thread {
 		try {
 			while ((fromServer = in.readLine()) != null) {
 				String[] commands = fromServer.split("\\s+");
-				if (commands[0].equals("start")) {
+				if (commands[0].equals("bootGUI")) {
 					guiCanBeLaunched = true;
 				}
 			}

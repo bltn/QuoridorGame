@@ -159,8 +159,8 @@ public class Board {
 	private void reset() {
 		player1.setMoveCount(0);
 		player2.setMoveCount(0);
-		player1.setWallCount(0);
-		player2.setWallCount(0);
+		player1.setWallCount(10);
+		player2.setWallCount(10);
 		player1.setPosition(getPosition(4, 0));
 		player2.setPosition(getPosition(4, 8));
 		currentPlayer = player1;
