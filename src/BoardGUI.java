@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  *
  * @version 12/02/2016
  */
-public class BoardGUI extends Application {
+public class BoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
     private final Scene scene;
@@ -336,7 +336,7 @@ public class BoardGUI extends Application {
     /**
      * change the active player to the next player
      */
-    public void changeActivePlayer() {
+    public void updateActivePlayer() {
         if (controller.getCurrentPlayer().getID() == 2) {
             currentPlayerText.setText("Player 2's turn...");
         }
@@ -497,5 +497,15 @@ public class BoardGUI extends Application {
                     1000
             );
         }
+    }
+
+    public void resetBoard() {
+    	resetWalls();
+    	updatePlayerPawnPosition(4, 0, 1);
+    	updatePlayerPawnPosition(4, 8, 2);
+    	updatePlayerWallCount(10, 1);
+    	updatePlayerWallCount(10, 2);
+    	updatePlayerMoveCount(0, 1);
+    	updatePlayerMoveCount(0, 2);
     }
 }

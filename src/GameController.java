@@ -51,7 +51,7 @@ public class GameController<T> {
     		board.placeWalls(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
     		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
-    		gui.changeActivePlayer();
+    		gui.updateActivePlayer();
     	} catch (IllegalStateException e) {
     		throw e;
     	}
@@ -62,7 +62,7 @@ public class GameController<T> {
     		boolean gameOver = board.movePawn(posX, posY);
     			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
-    			gui.changeActivePlayer();
+    			gui.updateActivePlayer();
 			if (gameOver) {
     			gui.updatePlayerMoveCount(0, 1);
     	    	gui.updatePlayerMoveCount(0, 2);
