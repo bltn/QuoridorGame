@@ -99,7 +99,6 @@ public class ConnectionGUI extends Application {
                 portNumber = Integer.parseInt(portField.getText());
                 client.connectToServer(IPAddress, portNumber);
                 GUI gui = (NetworkedBoardGUI)client.getGUI();
-                ((NetworkedBoardGUI) gui).setClient(client);
                 while (client.guiIsLaunched() == false) {
                 	try {
 						Thread.sleep(500);
@@ -108,6 +107,7 @@ public class ConnectionGUI extends Application {
 					}
                 	if (client.guiCanBeLaunched()) {
                 		client.setGUILaunched(true);
+                        ((NetworkedBoardGUI) gui).setClient(client);
                 		gui.start(new Stage());
                 	}
                 }

@@ -61,9 +61,9 @@ public class LocalGameController<T> implements Controller {
     public void movePawn(int posX, int posY) {
     	try {
     		boolean gameOver = board.movePawn(posX, posY);
-    			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
-    			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
-    			gui.updateActivePlayer();
+			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
+			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
+			gui.updateActivePlayer();
 			if (gameOver) {
     			gui.updatePlayerMoveCount(0, 1);
     	    	gui.updatePlayerMoveCount(0, 2);

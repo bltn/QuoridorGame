@@ -105,7 +105,7 @@ public class MenuGUI extends Application {
 			public void handle(ActionEvent event) {
 				GUI gui = new NetworkedBoardGUI();
 				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer();
+				GameServer server = new GameServer(new NetworkedGameController(new Board()));
 				ConnectionGUI connGUI = new ConnectionGUI(server, client);
 				connGUI.start(new Stage());
 			}

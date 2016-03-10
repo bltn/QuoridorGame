@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class GameClient extends Thread {
@@ -40,6 +41,10 @@ public class GameClient extends Thread {
 		}
 	}
 
+	public int getPlayerID() {
+		return playerID;
+	}
+
 	public boolean guiCanBeLaunched() {
 		return guiCanBeLaunched;
 	}
@@ -51,14 +56,11 @@ public class GameClient extends Thread {
 	public void connectToServer(String IPAddress, int portAddress) {
 		if (portAddress <= 65535) {
 			try {
-				System.out.println("Trying to establish a connection with the GameServer");
 				serverSocket = new Socket(IPAddress, portAddress);
 				out = new PrintWriter(serverSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-				System.out.println("Successfully connected to the GameServer");
 				initThread();
 			} catch (Exception e) {
-				System.out.println("Exception caught on the client side.");
 				System.out.println(e.getMessage());
 			}
 		}
@@ -93,11 +95,39 @@ public class GameClient extends Thread {
 				else if (commands[0].equals("setID")) {
 					int id = Integer.parseInt(commands[1]);
 					setPlayerID(id);
-					System.out.println("Client ID: " + playerID);
+				}
+				else if (commands[0].equals("stats")) {
+					int moveCount = Integer.parseInt(commands[1]);
+					int wallCount = Integer.parseInt(commands[2]);
+					int playerID = Integer.parseInt(commands[3]);
+					gui.updatePlayerMoveCount(moveCount, playerID);
+					gui.updatePlayerWallCount(wallCount, playerID);
+				}
+				else if (commands[0].equals("pawn")) {
+					int x = Integer.parseInt(commands[1]);
+					int y = Integer.parseInt(commands[2]);
+					int playerID = Integer.parseInt(commands[3]);
+					Platform.runLater(new Runnable(){
+						@Override
+						public void run() {
+							gui.updatePlayerPawnPosition(x, y, playerID);
+						}
+					});
+				}
+				else if (commands[0].equals("currentPlayer")) {
+					int playerID = Integer.parseInt(commands[1]);
+					gui.updateActivePlayer(playerID);
+				}
+				else if (commands[0].equals("error")) {
+					StringBuilder message = new StringBuilder();
+					for (int i = 1; i < commands.length; i++) {
+						message.append(commands[i] + " ");
+					}
+					gui.displayErrorMessage(message.toString());
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception caught on the client side.");
+			System.out.println("GC");
 			System.out.println(e.getMessage());
 		}
 	}

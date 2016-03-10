@@ -13,7 +13,11 @@ public class GameServer {
 	private ClientSocketIOThread player1IOThread;
 	private ClientSocketIOThread player2IOThread;
 
-	public GameServer() {}
+	private NetworkedGameController controller;
+
+	public GameServer(NetworkedGameController controller) {
+		this.controller = controller;
+	}
 
 	public void initialiseServer(String IPAddress, int portAddress) {
 		if (portAddress <= 65535) {
@@ -33,17 +37,19 @@ public class GameServer {
 			int socketCount = 0;
 			while (socketCount < 2) {
 				if (socketCount == 0) {
-					player1IOThread = new ClientSocketIOThread(serverSocket.accept());
+					player1IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
 					System.out.println("Client socket # 1 I/O thread booted up");
 				}
 				else if (socketCount == 1) {
-					player2IOThread = new ClientSocketIOThread(serverSocket.accept());
+					player2IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
 					System.out.println("Client socket # 2 I/O thread booted up");
 				}
 				socketCount++;
 			}
 			player1IOThread.setSisterSocket(player2IOThread.getSocket());
 			player2IOThread.setSisterSocket(player1IOThread.getSocket());
+			controller.setPlayer1IO(player1IOThread);
+			controller.setPlayer2IO(player2IOThread);
 			initThreads();
 			player1IOThread.sendMessage("bootGUI");
 			player2IOThread.sendMessage("bootGUI");

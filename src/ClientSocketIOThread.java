@@ -14,9 +14,12 @@ public class ClientSocketIOThread extends Thread {
 
 	private PrintWriter sisterOut;
 
-	public ClientSocketIOThread(Socket socket) {
+	private NetworkedGameController controller;
+
+	public ClientSocketIOThread(Socket socket, NetworkedGameController controller) {
 		super("ClientSocketInputThread");
 		this.socket = socket;
+		this.controller = controller;
 		init();
 	}
 
@@ -25,7 +28,13 @@ public class ClientSocketIOThread extends Thread {
 			String inputLine;
 
 			while ((inputLine = in.readLine()) != null) {
-				// process input
+				String[] commands = inputLine.split("\\s+");
+				if (commands[0].equals("move")) {
+					int x = Integer.parseInt(commands[1]);
+					int y = Integer.parseInt(commands[2]);
+					int playerID = Integer.parseInt(commands[3]);
+					controller.movePawn(x, y, playerID);
+				}
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -34,6 +43,22 @@ public class ClientSocketIOThread extends Thread {
 
 	public void sendMessage(String message) {
 		out.println(message);
+	}
+
+	public void sendStatsUpdate(int moveCount, int wallCount, int playerID) {
+		out.println("stats " + moveCount + " " + wallCount + " " + playerID);
+	}
+
+	public void sendPawnUpdate(int x, int y, int playerID) {
+		out.println("pawn " + x + " " + y + " " + playerID);
+	}
+
+	public void sendErrorMessage(String message) {
+		out.println("error " + message);
+	}
+
+	public void sendCurrentPlayerGUIUpdate(int playerID) {
+		out.println("currentPlayer " + playerID);
 	}
 
 	public Socket getSocket() {

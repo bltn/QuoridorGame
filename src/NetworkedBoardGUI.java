@@ -62,6 +62,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private Circle secondPawn;
     private boolean drawing;
 
+    private Text assignedIDText;
+
     private GameClient client;
 
     private Controller controller;
@@ -96,6 +98,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
     public void setClient(GameClient client) {
     	this.client = client;
+    	assignedIDText = new Text("You are player " + client.getPlayerID() + "    ");
     }
 
     @Override
@@ -118,13 +121,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
-        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
+        currentPlayerPane.setAlignment(Pos.CENTER);
+        currentPlayerPane.setPadding(new Insets(0, 5, 0, 5));
         errorPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
-        //boardPane.setHgap(5);
-        //boardPane.setVgap(5);
         rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
@@ -226,13 +228,16 @@ public class NetworkedBoardGUI extends Application implements GUI {
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player1Moves.setTextAlignment(TextAlignment.CENTER);
         currentPlayerText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.ITALIC, 15));
+        currentPlayerText.setTextAlignment(TextAlignment.CENTER);
+        assignedIDText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        assignedIDText.setFill(Color.GREEN);
         errorPaneText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         errorPaneText.setFill(Color.RED);
         player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         Text player1Title = new Text("Player 1");
         player1Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player1StatsPane.getChildren().addAll(player1Moves, player1Title, player1Walls);
-        currentPlayerPane.getChildren().addAll(currentPlayerText);
+        currentPlayerPane.getChildren().addAll(currentPlayerText, assignedIDText);
         errorPane.getChildren().addAll(errorPaneText);
         player2Walls.setTextAlignment(TextAlignment.CENTER);
         player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -342,14 +347,16 @@ public class NetworkedBoardGUI extends Application implements GUI {
     /**
      * change the active player to the next player
      */
-    public void updateActivePlayer() {
-        if (controller.getCurrentPlayer().getID() == 2) {
-            currentPlayerText.setText("Player 2's turn...");
-        }
-        else if (controller.getCurrentPlayer().getID() == 1) {
-            currentPlayerText.setText("Player 1's turn...");
-        }
+    public void updateActivePlayer(int playerID) {
+    	if (playerID == 1) {
+    		currentPlayerText.setText("Player 1's turn...");
+    	}
+    	else if (playerID == 2) {
+    		currentPlayerText.setText("Player 2's turn...");
+    	}
     }
+
+    public void updateActivePlayer() {/*Do nothing*/}
 
     /**
      * Set the occupiable positions
@@ -371,24 +378,22 @@ public class NetworkedBoardGUI extends Application implements GUI {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
-                try {
-                	//controller.movePawn(nineByNineX, nineByNineY);
-                	client.sendMove(nineByNineX, nineByNineY);
-                }
-                catch (IllegalArgumentException e) {
-                	errorPaneText.setText(e.getMessage());
-                	new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    errorPaneText.setText("");
-                                }
-                            },
-                            1000
-                    );
-                }
+            	client.sendMove(nineByNineX, nineByNineY);
             }
         });
+    }
+
+    public void displayErrorMessage(String message) {
+    	errorPaneText.setText(message);
+    	new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        errorPaneText.setText("");
+                    }
+                },
+                1000
+        );
     }
 
     private void setWideWall(int x, int y, int X, int Y) {
