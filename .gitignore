@@ -8,8 +8,4 @@
 *.ipr
 *.iws
 /out/
-<<<<<<< HEAD
 .idea_modules/
-=======
-.idea_modules/
->>>>>>> 7e6db9e6adc2ab1e7772595162eb0c6079e394bf
