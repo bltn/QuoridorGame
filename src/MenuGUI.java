@@ -84,9 +84,11 @@ public class MenuGUI extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	BoardGUI gui = new BoardGUI();
+
+            	LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new Board();
-            	GameController controller = new GameController(gui, board);
+            	Controller controller = new LocalGameController(gui, board);
+            	gui.setController(controller);
             	gui.start(new Stage());
             };
         });
@@ -99,19 +101,14 @@ public class MenuGUI extends Application {
         });
         multiplayerButton.setPrefWidth(150);
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
-        	public void handle(ActionEvent event){
-                try {
-                    BoardGUI gui = new BoardGUI();
-                    Board board = new Board();
-                    Server server = new Server(gui);
-                    GameController controller = new GameController(gui, board, server);
-                    ServerGUI sgui = new ServerGUI(controller);
-                    sgui.start(new Stage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("constructing error for GameController in ServerGUI");
-                }
-        	}
+			@Override
+			public void handle(ActionEvent event) {
+				GUI gui = new NetworkedBoardGUI();
+				GameClient client = new GameClient(gui);
+				GameServer server = new GameServer(new NetworkedGameController(new Board()));
+				ConnectionGUI connGUI = new ConnectionGUI(server, client);
+				connGUI.start(new Stage());
+			}
         });
     }
 
@@ -119,3 +116,4 @@ public class MenuGUI extends Application {
         launch(args);
     }
 }
+
