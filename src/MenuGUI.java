@@ -116,4 +116,3 @@ public class MenuGUI extends Application {
         launch(args);
     }
 }
-

@@ -488,4 +488,3 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	updatePlayerMoveCount(0, 2);
     }
 }
-
