@@ -65,14 +65,14 @@ public class LocalGameController<T> implements Controller {
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer();
 			if (gameOver) {
-    			gui.updatePlayerMoveCount(0, 1);
-    	    	gui.updatePlayerMoveCount(0, 2);
-    	    	gui.updatePlayerWallCount(10, 1);
-    	    	gui.updatePlayerWallCount(10, 2);
-    	    	gui.updatePlayerPawnPosition(4, 0, 1);
-    	    	gui.updatePlayerPawnPosition(4, 8, 2);
-    	    	gui.resetWalls();
-    		}
+				gui.updatePlayerMoveCount(0, 1);
+				gui.updatePlayerMoveCount(0, 2);
+				gui.updatePlayerWallCount(10, 1);
+				gui.updatePlayerWallCount(10, 2);
+				gui.updatePlayerPawnPosition(4, 0, 1);
+				gui.updatePlayerPawnPosition(4, 8, 2);
+				gui.resetWalls();
+			}
     	} catch (IllegalArgumentException e) {
     		throw e;
     	}

@@ -80,6 +80,10 @@ public class ClientSocketIOThread extends Thread {
 		out.println("wall " + x + " " + y + " " + border);
 	}
 
+	public void sendResetWalls() {
+        out.println("reset");
+    }
+
 	public void sendErrorMessage(String message) {
 		out.println("error " + message);
 	}

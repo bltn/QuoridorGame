@@ -99,6 +99,27 @@ public class NetworkedGameController implements Controller {
 		if (playerID == board.getCurrentPlayer().getID()) {
 			try {
 				boolean gameOver = board.movePawn(posX, posY);
+                Player prevPlayer = board.getPreviousPlayer();
+                player1IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
+                player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+                player2IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
+                player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+                player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+                player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+                if (gameOver) {
+                    player1IO.sendStatsUpdate(0, 10, 1);
+                    player1IO.sendStatsUpdate(0, 10, 2);
+                    player2IO.sendStatsUpdate(0, 10, 1);
+                    player2IO.sendStatsUpdate(0, 10, 2);
+                    player1IO.sendPawnUpdate(4, 0, 1);
+                    player1IO.sendPawnUpdate(4, 8, 2);
+                    player2IO.sendPawnUpdate(4, 0, 1);
+                    player2IO.sendPawnUpdate(4, 8, 2);
+                    player1IO.sendResetWalls();
+                    player2IO.sendResetWalls();
+                    player1IO.sendCurrentPlayerGUIUpdate(1);
+                    player2IO.sendCurrentPlayerGUIUpdate(1);
+                }
 			} catch (IllegalArgumentException e) {
 				if (playerID == 1) {
 					player1IO.sendErrorMessage(e.getMessage());
@@ -107,13 +128,6 @@ public class NetworkedGameController implements Controller {
 					player2IO.sendErrorMessage(e.getMessage());
 				}
 			}
-			Player prevPlayer = board.getPreviousPlayer();
-			player1IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
-			player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-			player2IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
-			player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-			player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
-			player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
 		}
 		else {
 			if (playerID == 1) {
@@ -124,6 +138,4 @@ public class NetworkedGameController implements Controller {
 			}
 		}
 	}
-
-
 }

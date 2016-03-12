@@ -167,6 +167,9 @@ public class GameClient extends Thread {
 					}
 					gui.displayWall(x, y);
 				}
+				else if (commands[0].equals("reset")) {
+                    gui.resetWalls();
+                }
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
