@@ -29,6 +29,14 @@ public class Board {
 		currentPlayer = player1;
 	}
 
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	public Player getPlayer2() {
+		return player2;
+	}
+
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}

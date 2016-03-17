@@ -95,6 +95,24 @@ public class NetworkedGameController implements Controller {
 	@Override
 	public void movePawn(int posX, int posY) {/*Method not implemented; player ID required. See below.*/}
 
+	private void sendGUIResetCommands() {
+        Player player1 = board.getPlayer1();
+        Player player2 = board.getPlayer2();
+        // send updates to player 1's GUI
+        player1IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), player1.getID());
+        player1IO.sendStatsUpdate(player2.getMoveCount(), player2.getMoveCount(), player2.getID());
+        player1IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
+        player1IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
+        // send updates for player 2's GUI
+        player2IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), player2.getID());
+        player2IO.sendStatsUpdate(player1.getMoveCount(), player1.getMoveCount(), player1.getID());
+        player2IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
+        player2IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
+        // send commands to reset both GUI's walls
+        player1IO.sendResetWalls();
+        player2IO.sendResetWalls();
+	}
+
 	public void movePawn(int posX, int posY, int playerID) {
 		if (playerID == board.getCurrentPlayer().getID()) {
 			try {
@@ -107,18 +125,7 @@ public class NetworkedGameController implements Controller {
                 player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
                 player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
                 if (gameOver) {
-                    player1IO.sendStatsUpdate(0, 10, 1);
-                    player1IO.sendStatsUpdate(0, 10, 2);
-                    player2IO.sendStatsUpdate(0, 10, 1);
-                    player2IO.sendStatsUpdate(0, 10, 2);
-                    player1IO.sendPawnUpdate(4, 0, 1);
-                    player1IO.sendPawnUpdate(4, 8, 2);
-                    player2IO.sendPawnUpdate(4, 0, 1);
-                    player2IO.sendPawnUpdate(4, 8, 2);
-                    player1IO.sendResetWalls();
-                    player2IO.sendResetWalls();
-                    player1IO.sendCurrentPlayerGUIUpdate(1);
-                    player2IO.sendCurrentPlayerGUIUpdate(1);
+                    sendGUIResetCommands();
                 }
 			} catch (IllegalArgumentException e) {
 				if (playerID == 1) {
