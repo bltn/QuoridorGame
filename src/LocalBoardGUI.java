@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  *
  * @version 12/02/2016
  */
-public class BoardGUI extends Application {
+public class LocalBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
     private final Scene scene;
@@ -55,8 +55,6 @@ public class BoardGUI extends Application {
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
-    // current player
-    private int currentPlayer;
     //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
@@ -64,11 +62,13 @@ public class BoardGUI extends Application {
     private Circle secondPawn;
     private boolean drawing;
 
+    private Controller controller;
+
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
      */
-    public BoardGUI() {
+    public LocalBoardGUI() {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
@@ -85,8 +85,11 @@ public class BoardGUI extends Application {
         player2Moves = new Text("Moves: " + 0);
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
-        currentPlayer = 1;
         errorPaneText = new Text("");
+    }
+
+    public void setController(Controller controller) {
+    	this.controller = controller;
     }
 
     @Override
@@ -99,6 +102,7 @@ public class BoardGUI extends Application {
         setPawn(secondPawn, Color.RED, 8, 16);
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
+        primaryStage.setTitle("BOARD");
         primaryStage.show();
     }
 
@@ -152,7 +156,7 @@ public class BoardGUI extends Application {
  	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
            @Override
            public void handle(MouseEvent event) {
-               GameController.showCurrentPlayerMoves();
+               controller.showCurrentPlayerMoves();
            }
        });
        buttonPane.getChildren().add(highlightPositionsButton);
@@ -197,11 +201,13 @@ public class BoardGUI extends Application {
 	   for (int y = 0; y < 17; y += 2) {
 		   for (int x = 1; x < 17; x+= 2) {
 			   grids[y][x].setFill(Color.GREY);
+			   grids[y][x].setStroke(Color.GREY);
 		   }
 	   }
 	   for (int y = 1; y < 17; y += 2) {
-		   for (int x = 0; x < 17; x+= 2) {
+		   for (int x = 0; x < 17; x++) {
 			   grids[y][x].setFill(Color.GREY);
+			   grids[y][x].setStroke(Color.GREY);
 		   }
 	   }
    }
@@ -269,6 +275,7 @@ public class BoardGUI extends Application {
      * @param y		the y co-ordinate
      */
     public void highlightPositionAvailability(int x, int y) {
+
         grids[y][x].setFill(Color.YELLOW);
         grids[y][x].setStroke(Color.YELLOW);
         new java.util.Timer().schedule(
@@ -289,78 +296,51 @@ public class BoardGUI extends Application {
         );
     }
 
-    /**
-     * Set the player move count to the selected value
-     * @param moveCount		the value to change movecount to
-     */
-    public void updatePlayer1MoveCount(int moveCount) {
-        player1Moves.setText("Moves: " + moveCount);
+    public void updatePlayerMoveCount(int moveCount, int playerID) {
+    	if (playerID == 1) {
+    		player1Moves.setText("Moves: " + moveCount);
+    	}
+    	else if (playerID == 2) {
+    		player2Moves.setText("Moves: " + moveCount);
+    	}
     }
 
-    /**
-     *
-     * @param moveCount		the value to change movecount to
-     */
-    public void updatePlayer2MoveCount(int moveCount) {
-        player2Moves.setText("Moves: " + moveCount);
+    public void updatePlayerWallCount(int wallCount, int playerID) {
+    	if (playerID == 1) {
+    		player1WallCount = wallCount;
+            player1Walls.setText("Walls: " + player1WallCount);
+    	}
+    	else if (playerID == 2) {
+    		player2WallCount = wallCount;
+            player2Walls.setText("Walls: " + player2WallCount);
+    	}
     }
 
-    /**
-     * Set the player wall count to the selected value
-     * @param wallCount		the value to change walls to
-     */
-    public void updatePlayer1WallCount(int wallCount) {
-        player1WallCount = wallCount;
-        player1Walls.setText("Walls: " + player1WallCount);
-    }
-
-    /**
-     * Set the player wall count to the selected value
-     * @param wallCount		the value to change walls to
-     */
-    public void updatePlayer2WallCount(int wallCount) {
-        player2WallCount = wallCount;
-        player2Walls.setText("Walls: " + player2WallCount);
-    }
-
-    /**
-     * Updates the player's pawn position to the selected position
-     * @param x		x co-ordinate
-     * @param y		y co-ordinate
-     */
-    public void updatePlayer1PawnPosition(int x, int y) {
+    public void updatePlayerPawnPosition(int x, int y, int playerID) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
     	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(firstPawn);
-        boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(firstPawn);
-    }
 
-    /**
-     * Updates the player's pawn position to the selected position
-     * @param x		x co-ordinate
-     * @param y		y co-ordinate
-     */
-    public void updatePlayer2PawnPosition(int x, int y) {
-    	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
-    	int eighteenByEighteenX = x * 2;
-    	int eighteenByEighteenY = y * 2;
-        boardPane.getChildren().remove(secondPawn);
-        boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
-        boardPane.getChildren().add(secondPawn);
+    	if (playerID == 1) {
+    		boardPane.getChildren().remove(firstPawn);
+            boardPane.setConstraints(firstPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(firstPawn);
+    	}
+    	else if (playerID == 2) {
+    		boardPane.getChildren().remove(secondPawn);
+            boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(secondPawn);
+    	}
     }
 
     /**
      * change the active player to the next player
      */
-    public void changeActivePlayer() {
-        if (currentPlayer == 1) {
-            currentPlayer = 2;
+    public void updateActivePlayer() {
+        if (controller.getCurrentPlayer().getID() == 2) {
             currentPlayerText.setText("Player 2's turn...");
         }
-        else {
-            currentPlayer = 1;
+        else if (controller.getCurrentPlayer().getID() == 1) {
             currentPlayerText.setText("Player 1's turn...");
         }
     }
@@ -386,7 +366,7 @@ public class BoardGUI extends Application {
                 int nineByNineX = X / 2;
                 int nineByNineY = Y / 2;
                 try {
-                	GameController.movePawn(nineByNineX, nineByNineY);
+                	controller.movePawn(nineByNineX, nineByNineY);
                 }
                 catch (IllegalArgumentException e) {
                 	errorPaneText.setText(e.getMessage());
@@ -459,7 +439,7 @@ public class BoardGUI extends Application {
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
         try {
-        	GameController.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
         	grids[y][x].setFill(Color.ORANGE);
             grids[y + 1][x].setFill(Color.ORANGE);
             grids[y + 2][x].setFill(Color.ORANGE);
@@ -497,7 +477,7 @@ public class BoardGUI extends Application {
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
         try {
-        	GameController.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
         	grids[y][x].setFill(Color.ORANGE);
             grids[y][x + 1].setFill(Color.ORANGE);
             grids[y][x + 2].setFill(Color.ORANGE);
@@ -517,5 +497,15 @@ public class BoardGUI extends Application {
                     1000
             );
         }
+    }
+
+    public void resetBoard() {
+    	resetWalls();
+    	updatePlayerPawnPosition(4, 0, 1);
+    	updatePlayerPawnPosition(4, 8, 2);
+    	updatePlayerWallCount(10, 1);
+    	updatePlayerWallCount(10, 2);
+    	updatePlayerMoveCount(0, 1);
+    	updatePlayerMoveCount(0, 2);
     }
 }

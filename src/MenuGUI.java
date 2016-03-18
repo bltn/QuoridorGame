@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 import javax.sound.midi.SysexMessage;
 
 /**
@@ -33,6 +35,7 @@ public class MenuGUI extends Application {
     private VBox buttonBox;
     private Button startButton;
     private Button quitButton;
+    private Button multiplayerButton;
 
     public MenuGUI() {
         introPane = new GridPane();
@@ -40,6 +43,7 @@ public class MenuGUI extends Application {
         buttonBox = new VBox();
         startButton = new Button("Start");
         quitButton = new Button("Quit");
+        multiplayerButton = new Button("Multiplayer");
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
@@ -73,6 +77,7 @@ public class MenuGUI extends Application {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
         buttonBox.getChildren().add(startButton);
+        buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
         startButton.setPrefWidth(150);
@@ -80,9 +85,10 @@ public class MenuGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
 
-            	BoardGUI gui = new BoardGUI();
+            	LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new Board();
-            	GameController controller = new GameController(gui, board);
+            	Controller controller = new LocalGameController(gui, board);
+            	gui.setController(controller);
             	gui.start(new Stage());
             };
         });
@@ -92,6 +98,17 @@ public class MenuGUI extends Application {
             public void handle(ActionEvent event) {
                 System.exit(0);
             }
+        });
+        multiplayerButton.setPrefWidth(150);
+        multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				GUI gui = new NetworkedBoardGUI();
+				GameClient client = new GameClient(gui);
+				GameServer server = new GameServer(new NetworkedGameController(new Board()));
+				ConnectionGUI connGUI = new ConnectionGUI(server, client);
+				connGUI.start(new Stage());
+			}
         });
     }
 
