@@ -1,3 +1,5 @@
+import javafx.scene.control.Alert;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,9 +17,12 @@ public class GameServer {
 
 	private NetworkedGameController controller;
 
+    private Alert alert;
+
 	public GameServer(NetworkedGameController controller) {
 		this.controller = controller;
-	}
+        alert = new Alert(Alert.AlertType.CONFIRMATION, "");
+    }
 
 	public void initialiseServer(String IPAddress, int portAddress) {
 		if (portAddress <= 65535) {
@@ -27,6 +32,7 @@ public class GameServer {
 				listenForConnectionRequests();
 			} catch (Exception e) {
 				e.printStackTrace();
+                showAlert("Error creating server");
 				System.out.println("There was an error creating the server");
 			}
 		}
@@ -34,14 +40,17 @@ public class GameServer {
 
 	public void listenForConnectionRequests() {
 		try {
+            showAlert("Waiting for players to join");
 			int socketCount = 0;
 			while (socketCount < 2) {
 				if (socketCount == 0) {
 					player1IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    showAlert("Player 1 has joined");
 					System.out.println("Client socket # 1 I/O thread booted up");
 				}
 				else if (socketCount == 1) {
 					player2IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    showAlert("Player 2 has joined");
 					System.out.println("Client socket # 2 I/O thread booted up");
 				}
 				socketCount++;
@@ -55,7 +64,9 @@ public class GameServer {
 			player2IOThread.sendMessage("bootGUI");
 			player1IOThread.sendMessage("setID " + 1);
 			player2IOThread.sendMessage("setID " + 2);
+            showAlert("Game has begun");
 		} catch (IOException e) {
+            showAlert("There was a problem with a client joining the server");
 			System.out.println("IOException caught on the client side.");
 			System.out.println(e.getMessage());
 		}
@@ -65,4 +76,9 @@ public class GameServer {
 		player1IOThread.start();
 		player2IOThread.start();
 	}
+
+    private void showAlert(String alertText) {
+        alert.setContentText(alertText);
+        alert.showAndWait();
+    }
 }
