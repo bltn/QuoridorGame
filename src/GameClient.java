@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class GameClient extends Thread {
@@ -21,11 +22,14 @@ public class GameClient extends Thread {
 	private int playerID;
 	private boolean idIsAssigned;
 
+    private Alert alert;
+
 	public GameClient(GUI gui) {
 		this.gui = (NetworkedBoardGUI) gui;
 		guiCanBeLaunched = false;
 		guiIsLaunched = false;
 		idIsAssigned = false;
+        alert = new Alert(Alert.AlertType.CONFIRMATION, "");
 	}
 
 	public void run() {
@@ -60,8 +64,10 @@ public class GameClient extends Thread {
 				out = new PrintWriter(serverSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 				initThread();
+                showAlert("Connected to server");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
+                showAlert("Error connecting to server");
 			}
 		}
 	}
@@ -204,4 +210,9 @@ public class GameClient extends Thread {
 		Thread thread = new Thread(this);
 		thread.start();
 	}
+
+    private void showAlert(String alertText) {
+        alert.setContentText(alertText);
+        alert.showAndWait();
+    }
 }
