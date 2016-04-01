@@ -1,3 +1,5 @@
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -19,7 +21,8 @@ public class ConnectionGUI extends Application {
 
 	private Scene scene;
 	private GridPane pane;
-	private Text joinText;
+	private Label joinText;
+    private static StringProperty joinTextValue;
 	private VBox buttonBox;
 	private Button createServerButton;
 	private Button connectToServerButton;
@@ -37,7 +40,9 @@ public class ConnectionGUI extends Application {
 		IPAddress = "localhost";
 		portNumber = 33333;
 		pane = new GridPane();
-		joinText = new Text("Join the game");
+		joinText = new Label();
+        joinTextValue = new SimpleStringProperty("Join the game");
+        joinText.textProperty().bind(joinTextValue);
 		buttonBox = new VBox();
 		createServerButton = new Button("Create game server");
 		connectToServerButton = new Button("Connect to game");

@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class GameClient extends Thread {
@@ -21,11 +22,14 @@ public class GameClient extends Thread {
 	private int playerID;
 	private boolean idIsAssigned;
 
+    private Alert alert;
+
 	public GameClient(GUI gui) {
 		this.gui = (NetworkedBoardGUI) gui;
 		guiCanBeLaunched = false;
 		guiIsLaunched = false;
 		idIsAssigned = false;
+        alert = new Alert(Alert.AlertType.CONFIRMATION, "");
 	}
 
 	public void run() {
@@ -60,8 +64,10 @@ public class GameClient extends Thread {
 				out = new PrintWriter(serverSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 				initThread();
+                showAlert("Connected to server");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
+                showAlert("Error connecting to server");
 			}
 		}
 	}
@@ -107,65 +113,22 @@ public class GameClient extends Thread {
 					setPlayerID(id);
 				}
 				else if (commands[0].equals("stats")) {
-					int moveCount = Integer.parseInt(commands[1]);
-					int wallCount = Integer.parseInt(commands[2]);
-					int playerID = Integer.parseInt(commands[3]);
-					gui.updatePlayerMoveCount(moveCount, playerID);
-					gui.updatePlayerWallCount(wallCount, playerID);
+					updatePlayerStats(commands);
 				}
 				else if (commands[0].equals("pawn")) {
-					int x = Integer.parseInt(commands[1]);
-					int y = Integer.parseInt(commands[2]);
-					int playerID = Integer.parseInt(commands[3]);
-					Platform.runLater(new Runnable(){
-						@Override
-						public void run() {
-							gui.updatePlayerPawnPosition(x, y, playerID);
-						}
-					});
+					updatePlayerPawnPosition(commands);
 				}
 				else if (commands[0].equals("currentPlayer")) {
-					int playerID = Integer.parseInt(commands[1]);
-					gui.updateActivePlayer(playerID);
+					updateCurrentPlayer(commands);
 				}
 				else if (commands[0].equals("highlight")) {
-					int x = Integer.parseInt(commands[1]);
-					int y = Integer.parseInt(commands[2]);
-					gui.highlightPositionAvailability(x, y);
+					highlightAvailablePositions(commands);
 				}
 				else if (commands[0].equals("error")) {
-					StringBuilder message = new StringBuilder();
-					for (int i = 1; i < commands.length; i++) {
-						message.append(commands[i] + " ");
-					}
-					gui.displayErrorMessage(message.toString());
+					displayErrorMessage(commands);
 				}
 				else if (commands[0].equals("wall")) {
-					int x = Integer.parseInt(commands[1]);
-					int y = Integer.parseInt(commands[2]);
-					PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
-					x *= 2;
-					y *= 2;
-
-					switch (border) {
-						case LEFT: {
-							x -= 1;
-							break;
-						}
-						case RIGHT: {
-							x += 1;
-							break;
-						}
-						case TOP: {
-							y -= 1;
-							break;
-						}
-						case BOTTOM: {
-							y += 1;
-							break;
-						}
-					}
-					gui.displayWall(x, y);
+					updateWallPosition(commands);
 				}
 				else if (commands[0].equals("reset")) {
                     gui.resetWalls();
@@ -176,8 +139,80 @@ public class GameClient extends Thread {
 		}
 	}
 
-	private void initThread() {
+    private void updateWallPosition(String[] commands) {
+        int x = Integer.parseInt(commands[1]);
+        int y = Integer.parseInt(commands[2]);
+        PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
+        x *= 2;
+        y *= 2;
+
+        switch (border) {
+            case LEFT: {
+                x -= 1;
+                break;
+            }
+            case RIGHT: {
+                x += 1;
+                break;
+            }
+            case TOP: {
+                y -= 1;
+                break;
+            }
+            case BOTTOM: {
+                y += 1;
+                break;
+            }
+        }
+        gui.displayWall(x, y);
+    }
+
+    private void displayErrorMessage(String[] commands) {
+        StringBuilder message = new StringBuilder();
+        for (int i = 1; i < commands.length; i++) {
+            message.append(commands[i] + " ");
+        }
+        gui.displayErrorMessage(message.toString());
+    }
+
+    private void highlightAvailablePositions(String[] commands) {
+        int x = Integer.parseInt(commands[1]);
+        int y = Integer.parseInt(commands[2]);
+        gui.highlightPositionAvailability(x, y);
+    }
+
+    private void updateCurrentPlayer(String[] commands) {
+        int playerID = Integer.parseInt(commands[1]);
+        gui.updateActivePlayer(playerID);
+    }
+
+    private void updatePlayerPawnPosition(String[] commands) {
+        int x = Integer.parseInt(commands[1]);
+        int y = Integer.parseInt(commands[2]);
+        int playerID = Integer.parseInt(commands[3]);
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                gui.updatePlayerPawnPosition(x, y, playerID);
+            }
+        });
+    }
+
+    private void updatePlayerStats(String[] commands) {
+        int moveCount = Integer.parseInt(commands[1]);
+        int wallCount = Integer.parseInt(commands[2]);
+        int playerID = Integer.parseInt(commands[3]);
+        gui.updatePlayerMoveCount(moveCount, playerID);
+        gui.updatePlayerWallCount(wallCount, playerID);
+    }
+
+    private void initThread() {
 		Thread thread = new Thread(this);
 		thread.start();
 	}
+
+    private void showAlert(String alertText) {
+        alert.setContentText(alertText);
+        alert.showAndWait();
+    }
 }

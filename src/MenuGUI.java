@@ -84,7 +84,6 @@ public class MenuGUI extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
             	LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new Board();
             	Controller controller = new LocalGameController(gui, board);
