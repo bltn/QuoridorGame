@@ -12,10 +12,14 @@ import org.junit.Test;
 public class BoardTest {
 
 	private static Board board;
+    private static Player player1;
+    private static Player player2;
 
 	@BeforeClass
 	public static void setUp() {
 		board = new Board();
+        player1 = board.getPlayer1();
+        player2 = board.getPlayer2();
 	}
 
 	@Test
@@ -66,8 +70,8 @@ public class BoardTest {
 
 	/**
 	 * @param positions the collection of positions
-	 * @param x the x coordinate of the position being searched for
-	 * @param y the y coordinate of the position being searched for
+	 * @param xCoord the x coordinate of the position being searched for
+	 * @param yCoord the y coordinate of the position being searched for
 	 * @return whether or not the given ArrayList of positions contains a position with the given coordinates
 	 */
 	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {
@@ -79,4 +83,49 @@ public class BoardTest {
 		}
 		return containsCoordinates;
 	}
+
+    @Test
+    /**
+     * Test that the starting player at the beginning of the game is player 1
+     */
+    public void testCurrentPlayer() {
+        assertEquals(player1, board.getCurrentPlayer());
+    }
+
+    @Test
+    /**
+     * Test that the players switch turns correctly
+     */
+    public void testSwitchPlayer() {
+        board.switchPlayer();
+        assertEquals(player2, board.getCurrentPlayer());
+        assertEquals(player1, board.getPreviousPlayer());
+        board.switchPlayer();
+        assertEquals(player1, board.getCurrentPlayer());
+        assertEquals(player2, board.getPreviousPlayer());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    /**
+     * Test that move pawn is working correctly.
+     */
+    public void movePawnTest() {
+        // test normal moves
+        board.movePawn(4, 1);
+        assertEquals(player1.getPosition(), board.getPosition(4, 1));
+        // test an illegal move before the next valid move
+        board.movePawn(4, 9);
+        assertEquals(player2.getPosition(), board.getPosition(4, 8));
+        board.movePawn(4, 7);
+        assertEquals(player2.getPosition(), board.getPosition(4, 7));
+        // test if two pawns are prevented from occupying the same position
+        board.movePawn(4, 2);
+        board.movePawn(4, 6);
+        board.movePawn(4, 3);
+        board.movePawn(4, 5);
+        board.movePawn(4, 4);
+        board.movePawn(4, 4);
+        assertEquals(player1.getPosition(), board.getPosition(4, 4));
+        assertEquals(player2.getPosition(), board.getPosition(4, 5));
+    }
 }
