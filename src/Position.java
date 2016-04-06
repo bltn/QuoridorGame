@@ -3,7 +3,7 @@
  *
  * @author Jordan Bird
  * @author Ben Lawton
- * @version 12/02/2016
+ * 
  */
 public class Position
 {
@@ -14,6 +14,10 @@ public class Position
     // is at the top or bottom of the grid
     private boolean isTop;
     private boolean isBottom;
+    
+    //is at the top corner or bottom corner of the grid
+    private boolean isTopCorner;
+    private boolean isBottomCorner;
 
     // whether the position has a right, left, top or bottom wall assigned to it
     private boolean hasTopWall;
@@ -63,7 +67,19 @@ public class Position
 	public boolean isBottom() {
 		return isBottom;
 	}
+/**
+     * @return whether it's at the top of the board
+     */
+	public boolean isTopCorner() {
+		return isTopCorner;
+	}
 
+	/**
+	 * @return whether it's at the bottom of the board
+	 */
+	public boolean isBottomCorner() {
+		return isBottomCorner;
+	}
 	/**
 	 * set as a top of the board position
 	 */
@@ -79,6 +95,24 @@ public class Position
 	public void setBottom() {
 		if (!isTop) {
 			isBottom = true;
+		}
+	}
+        
+        	/**
+	 * set as a top corner of the board position
+	 */
+	public void setTopCorner() {
+		if (!isBottomCorner) {
+			isTopCorner = true;
+		}
+	}
+
+	/**
+	 * set as a bottom corner of the board position
+	 */
+	public void setBottomCorner() {
+		if (!isTopCorner) {
+			isBottomCorner = true;
 		}
 	}
 
@@ -112,28 +146,28 @@ public class Position
 	}
 
 	/**
-	 * @return whether or note the position has a top wall
+	 * @return whether or not the position has a top wall
 	 */
 	public boolean hasTopWall() {
 		return hasTopWall;
 	}
 
 	/**
-	 * @return whether or note the position has a right wall
+	 * @return whether or not the position has a right wall
 	 */
 	public boolean hasRightWall() {
 		return hasRightWall;
 	}
 
 	/**
-	 * @return whether or note the position has a bottom wall
+	 * @return whether or not the position has a bottom wall
 	 */
 	public boolean hasBottomWall() {
 		return hasBottomWall;
 	}
 
 	/**
-	 * @return whether or note the position has a left wall
+	 * @return whether or not the position has a left wall
 	 */
 	public boolean hasLeftWall() {
 		return hasLeftWall;

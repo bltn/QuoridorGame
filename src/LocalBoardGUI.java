@@ -22,7 +22,6 @@ import javafx.stage.Stage;
  * @author Ben Lawton
  * @author Jordan Bird
  *
- * @version 12/02/2016
  */
 public class LocalBoardGUI extends Application implements GUI {
 
@@ -63,6 +62,7 @@ public class LocalBoardGUI extends Application implements GUI {
     private boolean drawing;
 
     private Controller controller;
+    
 
     /**
      * Constructor for objects of class BoardGUI
@@ -91,6 +91,7 @@ public class LocalBoardGUI extends Application implements GUI {
     public void setController(Controller controller) {
     	this.controller = controller;
     }
+    
 
     @Override
     public void start(Stage primaryStage) {
@@ -98,8 +99,8 @@ public class LocalBoardGUI extends Application implements GUI {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, 8, 0);
-        setPawn(secondPawn, Color.RED, 8, 16);
+        setPawn(firstPawn, Color.BLUE, controller.getPlayer1X(), controller.getPlayer1Y());
+        setPawn(secondPawn, Color.RED, controller.getPlayer2X(), controller.getPlayer2Y());
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
@@ -440,13 +441,21 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation right = PositionWallLocation.RIGHT;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y + 1][x].setFill(Color.ORANGE);
-            grids[y + 2][x].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y + 1][x].setStroke(Color.ORANGE);
-            grids[y + 2][x].setStroke(Color.ORANGE);
-        }
+            if (controller.getCurrentPlayer().getID() == 1){
+            grids[y][x].setFill(Color.RED);
+            grids[y + 1][x].setFill(Color.RED);
+            grids[y + 2][x].setFill(Color.RED);
+            grids[y][x].setStroke(Color.RED);
+            grids[y + 1][x].setStroke(Color.RED);
+            grids[y + 2][x].setStroke(Color.RED);}
+            else{
+            grids[y][x].setFill(Color.BLUE);
+            grids[y + 1][x].setFill(Color.BLUE);
+            grids[y + 2][x].setFill(Color.BLUE);
+            grids[y][x].setStroke(Color.BLUE);
+            grids[y + 1][x].setStroke(Color.BLUE);
+            grids[y + 2][x].setStroke(Color.BLUE);
+        }}
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
         	new java.util.Timer().schedule(
@@ -478,12 +487,21 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y][x + 1].setFill(Color.ORANGE);
-            grids[y][x + 2].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y][x + 1].setStroke(Color.ORANGE);
-            grids[y][x + 2].setStroke(Color.ORANGE);
+            if (controller.getCurrentPlayer().getID() == 1){
+            grids[y][x].setFill(Color.RED);
+            grids[y][x + 1].setFill(Color.RED);
+            grids[y][x + 2].setFill(Color.RED);
+            grids[y][x].setStroke(Color.RED);
+            grids[y][x + 1].setStroke(Color.RED);
+            grids[y][x + 2].setStroke(Color.RED);}
+            else{
+            grids[y][x].setFill(Color.BLUE);
+            grids[y][x + 1].setFill(Color.BLUE);
+            grids[y][x + 2].setFill(Color.BLUE);
+            grids[y][x].setStroke(Color.BLUE);
+            grids[y][x + 1].setStroke(Color.BLUE);
+            grids[y][x + 2].setStroke(Color.BLUE);
+            }
         }
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
@@ -501,8 +519,8 @@ public class LocalBoardGUI extends Application implements GUI {
 
     public void resetBoard() {
     	resetWalls();
-    	updatePlayerPawnPosition(4, 0, 1);
-    	updatePlayerPawnPosition(4, 8, 2);
+//    	updatePlayerPawnPosition(4, 0, 1);
+//    	updatePlayerPawnPosition(4, 8, 2);
     	updatePlayerWallCount(10, 1);
     	updatePlayerWallCount(10, 2);
     	updatePlayerMoveCount(0, 1);

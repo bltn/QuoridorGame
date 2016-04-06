@@ -9,5 +9,13 @@ public interface Controller {
     		PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border);
 
 	public void movePawn(int posX, int posY);
+        
+        public int getPlayer1X();
+        
+        public int getPlayer1Y();
+        
+        public int getPlayer2X();
+        
+        public int getPlayer2Y();
 
 }
