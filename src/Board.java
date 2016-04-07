@@ -329,7 +329,7 @@ public class Board {
 		}
 		Position start = new Position(currentPlayer.getPosition().getY() * 2 + 1, currentPlayer.getPosition().getX() * 2 + 1);
 		assignMapWall(coveredPos1, pos1Border);
-		if (Utility.traverse(map, start, goal)) {
+		if (Utility.DepthFirstSearch(map, start, goal)) {
 			return true;
 		} else {
 			undoAssignMapWall(coveredPos1, pos1Border);

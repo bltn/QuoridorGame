@@ -23,7 +23,7 @@ public class Utility {
 		Position start = new Position(16, 10);
 		Position goal = new Position(0, 0);
 		System.out.println("start");
-		u.traverse(grid1,start,goal);
+		u.DepthFirstSearch(grid1,start,goal);
 		System.out.println("end");
     }
 	
@@ -51,7 +51,7 @@ public class Utility {
 		 };
 		
 		
-	public static boolean traverse(int[][] grid,Position start,Position finish) {
+	public static boolean DepthFirstSearch(int[][] grid,Position start,Position finish) {
 		 Stack<Position> stack = new Stack(); 
 		
 		 boolean done = false; // set true when the finish position is reached
