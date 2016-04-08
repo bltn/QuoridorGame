@@ -1,0 +1,12 @@
+Start
+Multiplayer
+Quit
+Moves
+Player 1
+Player 2
+Walls
+Hint
+Join game
+Enter the IP and port address for your machine
+Create server
+Connect to game
