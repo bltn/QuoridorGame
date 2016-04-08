@@ -61,7 +61,7 @@ public class Utility {
 		 while (!stack.isEmpty()) {
 		 pos = stack.pop();
 		 grid[pos.getX()][pos.getY()] = 2; // this cell has been tried
-		 if (pos.getX() == finish.getX() && pos.getY() == finish.getY())
+		 if (pos.getX() == finish.getX()) //&& pos.getY() == finish.getY())
 		 done = true; 
 		 else {
 
