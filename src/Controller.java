@@ -10,14 +10,14 @@ public interface Controller {
 
 	public void movePawn(int posX, int posY);
 
-        public int getPlayer1X();
+    public int getPlayer1X();
 
-        public int getPlayer1Y();
+    public int getPlayer1Y();
 
-        public int getPlayer2X();
+    public int getPlayer2X();
 
-        public int getPlayer2Y();
+    public int getPlayer2Y();
 
-		public void resetGame();
+	public void resetGame();
 
 }

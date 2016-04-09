@@ -26,26 +26,6 @@ public class LocalGameController<T> implements Controller {
     	return board.getCurrentPlayer();
     }
 
-    @Override
-    public int getPlayer1X() {
-        return board.player1.getPosition().getX()*2;
-    }
-
-    @Override
-    public int getPlayer1Y() {
-        return board.player1.getPosition().getY()*2;
-    }
-
-    @Override
-    public int getPlayer2X() {
-	return board.player2.getPosition().getX()*2;
-    }
-
-    @Override
-    public int getPlayer2Y() {
-	return board.player2.getPosition().getY()*2;
-    }
-
     /**
      * Get the available positions a player can move into and then highlight them in the GUI
      */
@@ -103,4 +83,24 @@ public class LocalGameController<T> implements Controller {
     	gui.updatePlayerPawnPosition(player2.getPosition().getX(), player2.getPosition().getY(), 2);
 		gui.resetWalls();
     }
+
+	@Override
+	public int getPlayer1X() {
+		return board.getPlayer1().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer1Y() {
+		return board.getPlayer1().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer2X() {
+		return board.getPlayer2().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer2Y() {
+		return board.getPlayer2().getPosition().getY();
+	}
 }

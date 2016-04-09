@@ -62,7 +62,7 @@ public class LocalBoardGUI extends Application implements GUI {
     private boolean drawing;
 
     private Controller controller;
-    
+
 
     /**
      * Constructor for objects of class BoardGUI
@@ -91,7 +91,7 @@ public class LocalBoardGUI extends Application implements GUI {
     public void setController(Controller controller) {
     	this.controller = controller;
     }
-    
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -99,8 +99,8 @@ public class LocalBoardGUI extends Application implements GUI {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, controller.getPlayer1X(), controller.getPlayer1Y());
-        setPawn(secondPawn, Color.RED, controller.getPlayer2X(), controller.getPlayer2Y());
+        setPawn(firstPawn, Color.BLUE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
+        setPawn(secondPawn, Color.RED, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
