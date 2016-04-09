@@ -132,24 +132,22 @@ public class LocalBoardGUI extends Application implements GUI {
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
     		for(int y = 0; y < width; y++){
-                final int X = x;
-                final int Y = y;
     			grids[y][x] = new Rectangle();
     			// middle points between walls
     			if(x % 2 != 0 && y % 2 != 0) {
-                    setUnusedSquare(x, y, X, Y);
+                    initialiseUnusedSquare(x, y);
     			}
     			// occupiable position
     			if(x % 2 == 0 && y % 2 == 0) {
-                    setOccupiablePosition(x, y, X, Y);
+                    initialiseOccupiableGrid(x, y);
     			}
     			// wide, short walls
     			if(x % 2 == 0 && y % 2 != 0) {
-                    setWideWall(x, y, X, Y);
+                    initialiseWideWall(x, y);
     			}
     			// tall, thin walls
     			if(x % 2 != 0 && y % 2 == 0) {
-                    setThinWall(x, y, X, Y);
+                    initialiseThinWall(x, y);
     			}
     		}
     	}
@@ -346,13 +344,48 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
+     * Method the controller calls to place a wall in the GUI
+     */
+    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+    	x *= 2;
+    	y *= 2;
+
+    	switch(relativeLocation) {
+	    	case LEFT: {
+	            x -= 1;
+
+	            break;
+	        }
+	        case RIGHT: {
+	            x += 1;
+	            break;
+	        }
+	        case TOP: {
+	            y -= 1;
+	            break;
+	        }
+	        case BOTTOM: {
+	            y += 1;
+	            break;
+	        }
+    	}
+    	if (playerID == 1) {
+    		grids[y][x].setFill(Color.BLUE);
+    		grids[y][x].setStroke(Color.BLUE);
+    	} else if (playerID == 2) {
+    		grids[y][x].setFill(Color.RED);
+    		grids[y][x].setStroke(Color.RED);
+    	}
+    }
+
+    /**
      * Set the occupiable positions
      * @param x
      * @param y
      * @param X
      * @param Y
      */
-    private void setOccupiablePosition(int x, int y, int X, int Y) {
+    private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.WHITE);
@@ -363,8 +396,8 @@ public class LocalBoardGUI extends Application implements GUI {
             @Override
             public void handle(MouseEvent event) {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
-                int nineByNineX = X / 2;
-                int nineByNineY = Y / 2;
+                int nineByNineX = x / 2;
+                int nineByNineY = y / 2;
                 try {
                 	controller.movePawn(nineByNineX, nineByNineY);
                 }
@@ -384,7 +417,7 @@ public class LocalBoardGUI extends Application implements GUI {
         });
     }
 
-    private void setWideWall(int x, int y, int X, int Y) {
+    private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.GREY);
@@ -394,12 +427,12 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                setWall(x, y);
             }
         });
     }
 
-    private void setThinWall(int x, int y, int X, int Y) {
+    private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
         grids[y][x].setStroke(Color.GREY);
@@ -409,12 +442,12 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                setWall(x, y);
             }
         });
     }
 
-    private void setUnusedSquare(int x, int y, int X, int Y) {
+    private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
         grids[y][x].setStroke(Color.rgb(192, 192, 192));
@@ -455,41 +488,6 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
-    /**
-     * Method the controller calls to place a wall in the GUI
-     */
-    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
-    	x *= 2;
-    	y *= 2;
-
-    	switch(relativeLocation) {
-	    	case LEFT: {
-	            x -= 1;
-
-	            break;
-	        }
-	        case RIGHT: {
-	            x += 1;
-	            break;
-	        }
-	        case TOP: {
-	            y -= 1;
-	            break;
-	        }
-	        case BOTTOM: {
-	            y += 1;
-	            break;
-	        }
-    	}
-    	if (playerID == 1) {
-    		grids[y][x].setFill(Color.BLUE);
-    		grids[y][x].setStroke(Color.BLUE);
-    	} else if (playerID == 2) {
-    		grids[y][x].setFill(Color.RED);
-    		grids[y][x].setStroke(Color.RED);
-    	}
-    }
-
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
@@ -520,15 +518,5 @@ public class LocalBoardGUI extends Application implements GUI {
                     1000
             );
         }
-    }
-
-    public void resetBoard() {
-    	resetWalls();
-//    	updatePlayerPawnPosition(4, 0, 1);
-//    	updatePlayerPawnPosition(4, 8, 2);
-    	updatePlayerWallCount(10, 1);
-    	updatePlayerWallCount(10, 2);
-    	updatePlayerMoveCount(0, 1);
-    	updatePlayerMoveCount(0, 2);
     }
 }

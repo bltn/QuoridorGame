@@ -477,14 +477,4 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
         client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
     }
-
-    public void resetBoard() {
-    	resetWalls();
-    	updatePlayerPawnPosition(4, 0, 1);
-    	updatePlayerPawnPosition(4, 8, 2);
-    	updatePlayerWallCount(10, 1);
-    	updatePlayerWallCount(10, 2);
-    	updatePlayerMoveCount(0, 1);
-    	updatePlayerMoveCount(0, 2);
-    }
 }

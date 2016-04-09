@@ -12,7 +12,7 @@ public interface GUI {
 
 	public void updatePlayerWallCount(int i, int j);
 
-	public void resetBoard();
+	public void resetWalls();
 
 	public void setController(Controller controller);
 
