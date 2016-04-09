@@ -155,4 +155,28 @@ public class NetworkedGameController implements Controller {
         player2IO.sendResetWalls();
     }
 
+    @Override
+	public int getPlayer1X() {
+		return board.getPlayer1().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer1Y() {
+		return board.getPlayer1().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer2X() {
+		return board.getPlayer2().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer2Y() {
+		return board.getPlayer2().getPosition().getY();
+	}
+
+	public void resetGame() {
+		//TODO method stub
+	}
+
 }

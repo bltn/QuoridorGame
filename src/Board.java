@@ -69,7 +69,7 @@ public abstract class Board {
 
     public void placeWalls(Position coveredPos1, PositionWallLocation pos1Border, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-    if (currentPlayer.hasWalls()) {
+    	if (currentPlayer.hasWalls()) {
             assignWall(coveredPos1, pos1Border);
             assignWall(coveredPos2, pos2Border);
             assignWall(coveredPos3, pos3Border);
@@ -79,10 +79,10 @@ public abstract class Board {
             currentPlayer.incrementMoveCount();
 
             switchPlayer();
-    } else {
-            throw new IllegalStateException("You have no remaining walls");
-           }
-    }
+	    } else {
+	            throw new IllegalStateException("You have no remaining walls");
+	           }
+	    }
 
     /**
      * Adds a position to the collection of positions with walls assigned to them
@@ -92,8 +92,8 @@ public abstract class Board {
             if (!walledOffPositions.contains(pos)) {
                     walledOffPositions.add(pos);
             }
-    }    
-    
+    }
+
     /**
      * Removes all non-border walls from positions with walls assigned to them
      */
@@ -156,7 +156,7 @@ public abstract class Board {
             }
             return localPositions;
     }
-    
+
     public boolean isValidMove(Player player, int newX, int newY) {
     boolean isValid = false;
     Position playerPos = player.getPosition();

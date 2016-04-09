@@ -92,7 +92,6 @@ public class LocalBoardGUI extends Application implements GUI {
     	this.controller = controller;
     }
 
-
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
@@ -418,8 +417,8 @@ public class LocalBoardGUI extends Application implements GUI {
     private void setUnusedSquare(int x, int y, int X, int Y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
-        grids[y][x].setStroke(Color.GREY);
-        grids[y][x].setFill(Color.GREY);
+        grids[y][x].setStroke(Color.rgb(192, 192, 192));
+        grids[y][x].setFill(Color.rgb(192, 192, 192));
         boardPane.setConstraints(grids[y][x],x,y);
         boardPane.getChildren().add(grids[y][x]);
     }
@@ -441,21 +440,7 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation right = PositionWallLocation.RIGHT;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-            if (controller.getCurrentPlayer().getID() == 1){
-            grids[y][x].setFill(Color.RED);
-            grids[y + 1][x].setFill(Color.RED);
-            grids[y + 2][x].setFill(Color.RED);
-            grids[y][x].setStroke(Color.RED);
-            grids[y + 1][x].setStroke(Color.RED);
-            grids[y + 2][x].setStroke(Color.RED);}
-            else{
-            grids[y][x].setFill(Color.BLUE);
-            grids[y + 1][x].setFill(Color.BLUE);
-            grids[y + 2][x].setFill(Color.BLUE);
-            grids[y][x].setStroke(Color.BLUE);
-            grids[y + 1][x].setStroke(Color.BLUE);
-            grids[y + 2][x].setStroke(Color.BLUE);
-        }}
+        }
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
         	new java.util.Timer().schedule(
@@ -468,6 +453,41 @@ public class LocalBoardGUI extends Application implements GUI {
                     1000
             );
         }
+    }
+
+    /**
+     * Method the controller calls to place a wall in the GUI
+     */
+    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+    	x *= 2;
+    	y *= 2;
+
+    	switch(relativeLocation) {
+	    	case LEFT: {
+	            x -= 1;
+
+	            break;
+	        }
+	        case RIGHT: {
+	            x += 1;
+	            break;
+	        }
+	        case TOP: {
+	            y -= 1;
+	            break;
+	        }
+	        case BOTTOM: {
+	            y += 1;
+	            break;
+	        }
+    	}
+    	if (playerID == 1) {
+    		grids[y][x].setFill(Color.BLUE);
+    		grids[y][x].setStroke(Color.BLUE);
+    	} else if (playerID == 2) {
+    		grids[y][x].setFill(Color.RED);
+    		grids[y][x].setStroke(Color.RED);
+    	}
     }
 
     private void placeWideWall(int x, int y) {
@@ -487,21 +507,6 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-            if (controller.getCurrentPlayer().getID() == 1){
-            grids[y][x].setFill(Color.RED);
-            grids[y][x + 1].setFill(Color.RED);
-            grids[y][x + 2].setFill(Color.RED);
-            grids[y][x].setStroke(Color.RED);
-            grids[y][x + 1].setStroke(Color.RED);
-            grids[y][x + 2].setStroke(Color.RED);}
-            else{
-            grids[y][x].setFill(Color.BLUE);
-            grids[y][x + 1].setFill(Color.BLUE);
-            grids[y][x + 2].setFill(Color.BLUE);
-            grids[y][x].setStroke(Color.BLUE);
-            grids[y][x + 1].setStroke(Color.BLUE);
-            grids[y][x + 2].setStroke(Color.BLUE);
-            }
         }
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
