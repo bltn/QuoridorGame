@@ -67,10 +67,20 @@ public abstract class Board {
 
     abstract public boolean movePawn(int posX, int posY);
 
-    public void placeWalls(Position coveredPos1, PositionWallLocation pos1Border, Position coveredPos2, PositionWallLocation pos2Border,
+    /**
+     * @param topLeftPosition First argument must always be the top left position of the 4x4 grid of positions the walls are
+     * being assigned to, as this is the one validation must be performed on
+     */
+    public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
+
     	if (currentPlayer.hasWalls()) {
-            assignWall(coveredPos1, pos1Border);
+    		try {
+    			MoveValidator.validateWallPlacement(topLeftPosition, topLeftBorder);
+    		} catch (IllegalStateException e) {
+    			throw e;
+    		}
+            assignWall(topLeftPosition, topLeftBorder);
             assignWall(coveredPos2, pos2Border);
             assignWall(coveredPos3, pos3Border);
             assignWall(coveredPos4, pos4Border);
@@ -81,8 +91,8 @@ public abstract class Board {
             switchPlayer();
 	    } else {
 	            throw new IllegalStateException("You have no remaining walls");
-	           }
 	    }
+    }
 
     /**
      * Adds a position to the collection of positions with walls assigned to them
@@ -114,8 +124,54 @@ public abstract class Board {
             }
     }
 
-    public void assignWall(Position position, PositionWallLocation location) {
-    switch (location) {
+    public ArrayList<Position> getCurrentPlayerOccupiablePositions() {
+            ArrayList<Position> localPositions = new ArrayList<Position>();
+            Position currentPosition = currentPlayer.getPosition();
+            if (!currentPosition.hasTopWall()) {
+                    localPositions.add(positions[currentPosition.getY()-1][currentPosition.getX()]);
+            }
+            if (!currentPosition.hasRightWall()) {
+                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()+1]);
+            }
+            if (!currentPosition.hasBottomWall()) {
+                    localPositions.add(positions[currentPosition.getY()+1][currentPosition.getX()]);
+            }
+            if (!currentPosition.hasLeftWall()) {
+                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()-1]);
+            }
+            return localPositions;
+    }
+
+    public boolean isValidMove(Player player, int newX, int newY) {
+	    boolean isValid = false;
+	    Position playerPos = player.getPosition();
+	    // if the move is directly along the x axis
+	    if (((newX == (playerPos.getX() + 1)) || (newX == (playerPos.getX() - 1))) && newY == playerPos.getY()) {
+	            // if the move is to the left and the player won't be blocked by a wall to the left
+	            if ((newX == (playerPos.getX() - 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasLeftWall()))) {
+	                    isValid = true;
+	            }
+	            // if the move is to the right and the player won't be blocked by a wall to the right
+	            else if ((newX == (playerPos.getX() + 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasRightWall()))) {
+	                    isValid = true;
+	            }
+	    }
+	    // if the move is directly along the y axis
+	    else if (((newY == (playerPos.getY() + 1)) || (newY == (playerPos.getY() - 1))) && newX == playerPos.getX()) {
+	            // if the move is up and the player won't be blocked by a wall to the top
+	            if ((newY == (playerPos.getY() - 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasTopWall()))) {
+	                    isValid = true;
+	            }
+	            // if the move is down and the player won't be blocked by a wall to the bottom
+	            else if ((newY == (playerPos.getY() + 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasBottomWall()))) {
+	                    isValid = true;
+	            }
+	    }
+	    return isValid;
+    }
+
+    private void assignWall(Position position, PositionWallLocation location) {
+    	switch (location) {
             case LEFT: {
                     position.setHasLeftWall(true);
                     addWalledOffPosition(position);
@@ -137,51 +193,5 @@ public abstract class Board {
                     break;
             }
         }
-    }
-
-    public ArrayList<Position> getCurrentPlayerOccupiablePositions() {
-            ArrayList<Position> localPositions = new ArrayList<Position>();
-            Position currentPosition = currentPlayer.getPosition();
-            if (!currentPosition.hasTopWall()) {
-                    localPositions.add(positions[currentPosition.getY()-1][currentPosition.getX()]);
-            }
-            if (!currentPosition.hasRightWall()) {
-                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()+1]);
-            }
-            if (!currentPosition.hasBottomWall()) {
-                    localPositions.add(positions[currentPosition.getY()+1][currentPosition.getX()]);
-            }
-            if (!currentPosition.hasLeftWall()) {
-                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()-1]);
-            }
-            return localPositions;
-    }
-
-    public boolean isValidMove(Player player, int newX, int newY) {
-    boolean isValid = false;
-    Position playerPos = player.getPosition();
-    // if the move is directly along the x axis
-    if (((newX == (playerPos.getX() + 1)) || (newX == (playerPos.getX() - 1))) && newY == playerPos.getY()) {
-            // if the move is to the left and the player won't be blocked by a wall to the left
-            if ((newX == (playerPos.getX() - 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasLeftWall()))) {
-                    isValid = true;
-            }
-            // if the move is to the right and the player won't be blocked by a wall to the right
-            else if ((newX == (playerPos.getX() + 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasRightWall()))) {
-                    isValid = true;
-            }
-    }
-    // if the move is directly along the y axis
-    else if (((newY == (playerPos.getY() + 1)) || (newY == (playerPos.getY() - 1))) && newX == playerPos.getX()) {
-            // if the move is up and the player won't be blocked by a wall to the top
-            if ((newY == (playerPos.getY() - 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasTopWall()))) {
-                    isValid = true;
-            }
-            // if the move is down and the player won't be blocked by a wall to the bottom
-            else if ((newY == (playerPos.getY() + 1) && (!getPosition(playerPos.getX(), playerPos.getY()).hasBottomWall()))) {
-                    isValid = true;
-            }
-    }
-    return isValid;
     }
 }

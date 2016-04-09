@@ -5,7 +5,11 @@ public interface Controller {
 
 	public void showCurrentPlayerMoves();
 
-	public void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
+	/**
+     * First argument must always be the top left position of the 4x4 grid of positions the walls are
+     * being assigned to, as this is the one validation must be performed on
+     */
+	public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
     		PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border);
 
 	public void movePawn(int posX, int posY);

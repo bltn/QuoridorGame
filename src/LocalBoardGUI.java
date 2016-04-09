@@ -96,7 +96,7 @@ public class LocalBoardGUI extends Application implements GUI {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
         setPanes();
-        setButtons();
+        initialiseBoardSpaces();
         setPlayerStats();
         setPawn(firstPawn, Color.BLUE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
         setPawn(secondPawn, Color.RED, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
@@ -129,7 +129,7 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * Create the board spaces and add them to the 2D array
      */
-    private void setButtons() {
+    private void initialiseBoardSpaces() {
     	for(int x = 0 ; x < width; x++){
     		for(int y = 0; y < width; y++){
     			grids[y][x] = new Rectangle();
@@ -163,7 +163,7 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * Allows a user to place a wall on a wall space that is available
      */
-   private void setWall(int x, int y) {
+   private void placeWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
            if (grids[y][x].getFill() == Color.GREY) {
@@ -427,7 +427,7 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(x, y);
+                placeWall(x, y);
             }
         });
     }
@@ -442,7 +442,7 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(x, y);
+                placeWall(x, y);
             }
         });
     }

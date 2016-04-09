@@ -40,17 +40,21 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    public void placeWall(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
+    /**
+     * First argument must always be the top left position of the 4x4 grid of positions the walls are
+     * being assigned to, as this is the one validation must be performed on
+     */
+    public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
     	PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
 
-    	Position coveredPos1 = board.getPosition(pos1X, pos1Y);
+    	Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
     	Position coveredPos2 = board.getPosition(pos2X, pos2Y);
     	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
     	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
 
     	try {
-    		board.placeWalls(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-    		gui.displayWall(pos1X, pos1Y, pos1Border, board.getPreviousPlayer().getID());
+    		board.placeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
+    		gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
     		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
     		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
     		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
