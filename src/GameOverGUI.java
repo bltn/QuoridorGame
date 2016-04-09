@@ -33,9 +33,12 @@ public class GameOverGUI extends Application {
     private VBox buttonBox;
     private Button quitButton;
     private Button newGameButton;
+    private Controller controller;
+    private Stage primaryStage;
 
 
-    public GameOverGUI() {
+    public GameOverGUI(Controller controller) {
+    	this.controller = controller;
         introPane = new GridPane();
         introText = new Text("Game Over");
         buttonBox = new VBox();
@@ -47,6 +50,7 @@ public class GameOverGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setTitle("Quoridor");
         setButtons();
         setIntroPane();
@@ -84,13 +88,13 @@ public class GameOverGUI extends Application {
                 System.exit(0);
             }
         });
-        
+
         newGameButton.setPrefWidth(150);
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	MenuGUI gui = new MenuGUI();
-            	gui.start(new Stage());
+            	controller.resetGame();
+            	primaryStage.close();
             };
         });
     }

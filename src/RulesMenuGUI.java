@@ -36,6 +36,7 @@ public class RulesMenuGUI extends Application {
     private Button multiplayerButton;
     private Button standardButton;
     private Button challengeButton;
+    private Stage primaryStage;
 
     public RulesMenuGUI() {
         introPane = new GridPane();
@@ -50,6 +51,7 @@ public class RulesMenuGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setTitle("Quoridor");
         setButtons();
         setIntroPane();
@@ -84,26 +86,28 @@ public class RulesMenuGUI extends Application {
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-		LocalBoardGUI gui = new LocalBoardGUI();
+            	LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new StandardBoard();
             	Controller controller = new LocalGameController(gui, board);
             	gui.setController(controller);
             	gui.start(new Stage());
+            	primaryStage.close();
 			}
         });
-        
+
         challengeButton.setPrefWidth(200);
         challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-            LocalBoardGUI gui = new LocalBoardGUI();
-            Board board = new ChallengeBoard();
-            Controller controller = new LocalGameController(gui, board);
-            gui.setController(controller);
-            gui.start(new Stage());
+	            LocalBoardGUI gui = new LocalBoardGUI();
+	            Board board = new ChallengeBoard();
+	            Controller controller = new LocalGameController(gui, board);
+	            gui.setController(controller);
+	            gui.start(new Stage());
+	            primaryStage.close();
 			}
         });
-        
+
         quitButton.setPrefWidth(200);
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

@@ -11,7 +11,7 @@ import java.util.Iterator;
  *
  */
 public class LocalGameController<T> implements Controller {
-    
+
     // The game board and its positions' logic
     private Board board;
     // GUI (View) representing the game board
@@ -21,21 +21,21 @@ public class LocalGameController<T> implements Controller {
         this.board = board;
         this.gui = gui;
     }
-    
+
     public Player getCurrentPlayer() {
     	return board.getCurrentPlayer();
     }
-    
+
     @Override
     public int getPlayer1X() {
         return board.player1.getPosition().getX()*2;
     }
-    
+
     @Override
     public int getPlayer1Y() {
         return board.player1.getPosition().getY()*2;
     }
-    
+
     @Override
     public int getPlayer2X() {
 	return board.player2.getPosition().getX()*2;
@@ -84,19 +84,21 @@ public class LocalGameController<T> implements Controller {
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer();
 			if (gameOver) {
-//				gui.updatePlayerMoveCount(0, 1);
-//				gui.updatePlayerMoveCount(0, 2);
-//				gui.updatePlayerWallCount(10, 1);
-//				gui.updatePlayerWallCount(10, 2);
-//				gui.updatePlayerPawnPosition(4, 0, 1);
-//				gui.updatePlayerPawnPosition(4, 8, 2);
-//				gui.resetWalls();
-//                                
-                        GameOverGUI gui = new GameOverGUI();
-                        gui.start(new Stage());
+                GameOverGUI gui = new GameOverGUI((Controller) this);
+                gui.start(new Stage());
 			}
     	} catch (IllegalArgumentException e) {
     		throw e;
     	}
+    }
+
+    public void resetGame() {
+    	gui.updatePlayerMoveCount(0, 1);
+		gui.updatePlayerMoveCount(0, 2);
+		gui.updatePlayerWallCount(10, 1);
+		gui.updatePlayerWallCount(10, 2);
+		gui.updatePlayerPawnPosition(4, 0, 1);
+		gui.updatePlayerPawnPosition(4, 8, 2);
+		gui.resetWalls();
     }
 }
