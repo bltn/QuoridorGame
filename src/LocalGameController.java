@@ -93,12 +93,14 @@ public class LocalGameController<T> implements Controller {
     }
 
     public void resetGame() {
-    	gui.updatePlayerMoveCount(0, 1);
-		gui.updatePlayerMoveCount(0, 2);
-		gui.updatePlayerWallCount(10, 1);
-		gui.updatePlayerWallCount(10, 2);
-		gui.updatePlayerPawnPosition(4, 0, 1);
-		gui.updatePlayerPawnPosition(4, 8, 2);
+    	Player player1 = board.getPlayer1();
+    	Player player2 = board.getPlayer2();
+    	gui.updatePlayerMoveCount(player1.getMoveCount(), 1);
+    	gui.updatePlayerMoveCount(player2.getMoveCount(), 2);
+    	gui.updatePlayerWallCount(player1.getWallCount(), 1);
+    	gui.updatePlayerWallCount(player2.getWallCount(), 2);
+    	gui.updatePlayerPawnPosition(player1.getPosition().getX(), player1.getPosition().getY(), 1);
+    	gui.updatePlayerPawnPosition(player2.getPosition().getX(), player2.getPosition().getY(), 2);
 		gui.resetWalls();
     }
 }
