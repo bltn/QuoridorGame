@@ -62,7 +62,11 @@ public abstract class Board {
      * @return position at the given coordinates
      */
     public Position getPosition(int posX, int posY) {
-            return positions[posY][posX];
+    	Position position = null;
+    	if (posX <= 8 && posY <= 8) {
+    		position = positions[posY][posX];
+    	}
+    	return position;
     }
 
     abstract public boolean movePawn(int posX, int posY);
@@ -73,25 +77,72 @@ public abstract class Board {
      */
     public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-
     	if (currentPlayer.hasWalls()) {
-    		try {
-    			MoveValidator.validateWallPlacement(topLeftPosition, topLeftBorder);
-    		} catch (IllegalStateException e) {
-    			throw e;
+    		if (wallPlacementIsValid(topLeftPosition, topLeftBorder)) {
+    			assignWall(topLeftPosition, topLeftBorder);
+                assignWall(coveredPos2, pos2Border);
+                assignWall(coveredPos3, pos3Border);
+                assignWall(coveredPos4, pos4Border);
+
+                currentPlayer.decrementWallCount();
+                currentPlayer.incrementMoveCount();
+
+                switchPlayer();
+    		} else {
+    			throw new IllegalStateException("You can't place a wall there.");
     		}
-            assignWall(topLeftPosition, topLeftBorder);
-            assignWall(coveredPos2, pos2Border);
-            assignWall(coveredPos3, pos3Border);
-            assignWall(coveredPos4, pos4Border);
-
-            currentPlayer.decrementWallCount();
-            currentPlayer.incrementMoveCount();
-
-            switchPlayer();
 	    } else {
 	            throw new IllegalStateException("You have no remaining walls");
 	    }
+    }
+
+    /**
+     * Returns true if a wall placement move is valid. Returns false if the move isn't valid, or if the
+     * given position isn't the top left position in the 4x4 grid of board grids affected by the wall placement
+     */
+    private boolean wallPlacementIsValid(Position topLeftPosition, PositionWallLocation borderValue) {
+    	if (borderValue == PositionWallLocation.RIGHT || borderValue == PositionWallLocation.BOTTOM) {
+	    	boolean isValid = true;
+
+	    	// vertically placed wall
+	    	if (borderValue == PositionWallLocation.RIGHT) {
+	    		// make there isn't already a wall here
+	    		if (topLeftPosition.hasRightWall()) {
+	    			isValid = false;
+	    		}
+	    		// make sure the player isn't clicking the bottom wall grid of the board (isn't allowed)
+	    		if (topLeftPosition.getY() == 8) {
+	    			isValid = false;
+	    		} // make sure the wall following this one won't be placed in a wall slot that's already occupied
+	    		else if (positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
+	    			isValid = false;
+	    		}
+	    		// make sure a cross wouldn't be formed with another two walls
+	    		if (topLeftPosition.hasBottomWall() && positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
+	    			isValid = false;
+	    		}
+	    		// horizontally placed wall
+	    	} else if (borderValue == PositionWallLocation.BOTTOM) {
+	    		// make sure there isn't already a wall here
+	    		if (topLeftPosition.hasBottomWall()) {
+	    			isValid = false;
+	    		}
+	    		// make sure the player isn't clicking the far-right wall grid of the board (isn't allowed)
+	    		if (topLeftPosition.getX() == 8) {
+	    			isValid = false;
+	    			// make sure the wall following this one won't be placed in a wall slot that's already occupied
+	    		} else if (positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
+	    			isValid = false;
+	    		}
+	    		// make sure a cross wouldn't be formed with another two walls
+	    		if (topLeftPosition.hasRightWall() && positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
+	    			isValid = false;
+	    		}
+	    	}
+	    	return isValid;
+    	} else {
+    		return false;
+    	}
     }
 
     /**

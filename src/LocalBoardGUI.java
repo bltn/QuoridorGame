@@ -166,29 +166,11 @@ public class LocalBoardGUI extends Application implements GUI {
    private void placeWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (y < 16) {
-                   if (grids[y + 2][x].getFill() == Color.GREY) {
-                       // avoid making a cross with the walls
-                       if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                           placeThinWall(x, y);
-                       }
-                   }
-               }
-           }
+           placeThinWall(x, y);
        }
        //short, wide wall
        if (y % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (x < 16) {
-                       if (grids[y][x + 2].getFill() == Color.GREY) {
-                           // avoid making a cross with the walls
-                           if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                               placeWideWall(x, y);
-                           }
-                       }
-               }
-           }
+    	   placeWideWall(x, y);
        }
    }
 
