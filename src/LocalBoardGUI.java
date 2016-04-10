@@ -98,8 +98,8 @@ public class LocalBoardGUI extends Application implements GUI {
         setPanes();
         initialiseBoardSpaces();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
-        setPawn(secondPawn, Color.RED, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
+        setPawn(firstPawn, Color.ORANGE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
+        setPawn(secondPawn, Color.GREEN, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
@@ -285,11 +285,11 @@ public class LocalBoardGUI extends Application implements GUI {
 	        }
     	}
     	if (playerID == 1) {
-    		grids[y][x].setFill(Color.BLUE);
-    		grids[y][x].setStroke(Color.BLUE);
+    		grids[y][x].setFill(Color.ORANGE);
+    		grids[y][x].setStroke(Color.ORANGE);
     	} else if (playerID == 2) {
-    		grids[y][x].setFill(Color.RED);
-    		grids[y][x].setStroke(Color.RED);
+    		grids[y][x].setFill(Color.GREEN);
+    		grids[y][x].setStroke(Color.GREEN);
     	}
     }
 
@@ -493,15 +493,10 @@ public class LocalBoardGUI extends Application implements GUI {
         	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
-        			try {
-        				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        			} catch (IllegalStateException e) {
-        				//
-        			}
+    				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
         		}
         	});
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
         	new java.util.Timer().schedule(
                     new java.util.TimerTask() {
@@ -532,6 +527,12 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+    				controller.removeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        		}
+        	});
         }
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
