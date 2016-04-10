@@ -106,73 +106,7 @@ public class LocalBoardGUI extends Application implements GUI {
         primaryStage.show();
     }
 
-    /**
-     * Set the alignment of all instantiated fields to the centre of the pane
-     */
-    private void setPanes() {
-        rootPane.setAlignment(Pos.CENTER);
-        player1StatsPane.setAlignment(Pos.CENTER);
-        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
-        errorPane.setAlignment(Pos.CENTER);
-        player2StatsPane.setAlignment(Pos.CENTER);
-        boardPane.setAlignment(Pos.CENTER);
-        buttonPane.setAlignment(Pos.CENTER);
-        //boardPane.setHgap(5);
-        //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
-        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
-        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
-        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
-        errorPane.setPadding(new Insets(5, 0, 0, 0));
-    }
 
-    /**
-     * Create the board spaces and add them to the 2D array
-     */
-    private void initialiseBoardSpaces() {
-    	for(int x = 0 ; x < width; x++){
-    		for(int y = 0; y < width; y++){
-    			grids[y][x] = new Rectangle();
-    			// middle points between walls
-    			if(x % 2 != 0 && y % 2 != 0) {
-                    initialiseUnusedSquare(x, y);
-    			}
-    			// occupiable position
-    			if(x % 2 == 0 && y % 2 == 0) {
-                    initialiseOccupiableGrid(x, y);
-    			}
-    			// wide, short walls
-    			if(x % 2 == 0 && y % 2 != 0) {
-                    initialiseWideWall(x, y);
-    			}
-    			// tall, thin walls
-    			if(x % 2 != 0 && y % 2 == 0) {
-                    initialiseThinWall(x, y);
-    			}
-    		}
-    	}
- 	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-           @Override
-           public void handle(MouseEvent event) {
-               controller.showCurrentPlayerMoves();
-           }
-       });
-       buttonPane.getChildren().add(highlightPositionsButton);
-    }
-
-    /**
-     * Allows a user to place a wall on a wall space that is available
-     */
-   private void placeWall(int x, int y) {
-       // tall, thin wall
-	   if (x % 2 != 0) {
-           placeThinWall(x, y);
-       }
-       //short, wide wall
-       if (y % 2 != 0) {
-    	   placeWideWall(x, y);
-       }
-   }
 
    /**
     * Removes all of the walls on the board
@@ -361,6 +295,74 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
+     * Set the alignment of all instantiated fields to the centre of the pane
+     */
+    private void setPanes() {
+        rootPane.setAlignment(Pos.CENTER);
+        player1StatsPane.setAlignment(Pos.CENTER);
+        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
+        errorPane.setAlignment(Pos.CENTER);
+        player2StatsPane.setAlignment(Pos.CENTER);
+        boardPane.setAlignment(Pos.CENTER);
+        buttonPane.setAlignment(Pos.CENTER);
+        //boardPane.setHgap(5);
+        //boardPane.setVgap(5);
+        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
+        errorPane.setPadding(new Insets(5, 0, 0, 0));
+    }
+
+    /**
+     * Create the board spaces and add them to the 2D array
+     */
+    private void initialiseBoardSpaces() {
+    	for(int x = 0 ; x < width; x++){
+    		for(int y = 0; y < width; y++){
+    			grids[y][x] = new Rectangle();
+    			// middle points between walls
+    			if(x % 2 != 0 && y % 2 != 0) {
+                    initialiseUnusedSquare(x, y);
+    			}
+    			// occupiable position
+    			if(x % 2 == 0 && y % 2 == 0) {
+                    initialiseOccupiableGrid(x, y);
+    			}
+    			// wide, short walls
+    			if(x % 2 == 0 && y % 2 != 0) {
+                    initialiseWideWall(x, y);
+    			}
+    			// tall, thin walls
+    			if(x % 2 != 0 && y % 2 == 0) {
+                    initialiseThinWall(x, y);
+    			}
+    		}
+    	}
+ 	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+           @Override
+           public void handle(MouseEvent event) {
+               controller.showCurrentPlayerMoves();
+           }
+       });
+       buttonPane.getChildren().add(highlightPositionsButton);
+    }
+
+    /**
+     * Allows a user to place a wall on a wall space that is available
+     */
+   private void placeWall(int x, int y) {
+       // tall, thin wall
+	   if (x % 2 != 0) {
+           placeThinWall(x, y);
+       }
+       //short, wide wall
+       if (y % 2 != 0) {
+    	   placeWideWall(x, y);
+       }
+   }
+
+    /**
      * Set the occupiable positions
      * @param x
      * @param y
@@ -455,6 +457,12 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation right = PositionWallLocation.RIGHT;
         try {
         	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        		}
+        	});
         }
         catch (IllegalStateException e) {
         	errorPaneText.setText(e.getMessage());
