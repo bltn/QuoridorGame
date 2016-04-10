@@ -100,10 +100,29 @@ public abstract class Board {
 	    }
     }
 
-    public void removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
+    public boolean removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-    	if (wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID() != currentPlayer.getID()) {
-    		System.out.println("Not the current player's ID");
+
+    	int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID();
+    	Player wallOwner = null;
+    	if (wallOwnerID != currentPlayer.getID()) {
+    		if (wallOwnerID == 1) {
+    			wallOwner = player1;
+    		} else if (wallOwnerID == 2) {
+    			wallOwner = player2;
+    		}
+    		removeWallFromPosition(topLeftPosition, topLeftBorder);
+            removeWallFromPosition(coveredPos2, pos2Border);
+            removeWallFromPosition(coveredPos3, pos3Border);
+            removeWallFromPosition(coveredPos4, pos4Border);
+
+            wallOwner.incrementWallCount();
+            currentPlayer.incrementMoveCount();
+
+            switchPlayer();
+            return true;
+    	} else {
+    		return false;
     	}
     }
 
@@ -160,7 +179,7 @@ public abstract class Board {
      * Adds a position to the collection of positions with walls assigned to them
      * @param pos position with wall assigned to it
      */
-    public void addWalledOffPosition(Position pos) {
+    private void addWalledOffPosition(Position pos) {
         if (!walledOffPositions.contains(pos)) {
                 walledOffPositions.add(pos);
         }
@@ -263,5 +282,30 @@ public abstract class Board {
                     break;
             }
         }
+    }
+
+    private void removeWallFromPosition(Position position, PositionWallLocation location) {
+    	switch (location) {
+	    	case LEFT: {
+	    		position.setHasLeftWall(false);
+	    		wallOwnershipRecords.removeRecord(position, location);
+	    		break;
+	    	}
+	    	case RIGHT: {
+	    		position.setHasRightWall(false);
+	    		wallOwnershipRecords.removeRecord(position, location);
+	    		break;
+	    	}
+	    	case TOP: {
+	    		position.setHasTopWall(false);
+	    		wallOwnershipRecords.removeRecord(position, location);
+	    		break;
+	    	}
+	    	case BOTTOM: {
+	    		position.setHasBottomWall(false);
+	    		wallOwnershipRecords.removeRecord(position, location);
+	    		break;
+	    	}
+    	}
     }
 }

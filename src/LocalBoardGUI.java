@@ -269,7 +269,6 @@ public class LocalBoardGUI extends Application implements GUI {
     	switch(relativeLocation) {
 	    	case LEFT: {
 	            x -= 1;
-
 	            break;
 	        }
 	        case RIGHT: {
@@ -293,6 +292,40 @@ public class LocalBoardGUI extends Application implements GUI {
     		grids[y][x].setStroke(Color.RED);
     	}
     }
+
+    public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+		x *= 2;
+		y *= 2;
+
+		switch (relativeLocation) {
+			case LEFT: {
+	            x -= 1;
+	            break;
+	        }
+	        case RIGHT: {
+	            x += 1;
+	            break;
+	        }
+	        case TOP: {
+	            y -= 1;
+	            break;
+	        }
+	        case BOTTOM: {
+	            y += 1;
+	            break;
+	        }
+		}
+		final int innerX = x;
+		final int innerY = y;
+		grids[y][x].setFill(Color.GREY);
+		grids[y][x].setStroke(Color.GREY);
+		grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                placeWall(innerX, innerY);
+            }
+        });
+	}
 
     /**
      * Set the alignment of all instantiated fields to the centre of the pane
@@ -460,7 +493,11 @@ public class LocalBoardGUI extends Application implements GUI {
         	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
-        			controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        			try {
+        				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        			} catch (IllegalStateException e) {
+        				//
+        			}
         		}
         	});
         }

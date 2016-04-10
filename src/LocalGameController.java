@@ -74,18 +74,16 @@ public class LocalGameController<T> implements Controller {
     	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
     	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
 
-    	try {
-    		board.removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-    		/**gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
-    		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
-    		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
-    		gui.updateActivePlayer();**/
-    	} catch (IllegalStateException e) {
-    		// handle
-    	}
+		boolean wallsRemoved = board.removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
+		if (wallsRemoved) {
+			gui.removeWallDisplay(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
+    		gui.removeWallDisplay(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
+    		gui.removeWallDisplay(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
+    		gui.removeWallDisplay(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
+			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
+			gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(), board.getCurrentPlayer().getID());
+			gui.updateActivePlayer();
+		}
     }
 
     public void movePawn(int posX, int posY) {

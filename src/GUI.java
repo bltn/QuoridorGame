@@ -18,4 +18,5 @@ public interface GUI {
 
 	public void start(Stage stage);
 
+	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID);
 }
