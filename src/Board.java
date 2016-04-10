@@ -14,7 +14,6 @@ public abstract class Board {
     // Positions with walls assigned to them, tracked for a more efficient reset
     public ArrayList<Position> walledOffPositions;
 
-    public WallOwnershipCollection wallOwnershipRecords;
 
     public Player player1;
     public Player player2;
@@ -26,7 +25,6 @@ public abstract class Board {
      */
     public Board() {
         walledOffPositions = new ArrayList<Position>();
-        wallOwnershipRecords = new WallOwnershipCollection();
     }
 
     public Player getPlayer1() {
@@ -74,112 +72,14 @@ public abstract class Board {
 
     abstract public boolean movePawn(int posX, int posY);
 
-    /**
-     * @param topLeftPosition First argument must always be the top left position of the 4x4 grid of positions the walls are
-     * being assigned to, as this is the one validation must be performed on
-     */
-    public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
-            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-
-    	if (currentPlayer.hasWalls()) {
-    		if (wallPlacementIsValid(topLeftPosition, topLeftBorder)) {
-    			assignWall(topLeftPosition, topLeftBorder);
-                assignWall(coveredPos2, pos2Border);
-                assignWall(coveredPos3, pos3Border);
-                assignWall(coveredPos4, pos4Border);
-
-                currentPlayer.decrementWallCount();
-                currentPlayer.incrementMoveCount();
-
-                switchPlayer();
-    		} else {
-    			throw new IllegalStateException("You can't place a wall there.");
-    		}
-	    } else {
-	            throw new IllegalStateException("You have no remaining walls");
-	    }
-    }
-
-    public boolean removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
-            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-
-    	int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID();
-    	Player wallOwner = null;
-    	if (wallOwnerID != currentPlayer.getID()) {
-    		if (wallOwnerID == 1) {
-    			wallOwner = player1;
-    		} else if (wallOwnerID == 2) {
-    			wallOwner = player2;
-    		}
-    		removeWallFromPosition(topLeftPosition, topLeftBorder);
-            removeWallFromPosition(coveredPos2, pos2Border);
-            removeWallFromPosition(coveredPos3, pos3Border);
-            removeWallFromPosition(coveredPos4, pos4Border);
-
-            wallOwner.incrementWallCount();
-            currentPlayer.incrementMoveCount();
-
-            switchPlayer();
-            return true;
-    	} else {
-    		return false;
-    	}
-    }
-
-    /**
-     * Returns true if a wall placement move is valid. Returns false if the move isn't valid, or if the
-     * given position isn't the top left position in the 4x4 grid of board grids affected by the wall placement
-     */
-    private boolean wallPlacementIsValid(Position topLeftPosition, PositionWallLocation borderValue) {
-    	if (borderValue == PositionWallLocation.RIGHT || borderValue == PositionWallLocation.BOTTOM) {
-	    	boolean isValid = true;
-
-	    	// vertically placed wall
-	    	if (borderValue == PositionWallLocation.RIGHT) {
-	    		// make there isn't already a wall here
-	    		if (topLeftPosition.hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure the player isn't clicking the bottom wall grid of the board (isn't allowed)
-	    		if (topLeftPosition.getY() == 8) {
-	    			isValid = false;
-	    		} // make sure the wall following this one won't be placed in a wall slot that's already occupied
-	    		else if (positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure a cross wouldn't be formed with another two walls
-	    		if (topLeftPosition.hasBottomWall() && positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// horizontally placed wall
-	    	} else if (borderValue == PositionWallLocation.BOTTOM) {
-	    		// make sure there isn't already a wall here
-	    		if (topLeftPosition.hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure the player isn't clicking the far-right wall grid of the board (isn't allowed)
-	    		if (topLeftPosition.getX() == 8) {
-	    			isValid = false;
-	    			// make sure the wall following this one won't be placed in a wall slot that's already occupied
-	    		} else if (positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure a cross wouldn't be formed with another two walls
-	    		if (topLeftPosition.hasRightWall() && positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    	}
-	    	return isValid;
-    	} else {
-    		return false;
-    	}
-    }
+    abstract public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
+            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border);
 
     /**
      * Adds a position to the collection of positions with walls assigned to them
      * @param pos position with wall assigned to it
      */
-    private void addWalledOffPosition(Position pos) {
+    public void addWalledOffPosition(Position pos) {
         if (!walledOffPositions.contains(pos)) {
                 walledOffPositions.add(pos);
         }
@@ -249,63 +149,5 @@ public abstract class Board {
 	            }
 	    }
 	    return isValid;
-    }
-
-    private void assignWall(Position position, PositionWallLocation location) {
-    	switch (location) {
-            case LEFT: {
-                    position.setHasLeftWall(true);
-                    addWalledOffPosition(position);
-                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
-                    wallOwnershipRecords.addRecord(wallOwnerRecord);
-                    break;
-            }
-            case RIGHT: {
-                    position.setHasRightWall(true);
-                    addWalledOffPosition(position);
-                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
-                    wallOwnershipRecords.addRecord(wallOwnerRecord);
-                    break;
-            }
-            case TOP: {
-                    position.setHasTopWall(true);
-                    addWalledOffPosition(position);
-                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
-                    wallOwnershipRecords.addRecord(wallOwnerRecord);
-                    break;
-            }
-            case BOTTOM: {
-                    position.setHasBottomWall(true);
-                    addWalledOffPosition(position);
-                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
-                    wallOwnershipRecords.addRecord(wallOwnerRecord);
-                    break;
-            }
-        }
-    }
-
-    private void removeWallFromPosition(Position position, PositionWallLocation location) {
-    	switch (location) {
-	    	case LEFT: {
-	    		position.setHasLeftWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case RIGHT: {
-	    		position.setHasRightWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case TOP: {
-	    		position.setHasTopWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case BOTTOM: {
-	    		position.setHasBottomWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-    	}
     }
 }
