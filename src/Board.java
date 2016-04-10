@@ -102,7 +102,9 @@ public abstract class Board {
 
     public void removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-    	System.out.println("Remove wall.");
+    	if (wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID() != currentPlayer.getID()) {
+    		System.out.println("Not the current player's ID");
+    	}
     }
 
     /**

@@ -75,7 +75,7 @@ public class LocalGameController<T> implements Controller {
     	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
 
     	try {
-    		board.placeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
+    		board.removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
     		/**gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
     		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
     		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());

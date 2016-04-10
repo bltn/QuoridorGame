@@ -12,4 +12,14 @@ public class WallOwnershipCollection {
 		this.ownershipRecords.add(record);
 	}
 
+	public WallOwnershipRecord getRecordByCoordinates(int x, int y) {
+		WallOwnershipRecord ownershipRecord = null;
+		for (WallOwnershipRecord record : this.ownershipRecords) {
+			if ((record.getCoveredPosition().getX() == x) && (record.getCoveredPosition().getY() == y)) {
+				ownershipRecord = record;
+			}
+		}
+		return ownershipRecord;
+	}
+
 }
