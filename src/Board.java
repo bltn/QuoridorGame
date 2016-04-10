@@ -14,6 +14,8 @@ public abstract class Board {
     // Positions with walls assigned to them, tracked for a more efficient reset
     public ArrayList<Position> walledOffPositions;
 
+    public WallOwnershipCollection wallOwnershipRecords;
+
     public Player player1;
     public Player player2;
 
@@ -24,6 +26,7 @@ public abstract class Board {
      */
     public Board() {
         walledOffPositions = new ArrayList<Position>();
+        wallOwnershipRecords = new WallOwnershipCollection();
     }
 
     public Player getPlayer1() {
@@ -77,6 +80,7 @@ public abstract class Board {
      */
     public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
+
     	if (currentPlayer.hasWalls()) {
     		if (wallPlacementIsValid(topLeftPosition, topLeftBorder)) {
     			assignWall(topLeftPosition, topLeftBorder);
@@ -94,6 +98,11 @@ public abstract class Board {
 	    } else {
 	            throw new IllegalStateException("You have no remaining walls");
 	    }
+    }
+
+    public void removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
+            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
+    	System.out.println("Remove wall.");
     }
 
     /**
@@ -150,47 +159,47 @@ public abstract class Board {
      * @param pos position with wall assigned to it
      */
     public void addWalledOffPosition(Position pos) {
-            if (!walledOffPositions.contains(pos)) {
-                    walledOffPositions.add(pos);
-            }
+        if (!walledOffPositions.contains(pos)) {
+                walledOffPositions.add(pos);
+        }
     }
 
     /**
      * Removes all non-border walls from positions with walls assigned to them
      */
     public void resetWalledOffPositions() {
-            for (Position pos : walledOffPositions) {
-                    if (pos.getY() != 0) {
-                            pos.setHasTopWall(false);
-                    }
-                    if (pos.getX() != 8) {
-                            pos.setHasRightWall(false);
-                    }
-                    if (pos.getX() != 0) {
-                            pos.setHasLeftWall(false);
-                    }
-                    if (pos.getY() != 8) {
-                            pos.setHasBottomWall(false);
-                    }
-            }
+        for (Position pos : walledOffPositions) {
+                if (pos.getY() != 0) {
+                        pos.setHasTopWall(false);
+                }
+                if (pos.getX() != 8) {
+                        pos.setHasRightWall(false);
+                }
+                if (pos.getX() != 0) {
+                        pos.setHasLeftWall(false);
+                }
+                if (pos.getY() != 8) {
+                        pos.setHasBottomWall(false);
+                }
+        }
     }
 
     public ArrayList<Position> getCurrentPlayerOccupiablePositions() {
-            ArrayList<Position> localPositions = new ArrayList<Position>();
-            Position currentPosition = currentPlayer.getPosition();
-            if (!currentPosition.hasTopWall()) {
-                    localPositions.add(positions[currentPosition.getY()-1][currentPosition.getX()]);
-            }
-            if (!currentPosition.hasRightWall()) {
-                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()+1]);
-            }
-            if (!currentPosition.hasBottomWall()) {
-                    localPositions.add(positions[currentPosition.getY()+1][currentPosition.getX()]);
-            }
-            if (!currentPosition.hasLeftWall()) {
-                    localPositions.add(positions[currentPosition.getY()][currentPosition.getX()-1]);
-            }
-            return localPositions;
+        ArrayList<Position> localPositions = new ArrayList<Position>();
+        Position currentPosition = currentPlayer.getPosition();
+        if (!currentPosition.hasTopWall()) {
+                localPositions.add(positions[currentPosition.getY()-1][currentPosition.getX()]);
+        }
+        if (!currentPosition.hasRightWall()) {
+                localPositions.add(positions[currentPosition.getY()][currentPosition.getX()+1]);
+        }
+        if (!currentPosition.hasBottomWall()) {
+                localPositions.add(positions[currentPosition.getY()+1][currentPosition.getX()]);
+        }
+        if (!currentPosition.hasLeftWall()) {
+                localPositions.add(positions[currentPosition.getY()][currentPosition.getX()-1]);
+        }
+        return localPositions;
     }
 
     public boolean isValidMove(Player player, int newX, int newY) {
@@ -226,21 +235,29 @@ public abstract class Board {
             case LEFT: {
                     position.setHasLeftWall(true);
                     addWalledOffPosition(position);
+                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
+                    wallOwnershipRecords.addRecord(wallOwnerRecord);
                     break;
             }
             case RIGHT: {
                     position.setHasRightWall(true);
                     addWalledOffPosition(position);
+                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
+                    wallOwnershipRecords.addRecord(wallOwnerRecord);
                     break;
             }
             case TOP: {
                     position.setHasTopWall(true);
                     addWalledOffPosition(position);
+                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
+                    wallOwnershipRecords.addRecord(wallOwnerRecord);
                     break;
             }
             case BOTTOM: {
                     position.setHasBottomWall(true);
                     addWalledOffPosition(position);
+                    WallOwnershipRecord wallOwnerRecord = new WallOwnershipRecord(currentPlayer.getID(), position, location);
+                    wallOwnershipRecords.addRecord(wallOwnerRecord);
                     break;
             }
         }

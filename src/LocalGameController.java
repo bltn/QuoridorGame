@@ -69,24 +69,23 @@ public class LocalGameController<T> implements Controller {
     public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
         	PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
 
-    	System.out.println("Method called from listener");
-    	/**Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
+    	Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
     	Position coveredPos2 = board.getPosition(pos2X, pos2Y);
     	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
     	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
 
     	try {
     		board.placeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-    		gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
+    		/**gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
     		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
     		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
     		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
     		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
-    		gui.updateActivePlayer();
+    		gui.updateActivePlayer();**/
     	} catch (IllegalStateException e) {
     		// handle
-    	}**/
+    	}
     }
 
     public void movePawn(int posX, int posY) {
