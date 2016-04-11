@@ -141,7 +141,7 @@ public class GameClient extends Thread {
                     gui.resetWalls();
                 }
 				else if (commands[0].equals("removal-signal")) {
-					System.out.println("YAY");
+					addWallRemovalListener(commands);
 				}
 				else if (commands[0].equals("coordinate")) {
 					int player1X = Integer.parseInt(commands[1]);

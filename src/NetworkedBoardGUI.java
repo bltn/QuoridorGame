@@ -92,9 +92,36 @@ public class NetworkedBoardGUI extends Application implements GUI {
         errorPaneText = new Text("");
     }
 
-    public void addWallRemovalListener(Position pos1X, Position pos1Y, PositionWallLocation pos1Border, Position pos2X, Position pos2Y, PositionWallLocation pos2Border,
-    		Position pos3X, Position pos3Y, PositionWallLocation pos3Border, Position pos4X, Position pos4Y, PositionWallLocation pos4Border) {
+    public void addWallRemovalListener(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border,
+    		int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
 
+    	int x = pos1X * 2;
+    	int y = pos1Y * 2;
+
+    	switch (pos1Border) {
+	        case LEFT: {
+	            x -= 1;
+	            break;
+	        }
+	        case RIGHT: {
+	            x += 1;
+	            break;
+	        }
+	        case TOP: {
+	            y -= 1;
+	            break;
+	        }
+	        case BOTTOM: {
+	            y += 1;
+	            break;
+	        }
+    	}
+    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+    		@Override
+    		public void handle(MouseEvent event) {
+        		client.sendWallRemoval(pos1X, pos1Y, pos1Border, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border, pos4X, pos4Y, pos4Border);
+    		}
+    	});
     }
 
     public void setController(Controller controller) {
