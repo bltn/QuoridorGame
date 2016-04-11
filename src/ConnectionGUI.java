@@ -1,6 +1,10 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +12,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -31,12 +37,8 @@ public class ConnectionGUI extends Application {
 	private TextField portField;
 	private String IPAddress;
 	private int portNumber;
-	private GameServer server;
-	private GameClient client;
 
-	public ConnectionGUI(GameServer server, GameClient client) {
-		this.server = server;
-		this.client = client;
+	public ConnectionGUI() {
 		IPAddress = "localhost";
 		portNumber = 33333;
 		pane = new GridPane();
@@ -91,6 +93,13 @@ public class ConnectionGUI extends Application {
         createServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	String mode = askForGameMode();
+            	GameServer server;
+            	if (mode.equals("Challenge")) {
+            		server = new GameServer(new NetworkedGameController(new ChallengeBoard()));
+            	} else {
+            		server = new GameServer(new NetworkedGameController(new StandardBoard()));
+            	}
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 server.initialiseServer(IPAddress, portNumber);
@@ -102,8 +111,9 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
+                GUI gui = new NetworkedBoardGUI();
+				GameClient client = new GameClient(gui);
                 client.connectToServer(IPAddress, portNumber);
-                GUI gui = (NetworkedBoardGUI)client.getGUI();
                 while (client.guiIsLaunched() == false) {
                 	try {
 						Thread.sleep(500);
@@ -119,4 +129,22 @@ public class ConnectionGUI extends Application {
             }
         });
     }
+
+	private String askForGameMode() {
+		String mode = null;
+		ArrayList<String> choices = new ArrayList();
+		choices.add("Standard");
+		choices.add("Challenge");
+
+		ChoiceDialog<String> dialog = new ChoiceDialog<>("Standard", choices);
+		dialog.setTitle("Game modes");
+		dialog.setHeaderText("Choose a game mode");
+		dialog.setContentText("Choose a mode:");
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			mode = result.get();
+		}
+		return mode;
+	}
 }

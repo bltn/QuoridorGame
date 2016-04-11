@@ -84,15 +84,15 @@ public class RulesMenuGUI extends Application {
         buttonBox.setAlignment(Pos.CENTER);
         standardButton.setPrefWidth(200);
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-            	LocalBoardGUI gui = new LocalBoardGUI();
+        	@Override
+        	public void handle(ActionEvent event) {
+    			LocalBoardGUI gui = new LocalBoardGUI();
             	Board board = new StandardBoard();
             	Controller controller = new LocalGameController(gui, board);
             	gui.setController(controller);
             	gui.start(new Stage());
             	primaryStage.close();
-			}
+        	}
         });
 
         challengeButton.setPrefWidth(200);

@@ -95,13 +95,13 @@ public class MenuGUI extends Application {
             }
         });
         multiplayerButton.setPrefWidth(150);
-        multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
+        multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				GUI gui = new NetworkedBoardGUI();
 				GameClient client = new GameClient(gui);
 				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard()));
-				ConnectionGUI connGUI = new ConnectionGUI(server, client);
+				ConnectionGUI connGUI = new ConnectionGUI();
 				connGUI.start(new Stage());
 			}
         });
