@@ -487,26 +487,13 @@ public class LocalBoardGUI extends Application implements GUI {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-        		@Override
-        		public void handle(MouseEvent event) {
-    				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        		}
-        	});
-        } catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
+    	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+    		@Override
+    		public void handle(MouseEvent event) {
+				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+    		}
+    	});
     }
 
     private void placeWideWall(int x, int y) {
@@ -524,26 +511,12 @@ public class LocalBoardGUI extends Application implements GUI {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-        	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-        		@Override
-        		public void handle(MouseEvent event) {
-    				controller.removeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-        		}
-        	});
-        }
-        catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
+    	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+    		@Override
+    		public void handle(MouseEvent event) {
+				controller.removeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+    		}
+    	});
     }
 }

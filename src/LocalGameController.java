@@ -84,6 +84,8 @@ public class LocalGameController<T> implements Controller {
     			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     			gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(), board.getCurrentPlayer().getID());
     			gui.updateActivePlayer(board.getCurrentPlayer().getID());
+    		} else {
+    			gui.displayErrorMessage("There was an error removing your walls");
     		}
     	}
     }
