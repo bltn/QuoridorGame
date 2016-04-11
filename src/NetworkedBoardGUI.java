@@ -107,8 +107,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, 8, 0);
-        setPawn(secondPawn, Color.RED, 8, 16);
+        setPawn(firstPawn, Color.ORANGE, 8, 0);
+        setPawn(secondPawn, Color.GREEN, 8, 16);
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
@@ -477,4 +477,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
         client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
     }
+
+	@Override
+	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+		// TODO stub
+	}
 }

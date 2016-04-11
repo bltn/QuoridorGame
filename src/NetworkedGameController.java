@@ -176,7 +176,15 @@ public class NetworkedGameController implements Controller {
 	}
 
 	public void resetGame() {
-		//TODO method stub
+		//TODO stub
+	}
+
+	@Override
+	public void removeWall(int topLeftPosX, int topLeftPosY, PositionWallLocation right, int topRightPosX,
+			int topRightPosY, PositionWallLocation left, int bottomLeftPosX, int bottomLeftPosY,
+			PositionWallLocation right2, int bottomRightPosX, int bottomRightPosY, PositionWallLocation left2) {
+		// TODO stub
+
 	}
 
 }
