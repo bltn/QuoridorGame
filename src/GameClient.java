@@ -76,10 +76,18 @@ public class GameClient extends Thread {
 		out.println("move " + x + " " + y + " " + playerID);
 	}
 
-	public void sendWallMove(int topLeftX, int topLeftY, PositionWallLocation border1, int bottomLeftX, int bottomLeftY, PositionWallLocation border2,
-			int topRightX, int topRightY, PositionWallLocation border3, int bottomRightX, int bottomRightY, PositionWallLocation border4) {
-		out.println("wall " + topLeftX + " " + topLeftY + " " + border1 + " " + bottomLeftX + " " + bottomLeftY + " " + border2 + " " + topRightX + " " +
-			topRightY + " " + border3 + " " + bottomRightX + " " + bottomRightY + " " + border4 + " " + playerID);
+	public void sendWallMove(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
+			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+
+		out.println("wall " + topLeftX + " " + topLeftY + " " + topLeftBorder + " " + pos2X + " " + pos2Y + " " + pos2Border + " " + pos3X + " " +
+			pos3Y + " " + pos3Border + " " + pos4X + " " + pos4Y + " " + pos4Border + " " + playerID);
+	}
+
+	public void sendWallRemoval(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
+			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+
+		out.println("remove-wall " + topLeftX + " " + topLeftY + " " + topLeftBorder + " " + pos2X + " " + pos2Y + " " + pos2Border + " " +
+		    pos3X + " " + pos3Y + " " + pos3Border + " " + pos4X + " " + pos4Y + " " + pos4Border + " " + playerID);
 	}
 
 	public void requestCurrentPlayerAvailableMoves() {
@@ -132,6 +140,9 @@ public class GameClient extends Thread {
 				else if (commands[0].equals("reset")) {
                     gui.resetWalls();
                 }
+				else if (commands[0].equals("removal-signal")) {
+					System.out.println("YAY");
+				}
 				else if (commands[0].equals("coordinate")) {
 					int player1X = Integer.parseInt(commands[1]);
 					int player1Y = Integer.parseInt(commands[2]);
@@ -143,6 +154,26 @@ public class GameClient extends Thread {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	private void addWallRemovalListener(String[] commands) {
+		int pos1X = Integer.parseInt(commands[1]);
+		int pos1Y = Integer.parseInt(commands[2]);
+		PositionWallLocation pos1Border = PositionWallLocation.valueOf(commands[3]);
+
+		int pos2X = Integer.parseInt(commands[4]);
+		int pos2Y = Integer.parseInt(commands[5]);
+		PositionWallLocation pos2Border = PositionWallLocation.valueOf(commands[6]);
+
+		int pos3X = Integer.parseInt(commands[7]);
+		int pos3Y = Integer.parseInt(commands[8]);
+		PositionWallLocation pos3Border = PositionWallLocation.valueOf(commands[9]);
+
+		int pos4X = Integer.parseInt(commands[10]);
+		int pos4Y = Integer.parseInt(commands[11]);
+		PositionWallLocation pos4Border = PositionWallLocation.valueOf(commands[12]);
+
+		gui.addWallRemovalListener(pos1X, pos1Y, pos1Border, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border, pos4X, pos4Y, pos4Border);
 	}
 
     private void updateWallPosition(String[] commands) {

@@ -412,8 +412,6 @@ public class LocalBoardGUI extends Application implements GUI {
      * Set the occupiable positions
      * @param x
      * @param y
-     * @param X
-     * @param Y
      */
     private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);

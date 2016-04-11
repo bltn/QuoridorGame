@@ -92,6 +92,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         errorPaneText = new Text("");
     }
 
+    public void addWallRemovalListener(Position pos1X, Position pos1Y, PositionWallLocation pos1Border, Position pos2X, Position pos2Y, PositionWallLocation pos2Border,
+    		Position pos3X, Position pos3Y, PositionWallLocation pos3Border, Position pos4X, Position pos4Y, PositionWallLocation pos4Border) {
+
+    }
+
     public void setController(Controller controller) {
     	this.controller = controller;
     }
@@ -179,7 +184,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
     /**
      * Allows a user to place a wall on a wall space that is available
      */
-   public void setWall(int x, int y) {
+   public void placeWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
            placeThinWall(x, y);
@@ -208,9 +213,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
 	   }
    }
 
-/**
- * Sets the player stats so they can be displayed in the UI
- */
+	/**
+	 * Sets the player stats so they can be displayed in the UI
+	 */
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -250,22 +255,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
         pawn.setTranslateX(5);
         boardPane.setConstraints(pawn, x, y);
         boardPane.getChildren().add(pawn);
-    }
-
-    /**
-     *  Checks whether the program is currently drawing
-     * @return		the value of isDrawing
-     */
-    public boolean isDrawing() {
-        return drawing;
-    }
-
-    /**
-     * Sets the drawing boolean to the passed boolean
-     * @param b		is the program drawing or not
-     */
-    public void setDrawing(boolean b) {
-        drawing = b;
     }
 
     /**
@@ -348,8 +337,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
      * Set the occupiable positions
      * @param x
      * @param y
-     * @param X
-     * @param Y
      */
     private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
@@ -392,7 +379,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(x, y);
+                placeWall(x, y);
             }
         });
     }
@@ -407,7 +394,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(x, y);
+                placeWall(x, y);
             }
         });
     }
@@ -438,6 +425,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         PositionWallLocation right = PositionWallLocation.RIGHT;
 
         client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        	@Override
+        	public void handle(MouseEvent event) {
+        		client.sendWallRemoval(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        	}
+        });
     }
 
     public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {

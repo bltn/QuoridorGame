@@ -22,9 +22,9 @@ public interface Controller {
 
     public int getPlayer2Y();
 
-	public void resetGame();
+    public void resetGame();
 
-	public void removeWall(int topLeftPosX, int topLeftPosY, PositionWallLocation right, int topRightPosX,
-			int topRightPosY, PositionWallLocation left, int bottomLeftPosX, int bottomLeftPosY, PositionWallLocation right2, int bottomRightPosX, int bottomRightPosY, PositionWallLocation left2);
+	public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
+			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border);
 
 }
