@@ -143,28 +143,8 @@ public class GameClient extends Thread {
         int x = Integer.parseInt(commands[1]);
         int y = Integer.parseInt(commands[2]);
         PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
-        x *= 2;
-        y *= 2;
-
-        switch (border) {
-            case LEFT: {
-                x -= 1;
-                break;
-            }
-            case RIGHT: {
-                x += 1;
-                break;
-            }
-            case TOP: {
-                y -= 1;
-                break;
-            }
-            case BOTTOM: {
-                y += 1;
-                break;
-            }
-        }
-        gui.displayWall(x, y);
+        int playerID = Integer.parseInt(commands[4]);
+        gui.displayWall(x, y, border, playerID);
     }
 
     private void displayErrorMessage(String[] commands) {

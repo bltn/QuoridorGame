@@ -174,29 +174,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
    public void setWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (y < 16) {
-                   if (grids[y + 2][x].getFill() == Color.GREY) {
-                       // avoid making a cross with the walls
-                       if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                           placeThinWall(x, y);
-                       }
-                   }
-               }
-           }
+           placeThinWall(x, y);
        }
        //short, wide wall
        if (y % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (x < 16) {
-                       if (grids[y][x + 2].getFill() == Color.GREY) {
-                           // avoid making a cross with the walls
-                           if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                               placeWideWall(x, y);
-                           }
-                       }
-               }
-           }
+           placeWideWall(x, y);
        }
    }
 
@@ -450,9 +432,36 @@ public class NetworkedBoardGUI extends Application implements GUI {
         client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
     }
 
-    public void displayWall(int x, int y) {
-    	grids[y][x].setFill(Color.ORANGE);
-    	grids[y][x].setStroke(Color.ORANGE);
+    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+    	x *= 2;
+    	y *= 2;
+
+        switch (relativeLocation) {
+            case LEFT: {
+                x -= 1;
+                break;
+            }
+            case RIGHT: {
+                x += 1;
+                break;
+            }
+            case TOP: {
+                y -= 1;
+                break;
+            }
+            case BOTTOM: {
+                y += 1;
+                break;
+            }
+        }
+
+        if (playerID == 1) {
+        	grids[y][x].setFill(Color.ORANGE);
+        	grids[y][x].setStroke(Color.ORANGE);
+        } else if (playerID == 2) {
+        	grids[y][x].setFill(Color.GREEN);
+        	grids[y][x].setStroke(Color.GREEN);
+        }
     }
 
     private void placeWideWall(int x, int y) {
@@ -476,11 +485,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
 	@Override
 	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID) {
-		// TODO stub
-	}
-
-	@Override
-	public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
 		// TODO stub
 	}
 }

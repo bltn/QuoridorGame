@@ -62,7 +62,7 @@ public class LocalGameController<T> implements Controller {
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
     		gui.updateActivePlayer(board.getCurrentPlayer().getID());
     	} catch (IllegalStateException e) {
-    		throw e;
+    		gui.displayErrorMessage(e.getMessage());
     	}
     }
 

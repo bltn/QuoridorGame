@@ -60,8 +60,8 @@ public class ClientSocketIOThread extends Thread {
 		out.println("pawn " + x + " " + y + " " + playerID);
 	}
 
-	public void sendWallUpdate(int x, int y, PositionWallLocation border) {
-		out.println("wall " + x + " " + y + " " + border);
+	public void sendWallUpdate(int x, int y, PositionWallLocation border, int playerID) {
+		out.println("wall " + x + " " + y + " " + border + " " + playerID);
 	}
 
 	public void sendResetWalls() {

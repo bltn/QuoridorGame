@@ -49,6 +49,7 @@ public class NetworkedGameController implements Controller {
 	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
 			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
 			int pos4y, PositionWallLocation pos4Border, int playerID) {
+
 		if (playerID == board.getCurrentPlayer().getID()) {
 			Position coveredPos1 = board.getPosition(pos1x, pos1y);
 			Position coveredPos2 = board.getPosition(pos2x, pos2y);
@@ -110,17 +111,18 @@ public class NetworkedGameController implements Controller {
                                 PositionWallLocation pos1Border, PositionWallLocation pos2Border,
                                 PositionWallLocation pos3Border, PositionWallLocation pos4Border) {
         board.placeWalls(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-        player1IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
-        player1IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
-        player1IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
-        player1IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
-
-        player2IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
-        player2IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
-        player2IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
-        player2IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
-
         Player prevPlayer = board.getPreviousPlayer();
+
+        player1IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border, prevPlayer.getID());
+        player1IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border, prevPlayer.getID());
+        player1IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border, prevPlayer.getID());
+        player1IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border, prevPlayer.getID());
+
+        player2IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border, prevPlayer.getID());
+        player2IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border, prevPlayer.getID());
+        player2IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border, prevPlayer.getID());
+        player2IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border, prevPlayer.getID());
+
         player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
         player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
 
