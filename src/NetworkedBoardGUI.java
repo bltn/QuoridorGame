@@ -107,12 +107,20 @@ public class NetworkedBoardGUI extends Application implements GUI {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.ORANGE, 8, 0);
-        setPawn(secondPawn, Color.GREEN, 8, 16);
+        client.requestInitialPlayerPawnPositions();
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
         primaryStage.show();
+    }
+
+    public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y) {
+    	player1X *= 2;
+    	player1Y *= 2;
+    	player2X *= 2;
+    	player2Y *= 2;
+    	setPawn(firstPawn, Color.ORANGE, player1X, player1Y);
+    	setPawn(secondPawn, Color.GREEN, player2X, player2Y);
     }
 
     /**

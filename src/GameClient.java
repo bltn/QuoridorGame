@@ -86,9 +86,8 @@ public class GameClient extends Thread {
 		out.println("available");
 	}
 
-	public void sendMessageToServer(String message) {
-		System.out.println("Message to be sent: " + message);
-		out.println(message);
+	public void requestInitialPlayerPawnPositions() {
+		out.println("start-coordinates");
 	}
 
 	public boolean guiIsLaunched() {
@@ -133,6 +132,13 @@ public class GameClient extends Thread {
 				else if (commands[0].equals("reset")) {
                     gui.resetWalls();
                 }
+				else if (commands[0].equals("coordinate")) {
+					int player1X = Integer.parseInt(commands[1]);
+					int player1Y = Integer.parseInt(commands[2]);
+					int player2X = Integer.parseInt(commands[3]);
+					int player2Y = Integer.parseInt(commands[4]);
+					gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

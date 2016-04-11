@@ -38,6 +38,9 @@ public class ClientSocketIOThread extends Thread {
 				else if (commands[0].equals("wall")) {
 					placeWall(commands);
 				}
+				else if (commands[0].equals("start-coordinates")) {
+					out.println("coordinate " + controller.getPlayer1X() + " " + controller.getPlayer1Y() + " " + controller.getPlayer2X() + " " + controller.getPlayer2Y());
+				}
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
