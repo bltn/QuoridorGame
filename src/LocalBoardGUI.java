@@ -250,11 +250,11 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * change the active player to the next player
      */
-    public void updateActivePlayer() {
-        if (controller.getCurrentPlayer().getID() == 2) {
+    public void updateActivePlayer(int playerID) {
+        if (playerID == 2) {
             currentPlayerText.setText("Player 2's turn...");
         }
-        else if (controller.getCurrentPlayer().getID() == 1) {
+        else if (playerID == 1) {
             currentPlayerText.setText("Player 1's turn...");
         }
     }
@@ -326,6 +326,19 @@ public class LocalBoardGUI extends Application implements GUI {
             }
         });
 	}
+
+    public void displayErrorMessage(String message) {
+    	errorPaneText.setText(message);
+    	new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        errorPaneText.setText("");
+                    }
+                },
+                1000
+        );
+    }
 
     /**
      * Set the alignment of all instantiated fields to the centre of the pane
@@ -415,21 +428,7 @@ public class LocalBoardGUI extends Application implements GUI {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = x / 2;
                 int nineByNineY = y / 2;
-                try {
-                	controller.movePawn(nineByNineX, nineByNineY);
-                }
-                catch (IllegalArgumentException e) {
-                	errorPaneText.setText(e.getMessage());
-                	new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    errorPaneText.setText("");
-                                }
-                            },
-                            1000
-                    );
-                }
+            	controller.movePawn(nineByNineX, nineByNineY);
             }
         });
     }

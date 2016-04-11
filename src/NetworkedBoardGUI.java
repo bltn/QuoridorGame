@@ -140,24 +140,22 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
     		for(int y = 0; y < width; y++){
-                final int X = x;
-                final int Y = y;
     			grids[y][x] = new Rectangle();
     			// middle points between walls
     			if(x % 2 != 0 && y % 2 != 0) {
-                    setUnusedSquare(x, y, X, Y);
+                    initialiseUnusedSquare(x, y);
     			}
     			// occupiable position
     			if(x % 2 == 0 && y % 2 == 0) {
-                    setOccupiablePosition(x, y, X, Y);
+                    initialiseOccupiableGrid(x, y);
     			}
     			// wide, short walls
     			if(x % 2 == 0 && y % 2 != 0) {
-                    setWideWall(x, y, X, Y);
+                    initialiseWideWall(x, y);
     			}
     			// tall, thin walls
     			if(x % 2 != 0 && y % 2 == 0) {
-                    setThinWall(x, y, X, Y);
+                    initialiseThinWall(x, y);
     			}
     		}
     	}
@@ -356,8 +354,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     }
 
-    public void updateActivePlayer() {/*Do nothing*/}
-
     /**
      * Set the occupiable positions
      * @param x
@@ -365,7 +361,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
      * @param X
      * @param Y
      */
-    private void setOccupiablePosition(int x, int y, int X, int Y) {
+    private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.WHITE);
@@ -376,8 +372,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
             @Override
             public void handle(MouseEvent event) {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
-                int nineByNineX = X / 2;
-                int nineByNineY = Y / 2;
+                int nineByNineX = x / 2;
+                int nineByNineY = y / 2;
             	client.sendMove(nineByNineX, nineByNineY);
             }
         });
@@ -396,7 +392,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
         );
     }
 
-    private void setWideWall(int x, int y, int X, int Y) {
+    private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.GREY);
@@ -406,12 +402,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                setWall(x, y);
             }
         });
     }
 
-    private void setThinWall(int x, int y, int X, int Y) {
+    private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
         grids[y][x].setStroke(Color.GREY);
@@ -421,12 +417,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                setWall(x, y);
             }
         });
     }
 
-    private void setUnusedSquare(int x, int y, int X, int Y) {
+    private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
         grids[y][x].setStroke(Color.LIGHTSKYBLUE);
@@ -480,6 +476,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
 	@Override
 	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+		// TODO stub
+	}
+
+	@Override
+	public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
 		// TODO stub
 	}
 }

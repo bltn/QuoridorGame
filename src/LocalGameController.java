@@ -60,7 +60,7 @@ public class LocalGameController<T> implements Controller {
     		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
     		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
-    		gui.updateActivePlayer();
+    		gui.updateActivePlayer(board.getCurrentPlayer().getID());
     	} catch (IllegalStateException e) {
     		throw e;
     	}
@@ -83,7 +83,7 @@ public class LocalGameController<T> implements Controller {
         		gui.removeWallDisplay(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
     			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     			gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(), board.getCurrentPlayer().getID());
-    			gui.updateActivePlayer();
+    			gui.updateActivePlayer(board.getCurrentPlayer().getID());
     		}
     	}
     }
@@ -93,13 +93,13 @@ public class LocalGameController<T> implements Controller {
     		boolean gameOver = board.movePawn(posX, posY);
 			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
-			gui.updateActivePlayer();
+			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
                 GameOverGUI gui = new GameOverGUI((Controller) this);
                 gui.start(new Stage());
 			}
     	} catch (IllegalArgumentException e) {
-    		throw e;
+    		gui.displayErrorMessage(e.getMessage());
     	}
     }
 
