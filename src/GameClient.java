@@ -148,7 +148,12 @@ public class GameClient extends Thread {
 					int player1Y = Integer.parseInt(commands[2]);
 					int player2X = Integer.parseInt(commands[3]);
 					int player2Y = Integer.parseInt(commands[4]);
-					gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y);
+					Platform.runLater(new Runnable() {
+					   @Override
+					   public void run() {
+					      gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y);
+					   }
+					});
 				}
 			}
 		} catch (Exception e) {

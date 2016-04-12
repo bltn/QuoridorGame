@@ -146,8 +146,8 @@ public class NetworkedGameController implements Controller {
         	if (wallsRemoved) {
         		System.out.println("THE WALLS WERE REMOVED ###############");
         	} else {
-        		player1IO.sendErrorMessage("WERE NOT REMOVED");
-        		player2IO.sendErrorMessage("WERE NOT REMOVED");
+        		player1IO.sendErrorMessage("Could not remove the walls");
+        		player2IO.sendErrorMessage("Could not remove the walls");
         	}
 		}
 	}
