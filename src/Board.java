@@ -163,8 +163,8 @@ public class Board {
 				throw new IllegalStateException("You have no remaining walls");
 			}
 		} else {
-			System.out.println("No no no");
-			System.out.println(Utility.toString(map));
+			//System.out.println("No no no");
+			//System.out.println(Utility.toString(map));
 			throw new IllegalStateException("Can't block like that");
 		}
 	}
@@ -275,17 +275,17 @@ public class Board {
 	public void assignMapWall(Position position, PositionWallLocation location) {
 		switch (location) {
 		case RIGHT: {
-			map[position.getY() * 2 + 1][position.getX() * 2 + 1 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1 + 1][position.getX() * 2 + 1 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1 + 1 + 1][position.getX() * 2 + 1 + 1] = 0;
+			map[position.getY() * 2 + 1][position.getX() * 2 + 2] = 0;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 2] = 0;
+			map[position.getY() * 2 + 3][position.getX() * 2 + 2] = 0;
+			map[position.getY() * 2 + 4][position.getX() * 2 + 2] = 0;
 			break;
 		}
 		case BOTTOM: {
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1 + 1] = 0;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1 + 1 + 1] = 0;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 1] = 0;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 2] = 0;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 3] = 0;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 4] = 0;
 			break;
 		}
 		}
@@ -295,17 +295,17 @@ public class Board {
 	public void undoAssignMapWall(Position position, PositionWallLocation location) {
 		switch (location) {
 		case RIGHT: {
-			map[position.getY() * 2 + 1][position.getX() * 2 + 1 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1 + 1][position.getX() * 2 + 1 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1 + 1 + 1][position.getX() * 2 + 1 + 1] = 1;
+			map[position.getY() * 2 + 1][position.getX() * 2 + 2] = 1;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 2] = 1;
+			map[position.getY() * 2 + 3][position.getX() * 2 + 2] = 1;
+			map[position.getY() * 2 + 4][position.getX() * 2 + 2] = 1;
 			break;
 		}
 		case BOTTOM: {
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1 + 1] = 1;
-			map[position.getY() * 2 + 1 + 1][position.getX() * 2 + 1 + 1 + 1 + 1] = 1;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 1] = 1;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 2] = 1;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 3] = 1;
+			map[position.getY() * 2 + 2][position.getX() * 2 + 4] = 1;
 			break;
 		}
 		}
@@ -321,15 +321,13 @@ public class Board {
 			PositionWallLocation pos2Border, Position coveredPos3, PositionWallLocation pos3Border,
 			Position coveredPos4, PositionWallLocation pos4Border) {
 
-		Position goal;
-		if (currentPlayer == player2) {
-			goal = new Position(1, 9);
-		} else {
-			goal = new Position(17, 9);
-		}
-		Position start = new Position(currentPlayer.getPosition().getY() * 2 + 1, currentPlayer.getPosition().getX() * 2 + 1);
 		assignMapWall(coveredPos1, pos1Border);
-		if (Utility.DepthFirstSearch(map, start, goal)) {
+		
+		Position start1 = new Position(player1.getPosition().getY() * 2 + 1, player2.getPosition().getX() * 2 + 1);
+		int goal1 = 17;
+		Position start2 = new Position(player2.getPosition().getY() * 2 + 1, player2.getPosition().getX() * 2 + 1);
+		int goal2 = 1;
+		if (Utility.BreadthFirstSearch(map, start1, goal1) && Utility.BreadthFirstSearch(map, start2, goal2)) {
 			return true;
 		} else {
 			undoAssignMapWall(coveredPos1, pos1Border);
