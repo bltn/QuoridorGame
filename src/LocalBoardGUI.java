@@ -293,7 +293,7 @@ public class LocalBoardGUI extends Application implements GUI {
     	}
     }
 
-    public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID) {
+    public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation) {
 		x *= 2;
 		y *= 2;
 

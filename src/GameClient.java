@@ -143,6 +143,9 @@ public class GameClient extends Thread {
 				else if (commands[0].equals("removal-signal")) {
 					addWallRemovalListener(commands);
 				}
+				else if (commands[0].equals("remove-wall-display")) {
+					removeWallDisplay(commands);
+				}
 				else if (commands[0].equals("coordinate")) {
 					int player1X = Integer.parseInt(commands[1]);
 					int player1Y = Integer.parseInt(commands[2]);
@@ -159,6 +162,13 @@ public class GameClient extends Thread {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	private void removeWallDisplay(String[] commands) {
+		int x = Integer.parseInt(commands[1]);
+		int y = Integer.parseInt(commands[2]);
+		PositionWallLocation relativeLocation = PositionWallLocation.valueOf(commands[3]);
+		gui.removeWallDisplay(x, y, relativeLocation);
 	}
 
 	private void addWallRemovalListener(String[] commands) {

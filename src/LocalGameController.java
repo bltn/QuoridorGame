@@ -77,10 +77,10 @@ public class LocalGameController<T> implements Controller {
 
     		boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
     		if (wallsRemoved) {
-    			gui.removeWallDisplay(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
-        		gui.removeWallDisplay(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
-        		gui.removeWallDisplay(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
-        		gui.removeWallDisplay(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
+    			gui.removeWallDisplay(topLeftX, topLeftY, topLeftBorder);
+        		gui.removeWallDisplay(pos2X, pos2Y, pos2Border);
+        		gui.removeWallDisplay(pos3X, pos3Y, pos3Border);
+        		gui.removeWallDisplay(pos4X, pos4Y, pos4Border);
     			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     			gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(), board.getCurrentPlayer().getID());
     			gui.updateActivePlayer(board.getCurrentPlayer().getID());

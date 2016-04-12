@@ -20,7 +20,7 @@ public interface GUI {
 
 	public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID);
 
-	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation, int playerID);
+	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation);
 
 	public void displayErrorMessage(String message);
 }

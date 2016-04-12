@@ -60,6 +60,10 @@ public class ClientSocketIOThread extends Thread {
 		out.println("highlight " + x + " " + y);
 	}
 
+	public void sendRemoveWallDisplay(int x, int y, PositionWallLocation relativeBorder) {
+		out.println("remove-wall-display " + x + " " + y + " " + relativeBorder);
+	}
+
 	public void sendMessage(String message) {
 		out.println(message);
 	}

@@ -141,15 +141,40 @@ public class NetworkedGameController implements Controller {
     		Position coveredPos2 = board.getPosition(pos2X, pos2Y);
         	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
         	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
-
         	boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
         	if (wallsRemoved) {
-        		System.out.println("THE WALLS WERE REMOVED ###############");
+        		sendWallRemovalUpdate(topLeftX, topLeftY, topLeftBorder, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border, pos4X, pos4Y, pos4Border);
         	} else {
         		player1IO.sendErrorMessage("Could not remove the walls");
         		player2IO.sendErrorMessage("Could not remove the walls");
         	}
 		}
+	}
+
+	private void sendWallRemovalUpdate(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border,
+			int pos4X, int pos4Y, PositionWallLocation pos4Border) {
+
+		player1IO.sendRemoveWallDisplay(topLeftX, topLeftY, topLeftBorder);
+		player1IO.sendRemoveWallDisplay(pos2X, pos2Y, pos2Border);
+		player1IO.sendRemoveWallDisplay(pos3X, pos3Y, pos3Border);
+		player1IO.sendRemoveWallDisplay(pos4X, pos4Y, pos4Border);
+
+		player2IO.sendRemoveWallDisplay(topLeftX, topLeftY, topLeftBorder);
+		player2IO.sendRemoveWallDisplay(pos2X, pos2Y, pos2Border);
+		player2IO.sendRemoveWallDisplay(pos3X, pos3Y, pos3Border);
+		player2IO.sendRemoveWallDisplay(pos4X, pos4Y, pos4Border);
+
+		Player player1 = board.getPlayer1();
+		Player player2 = board.getPlayer2();
+
+		// send stats updates for both players as the other player's wall count will be incremented by their wall being removed
+		player1IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), 1);
+		player1IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), 2);
+		player2IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), 1);
+		player2IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), 2);
+
+		player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
 	}
 
 	private void sendWallUpdate(Position coveredPos1, Position coveredPos2, Position coveredPos3, Position coveredPos4,
