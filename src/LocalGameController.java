@@ -66,6 +66,23 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
+    public void placeWallModified(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	System.out.println("controller");
+    	try {
+    		((StandardBoard) board).placeWallsModified(topLeftX, topLeftY, orientation);
+    		/**gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
+    		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
+    		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
+    		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());**/
+    		gui.displayWallModified(topLeftX, topLeftY, WallPlacement.VERTICAL);
+    		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
+    		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
+    		gui.updateActivePlayer(board.getCurrentPlayer().getID());
+    	} catch (IllegalStateException e) {
+    		gui.displayErrorMessage(e.getMessage());
+    	}
+    }
+
     public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
         	PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
 
