@@ -22,11 +22,10 @@ import java.io.IOException;
 import javax.sound.midi.SysexMessage;
 
 /**
- * @author Junaid Rasheed
- * @author Jordan Bird
+ * @author Khadija Patel
  *
  */
-public class MenuGUI extends Application {
+public class RulesMenuGUI extends Application {
 
     private Scene scene;
     private GridPane introPane;
@@ -35,20 +34,24 @@ public class MenuGUI extends Application {
     private Button startButton;
     private Button quitButton;
     private Button multiplayerButton;
+    private Button standardButton;
+    private Button challengeButton;
+    private Stage primaryStage;
 
-    public MenuGUI() {
+    public RulesMenuGUI() {
         introPane = new GridPane();
-        introText = new Text("Quoridor");
+        introText = new Text("Please pick the set of rules you would like to play with:");
         buttonBox = new VBox();
-        startButton = new Button("Start");
         quitButton = new Button("Quit");
-        multiplayerButton = new Button("Multiplayer");
+        standardButton = new Button("Standard Rules");
+        challengeButton = new Button("Challenge Rules");
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setTitle("Quoridor");
         setButtons();
         setIntroPane();
@@ -61,11 +64,11 @@ public class MenuGUI extends Application {
      */
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
-        introPane.setHgap(25);
-        introPane.setVgap(100);
+        introPane.setHgap(15);
+        introPane.setVgap(80);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
-        introText.setFont(Font.font("Calibri", FontWeight.BOLD, 50));
+        introText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         introPane.add(introText, 0, 0, 1, 1);
     }
 
@@ -75,39 +78,42 @@ public class MenuGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().add(startButton);
-        buttonBox.getChildren().add(multiplayerButton);
+        buttonBox.getChildren().add(standardButton);
+        buttonBox.getChildren().add(challengeButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
-        startButton.setPrefWidth(150);
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
+        standardButton.setPrefWidth(200);
+        standardButton.setOnAction(new EventHandler<ActionEvent>(){
+        	@Override
+        	public void handle(ActionEvent event) {
+    			LocalBoardGUI gui = new LocalBoardGUI();
+            	Board board = new StandardBoard();
+            	Controller controller = new LocalGameController(gui, board);
+            	gui.setController(controller);
+            	gui.start(new Stage());
+            	primaryStage.close();
+        	}
+        });
+
+        challengeButton.setPrefWidth(200);
+        challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-            	RulesMenuGUI gui = new RulesMenuGUI();
-            	gui.start(new Stage());
-            };
+	            LocalBoardGUI gui = new LocalBoardGUI();
+	            Board board = new ChallengeBoard();
+	            Controller controller = new LocalGameController(gui, board);
+	            gui.setController(controller);
+	            gui.start(new Stage());
+	            primaryStage.close();
+			}
         });
-        quitButton.setPrefWidth(150);
+
+        quitButton.setPrefWidth(200);
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 System.exit(0);
             }
         });
-        multiplayerButton.setPrefWidth(150);
-        multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				GUI gui = new NetworkedBoardGUI();
-				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard()));
-				ConnectionGUI connGUI = new ConnectionGUI();
-				connGUI.start(new Stage());
-			}
-        });
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
