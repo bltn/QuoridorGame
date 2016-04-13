@@ -12,6 +12,8 @@ public interface Controller {
 	public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
     		PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border);
 
+	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation);
+
 	public void movePawn(int posX, int posY);
 
     public int getPlayer1X();

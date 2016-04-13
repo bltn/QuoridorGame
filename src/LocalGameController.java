@@ -40,35 +40,9 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    /**
-     * First argument must always be the top left position of the 4x4 grid of positions the walls are
-     * being assigned to, as this is the one validation must be performed on
-     */
-    public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
-    	PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
-
-    	Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
-    	Position coveredPos2 = board.getPosition(pos2X, pos2Y);
-    	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
-    	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
-
+    public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
     	try {
-    		board.placeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-    		gui.displayWall(topLeftX, topLeftY, topLeftBorder, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos2X, pos2Y, pos2Border, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos3X, pos3Y, pos3Border, board.getPreviousPlayer().getID());
-    		gui.displayWall(pos4X, pos4Y, pos4Border, board.getPreviousPlayer().getID());
-    		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
-    		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
-    		gui.updateActivePlayer(board.getCurrentPlayer().getID());
-    	} catch (IllegalStateException e) {
-    		gui.displayErrorMessage(e.getMessage());
-    	}
-    }
-
-    public void placeWallModified(int topLeftX, int topLeftY, WallPlacement orientation) {
-    	try {
-    		((StandardBoard) board).placeWallsModified(topLeftX, topLeftY, orientation);
+    		board.placeWalls(topLeftX, topLeftY, orientation);
     		gui.displayWallModified(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
     		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
@@ -147,5 +121,13 @@ public class LocalGameController<T> implements Controller {
 	@Override
 	public int getPlayer2Y() {
 		return board.getPlayer2().getPosition().getY();
+	}
+
+	@Override
+	public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2x, int pos2y,
+			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
+			int pos4y, PositionWallLocation pos4Border) {
+		// TODO Auto-generated method stub
+
 	}
 }

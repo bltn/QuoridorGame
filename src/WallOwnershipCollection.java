@@ -15,12 +15,12 @@ public class WallOwnershipCollection {
 		}
 	}
 
-	public void removeRecord(Position position, PositionWallLocation location) {
+	public void removeRecord(Position topLeft, WallPlacement orientation) {
 		Iterator<WallOwnershipRecord> iter = ownershipRecords.iterator();
 		while (iter.hasNext()) {
 			WallOwnershipRecord record = iter.next();
 
-			if ((record.getCoveredPosition() == position) && (record.getPositionBorderValue() == location)) {
+			if ((record.getTopLeftCoveredPosition() == topLeft) && (record.getWallOrientation() == orientation)) {
 				iter.remove();
 			}
 		}
@@ -29,7 +29,7 @@ public class WallOwnershipCollection {
 	public WallOwnershipRecord getRecordByCoordinates(int x, int y) {
 		WallOwnershipRecord ownershipRecord = null;
 		for (WallOwnershipRecord record : this.ownershipRecords) {
-			if ((record.getCoveredPosition().getX() == x) && (record.getCoveredPosition().getY() == y)) {
+			if ((record.getTopLeftCoveredPosition().getX() == x) && (record.getTopLeftCoveredPosition().getY() == y)) {
 				ownershipRecord = record;
 			}
 		}

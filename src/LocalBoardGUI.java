@@ -523,7 +523,7 @@ public class LocalBoardGUI extends Application implements GUI {
         int bottomRightPosY = bottomLeftPosY;
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
-        ((LocalGameController) controller).placeWallModified(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
+        ((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
     		@Override
     		public void handle(MouseEvent event) {
@@ -548,7 +548,7 @@ public class LocalBoardGUI extends Application implements GUI {
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
     	//controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-    	((LocalGameController) controller).placeWallModified(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
+    	((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
     		@Override
     		public void handle(MouseEvent event) {
