@@ -16,66 +16,21 @@ public class StandardBoard extends Board{
             currentPlayer = player1;
     }
 
-    /**
-     * @param topLeftPosition First argument must always be the top left position of the 4x4 grid of positions the walls are
-     * being assigned to, as this is the one validation must be performed on
-     */
-    public void placeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
-            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-
+    public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {
     	if (currentPlayer.hasWalls()) {
-    		if (wallPlacementIsValid(topLeftPosition, topLeftBorder)) {
-    			assignWall(topLeftPosition, topLeftBorder);
-                assignWall(coveredPos2, pos2Border);
-                assignWall(coveredPos3, pos3Border);
-                assignWall(coveredPos4, pos4Border);
-
-                currentPlayer.decrementWallCount();
-                currentPlayer.incrementMoveCount();
-
-                switchPlayer();
-    		} else {
-    			throw new IllegalStateException("You can't place a wall there.");
-    		}
-	    } else {
-	            throw new IllegalStateException("You have no remaining walls");
-	    }
-    }
-
-    public void placeWallsModified(int topLeftX, int topLeftY, WallPlacement orientation) {
-    	if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
-    		Position topLeft = positions[topLeftY][topLeftX];
-    		if (wallPlacementIsValidModified(topLeft, orientation)) {
-        		Position topRight = positions[topLeftY][topLeftX + 1];
-        		Position bottomRight = positions[topLeftY + 1][topLeftX + 1];
-        		Position bottomLeft = positions[topLeftY + 1][topLeftX];
-
-        		if (orientation == WallPlacement.VERTICAL) {
-        			topLeft.setHasRightWall(true);
-        			addWalledOffPosition(topLeft);
-        			topRight.setHasLeftWall(true);
-        			addWalledOffPosition(topRight);
-        			bottomRight.setHasLeftWall(true);
-        			addWalledOffPosition(bottomRight);
-        			bottomLeft.setHasRightWall(true);
-        			addWalledOffPosition(bottomLeft);
-        		} else if (orientation == WallPlacement.HORIZONTAL) {
-        			topLeft.setHasBottomWall(true);
-        			addWalledOffPosition(topLeft);
-        			topRight.setHasBottomWall(true);
-        			addWalledOffPosition(topRight);
-        			bottomRight.setHasTopWall(true);
-        			addWalledOffPosition(bottomRight);
-        			bottomLeft.setHasTopWall(true);
-        			addWalledOffPosition(bottomLeft);
-        		}
-
-    			currentPlayer.incrementMoveCount();
-    			currentPlayer.decrementWallCount();
-    			switchPlayer();
-        	} else {
-        		throw new IllegalStateException("Move is invalid");
-        	}
+	    	if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
+	    		Position topLeft = positions[topLeftY][topLeftX];
+	    		if (wallPlacementIsValid(topLeft, orientation)) {
+	        		assignWallsFromTopLeftClockwise(topLeft, orientation);
+	    			currentPlayer.incrementMoveCount();
+	    			currentPlayer.decrementWallCount();
+	    			switchPlayer();
+	        	} else {
+	        		throw new IllegalStateException("Move is invalid");
+	        	}
+	    	}
+    	} else {
+    		throw new IllegalStateException("You don't have any walls");
     	}
     }
 
@@ -172,56 +127,33 @@ public class StandardBoard extends Board{
             }
     }
 
-   /**
-    * Returns true if a wall placement move is valid. Returns false if the move isn't valid, or if the
-    * given position isn't the top left position in the 4x4 grid of board grids affected by the wall placement
-    */
-   private boolean wallPlacementIsValid(Position topLeftPosition, PositionWallLocation borderValue) {
-   	if (borderValue == PositionWallLocation.RIGHT || borderValue == PositionWallLocation.BOTTOM) {
-	    	boolean isValid = true;
+   private void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
+	   Position topRight = positions[topLeft.getY()][topLeft.getX() + 1];
+	   Position bottomRight = positions[topLeft.getY() + 1][topLeft.getX() + 1];
+	   Position bottomLeft = positions[topLeft.getY() + 1][topLeft.getX()];
 
-	    	// vertically placed wall
-	    	if (borderValue == PositionWallLocation.RIGHT) {
-	    		// make there isn't already a wall here
-	    		if (topLeftPosition.hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure the player isn't clicking the bottom wall grid of the board (isn't allowed)
-	    		if (topLeftPosition.getY() == 8) {
-	    			isValid = false;
-	    		} // make sure the wall following this one won't be placed in a wall slot that's already occupied
-	    		else if (positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure a cross wouldn't be formed with another two walls
-	    		if (topLeftPosition.hasBottomWall() && positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// horizontally placed wall
-	    	} else if (borderValue == PositionWallLocation.BOTTOM) {
-	    		// make sure there isn't already a wall here
-	    		if (topLeftPosition.hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure the player isn't clicking the far-right wall grid of the board (isn't allowed)
-	    		if (topLeftPosition.getX() == 8) {
-	    			isValid = false;
-	    			// make sure the wall following this one won't be placed in a wall slot that's already occupied
-	    		} else if (positions[topLeftPosition.getY()][topLeftPosition.getX() + 1].hasBottomWall()) {
-	    			isValid = false;
-	    		}
-	    		// make sure a cross wouldn't be formed with another two walls
-	    		if (topLeftPosition.hasRightWall() && positions[topLeftPosition.getY() + 1][topLeftPosition.getX()].hasRightWall()) {
-	    			isValid = false;
-	    		}
-	    	}
-	    	return isValid;
-   	} else {
-   		return false;
-   	}
+	   if (orientation == WallPlacement.VERTICAL) {
+		   topLeft.setHasRightWall(true);
+		   addWalledOffPosition(topLeft);
+		   topRight.setHasLeftWall(true);
+		   addWalledOffPosition(topRight);
+		   bottomRight.setHasLeftWall(true);
+		   addWalledOffPosition(bottomRight);
+		   bottomLeft.setHasRightWall(true);
+		   addWalledOffPosition(bottomLeft);
+	   } else if (orientation == WallPlacement.HORIZONTAL) {
+		   topLeft.setHasBottomWall(true);
+		   addWalledOffPosition(topLeft);
+		   topRight.setHasBottomWall(true);
+		   addWalledOffPosition(topRight);
+		   bottomRight.setHasTopWall(true);
+		   addWalledOffPosition(bottomRight);
+		   bottomLeft.setHasTopWall(true);
+		   addWalledOffPosition(bottomLeft);
+	   }
    }
 
-   private boolean wallPlacementIsValidModified(Position topLeft, WallPlacement orientation) {
+   private boolean wallPlacementIsValid(Position topLeft, WallPlacement orientation) {
 
 		boolean isValid = true;
 
@@ -256,29 +188,4 @@ public class StandardBoard extends Board{
 		}
 		return isValid;
 	}
-
-   private void assignWall(Position position, PositionWallLocation location) {
-   	switch (location) {
-           case LEFT: {
-                   position.setHasLeftWall(true);
-                   addWalledOffPosition(position);
-                   break;
-           }
-           case RIGHT: {
-                   position.setHasRightWall(true);
-                   addWalledOffPosition(position);
-                   break;
-           }
-           case TOP: {
-                   position.setHasTopWall(true);
-                   addWalledOffPosition(position);
-                   break;
-           }
-           case BOTTOM: {
-                   position.setHasBottomWall(true);
-                   addWalledOffPosition(position);
-                   break;
-           }
-       }
-   }
 }
