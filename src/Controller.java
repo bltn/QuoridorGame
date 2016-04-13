@@ -26,7 +26,6 @@ public interface Controller {
 
     public void resetGame();
 
-	public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
-			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border);
+	public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation);
 
 }

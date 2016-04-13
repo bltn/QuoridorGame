@@ -18,34 +18,7 @@ public class ChallengeBoard extends Board{
         wallOwnershipRecords = new WallOwnershipCollection();
     }
 
-    public boolean removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
-            Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
-
-    	/**int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID();
-    	Player wallOwner = null;
-    	if (wallOwnerID != getCurrentPlayer().getID()) {
-    		if (wallOwnerID == 1) {
-    			wallOwner = getPlayer1();
-    		} else if (wallOwnerID == 2) {
-    			wallOwner = getPlayer2();
-    		}
-    		removeWallFromPosition(topLeftPosition, topLeftBorder);
-            removeWallFromPosition(coveredPos2, pos2Border);
-            removeWallFromPosition(coveredPos3, pos3Border);
-            removeWallFromPosition(coveredPos4, pos4Border);
-
-            wallOwner.incrementWallCount();
-            getCurrentPlayer().incrementMoveCount();
-
-            switchPlayer();
-            return true;
-    	} else {
-    		return false;
-    	}**/
-    	return true;
-    }
-
-    public boolean removeWallsModified(int topLeftX, int topLeftY, WallPlacement orientation) {
+    public boolean removeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {
     	if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
     		int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftX, topLeftY).getPlayerID();
         	Player wallOwner = null;
@@ -58,7 +31,7 @@ public class ChallengeBoard extends Board{
         		Position topLeft = getPosition(topLeftX, topLeftY);
         		removeWallsFromPosition(topLeft, orientation);
         		wallOwner.incrementWallCount();
-        		getCurrentPlayer().incrementWallCount();
+        		getCurrentPlayer().incrementMoveCount();
         		switchPlayer();
         		return true;
         	} else {

@@ -52,35 +52,14 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y,
-        	PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
-
+    public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
     	if (this.board instanceof ChallengeBoard) {
-    		Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
-    		Position coveredPos2 = board.getPosition(pos2X, pos2Y);
-        	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
-        	Position coveredPos4 = board.getPosition(pos4X, pos4Y);
-
-    		boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(coveredPos1, topLeftBorder, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
+    		boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(topLeftX, topLeftY, orientation);
     		if (wallsRemoved) {
-    			gui.removeWallDisplay(topLeftX, topLeftY, topLeftBorder);
-        		gui.removeWallDisplay(pos2X, pos2Y, pos2Border);
-        		gui.removeWallDisplay(pos3X, pos3Y, pos3Border);
-        		gui.removeWallDisplay(pos4X, pos4Y, pos4Border);
+    			gui.removeWallDisplay(topLeftX, topLeftY, orientation);
     			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     			gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(), board.getCurrentPlayer().getID());
     			gui.updateActivePlayer(board.getCurrentPlayer().getID());
-    		} else {
-    			gui.displayErrorMessage("There was an error removing your walls");
-    		}
-    	}
-    }
-
-    public void removeWallModified(int topLeftX, int topLeftY, WallPlacement orientation) {
-    	if (this.board instanceof ChallengeBoard) {
-    		boolean wallsRemoved = ((ChallengeBoard) board).removeWallsModified(topLeftX, topLeftY, orientation);
-    		if (wallsRemoved) {
-    			// update gui
     		} else {
     			gui.displayErrorMessage("You can't remove that wall");
     		}
