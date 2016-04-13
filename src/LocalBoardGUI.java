@@ -259,7 +259,7 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
-    public void displayWallModified(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	if (orientation == WallPlacement.VERTICAL) {
     		int topX = ((topLeftX * 2) + 1);
     		int topY = topLeftY * 2;
@@ -294,40 +294,6 @@ public class LocalBoardGUI extends Application implements GUI {
 	    		grids[rightY][rightX].setFill(Color.GREEN);
 	    		grids[rightY][rightX].setStroke(Color.GREEN);
     		}
-    	}
-    }
-
-    /**
-     * Method the controller calls to place a wall in the GUI
-     */
-    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
-    	x *= 2;
-    	y *= 2;
-
-    	switch(relativeLocation) {
-	    	case LEFT: {
-	            x -= 1;
-	            break;
-	        }
-	        case RIGHT: {
-	            x += 1;
-	            break;
-	        }
-	        case TOP: {
-	            y -= 1;
-	            break;
-	        }
-	        case BOTTOM: {
-	            y += 1;
-	            break;
-	        }
-    	}
-    	if (playerID == 1) {
-    		grids[y][x].setFill(Color.ORANGE);
-    		grids[y][x].setStroke(Color.ORANGE);
-    	} else if (playerID == 2) {
-    		grids[y][x].setFill(Color.GREEN);
-    		grids[y][x].setStroke(Color.GREEN);
     	}
     }
 
@@ -512,22 +478,11 @@ public class LocalBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
         ((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
     		@Override
     		public void handle(MouseEvent event) {
-				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+				((LocalGameController) controller).removeWallModified(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
     		}
     	});
     }
@@ -536,23 +491,11 @@ public class LocalBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-    	//controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
     	((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
     		@Override
     		public void handle(MouseEvent event) {
-				controller.removeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+    			((LocalGameController) controller).removeWallModified(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     		}
     	});
     }

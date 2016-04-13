@@ -15,12 +15,12 @@ public class WallOwnershipCollection {
 		}
 	}
 
-	public void removeRecord(Position topLeft, WallPlacement orientation) {
+	public void removeRecord(Position position, WallPlacement orientation) {
 		Iterator<WallOwnershipRecord> iter = ownershipRecords.iterator();
 		while (iter.hasNext()) {
 			WallOwnershipRecord record = iter.next();
 
-			if ((record.getTopLeftCoveredPosition() == topLeft) && (record.getWallOrientation() == orientation)) {
+			if ((record.getTopLeftCoveredPosition() == position) && (record.getWallOrientation() == orientation)) {
 				iter.remove();
 			}
 		}

@@ -18,7 +18,7 @@ public interface GUI {
 
 	public void start(Stage stage);
 
-	public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID);
+	public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID);
 
 	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation);
 

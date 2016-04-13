@@ -43,7 +43,7 @@ public class LocalGameController<T> implements Controller {
     public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
     	try {
     		board.placeWalls(topLeftX, topLeftY, orientation);
-    		gui.displayWallModified(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
+    		gui.displayWall(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
     		gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
     		gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
     		gui.updateActivePlayer(board.getCurrentPlayer().getID());
@@ -72,6 +72,17 @@ public class LocalGameController<T> implements Controller {
     			gui.updateActivePlayer(board.getCurrentPlayer().getID());
     		} else {
     			gui.displayErrorMessage("There was an error removing your walls");
+    		}
+    	}
+    }
+
+    public void removeWallModified(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if (this.board instanceof ChallengeBoard) {
+    		boolean wallsRemoved = ((ChallengeBoard) board).removeWallsModified(topLeftX, topLeftY, orientation);
+    		if (wallsRemoved) {
+    			// update gui
+    		} else {
+    			gui.displayErrorMessage("You can't remove that wall");
     		}
     	}
     }

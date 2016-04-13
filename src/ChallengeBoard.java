@@ -21,7 +21,7 @@ public class ChallengeBoard extends Board{
     public boolean removeWalls(Position topLeftPosition, PositionWallLocation topLeftBorder, Position coveredPos2, PositionWallLocation pos2Border,
             Position coveredPos3, PositionWallLocation pos3Border, Position coveredPos4, PositionWallLocation pos4Border) {
 
-    	int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID();
+    	/**int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftPosition.getX(), topLeftPosition.getY()).getPlayerID();
     	Player wallOwner = null;
     	if (wallOwnerID != getCurrentPlayer().getID()) {
     		if (wallOwnerID == 1) {
@@ -41,6 +41,50 @@ public class ChallengeBoard extends Board{
             return true;
     	} else {
     		return false;
+    	}**/
+    	return true;
+    }
+
+    public boolean removeWallsModified(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
+    		int wallOwnerID = wallOwnershipRecords.getRecordByCoordinates(topLeftX, topLeftY).getPlayerID();
+        	Player wallOwner = null;
+        	if (wallOwnerID != getCurrentPlayer().getID()) {
+        		if (wallOwnerID == 1) {
+        			wallOwner = getPlayer1();
+        		} else if (wallOwnerID == 2) {
+        			wallOwner = getPlayer2();
+        		}
+        		Position topLeft = getPosition(topLeftX, topLeftY);
+        		removeWallsFromPosition(topLeft, orientation);
+        		wallOwner.incrementWallCount();
+        		getCurrentPlayer().incrementWallCount();
+        		switchPlayer();
+        		return true;
+        	} else {
+        		return false;
+        	}
+    	} else {
+    		return false;
+    	}
+    }
+
+    private void removeWallsFromPosition(Position topLeft, WallPlacement orientation) {
+    	Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
+  	   	Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
+  	   	Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
+    	if (orientation == WallPlacement.VERTICAL) {
+    		topLeft.setHasRightWall(false);
+    		wallOwnershipRecords.removeRecord(topLeft, orientation);
+    		topRight.setHasLeftWall(false);
+    		bottomRight.setHasLeftWall(false);
+    		bottomLeft.setHasRightWall(false);
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		topLeft.setHasBottomWall(false);
+    		wallOwnershipRecords.removeRecord(topLeft, orientation);
+    		topRight.setHasBottomWall(false);
+    		bottomRight.setHasTopWall(false);
+    		bottomLeft.setHasTopWall(false);
     	}
     }
 
@@ -142,31 +186,6 @@ public class ChallengeBoard extends Board{
             }
     }
             return false;
-    }
-
-    private void removeWallFromPosition(Position position, PositionWallLocation location) {
-    	/**switch (location) {
-	    	case LEFT: {
-	    		position.setHasLeftWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case RIGHT: {
-	    		position.setHasRightWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case TOP: {
-	    		position.setHasTopWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-	    	case BOTTOM: {
-	    		position.setHasBottomWall(false);
-	    		wallOwnershipRecords.removeRecord(position, location);
-	    		break;
-	    	}
-    	}**/
     }
 
     private void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
