@@ -50,11 +50,6 @@ public class StandardBoard extends Board{
         		Position bottomRight = positions[topLeftY + 1][topLeftX + 1];
         		Position bottomLeft = positions[topLeftY + 1][topLeftX];
 
-        		System.out.println("TOP LEFT: " + topLeft.getX() + ", " + topLeft.getY() + " " + topLeft.hasRightWall());
-        		System.out.println("TOP RIGHT: " + topRight.getX() + ", " + topRight.getY() + " " + topRight.hasLeftWall());
-        		System.out.println("BOTTOM RIGHT: " + bottomRight.getX() + ", " + bottomRight.getY() + " " + bottomRight.hasLeftWall());
-        		System.out.println("BOTTOM LEFT: " + bottomLeft.getX() + ", " + bottomLeft.getY() + " " + bottomLeft.hasLeftWall());
-
         		if (orientation == WallPlacement.VERTICAL) {
         			topLeft.setHasRightWall(true);
         			addWalledOffPosition(topLeft);
@@ -64,15 +59,20 @@ public class StandardBoard extends Board{
         			addWalledOffPosition(bottomRight);
         			bottomLeft.setHasRightWall(true);
         			addWalledOffPosition(bottomLeft);
-
-        			currentPlayer.incrementMoveCount();
-        			currentPlayer.decrementWallCount();
-        			switchPlayer();
+        		} else if (orientation == WallPlacement.HORIZONTAL) {
+        			topLeft.setHasBottomWall(true);
+        			addWalledOffPosition(topLeft);
+        			topRight.setHasBottomWall(true);
+        			addWalledOffPosition(topRight);
+        			bottomRight.setHasTopWall(true);
+        			addWalledOffPosition(bottomRight);
+        			bottomLeft.setHasTopWall(true);
+        			addWalledOffPosition(bottomLeft);
         		}
-        		System.out.println("TOP LEFT: " + topLeft.getX() + ", " + topLeft.getY() + " " + topLeft.hasRightWall());
-        		System.out.println("TOP RIGHT: " + topRight.getX() + ", " + topRight.getY() + " " + topRight.hasLeftWall());
-        		System.out.println("BOTTOM RIGHT: " + bottomRight.getX() + ", " + bottomRight.getY() + " " + bottomRight.hasLeftWall());
-        		System.out.println("BOTTOM LEFT: " + bottomLeft.getX() + ", " + bottomLeft.getY() + " " + bottomLeft.hasLeftWall());
+
+    			currentPlayer.incrementMoveCount();
+    			currentPlayer.decrementWallCount();
+    			switchPlayer();
         	} else {
         		throw new IllegalStateException("Move is invalid");
         	}
@@ -226,10 +226,6 @@ public class StandardBoard extends Board{
 		boolean isValid = true;
 
 		if (orientation == WallPlacement.VERTICAL) {
-			System.out.println("RIGHT: " + topLeft.hasRightWall());
-			System.out.println("LEFT: " + topLeft.hasLeftWall());
-			System.out.println("TOP: " + topLeft.hasTopWall());
-			System.out.println("BOTTOM: " + topLeft.hasBottomWall());
 			if (topLeft.hasRightWall()) {
 				isValid = false;
 			}
@@ -243,7 +239,18 @@ public class StandardBoard extends Board{
 				isValid = false;
 			}
 		} else if (orientation == WallPlacement.HORIZONTAL) {
-			// TODO
+			if (topLeft.hasBottomWall()) {
+				isValid = false;
+			}
+			if (topLeft.getX() == 8) {
+				isValid = false;
+			}
+			else if (positions[topLeft.getY()][topLeft.getX() + 1].hasBottomWall()) {
+				isValid = false;
+			}
+			if (topLeft.hasRightWall() && positions[topLeft.getY() + 1][topLeft.getX()].hasRightWall()) {
+				isValid = false;
+			}
 		} else {
 			isValid = false;
 		}
