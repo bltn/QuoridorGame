@@ -277,6 +277,12 @@ public class LocalBoardGUI extends Application implements GUI {
 	    		grids[bottomY][bottomX].setFill(Color.GREEN);
 	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
     		}
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			((LocalGameController) controller).removeWall((topX / 2), (topY / 2), WallPlacement.VERTICAL);
+        		}
+        	});
     	} else if (orientation == WallPlacement.HORIZONTAL) {
     		int leftX = topLeftX * 2;
     		int leftY = ((topLeftY * 2) + 1);
@@ -294,6 +300,12 @@ public class LocalBoardGUI extends Application implements GUI {
 	    		grids[rightY][rightX].setFill(Color.GREEN);
 	    		grids[rightY][rightX].setStroke(Color.GREEN);
     		}
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			((LocalGameController) controller).removeWall((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL);
+        		}
+        	});
     	}
     }
 
@@ -515,12 +527,6 @@ public class LocalBoardGUI extends Application implements GUI {
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
         ((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
-        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-    		@Override
-    		public void handle(MouseEvent event) {
-				((LocalGameController) controller).removeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
-    		}
-    	});
     }
 
     private void placeWideWall(int x, int y) {
@@ -528,11 +534,5 @@ public class LocalBoardGUI extends Application implements GUI {
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
     	((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
-    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-    		@Override
-    		public void handle(MouseEvent event) {
-    			((LocalGameController) controller).removeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
-    		}
-    	});
     }
 }
