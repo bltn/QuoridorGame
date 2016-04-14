@@ -259,37 +259,89 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
-    /**
-     * Method the controller calls to place a wall in the GUI
-     */
-    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
-    	x *= 2;
-    	y *= 2;
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
 
-    	switch(relativeLocation) {
-	    	case LEFT: {
-	            x -= 1;
-	            break;
-	        }
-	        case RIGHT: {
-	            x += 1;
-	            break;
-	        }
-	        case TOP: {
-	            y -= 1;
-	            break;
-	        }
-	        case BOTTOM: {
-	            y += 1;
-	            break;
-	        }
+    		if (playerID == 1) {
+	    		grids[topY][topX].setFill(Color.ORANGE);
+	    		grids[topY][topX].setStroke(Color.ORANGE);
+	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
+	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[topY][topX].setFill(Color.GREEN);
+	    		grids[topY][topX].setStroke(Color.GREEN);
+	    		grids[bottomY][bottomX].setFill(Color.GREEN);
+	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
+    		}
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			controller.removeWall((topX / 2), (topY / 2), WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
+        		}
+        	});
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+    		if (playerID == 1) {
+    			grids[leftY][leftX].setFill(Color.ORANGE);
+	    		grids[leftY][leftX].setStroke(Color.ORANGE);
+	    		grids[rightY][rightX].setFill(Color.ORANGE);
+	    		grids[rightY][rightX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[leftY][leftX].setFill(Color.GREEN);
+	    		grids[leftY][leftX].setStroke(Color.GREEN);
+	    		grids[rightY][rightX].setFill(Color.GREEN);
+	    		grids[rightY][rightX].setStroke(Color.GREEN);
+    		}
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			controller.removeWall((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
+        		}
+        	});
     	}
-    	if (playerID == 1) {
-    		grids[y][x].setFill(Color.ORANGE);
-    		grids[y][x].setStroke(Color.ORANGE);
-    	} else if (playerID == 2) {
-    		grids[y][x].setFill(Color.GREEN);
-    		grids[y][x].setStroke(Color.GREEN);
+    }
+
+    public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+			grids[topY][topX].setFill(Color.GREY);
+    		grids[topY][topX].setStroke(Color.GREY);
+    		grids[bottomY][bottomX].setFill(Color.GREY);
+    		grids[bottomY][bottomX].setStroke(Color.GREY);
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(topX, topY);
+                }
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+			grids[leftY][leftX].setFill(Color.GREY);
+    		grids[leftY][leftX].setStroke(Color.GREY);
+    		grids[rightY][rightX].setFill(Color.GREY);
+    		grids[rightY][rightX].setStroke(Color.GREY);
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(leftX, leftY);
+                }
+            });
     	}
     }
 
@@ -426,7 +478,7 @@ public class LocalBoardGUI extends Application implements GUI {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = x / 2;
                 int nineByNineY = y / 2;
-            	controller.movePawn(nineByNineX, nineByNineY);
+            	controller.movePawn(nineByNineX, nineByNineY, controller.getCurrentPlayer().getID());
             }
         });
     }
@@ -474,47 +526,13 @@ public class LocalBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-    	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-    		@Override
-    		public void handle(MouseEvent event) {
-				controller.removeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-    		}
-    	});
+        controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
     }
 
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-    	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-    		@Override
-    		public void handle(MouseEvent event) {
-				controller.removeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-    		}
-    	});
+    	controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
     }
 }

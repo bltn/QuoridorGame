@@ -50,18 +50,12 @@ public class ClientSocketIOThread extends Thread {
 		}
 	}
 
-	public void sendWallRemovalListenerSignal(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border,
-			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
-
-		out.println("removal-signal " + pos1X + " " + pos1Y + " " + pos1Border + " " + pos2X + " " + pos2Y + " " + pos2Border + " " + pos3X + " " + pos3Y + " " + pos3Border + " " + pos4X + " " + pos4Y + " " + pos4Border);
-	}
-
 	public void sendAvailableMove(int x, int y) {
 		out.println("highlight " + x + " " + y);
 	}
 
-	public void sendRemoveWallDisplay(int x, int y, PositionWallLocation relativeBorder) {
-		out.println("remove-wall-display " + x + " " + y + " " + relativeBorder);
+	public void sendRemoveWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
+		out.println("remove-wall-display " + topLeftX + " " + topLeftY + " " + orientation);
 	}
 
 	public void sendMessage(String message) {
@@ -76,8 +70,8 @@ public class ClientSocketIOThread extends Thread {
 		out.println("pawn " + x + " " + y + " " + playerID);
 	}
 
-	public void sendWallUpdate(int x, int y, PositionWallLocation border, int playerID) {
-		out.println("wall " + x + " " + y + " " + border + " " + playerID);
+	public void sendWallUpdate(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+		out.println("wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
 	}
 
 	public void sendResetWalls() {
@@ -125,34 +119,16 @@ public class ClientSocketIOThread extends Thread {
     private void removeWall(String[] commands) {
     	int topLeftX = Integer.parseInt(commands[1]);
         int topLeftY = Integer.parseInt(commands[2]);
-        PositionWallLocation topLeftBorder = PositionWallLocation.valueOf(commands[3]);
-        int pos2X = Integer.parseInt(commands[4]);
-        int pos2Y = Integer.parseInt(commands[5]);
-        PositionWallLocation pos2Border = PositionWallLocation.valueOf(commands[6]);
-        int pos3X = Integer.parseInt(commands[7]);
-        int pos3Y = Integer.parseInt(commands[8]);
-        PositionWallLocation pos3Border = PositionWallLocation.valueOf(commands[9]);
-        int pos4X = Integer.parseInt(commands[10]);
-        int pos4Y = Integer.parseInt(commands[11]);
-        PositionWallLocation pos4Border = PositionWallLocation.valueOf(commands[12]);
-        int playerID = Integer.parseInt(commands[13]);
-        controller.removeWall(topLeftX, topLeftY, topLeftBorder, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border, pos4X, pos4Y, pos4Border, playerID);
+        WallPlacement orientation = WallPlacement.valueOf(commands[3]);
+        int playerID = Integer.parseInt(commands[4]);
+        controller.removeWall(topLeftX, topLeftY, orientation, playerID);
     }
 
     private void placeWall(String[] commands) {
         int topLeftX = Integer.parseInt(commands[1]);
         int topLeftY = Integer.parseInt(commands[2]);
-        PositionWallLocation border1 = PositionWallLocation.valueOf(commands[3]);
-        int bottomLeftX = Integer.parseInt(commands[4]);
-        int bottomLeftY = Integer.parseInt(commands[5]);
-        PositionWallLocation border2 = PositionWallLocation.valueOf(commands[6]);
-        int topRightX = Integer.parseInt(commands[7]);
-        int topRightY = Integer.parseInt(commands[8]);
-        PositionWallLocation border3 = PositionWallLocation.valueOf(commands[9]);
-        int bottomRightX = Integer.parseInt(commands[10]);
-        int bottomRightY = Integer.parseInt(commands[11]);
-        PositionWallLocation border4 = PositionWallLocation.valueOf(commands[12]);
-        int playerID = Integer.parseInt(commands[13]);
-        controller.placeWall(topLeftX, topLeftY, border1, bottomLeftX, bottomLeftY, border2, topRightX, topRightY, border3, bottomRightX, bottomRightY, border4, playerID);
+        WallPlacement orientation = WallPlacement.valueOf(commands[3]);
+        int playerID = Integer.parseInt(commands[4]);
+        controller.placeWall(topLeftX, topLeftY, orientation, playerID);
     }
 }

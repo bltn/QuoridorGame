@@ -3,25 +3,25 @@ public class WallOwnershipRecord {
 
 	private int playerID;
 
-	private Position coveredPos;
-	private PositionWallLocation posBorder;
+	private Position topLeftCoveredPos;
+	private WallPlacement orientation;
 
-	public WallOwnershipRecord(int playerID, Position coveredPos, PositionWallLocation posBorder) {
+	public WallOwnershipRecord(int playerID, Position topLeftCoveredPos, WallPlacement orientation) {
 		this.playerID = playerID;
 
-		this.coveredPos = coveredPos;
-		this.posBorder = posBorder;
+		this.topLeftCoveredPos = topLeftCoveredPos;
+		this.orientation = orientation;
 	}
 
 	public int getPlayerID() {
 		return this.playerID;
 	}
 
-	public Position getCoveredPosition() {
-		return this.coveredPos;
+	public Position getTopLeftCoveredPosition() {
+		return this.topLeftCoveredPos;
 	}
 
-	public PositionWallLocation getPositionBorderValue() {
-		return this.posBorder;
+	public WallPlacement getWallOrientation() {
+		return this.orientation;
 	}
 }
