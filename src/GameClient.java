@@ -76,11 +76,8 @@ public class GameClient extends Thread {
 		out.println("move " + x + " " + y + " " + playerID);
 	}
 
-	public void sendWallMove(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
-			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
-
-		out.println("wall " + topLeftX + " " + topLeftY + " " + topLeftBorder + " " + pos2X + " " + pos2Y + " " + pos2Border + " " + pos3X + " " +
-			pos3Y + " " + pos3Border + " " + pos4X + " " + pos4Y + " " + pos4Border + " " + playerID);
+	public void sendWallMove(int topLeftX, int topLeftY, WallPlacement orientation) {
+		out.println("wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
 	}
 
 	public void sendWallRemoval(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
@@ -192,11 +189,11 @@ public class GameClient extends Thread {
 	}
 
     private void updateWallPosition(String[] commands) {
-        int x = Integer.parseInt(commands[1]);
-        int y = Integer.parseInt(commands[2]);
-        PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
+        int topLeftX = Integer.parseInt(commands[1]);
+        int topLeftY = Integer.parseInt(commands[2]);
+        WallPlacement orientation = WallPlacement.valueOf(commands[3]);
         int playerID = Integer.parseInt(commands[4]);
-        gui.displayWall(x, y, border, playerID);
+        gui.displayWall(topLeftX, topLeftY, orientation, playerID);
     }
 
     private void displayErrorMessage(String[] commands) {

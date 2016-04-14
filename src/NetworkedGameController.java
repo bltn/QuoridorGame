@@ -41,12 +41,7 @@ public class NetworkedGameController implements Controller {
     	}
 	}
 
-	@Override
-	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
-			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
-			int pos4y, PositionWallLocation pos4Border) {/*Method not implemented; player ID required. See below.*/}
-
-	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
+	/**public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
 			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
 			int pos4y, PositionWallLocation pos4Border, int playerID) {
 
@@ -74,6 +69,19 @@ public class NetworkedGameController implements Controller {
 			}
 			else if (playerID == 2) {
 				player2IO.sendErrorMessage("It isn't your turn.");
+			}
+		}
+	}**/
+
+	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+		try {
+			board.placeWalls(topLeftX, topLeftY, orientation);
+			sendWallUpdate(topLeftX, topLeftY, orientation);
+		} catch (IllegalStateException e) {
+			if (playerID == 1) {
+				player1IO.sendErrorMessage(e.getMessage());
+			} else if (playerID == 2) {
+				player2IO.sendErrorMessage(e.getMessage());
 			}
 		}
 	}
@@ -129,14 +137,10 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
-	@Override
-	public void removeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
-			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {/*STUB*/}
-
 	public void removeWall (int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border,
 			int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border, int playerID) {
 
-		if (this.board instanceof ChallengeBoard) {
+		/**if (this.board instanceof ChallengeBoard) {
 			Position coveredPos1 = board.getPosition(topLeftX, topLeftY);
     		Position coveredPos2 = board.getPosition(pos2X, pos2Y);
         	Position coveredPos3 = board.getPosition(pos3X, pos3Y);
@@ -148,7 +152,7 @@ public class NetworkedGameController implements Controller {
         		player1IO.sendErrorMessage("Could not remove the walls");
         		player2IO.sendErrorMessage("Could not remove the walls");
         	}
-		}
+		}**/
 	}
 
 	private void sendWallRemovalUpdate(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2X, int pos2Y, PositionWallLocation pos2Border, int pos3X, int pos3Y, PositionWallLocation pos3Border,
@@ -177,23 +181,12 @@ public class NetworkedGameController implements Controller {
         player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
 	}
 
-	private void sendWallUpdate(Position coveredPos1, Position coveredPos2, Position coveredPos3, Position coveredPos4,
-                                PositionWallLocation pos1Border, PositionWallLocation pos2Border,
-                                PositionWallLocation pos3Border, PositionWallLocation pos4Border) {
-        Player prevPlayer = board.getPreviousPlayer();
+	private void sendWallUpdate(int topLeftX, int topLeftY, WallPlacement orientation) {
+        player1IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
+        player2IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
 
-        player1IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border, prevPlayer.getID());
-        player1IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border, prevPlayer.getID());
-        player1IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border, prevPlayer.getID());
-        player1IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border, prevPlayer.getID());
-
-        player2IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border, prevPlayer.getID());
-        player2IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border, prevPlayer.getID());
-        player2IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border, prevPlayer.getID());
-        player2IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border, prevPlayer.getID());
-
-        player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-        player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+        player1IO.sendStatsUpdate(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
+        player2IO.sendStatsUpdate(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
 
         player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
         player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
@@ -236,5 +229,25 @@ public class NetworkedGameController implements Controller {
 	@Override
 	public void resetGame() {
 		// TODO stub
+	}
+
+	@Override
+	public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2x, int pos2y,
+			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
+			int pos4y, PositionWallLocation pos4Border) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
+		// TODO Auto-generated method stub
+
 	}
 }

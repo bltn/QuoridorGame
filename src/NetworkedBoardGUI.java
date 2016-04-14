@@ -451,13 +451,52 @@ public class NetworkedBoardGUI extends Application implements GUI {
         PositionWallLocation left = PositionWallLocation.LEFT;
         PositionWallLocation right = PositionWallLocation.RIGHT;
 
-        client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
+        /**client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
         	@Override
         	public void handle(MouseEvent event) {
         		client.sendWallRemoval(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
         	}
-        });
+        });**/
+        client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
+    }
+
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+    		if (playerID == 1) {
+	    		grids[topY][topX].setFill(Color.ORANGE);
+	    		grids[topY][topX].setStroke(Color.ORANGE);
+	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
+	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[topY][topX].setFill(Color.GREEN);
+	    		grids[topY][topX].setStroke(Color.GREEN);
+	    		grids[bottomY][bottomX].setFill(Color.GREEN);
+	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
+    		}
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+    		if (playerID == 1) {
+    			grids[leftY][leftX].setFill(Color.ORANGE);
+	    		grids[leftY][leftX].setStroke(Color.ORANGE);
+	    		grids[rightY][rightX].setFill(Color.ORANGE);
+	    		grids[rightY][rightX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[leftY][leftX].setFill(Color.GREEN);
+	    		grids[leftY][leftX].setStroke(Color.GREEN);
+	    		grids[rightY][rightX].setFill(Color.GREEN);
+	    		grids[rightY][rightX].setStroke(Color.GREEN);
+    		}
+    	}
     }
 
     public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
@@ -508,7 +547,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
         PositionWallLocation top = PositionWallLocation.TOP;
         PositionWallLocation bottom = PositionWallLocation.BOTTOM;
 
-        client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        //client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     }
 
 	@Override
