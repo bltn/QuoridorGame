@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Khadija Patel
  */
 
-public class StandardBoard extends Board{
+public class StandardBoard extends Board {
 
     public StandardBoard() {
             super("Standard");

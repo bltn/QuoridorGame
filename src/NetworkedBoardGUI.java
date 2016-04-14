@@ -60,13 +60,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
-    private boolean drawing;
-
     private Text assignedIDText;
 
     private GameClient client;
-
-    private Controller controller;
 
     /**
      * Constructor for objects of class BoardGUI
@@ -81,7 +77,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
-        drawing = true;
         player1Moves = new Text("Moves: " + 0);
         currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
@@ -92,40 +87,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
         errorPaneText = new Text("");
     }
 
-    public void addWallRemovalListener(int pos1X, int pos1Y, PositionWallLocation pos1Border, int pos2X, int pos2Y, PositionWallLocation pos2Border,
-    		int pos3X, int pos3Y, PositionWallLocation pos3Border, int pos4X, int pos4Y, PositionWallLocation pos4Border) {
-
-    	int x = pos1X * 2;
-    	int y = pos1Y * 2;
-
-    	switch (pos1Border) {
-	        case LEFT: {
-	            x -= 1;
-	            break;
-	        }
-	        case RIGHT: {
-	            x += 1;
-	            break;
-	        }
-	        case TOP: {
-	            y -= 1;
-	            break;
-	        }
-	        case BOTTOM: {
-	            y += 1;
-	            break;
-	        }
-    	}
-    	grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-    		@Override
-    		public void handle(MouseEvent event) {
-        		client.sendWallRemoval(pos1X, pos1Y, pos1Border, pos2X, pos2Y, pos2Border, pos3X, pos3Y, pos3Border, pos4X, pos4Y, pos4Border);
-    		}
-    	});
-    }
-
     public void setController(Controller controller) {
-    	this.controller = controller;
     }
 
     public void setClient(GameClient client) {
@@ -360,6 +322,105 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     }
 
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+    		if (playerID == 1) {
+	    		grids[topY][topX].setFill(Color.ORANGE);
+	    		grids[topY][topX].setStroke(Color.ORANGE);
+	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
+	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[topY][topX].setFill(Color.GREEN);
+	    		grids[topY][topX].setStroke(Color.GREEN);
+	    		grids[bottomY][bottomX].setFill(Color.GREEN);
+	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
+    		}
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            	@Override
+            	public void handle(MouseEvent event) {
+            		client.sendWallRemoval((topX / 2), (topY / 2), WallPlacement.VERTICAL);
+            	}
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+    		if (playerID == 1) {
+    			grids[leftY][leftX].setFill(Color.ORANGE);
+	    		grids[leftY][leftX].setStroke(Color.ORANGE);
+	    		grids[rightY][rightX].setFill(Color.ORANGE);
+	    		grids[rightY][rightX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[leftY][leftX].setFill(Color.GREEN);
+	    		grids[leftY][leftX].setStroke(Color.GREEN);
+	    		grids[rightY][rightX].setFill(Color.GREEN);
+	    		grids[rightY][rightX].setStroke(Color.GREEN);
+    		}
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            	@Override
+            	public void handle(MouseEvent event) {
+            		client.sendWallRemoval((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL);
+            	}
+            });
+    	}
+    }
+
+    public void displayErrorMessage(String message) {
+    	errorPaneText.setText(message);
+    	new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        errorPaneText.setText("");
+                    }
+                },
+                1000
+        );
+    }
+
+    public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+			grids[topY][topX].setFill(Color.GREY);
+    		grids[topY][topX].setStroke(Color.GREY);
+    		grids[bottomY][bottomX].setFill(Color.GREY);
+    		grids[bottomY][bottomX].setStroke(Color.GREY);
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(topX, topY);
+                }
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+			grids[leftY][leftX].setFill(Color.GREY);
+    		grids[leftY][leftX].setStroke(Color.GREY);
+    		grids[rightY][rightX].setFill(Color.GREY);
+    		grids[rightY][rightX].setStroke(Color.GREY);
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(leftX, leftY);
+                }
+            });
+    	}
+    }
+
     /**
      * Set the occupiable positions
      * @param x
@@ -381,19 +442,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
             	client.sendMove(nineByNineX, nineByNineY);
             }
         });
-    }
-
-    public void displayErrorMessage(String message) {
-    	errorPaneText.setText(message);
-    	new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        errorPaneText.setText("");
-                    }
-                },
-                1000
-        );
     }
 
     private void initialiseWideWall(int x, int y) {
@@ -439,150 +487,13 @@ public class NetworkedBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-
-        /**client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-        	@Override
-        	public void handle(MouseEvent event) {
-        		client.sendWallRemoval(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        	}
-        });**/
         client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
-    }
-
-    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
-    	if (orientation == WallPlacement.VERTICAL) {
-    		int topX = ((topLeftX * 2) + 1);
-    		int topY = topLeftY * 2;
-    		int bottomX = topX;
-    		int bottomY = topY + 2;
-
-    		if (playerID == 1) {
-	    		grids[topY][topX].setFill(Color.ORANGE);
-	    		grids[topY][topX].setStroke(Color.ORANGE);
-	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
-	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
-    		} else if (playerID == 2) {
-    			grids[topY][topX].setFill(Color.GREEN);
-	    		grids[topY][topX].setStroke(Color.GREEN);
-	    		grids[bottomY][bottomX].setFill(Color.GREEN);
-	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
-    		}
-    	} else if (orientation == WallPlacement.HORIZONTAL) {
-    		int leftX = topLeftX * 2;
-    		int leftY = ((topLeftY * 2) + 1);
-    		int rightX = leftX + 2;
-    		int rightY = leftY;
-
-    		if (playerID == 1) {
-    			grids[leftY][leftX].setFill(Color.ORANGE);
-	    		grids[leftY][leftX].setStroke(Color.ORANGE);
-	    		grids[rightY][rightX].setFill(Color.ORANGE);
-	    		grids[rightY][rightX].setStroke(Color.ORANGE);
-    		} else if (playerID == 2) {
-    			grids[leftY][leftX].setFill(Color.GREEN);
-	    		grids[leftY][leftX].setStroke(Color.GREEN);
-	    		grids[rightY][rightX].setFill(Color.GREEN);
-	    		grids[rightY][rightX].setStroke(Color.GREEN);
-    		}
-    	}
-    }
-
-    public void displayWall(int x, int y, PositionWallLocation relativeLocation, int playerID) {
-    	x *= 2;
-    	y *= 2;
-
-        switch (relativeLocation) {
-            case LEFT: {
-                x -= 1;
-                break;
-            }
-            case RIGHT: {
-                x += 1;
-                break;
-            }
-            case TOP: {
-                y -= 1;
-                break;
-            }
-            case BOTTOM: {
-                y += 1;
-                break;
-            }
-        }
-
-        if (playerID == 1) {
-        	grids[y][x].setFill(Color.ORANGE);
-        	grids[y][x].setStroke(Color.ORANGE);
-        } else if (playerID == 2) {
-        	grids[y][x].setFill(Color.GREEN);
-        	grids[y][x].setStroke(Color.GREEN);
-        }
     }
 
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-
-        //client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
         client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     }
-
-	@Override
-	public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation) {
-		x *= 2;
-    	y *= 2;
-
-        switch (relativeLocation) {
-            case LEFT: {
-                x -= 1;
-                break;
-            }
-            case RIGHT: {
-                x += 1;
-                break;
-            }
-            case TOP: {
-                y -= 1;
-                break;
-            }
-            case BOTTOM: {
-                y += 1;
-                break;
-            }
-        }
-        grids[y][x].setFill(Color.GREY);
-        grids[y][x].setStroke(Color.GREY);
-        final int innerX = x;
-        final int innerY = y;
-        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                placeWall(innerX, innerY);
-            }
-        });
-	}
 }

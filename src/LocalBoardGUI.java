@@ -280,7 +280,7 @@ public class LocalBoardGUI extends Application implements GUI {
     		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
-        			((LocalGameController) controller).removeWall((topX / 2), (topY / 2), WallPlacement.VERTICAL);
+        			controller.removeWall((topX / 2), (topY / 2), WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
         		}
         	});
     	} else if (orientation == WallPlacement.HORIZONTAL) {
@@ -303,7 +303,7 @@ public class LocalBoardGUI extends Application implements GUI {
     		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
-        			((LocalGameController) controller).removeWall((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL);
+        			controller.removeWall((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
         		}
         	});
     	}
@@ -478,7 +478,7 @@ public class LocalBoardGUI extends Application implements GUI {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
                 int nineByNineX = x / 2;
                 int nineByNineY = y / 2;
-            	controller.movePawn(nineByNineX, nineByNineY);
+            	controller.movePawn(nineByNineX, nineByNineY, controller.getCurrentPlayer().getID());
             }
         });
     }
@@ -526,13 +526,13 @@ public class LocalBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        ((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
+        controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
     }
 
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-    	((LocalGameController) controller).placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
+    	controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
     }
 }

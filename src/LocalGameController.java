@@ -40,7 +40,7 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
+    public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	try {
     		board.placeWalls(topLeftX, topLeftY, orientation);
     		gui.displayWall(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
@@ -52,7 +52,7 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation) {
+    public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	if (this.board instanceof ChallengeBoard) {
     		boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(topLeftX, topLeftY, orientation);
     		if (wallsRemoved) {
@@ -66,7 +66,7 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
-    public void movePawn(int posX, int posY) {
+    public void movePawn(int posX, int posY, int playerID) {
     	try {
     		boolean gameOver = board.movePawn(posX, posY);
 			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
@@ -111,13 +111,5 @@ public class LocalGameController<T> implements Controller {
 	@Override
 	public int getPlayer2Y() {
 		return board.getPlayer2().getPosition().getY();
-	}
-
-	@Override
-	public void placeWall(int topLeftX, int topLeftY, PositionWallLocation topLeftBorder, int pos2x, int pos2y,
-			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
-			int pos4y, PositionWallLocation pos4Border) {
-		// TODO Auto-generated method stub
-
 	}
 }
