@@ -41,31 +41,19 @@ public class NetworkedGameController implements Controller {
     	}
 	}
 
-	@Override
-	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
-			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
-			int pos4y, PositionWallLocation pos4Border) {/*Method not implemented; player ID required. See below.*/}
-
-	public void placeWall(int pos1x, int pos1y, PositionWallLocation pos1Border, int pos2x, int pos2y,
-			PositionWallLocation pos2Border, int pos3x, int pos3y, PositionWallLocation pos3Border, int pos4x,
-			int pos4y, PositionWallLocation pos4Border, int playerID) {
-		if (playerID == board.getCurrentPlayer().getID()) {
-			Position coveredPos1 = board.getPosition(pos1x, pos1y);
-			Position coveredPos2 = board.getPosition(pos2x, pos2y);
-			Position coveredPos3 = board.getPosition(pos3x, pos3y);
-			Position coveredPos4 = board.getPosition(pos4x, pos4y);
+	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+		if (board.getCurrentPlayer().getID() == playerID) {
 			try {
-                sendWallUpdate(coveredPos1, coveredPos2, coveredPos3, coveredPos4, pos1Border, pos2Border, pos3Border, pos4Border);
+				board.placeWalls(topLeftX, topLeftY, orientation);
+				sendWallUpdate(topLeftX, topLeftY, orientation);
 			} catch (IllegalStateException e) {
 				if (playerID == 1) {
 					player1IO.sendErrorMessage(e.getMessage());
-				}
-				else if (playerID == 2) {
+				} else if (playerID == 2) {
 					player2IO.sendErrorMessage(e.getMessage());
 				}
 			}
-		}
-		else {
+		} else {
 			if (playerID == 1) {
 				player1IO.sendErrorMessage("It isn't your turn.");
 			}
@@ -76,7 +64,24 @@ public class NetworkedGameController implements Controller {
 	}
 
 	@Override
-	public void movePawn(int posX, int posY) {/*Method not implemented; player ID required. See below.*/}
+	public int getPlayer1X() {
+		return board.getPlayer1().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer1Y() {
+		return board.getPlayer1().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer2X() {
+		return board.getPlayer2().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer2Y() {
+		return board.getPlayer2().getPosition().getY();
+	}
 
 	public void movePawn(int posX, int posY, int playerID) {
 		if (playerID == board.getCurrentPlayer().getID()) {
@@ -85,7 +90,7 @@ public class NetworkedGameController implements Controller {
                 Player prevPlayer = board.getPreviousPlayer();
                 sendPawnUpdate(prevPlayer);
                 if (gameOver) {
-                    sendGUIResetCommands();
+                    resetGame();
                 }
 			} catch (IllegalArgumentException e) {
 				if (playerID == 1) {
@@ -106,38 +111,31 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
-	private void sendWallUpdate(Position coveredPos1, Position coveredPos2, Position coveredPos3, Position coveredPos4,
-                                PositionWallLocation pos1Border, PositionWallLocation pos2Border,
-                                PositionWallLocation pos3Border, PositionWallLocation pos4Border) {
-        board.placeWalls(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4, pos4Border);
-        player1IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
-        player1IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
-        player1IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
-        player1IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
-
-        player2IO.sendWallUpdate(coveredPos1.getX(), coveredPos1.getY(), pos1Border);
-        player2IO.sendWallUpdate(coveredPos2.getX(), coveredPos2.getY(), pos2Border);
-        player2IO.sendWallUpdate(coveredPos3.getX(), coveredPos3.getY(), pos3Border);
-        player2IO.sendWallUpdate(coveredPos4.getX(), coveredPos4.getY(), pos4Border);
-
-        Player prevPlayer = board.getPreviousPlayer();
-        player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-        player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-
-        player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
-        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+	public void removeWall (int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+		if (board.getCurrentPlayer().getID() == playerID) {
+			if (this.board instanceof ChallengeBoard) {
+				boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(topLeftX, topLeftY, orientation);
+				if (wallsRemoved) {
+					sendWallRemovalUpdate(topLeftX, topLeftY, orientation);
+				} else {
+					if (playerID == 1) {
+						player1IO.sendErrorMessage("You can't remove that wall");
+					} else if (playerID == 2) {
+						player2IO.sendErrorMessage("You can't remove that wall");
+					}
+				}
+			}
+		} else {
+			if (playerID == 1) {
+				player1IO.sendErrorMessage("It isn't your turn.");
+			}
+			else if (playerID == 2) {
+				player2IO.sendErrorMessage("It isn't your turn.");
+			}
+		}
 	}
 
-    private void sendPawnUpdate(Player prevPlayer) {
-        player1IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
-        player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-        player2IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
-        player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
-        player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
-        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
-    }
-
-    private void sendGUIResetCommands() {
+	public void resetGame() {
         Player player1 = board.getPlayer1();
         Player player2 = board.getPlayer2();
         // send updates to player 1's GUI
@@ -155,4 +153,40 @@ public class NetworkedGameController implements Controller {
         player2IO.sendResetWalls();
     }
 
+	private void sendWallRemovalUpdate(int topLeftX, int topLeftY, WallPlacement orientation) {
+
+		player1IO.sendRemoveWallDisplay(topLeftX, topLeftY, orientation);
+		player2IO.sendRemoveWallDisplay(topLeftX, topLeftY, orientation);
+
+		Player player1 = board.getPlayer1();
+		Player player2 = board.getPlayer2();
+
+		player1IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), 1);
+		player1IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), 2);
+		player2IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), 1);
+		player2IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), 2);
+
+		player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+	}
+
+	private void sendWallUpdate(int topLeftX, int topLeftY, WallPlacement orientation) {
+        player1IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
+        player2IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
+
+        player1IO.sendStatsUpdate(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
+        player2IO.sendStatsUpdate(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
+
+        player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+	}
+
+    private void sendPawnUpdate(Player prevPlayer) {
+        player1IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
+        player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+        player2IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
+        player2IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
+        player1IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+        player2IO.sendCurrentPlayerGUIUpdate(board.getCurrentPlayer().getID());
+    }
 }

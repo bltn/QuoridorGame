@@ -82,4 +82,8 @@ public class Player
     public boolean startedAtBottom() {
     	return startedAtBottom;
     }
+
+	public void incrementWallCount() {
+		wallCount++;
+	}
 }
