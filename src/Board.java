@@ -44,7 +44,7 @@ public class Board {
 
 	private Player currentPlayer;
 
-	private Utility ult;
+	private Utility ult = new Utility();
 
 	/**
 	 * Constructor for an object of class Board
@@ -145,16 +145,35 @@ public class Board {
 	public void placeWalls(Position coveredPos1, PositionWallLocation pos1Border, Position coveredPos2,
 			PositionWallLocation pos2Border, Position coveredPos3, PositionWallLocation pos3Border,
 			Position coveredPos4, PositionWallLocation pos4Border) {
-
+		/*
 		if (isBlock(coveredPos1, pos1Border, coveredPos2, pos2Border, coveredPos3, pos3Border, coveredPos4,
 				pos4Border)) {
-
+		*/
 			if (currentPlayer.hasWalls()) {
 				assignWall(coveredPos1, pos1Border);
 				assignWall(coveredPos2, pos2Border);
 				assignWall(coveredPos3, pos3Border);
 				assignWall(coveredPos4, pos4Border);
-
+					
+				Position start1 = new Position(player1.getPosition().getX(), player1.getPosition().getY());
+				int goal1 = 8;
+				Position start2 = new Position(player2.getPosition().getX(), player2.getPosition().getY());
+				int goal2 = 0;
+			
+					if(Utility.AstarSearch(positions, start1, goal1) && Utility.AstarSearch(positions, start2, goal2)){
+						
+						System.out.println("success");//
+				
+					} else {
+							//System.out.println("No no no");
+							//System.out.println(Utility.toString(positions));
+							unassignWall(coveredPos1, pos1Border);
+							unassignWall(coveredPos2, pos2Border);						
+							unassignWall(coveredPos3, pos3Border);
+						    unassignWall(coveredPos4, pos4Border);
+						throw new IllegalStateException("Can't block like that");
+					}
+			
 				currentPlayer.decrementWallCount();
 				currentPlayer.incrementMoveCount();
 
@@ -162,11 +181,14 @@ public class Board {
 			} else {
 				throw new IllegalStateException("You have no remaining walls");
 			}
-		} else {
-			//System.out.println("No no no");
-			//System.out.println(Utility.toString(map));
-			throw new IllegalStateException("Can't block like that");
-		}
+			
+		//} else {
+			/*
+			System.out.println("No no no");
+			System.out.println(ult.toString(map));
+			*/
+			//throw new IllegalStateException("Can't block like that");
+		//}
 	}
 
 	private void assignWall(Position position, PositionWallLocation location) {
@@ -188,6 +210,31 @@ public class Board {
 		}
 		case BOTTOM: {
 			position.setHasBottomWall(true);
+			addWalledOffPosition(position);
+			break;
+		}
+		}
+	}
+	
+	private void unassignWall(Position position, PositionWallLocation location) {
+		switch (location) {
+		case LEFT: {
+			position.setHasLeftWall(false);
+			addWalledOffPosition(position);
+			break;
+		}
+		case RIGHT: {
+			position.setHasRightWall(false);
+			addWalledOffPosition(position);
+			break;
+		}
+		case TOP: {
+			position.setHasTopWall(false);
+			addWalledOffPosition(position);
+			break;
+		}
+		case BOTTOM: {
+			position.setHasBottomWall(false);
 			addWalledOffPosition(position);
 			break;
 		}
@@ -323,11 +370,11 @@ public class Board {
 
 		assignMapWall(coveredPos1, pos1Border);
 		
-		Position start1 = new Position(player1.getPosition().getY() * 2 + 1, player2.getPosition().getX() * 2 + 1);
+		Position start1 = new Position(player1.getPosition().getY() * 2 + 1, player1.getPosition().getX() * 2 + 1);
 		int goal1 = 17;
 		Position start2 = new Position(player2.getPosition().getY() * 2 + 1, player2.getPosition().getX() * 2 + 1);
 		int goal2 = 1;
-		if (Utility.BreadthFirstSearch(map, start1, goal1) && Utility.BreadthFirstSearch(map, start2, goal2)) {
+		if (ult.A(map, start1, goal1) && ult.A(map, start2, goal2)) {
 			return true;
 		} else {
 			undoAssignMapWall(coveredPos1, pos1Border);
