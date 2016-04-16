@@ -43,7 +43,7 @@ public class LocalBoardGUI extends Application implements GUI {
     private final HBox player1StatsPane = new HBox(120);
     // player two stats
     private GridPane boardPane;
-    //amount of move the player has make
+    //amount of moves the player has made
     private Text player1Moves;
     private Text currentPlayerText;
     //amount of walls the player has
@@ -54,6 +54,15 @@ public class LocalBoardGUI extends Application implements GUI {
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
+
+    private Text player3Moves;
+    private int player3WallCount;
+    private Text player3Walls;
+
+    private Text player4Moves;
+    private int player4WallCount;
+    private Text player4Walls;
+
     //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
@@ -62,13 +71,15 @@ public class LocalBoardGUI extends Application implements GUI {
     private boolean drawing;
 
     private Controller controller;
+    private int numberOfPlayers;
 
 
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
+     * @param numberOfPlayers
      */
-    public LocalBoardGUI() {
+    public LocalBoardGUI(int numberOfPlayers) {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
@@ -85,7 +96,14 @@ public class LocalBoardGUI extends Application implements GUI {
         player2Moves = new Text("Moves: " + 0);
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
+        player3Moves = new Text("Moves: " + 0);
+        player3WallCount = 10;
+        player3Walls = new Text("Walls: " + player3WallCount);
+        player4Moves = new Text("Moves: " + 0);
+        player4WallCount = 10;
+        player4Walls = new Text("Walls: " + player3WallCount);
         errorPaneText = new Text("");
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void setController(Controller controller) {

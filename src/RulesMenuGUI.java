@@ -86,7 +86,7 @@ public class RulesMenuGUI extends Application {
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override
         	public void handle(ActionEvent event) {
-    			LocalBoardGUI gui = new LocalBoardGUI();
+    			LocalBoardGUI gui = new LocalBoardGUI(2);
             	Board board = new StandardBoard(2);
             	Controller controller = new LocalGameController(gui, board);
             	gui.setController(controller);
@@ -99,7 +99,7 @@ public class RulesMenuGUI extends Application {
         challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-	            LocalBoardGUI gui = new LocalBoardGUI();
+	            LocalBoardGUI gui = new LocalBoardGUI(2);
 	            Board board = new ChallengeBoard(2);
 	            Controller controller = new LocalGameController(gui, board);
 	            gui.setController(controller);
@@ -112,7 +112,7 @@ public class RulesMenuGUI extends Application {
         fourPlayerStandardButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI();
+                LocalBoardGUI gui = new LocalBoardGUI(4);
                 Board board = new StandardBoard(4);
                 Controller controller = new LocalGameController(gui, board);
                 gui.setController(controller);
@@ -124,7 +124,7 @@ public class RulesMenuGUI extends Application {
         fourPlayerChallengeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI();
+                LocalBoardGUI gui = new LocalBoardGUI(4);
                 Board board = new ChallengeBoard(4);
                 Controller controller = new LocalGameController(gui, board);
                 gui.setController(controller);

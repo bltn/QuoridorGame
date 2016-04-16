@@ -21,7 +21,7 @@ public class LocalGameControllerTest extends Application {
 		t.setDaemon(true);
 		t.start();
 		board = new StandardBoard(2);
-		gui = new LocalBoardGUI();
+		gui = new LocalBoardGUI(2);
 		controller = new LocalGameController<>(gui, board);
 		gui.setController(controller);
 	}
