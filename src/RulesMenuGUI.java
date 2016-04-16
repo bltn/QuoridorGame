@@ -31,20 +31,28 @@ public class RulesMenuGUI extends Application {
     private GridPane introPane;
     private Text introText;
     private VBox buttonBox;
+    private HBox standardButtonBox;
+    private HBox challengeButtonBox;
     private Button startButton;
     private Button quitButton;
     private Button multiplayerButton;
     private Button standardButton;
+    private Button fourPlayerStandardButton;
     private Button challengeButton;
+    private Button fourPlayerChallengeButton;
     private Stage primaryStage;
 
     public RulesMenuGUI() {
         introPane = new GridPane();
         introText = new Text("Please pick the set of rules you would like to play with:");
-        buttonBox = new VBox();
+        buttonBox = new VBox(10);
+        standardButtonBox = new HBox(10);
+        challengeButtonBox = new HBox(10);
         quitButton = new Button("Quit");
-        standardButton = new Button("Standard Rules");
-        challengeButton = new Button("Challenge Rules");
+        standardButton = new Button("2P Standard");
+        fourPlayerStandardButton = new Button("4P Standard");
+        challengeButton = new Button("2P Challenge");
+        fourPlayerChallengeButton = new Button("4P Challenge");
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
@@ -77,10 +85,9 @@ public class RulesMenuGUI extends Application {
      */
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
-        buttonBox.setSpacing(10);
-        buttonBox.getChildren().add(standardButton);
-        buttonBox.getChildren().add(challengeButton);
-        buttonBox.getChildren().add(quitButton);
+        standardButtonBox.getChildren().addAll(standardButton, fourPlayerStandardButton);
+        challengeButtonBox.getChildren().addAll(challengeButton, fourPlayerChallengeButton);
+        buttonBox.getChildren().addAll(standardButtonBox, challengeButtonBox, quitButton);
         buttonBox.setAlignment(Pos.CENTER);
         standardButton.setPrefWidth(200);
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -108,6 +115,30 @@ public class RulesMenuGUI extends Application {
 			}
         });
 
+        fourPlayerStandardButton.setPrefWidth(200);
+        fourPlayerStandardButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                LocalBoardGUI gui = new LocalBoardGUI();
+                Board board = new StandardBoard();
+                Controller controller = new LocalGameController(gui, board);
+                gui.setController(controller);
+                gui.start(new Stage());
+                primaryStage.close();
+            }
+        });
+        fourPlayerChallengeButton.setPrefWidth(200);
+        fourPlayerChallengeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                LocalBoardGUI gui = new LocalBoardGUI();
+                Board board = new ChallengeBoard();
+                Controller controller = new LocalGameController(gui, board);
+                gui.setController(controller);
+                gui.start(new Stage());
+                primaryStage.close();
+            }
+        });
         quitButton.setPrefWidth(200);
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
