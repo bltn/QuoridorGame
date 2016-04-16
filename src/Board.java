@@ -224,14 +224,14 @@ public abstract class Board {
                         positions[y][x] = new Position(x, y);
                 }
         }
-        //mark top positions as winners
-        for (int x = 0; x < 9; x++) {
-                positions[0][0].setTopCorner();
-        }
-        //mark bottom positions as winners
-        for (int x = 0; x < 9; x++) {
-                positions[8][8].setBottomCorner();
-        }
+        //mark top left positions as winners
+        positions[0][0].setTopLeftCorner();
+        //mark bottom right positions as winners
+        positions[8][8].setBottomRightCorner();
+        //mark top right positions as winners
+        positions[0][8].setTopRightCorner();
+        //mark bottom left positions as winners
+        positions[8][0].setBottomLeftCorner();
 
         //set the board's top borders (walls)
         for (int x = 0; x < 9; x++) {

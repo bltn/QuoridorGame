@@ -1,6 +1,7 @@
 /**
  *
  * @author Khadija Patel
+ * @author Junaid Rasheed
  */
 
 public class ChallengeBoard extends Board{
@@ -127,7 +128,7 @@ public class ChallengeBoard extends Board{
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                             getPlayer1().setPosition(getPosition(posX, posY));
                             getCurrentPlayer().incrementMoveCount();
-                            if (getPosition(posX, posY).isBottomCorner()) {
+                            if (getPosition(posX, posY).isBottomRightCorner()) {
                                     reset();
                                     return true;
                             }
@@ -147,7 +148,7 @@ public class ChallengeBoard extends Board{
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                             getPlayer2().setPosition(getPosition(posX, posY));
                             getCurrentPlayer().incrementMoveCount();
-                            if (getPosition(posX, posY).isTopCorner()) {
+                            if (getPosition(posX, posY).isTopLeftCorner()) {
                                     reset();
                                     return true;
                             }
