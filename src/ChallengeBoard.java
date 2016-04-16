@@ -279,6 +279,14 @@ public class ChallengeBoard extends Board{
         getPlayer2().setWallCount(10);
         getPlayer1().setPosition(getPosition(0, 0));
         getPlayer2().setPosition(getPosition(8, 8));
+        if (getPlayer3() != null) {
+            getPlayer3().setMoveCount(0);
+            getPlayer4().setMoveCount(0);
+            getPlayer3().setWallCount(10);
+            getPlayer4().setWallCount(10);
+            getPlayer3().setPosition(getPosition(0, 8));
+            getPlayer4().setPosition(getPosition(8, 0));
+        }
         setCurrentPlayer(getPlayer1());
         resetWalledOffPositions();
     }
