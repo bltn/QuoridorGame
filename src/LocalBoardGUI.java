@@ -325,7 +325,17 @@ public class LocalBoardGUI extends Application implements GUI {
 	    		grids[topY][topX].setStroke(Color.GREEN);
 	    		grids[bottomY][bottomX].setFill(Color.GREEN);
 	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
-    		}
+    		} else if (playerID == 3) {
+                grids[topY][topX].setFill(Color.BLUE);
+                grids[topY][topX].setStroke(Color.BLUE);
+                grids[bottomY][bottomX].setFill(Color.BLUE);
+                grids[bottomY][bottomX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[topY][topX].setFill(Color.RED);
+                grids[topY][topX].setStroke(Color.RED);
+                grids[bottomY][bottomX].setFill(Color.RED);
+                grids[bottomY][bottomX].setStroke(Color.RED);
+            }
     		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
@@ -348,7 +358,17 @@ public class LocalBoardGUI extends Application implements GUI {
 	    		grids[leftY][leftX].setStroke(Color.GREEN);
 	    		grids[rightY][rightX].setFill(Color.GREEN);
 	    		grids[rightY][rightX].setStroke(Color.GREEN);
-    		}
+            } else if (playerID == 3) {
+                grids[leftY][leftX].setFill(Color.BLUE);
+                grids[leftY][leftX].setStroke(Color.BLUE);
+                grids[rightY][rightX].setFill(Color.BLUE);
+                grids[rightY][rightX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[leftY][leftX].setFill(Color.RED);
+                grids[leftY][leftX].setStroke(Color.RED);
+                grids[rightY][rightX].setFill(Color.RED);
+                grids[rightY][rightX].setStroke(Color.RED);
+            }
     		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
         		@Override
         		public void handle(MouseEvent event) {
