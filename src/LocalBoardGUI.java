@@ -70,6 +70,8 @@ public class LocalBoardGUI extends Application implements GUI {
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
+    private Circle thirdPawn;
+    private Circle fourthPawn;
     private boolean drawing;
 
     private Controller controller;
@@ -90,6 +92,8 @@ public class LocalBoardGUI extends Application implements GUI {
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
+        thirdPawn = new Circle(15);
+        fourthPawn = new Circle(15);
         drawing = true;
         player1Moves = new Text("Moves: " + 0);
         currentPlayerText = new Text("Player 1's turn...");
@@ -120,6 +124,10 @@ public class LocalBoardGUI extends Application implements GUI {
         setPlayerStats();
         setPawn(firstPawn, Color.ORANGE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
         setPawn(secondPawn, Color.GREEN, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
+        if (numberOfPlayers == 4) {
+            setPawn(thirdPawn, Color.BLUE, (controller.getPlayer3X() * 2), (controller.getPlayer3Y() * 2));
+            setPawn(fourthPawn, Color.RED, (controller.getPlayer4X() * 2), (controller.getPlayer4Y() * 2));
+        }
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
