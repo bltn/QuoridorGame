@@ -261,7 +261,11 @@ public class LocalBoardGUI extends Application implements GUI {
     	}
     	else if (playerID == 2) {
     		player2Moves.setText("Moves: " + moveCount);
-    	}
+    	} else if (playerID == 3) {
+            player3Moves.setText("Moves: " + moveCount);
+        } else if (playerID == 4) {
+            player4Moves.setText("Moves: " + moveCount);
+        }
     }
 
     public void updatePlayerWallCount(int wallCount, int playerID) {
@@ -272,7 +276,13 @@ public class LocalBoardGUI extends Application implements GUI {
     	else if (playerID == 2) {
     		player2WallCount = wallCount;
             player2Walls.setText("Walls: " + player2WallCount);
-    	}
+    	} else if (playerID == 3) {
+            player3WallCount = wallCount;
+            player3Walls.setText("Walls: " + player3WallCount);
+        } else if (playerID == 4) {
+            player4WallCount = wallCount;
+            player4Walls.setText("Walls: " + player4WallCount);
+        }
     }
 
     public void updatePlayerPawnPosition(int x, int y, int playerID) {
