@@ -1,13 +1,10 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,10 +13,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import javax.sound.midi.SysexMessage;
 
 /**
  * @author Khadija Patel
@@ -94,7 +87,7 @@ public class RulesMenuGUI extends Application {
         	@Override
         	public void handle(ActionEvent event) {
     			LocalBoardGUI gui = new LocalBoardGUI();
-            	Board board = new StandardBoard();
+            	Board board = new StandardBoard(2);
             	Controller controller = new LocalGameController(gui, board);
             	gui.setController(controller);
             	gui.start(new Stage());
@@ -107,7 +100,7 @@ public class RulesMenuGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
 	            LocalBoardGUI gui = new LocalBoardGUI();
-	            Board board = new ChallengeBoard();
+	            Board board = new ChallengeBoard(2);
 	            Controller controller = new LocalGameController(gui, board);
 	            gui.setController(controller);
 	            gui.start(new Stage());
@@ -120,7 +113,7 @@ public class RulesMenuGUI extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 LocalBoardGUI gui = new LocalBoardGUI();
-                Board board = new StandardBoard();
+                Board board = new StandardBoard(4);
                 Controller controller = new LocalGameController(gui, board);
                 gui.setController(controller);
                 gui.start(new Stage());
@@ -132,7 +125,7 @@ public class RulesMenuGUI extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 LocalBoardGUI gui = new LocalBoardGUI();
-                Board board = new ChallengeBoard();
+                Board board = new ChallengeBoard(4);
                 Controller controller = new LocalGameController(gui, board);
                 gui.setController(controller);
                 gui.start(new Stage());

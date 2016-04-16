@@ -1,6 +1,3 @@
-
-import java.util.ArrayList;
-
 /**
  *
  * @author Khadija Patel
@@ -10,10 +7,14 @@ public class ChallengeBoard extends Board{
 
     private WallOwnershipCollection wallOwnershipRecords;
 
-    public ChallengeBoard() {
-        super("Challenge");
+    public ChallengeBoard(int numberOfPlayers) {
+        super("Challenge", numberOfPlayers);
         initialisePlayer1(getPosition(0, 0));
         initialisePlayer2(getPosition(8, 8));
+		if (numberOfPlayers == 4) {
+			initialisePlayer3(getPosition(0, 4));
+			initialisePlayer4(getPosition(8, 4));
+		}
         setCurrentPlayer(getPlayer1());
         wallOwnershipRecords = new WallOwnershipCollection();
     }

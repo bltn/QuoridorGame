@@ -1,25 +1,17 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import javax.sound.midi.SysexMessage;
 
 /**
  * @author Junaid Rasheed
@@ -100,7 +92,7 @@ public class MenuGUI extends Application {
 			public void handle(ActionEvent event) {
 				GUI gui = new NetworkedBoardGUI();
 				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard()));
+				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard(2)));
 				ConnectionGUI connGUI = new ConnectionGUI();
 				connGUI.start(new Stage());
 			}

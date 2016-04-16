@@ -16,14 +16,18 @@ public abstract class Board {
 
     private Player player1;
     private Player player2;
+    private Player player3;
+    private Player player4;
 
     private Player currentPlayer;
+    private int numberOfPlayers;
 
     /**
      * Constructor for an object of class Board
      */
-    public Board(String gameMode) {
+    public Board(String gameMode, int numberOfPlayers) {
         walledOffPositions = new ArrayList<Position>();
+        this.numberOfPlayers = numberOfPlayers;
         if (gameMode.equals("Challenge")) {
         	initialiseBoardWithChallengeRules();
         } else if (gameMode.equals("Standard")) {
@@ -43,6 +47,10 @@ public abstract class Board {
             return player2;
     }
 
+    public Player getPlayer3() { return player3; }
+
+    public Player getPlayer4() { return player4; }
+
     public void initialisePlayer1(Position startingPosition) {
     	if (player1 == null) {
     		player1 = new Player(startingPosition, 1);
@@ -50,9 +58,21 @@ public abstract class Board {
     }
 
     public void initialisePlayer2(Position startingPosition) {
-    	if (player2 == null) {
-    		player2 = new Player(startingPosition, 2);
-    	}
+        if (player2 == null) {
+            player2 = new Player(startingPosition, 2);
+        }
+    }
+
+    public void initialisePlayer3(Position startingPosition) {
+        if (player3 == null) {
+            player3 = new Player(startingPosition, 3);
+        }
+    }
+
+    public void initialisePlayer4(Position startingPosition) {
+        if (player4 == null) {
+            player4 = new Player(startingPosition, 4);
+        }
     }
 
     public Player getCurrentPlayer() {

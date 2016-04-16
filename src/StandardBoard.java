@@ -1,6 +1,3 @@
-
-import java.util.ArrayList;
-
 /**
  *
  * @author Khadija Patel
@@ -8,11 +5,15 @@ import java.util.ArrayList;
 
 public class StandardBoard extends Board {
 
-    public StandardBoard() {
-            super("Standard");
-            initialisePlayer1(getPosition(4, 0));
-            initialisePlayer2(getPosition(4, 8));
-            setCurrentPlayer(getPlayer1());
+    public StandardBoard(int numberOfPlayers) {
+		super("Standard", numberOfPlayers);
+		initialisePlayer1(getPosition(4, 0));
+		initialisePlayer2(getPosition(4, 8));
+		if (numberOfPlayers == 4) {
+			initialisePlayer3(getPosition(0, 4));
+			initialisePlayer4(getPosition(8, 4));
+		}
+		setCurrentPlayer(getPlayer1());
     }
 
     public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {

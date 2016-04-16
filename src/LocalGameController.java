@@ -112,4 +112,24 @@ public class LocalGameController<T> implements Controller {
 	public int getPlayer2Y() {
 		return board.getPlayer2().getPosition().getY();
 	}
+
+	@Override
+	public int getPlayer3X() {
+		return board.getPlayer3().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer3Y() {
+		return board.getPlayer3().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer4X() {
+		return board.getPlayer4().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer4Y() {
+		return board.getPlayer4().getPosition().getY();
+	}
 }

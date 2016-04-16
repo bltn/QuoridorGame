@@ -12,7 +12,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class ConnectionGUI extends Application {
@@ -96,9 +94,9 @@ public class ConnectionGUI extends Application {
             	String mode = askForGameMode();
             	GameServer server;
             	if (mode.equals("Challenge")) {
-            		server = new GameServer(new NetworkedGameController(new ChallengeBoard()));
+            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)));
             	} else {
-            		server = new GameServer(new NetworkedGameController(new StandardBoard()));
+            		server = new GameServer(new NetworkedGameController(new StandardBoard(2)));
             	}
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
