@@ -300,6 +300,16 @@ public class LocalBoardGUI extends Application implements GUI {
             boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
             boardPane.getChildren().add(secondPawn);
     	}
+        else if (playerID == 3) {
+            boardPane.getChildren().remove(thirdPawn);
+            boardPane.setConstraints(thirdPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(thirdPawn);
+        }
+        else if (playerID == 4) {
+            boardPane.getChildren().remove(fourthPawn);
+            boardPane.setConstraints(fourthPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(fourthPawn);
+        }
     }
 
     /**
