@@ -296,11 +296,15 @@ public class LocalBoardGUI extends Application implements GUI {
      * change the active player to the next player
      */
     public void updateActivePlayer(int playerID) {
-        if (playerID == 2) {
-            currentPlayerText.setText("Player 2's turn...");
-        }
-        else if (playerID == 1) {
+        if (playerID == 1) {
             currentPlayerText.setText("Player 1's turn...");
+        }
+        else if (playerID == 2) {
+            currentPlayerText.setText("Player 2's turn...");
+        } else if (playerID == 3) {
+            currentPlayerText.setText("Player 3's turn...");
+        } else if (playerID == 4) {
+            currentPlayerText.setText("Player 4's turn...");
         }
     }
 

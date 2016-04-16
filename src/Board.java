@@ -3,7 +3,6 @@
  * @author Thai Hoang
  * @author Khadija Patel
  */
-import sun.security.ssl.Debug;
 
 import java.util.ArrayList;
 
@@ -82,12 +81,23 @@ public abstract class Board {
     }
 
     public Player getPreviousPlayer() {
+        if (numberOfPlayers == 2) {
             if (currentPlayer == player1) {
-                    return player2;
+                return player2;
+            } else {
+                return player1;
             }
-            else {
-                    return player1;
+        } else {
+            if (currentPlayer == player1) {
+                return player4;
+            } else if (currentPlayer == player2) {
+                return player1;
+            } else if (currentPlayer == player3) {
+                return player2;
+            } else {
+                return player3;
             }
+        }
     }
 
     public void switchPlayer() {
