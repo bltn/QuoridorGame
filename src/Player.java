@@ -1,6 +1,7 @@
 /**
  * @author Jordan Bird
  * @author Ben Lawton
+ * @author Junaid Rasheed
  *
  *  @version 12/02/2016
  */
@@ -11,6 +12,8 @@ public class Player
     private Position position;
     private boolean startedAtTop;
     private boolean startedAtBottom;
+    private boolean startedAtLeft;
+    private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
 
@@ -64,23 +67,43 @@ public class Player
     }
 
     public void setStartedAtTop() {
-    	if (!startedAtBottom) {
+    	if (!startedAtBottom && !startedAtLeft && !startedAtRight) {
     		startedAtTop = true;
     	}
     }
 
     public void setStartedAtBottom() {
-    	if (!startedAtTop) {
+    	if (!startedAtTop && !startedAtLeft && !startedAtRight) {
     		startedAtBottom = true;
     	}
     }
 
+    public void setStartedAtLeft() {
+        if (!startedAtBottom && !startedAtTop && !startedAtRight) {
+            startedAtLeft = true;
+        }
+    }
+
+    public void setStartedAtRight() {
+        if (!startedAtBottom && !startedAtTop && !startedAtLeft) {
+            startedAtRight = true;
+        }
+    }
+
     public boolean startedAtTop() {
-    	return startedAtTop;
+        return startedAtTop;
     }
 
     public boolean startedAtBottom() {
-    	return startedAtBottom;
+        return startedAtBottom;
+    }
+
+    public boolean startedAtLeft() {
+        return startedAtLeft;
+    }
+
+    public boolean startedAtRight() {
+        return startedAtRight;
     }
 
 	public void incrementWallCount() {

@@ -2,6 +2,7 @@
  * @author Ben Lawton
  * @author Thai Hoang
  * @author Khadija Patel
+ * @author Junaid Rasheed
  */
 
 import java.util.ArrayList;
@@ -254,38 +255,44 @@ public abstract class Board {
 	 * Assign borders to the board and set top and bottom grids as winning positions
 	 */
    private void initialiseBoardWithStandardRules() {
-            positions = new Position[9][9];
+        positions = new Position[9][9];
 
-            //initialise Position objects
-            for (int x = 0; x < 9; x++) {
-                    for (int y = 0; y < 9; y++) {
-                            positions[y][x] = new Position(x, y);
-                    }
-            }
-            //mark top positions as winners
-            for (int x = 0; x < 9; x++) {
-                    positions[0][x].setTop();
-            }
-            //mark bottom positions as winners
-            for (int x = 0; x < 9; x++) {
-                    positions[8][x].setBottom();
-            }
-
-            //set the board's top borders (walls)
-            for (int x = 0; x < 9; x++) {
-                    positions[0][x].setHasTopWall(true);
-            }
-            //set the board's right borders (walls)
-            for (int y = 0; y < 9; y++) {
-                    positions[y][8].setHasRightWall(true);
-            }
-            //set the board's bottom borders (walls)
-            for (int x = 0; x < 9; x++) {
-                    positions[8][x].setHasBottomWall(true);
-            }
-            //set the board's left borders (walls)
-            for (int y = 0; y < 9; y++) {
-                    positions[y][0].setHasLeftWall(true);
-            }
+        //initialise Position objects
+        for (int x = 0; x < 9; x++) {
+                for (int y = 0; y < 9; y++) {
+                        positions[y][x] = new Position(x, y);
+                }
+        }
+        //mark top positions as winners
+        for (int x = 0; x < 9; x++) {
+                positions[0][x].setTop();
+        }
+        //mark bottom positions as winners
+        for (int x = 0; x < 9; x++) {
+                positions[8][x].setBottom();
+        }
+        //mark left position as winners
+        for (int y = 0; y < 9; y++) {
+            positions[y][0].setLeft();
+        }
+       for (int y = 0; y < 9; y++) {
+           positions[y][8].setRight();
+       }
+        //set the board's top borders (walls)
+        for (int x = 0; x < 9; x++) {
+                positions[0][x].setHasTopWall(true);
+        }
+        //set the board's right borders (walls)
+        for (int y = 0; y < 9; y++) {
+                positions[y][8].setHasRightWall(true);
+        }
+        //set the board's bottom borders (walls)
+        for (int x = 0; x < 9; x++) {
+                positions[8][x].setHasBottomWall(true);
+        }
+        //set the board's left borders (walls)
+        for (int y = 0; y < 9; y++) {
+                positions[y][0].setHasLeftWall(true);
+        }
     }
 }

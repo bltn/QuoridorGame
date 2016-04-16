@@ -1,6 +1,7 @@
 /**
  *
  * @author Khadija Patel
+ * @author Junaid Rasheed
  */
 
 public class StandardBoard extends Board {
@@ -85,7 +86,7 @@ public class StandardBoard extends Board {
                 if (isValidMove(getCurrentPlayer(), posX, posY)) {
                     getPlayer3().setPosition(getPosition(posX, posY));
                     getCurrentPlayer().incrementMoveCount();
-                    if (getPosition(posX, posY).isTop()) {
+                    if (getPosition(posX, posY).isRight()) {
                         reset();
                         return true;
                     }
@@ -105,7 +106,7 @@ public class StandardBoard extends Board {
                 if (isValidMove(getCurrentPlayer(), posX, posY)) {
                     getPlayer4().setPosition(getPosition(posX, posY));
                     getCurrentPlayer().incrementMoveCount();
-                    if (getPosition(posX, posY).isTop()) {
+                    if (getPosition(posX, posY).isLeft()) {
                         reset();
                         return true;
                     }

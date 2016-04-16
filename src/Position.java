@@ -3,6 +3,7 @@
  *
  * @author Jordan Bird
  * @author Ben Lawton
+ * @author Junaid Rasheed
  * 
  */
 public class Position
@@ -14,6 +15,10 @@ public class Position
     // is at the top or bottom of the grid
     private boolean isTop;
     private boolean isBottom;
+
+    // is at the left or right of the grid
+    private boolean isLeft;
+    private boolean isRight;
     
     //is at the top corner or bottom corner of the grid
     private boolean isTopCorner;
@@ -67,7 +72,17 @@ public class Position
 	public boolean isBottom() {
 		return isBottom;
 	}
-/**
+    /**
+     *
+     * @return whether it's at the left of the board
+     */
+    public boolean isLeft() { return isLeft; }
+    /**
+     *
+     * @return whether it's at the right of the board
+     */
+    public boolean isRight() { return isRight; }
+    /**
      * @return whether it's at the top of the board
      */
 	public boolean isTopCorner() {
@@ -97,8 +112,26 @@ public class Position
 			isBottom = true;
 		}
 	}
-        
-        	/**
+
+    /**
+     * set as a left of the board position
+     */
+    public void setLeft() {
+        if (!isRight) {
+            isLeft = true;
+        }
+    }
+
+    /**
+     * set as a right of the board position
+     */
+    public void setRight() {
+        if (!isLeft) {
+            isRight = true;
+        }
+    }
+
+    /**
 	 * set as a top corner of the board position
 	 */
 	public void setTopCorner() {
