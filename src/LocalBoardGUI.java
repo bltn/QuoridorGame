@@ -30,6 +30,8 @@ public class LocalBoardGUI extends Application implements GUI {
     private final int width = 17;
     private final int height = 17;
     private final HBox player2StatsPane = new HBox(120);
+    private final HBox player3StatsPane = new HBox(120);
+    private final HBox player4StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
     private final HBox currentPlayerPane = new HBox();
@@ -167,6 +169,23 @@ public class LocalBoardGUI extends Application implements GUI {
         Text player2Title = new Text("Player 2");
         player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
+        if (numberOfPlayers == 4) {
+            player3Walls.setTextAlignment(TextAlignment.CENTER);
+            player3Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player3Moves.setTextAlignment(TextAlignment.CENTER);
+            player3Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player3Title = new Text("Player 3");
+            player3Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player3StatsPane.getChildren().addAll(player3Moves, player3Title, player3Walls);
+
+            player4Walls.setTextAlignment(TextAlignment.CENTER);
+            player4Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player4Moves.setTextAlignment(TextAlignment.CENTER);
+            player4Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player4Title = new Text("Player 4");
+            player4Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player4StatsPane.getChildren().addAll(player4Moves, player4Title, player4Walls);
+        }
     }
 
     /**
@@ -423,9 +442,17 @@ public class LocalBoardGUI extends Application implements GUI {
         buttonPane.setAlignment(Pos.CENTER);
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        if (numberOfPlayers == 2) {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        } else {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);
+        }
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player3StatsPane.setAlignment(Pos.CENTER);
+        player3StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player4StatsPane.setAlignment(Pos.CENTER);
+        player4StatsPane.setPadding(new Insets(5, 0, 5, 0));
         currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
         errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
