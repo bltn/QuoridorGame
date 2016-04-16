@@ -29,7 +29,11 @@ public class ChallengeBoard extends Board{
         			wallOwner = getPlayer1();
         		} else if (wallOwnerID == 2) {
         			wallOwner = getPlayer2();
-        		}
+        		} else if (wallOwnerID == 3) {
+                    wallOwner = getPlayer3();
+                } else if (wallOwnerID == 4) {
+                    wallOwner = getPlayer4();
+                }
         		Position topLeft = getPosition(topLeftX, topLeftY);
         		removeWallsFromPosition(topLeft, orientation);
         		wallOwner.incrementWallCount();
