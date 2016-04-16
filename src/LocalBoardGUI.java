@@ -22,7 +22,6 @@ import javafx.stage.Stage;
  * @author Ben Lawton
  * @author Jordan Bird
  *
- * @version 12/02/2016
  */
 public class LocalBoardGUI extends Application implements GUI {
 
@@ -64,6 +63,7 @@ public class LocalBoardGUI extends Application implements GUI {
 
     private Controller controller;
 
+
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
@@ -96,103 +96,17 @@ public class LocalBoardGUI extends Application implements GUI {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
         setPanes();
-        setButtons();
+        initialiseBoardSpaces();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, 8, 0);
-        setPawn(secondPawn, Color.RED, 8, 16);
+        setPawn(firstPawn, Color.ORANGE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
+        setPawn(secondPawn, Color.GREEN, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
         scene.getStylesheets().add("Theme.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
         primaryStage.show();
     }
 
-    /**
-     * Set the alignment of all instantiated fields to the centre of the pane
-     */
-    private void setPanes() {
-        rootPane.setAlignment(Pos.CENTER);
-        player1StatsPane.setAlignment(Pos.CENTER);
-        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
-        errorPane.setAlignment(Pos.CENTER);
-        player2StatsPane.setAlignment(Pos.CENTER);
-        boardPane.setAlignment(Pos.CENTER);
-        buttonPane.setAlignment(Pos.CENTER);
-        //boardPane.setHgap(5);
-        //boardPane.setVgap(5);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
-        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
-        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
-        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
-        errorPane.setPadding(new Insets(5, 0, 0, 0));
-    }
 
-    /**
-     * Create the board spaces and add them to the 2D array
-     */
-    private void setButtons() {
-    	for(int x = 0 ; x < width; x++){
-    		for(int y = 0; y < width; y++){
-                final int X = x;
-                final int Y = y;
-    			grids[y][x] = new Rectangle();
-    			// middle points between walls
-    			if(x % 2 != 0 && y % 2 != 0) {
-                    setUnusedSquare(x, y, X, Y);
-    			}
-    			// occupiable position
-    			if(x % 2 == 0 && y % 2 == 0) {
-                    setOccupiablePosition(x, y, X, Y);
-    			}
-    			// wide, short walls
-    			if(x % 2 == 0 && y % 2 != 0) {
-                    setWideWall(x, y, X, Y);
-    			}
-    			// tall, thin walls
-    			if(x % 2 != 0 && y % 2 == 0) {
-                    setThinWall(x, y, X, Y);
-    			}
-    		}
-    	}
- 	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-           @Override
-           public void handle(MouseEvent event) {
-               controller.showCurrentPlayerMoves();
-           }
-       });
-       buttonPane.getChildren().add(highlightPositionsButton);
-    }
-
-    /**
-     * Allows a user to place a wall on a wall space that is available
-     */
-   private void setWall(int x, int y) {
-       // tall, thin wall
-	   if (x % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (y < 16) {
-                   if (grids[y + 2][x].getFill() == Color.GREY) {
-                       // avoid making a cross with the walls
-                       if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                           placeThinWall(x, y);
-                       }
-                   }
-               }
-           }
-       }
-       //short, wide wall
-       if (y % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (x < 16) {
-                       if (grids[y][x + 2].getFill() == Color.GREY) {
-                           // avoid making a cross with the walls
-                           if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                               placeWideWall(x, y);
-                           }
-                       }
-               }
-           }
-       }
-   }
 
    /**
     * Removes all of the walls on the board
@@ -336,23 +250,222 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * change the active player to the next player
      */
-    public void updateActivePlayer() {
-        if (controller.getCurrentPlayer().getID() == 2) {
+    public void updateActivePlayer(int playerID) {
+        if (playerID == 2) {
             currentPlayerText.setText("Player 2's turn...");
         }
-        else if (controller.getCurrentPlayer().getID() == 1) {
+        else if (playerID == 1) {
             currentPlayerText.setText("Player 1's turn...");
         }
     }
+
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+    		if (playerID == 1) {
+	    		grids[topY][topX].setFill(Color.ORANGE);
+	    		grids[topY][topX].setStroke(Color.ORANGE);
+	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
+	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[topY][topX].setFill(Color.GREEN);
+	    		grids[topY][topX].setStroke(Color.GREEN);
+	    		grids[bottomY][bottomX].setFill(Color.GREEN);
+	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
+    		}
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			controller.removeWall((topX / 2), (topY / 2), WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
+        		}
+        	});
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+    		if (playerID == 1) {
+    			grids[leftY][leftX].setFill(Color.ORANGE);
+	    		grids[leftY][leftX].setStroke(Color.ORANGE);
+	    		grids[rightY][rightX].setFill(Color.ORANGE);
+	    		grids[rightY][rightX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[leftY][leftX].setFill(Color.GREEN);
+	    		grids[leftY][leftX].setStroke(Color.GREEN);
+	    		grids[rightY][rightX].setFill(Color.GREEN);
+	    		grids[rightY][rightX].setStroke(Color.GREEN);
+    		}
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+        		@Override
+        		public void handle(MouseEvent event) {
+        			controller.removeWall((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
+        		}
+        	});
+    	}
+    }
+
+    public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+			grids[topY][topX].setFill(Color.GREY);
+    		grids[topY][topX].setStroke(Color.GREY);
+    		grids[bottomY][bottomX].setFill(Color.GREY);
+    		grids[bottomY][bottomX].setStroke(Color.GREY);
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(topX, topY);
+                }
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+			grids[leftY][leftX].setFill(Color.GREY);
+    		grids[leftY][leftX].setStroke(Color.GREY);
+    		grids[rightY][rightX].setFill(Color.GREY);
+    		grids[rightY][rightX].setStroke(Color.GREY);
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(leftX, leftY);
+                }
+            });
+    	}
+    }
+
+    public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation) {
+		x *= 2;
+		y *= 2;
+
+		switch (relativeLocation) {
+			case LEFT: {
+	            x -= 1;
+	            break;
+	        }
+	        case RIGHT: {
+	            x += 1;
+	            break;
+	        }
+	        case TOP: {
+	            y -= 1;
+	            break;
+	        }
+	        case BOTTOM: {
+	            y += 1;
+	            break;
+	        }
+		}
+		final int innerX = x;
+		final int innerY = y;
+		grids[y][x].setFill(Color.GREY);
+		grids[y][x].setStroke(Color.GREY);
+		grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                placeWall(innerX, innerY);
+            }
+        });
+	}
+
+    public void displayErrorMessage(String message) {
+    	errorPaneText.setText(message);
+    	new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        errorPaneText.setText("");
+                    }
+                },
+                1000
+        );
+    }
+
+    /**
+     * Set the alignment of all instantiated fields to the centre of the pane
+     */
+    private void setPanes() {
+        rootPane.setAlignment(Pos.CENTER);
+        player1StatsPane.setAlignment(Pos.CENTER);
+        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
+        errorPane.setAlignment(Pos.CENTER);
+        player2StatsPane.setAlignment(Pos.CENTER);
+        boardPane.setAlignment(Pos.CENTER);
+        buttonPane.setAlignment(Pos.CENTER);
+        //boardPane.setHgap(5);
+        //boardPane.setVgap(5);
+        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
+        errorPane.setPadding(new Insets(5, 0, 0, 0));
+    }
+
+    /**
+     * Create the board spaces and add them to the 2D array
+     */
+    private void initialiseBoardSpaces() {
+    	for(int x = 0 ; x < width; x++){
+    		for(int y = 0; y < width; y++){
+    			grids[y][x] = new Rectangle();
+    			// middle points between walls
+    			if(x % 2 != 0 && y % 2 != 0) {
+                    initialiseUnusedSquare(x, y);
+    			}
+    			// occupiable position
+    			if(x % 2 == 0 && y % 2 == 0) {
+                    initialiseOccupiableGrid(x, y);
+    			}
+    			// wide, short walls
+    			if(x % 2 == 0 && y % 2 != 0) {
+                    initialiseWideWall(x, y);
+    			}
+    			// tall, thin walls
+    			if(x % 2 != 0 && y % 2 == 0) {
+                    initialiseThinWall(x, y);
+    			}
+    		}
+    	}
+ 	   highlightPositionsButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+           @Override
+           public void handle(MouseEvent event) {
+               controller.showCurrentPlayerMoves();
+           }
+       });
+       buttonPane.getChildren().add(highlightPositionsButton);
+    }
+
+    /**
+     * Allows a user to place a wall on a wall space that is available
+     */
+   private void placeWall(int x, int y) {
+       // tall, thin wall
+	   if (x % 2 != 0) {
+           placeThinWall(x, y);
+       }
+       //short, wide wall
+       if (y % 2 != 0) {
+    	   placeWideWall(x, y);
+       }
+   }
 
     /**
      * Set the occupiable positions
      * @param x
      * @param y
-     * @param X
-     * @param Y
      */
-    private void setOccupiablePosition(int x, int y, int X, int Y) {
+    private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.WHITE);
@@ -363,28 +476,14 @@ public class LocalBoardGUI extends Application implements GUI {
             @Override
             public void handle(MouseEvent event) {
                 // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
-                int nineByNineX = X / 2;
-                int nineByNineY = Y / 2;
-                try {
-                	controller.movePawn(nineByNineX, nineByNineY);
-                }
-                catch (IllegalArgumentException e) {
-                	errorPaneText.setText(e.getMessage());
-                	new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    errorPaneText.setText("");
-                                }
-                            },
-                            1000
-                    );
-                }
+                int nineByNineX = x / 2;
+                int nineByNineY = y / 2;
+            	controller.movePawn(nineByNineX, nineByNineY, controller.getCurrentPlayer().getID());
             }
         });
     }
 
-    private void setWideWall(int x, int y, int X, int Y) {
+    private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.GREY);
@@ -394,12 +493,12 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                placeWall(x, y);
             }
         });
     }
 
-    private void setThinWall(int x, int y, int X, int Y) {
+    private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
         grids[y][x].setStroke(Color.GREY);
@@ -409,16 +508,16 @@ public class LocalBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                placeWall(x, y);
             }
         });
     }
 
-    private void setUnusedSquare(int x, int y, int X, int Y) {
+    private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
-        grids[y][x].setStroke(Color.GREY);
-        grids[y][x].setFill(Color.GREY);
+        grids[y][x].setStroke(Color.rgb(192, 192, 192));
+        grids[y][x].setFill(Color.rgb(192, 192, 192));
         boardPane.setConstraints(grids[y][x],x,y);
         boardPane.getChildren().add(grids[y][x]);
     }
@@ -427,85 +526,13 @@ public class LocalBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y + 1][x].setFill(Color.ORANGE);
-            grids[y + 2][x].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y + 1][x].setStroke(Color.ORANGE);
-            grids[y + 2][x].setStroke(Color.ORANGE);
-        }
-        catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
+        controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
     }
 
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-        try {
-        	controller.placeWall(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
-        	grids[y][x].setFill(Color.ORANGE);
-            grids[y][x + 1].setFill(Color.ORANGE);
-            grids[y][x + 2].setFill(Color.ORANGE);
-            grids[y][x].setStroke(Color.ORANGE);
-            grids[y][x + 1].setStroke(Color.ORANGE);
-            grids[y][x + 2].setStroke(Color.ORANGE);
-        }
-        catch (IllegalStateException e) {
-        	errorPaneText.setText(e.getMessage());
-        	new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            errorPaneText.setText("");
-                        }
-                    },
-                    1000
-            );
-        }
-    }
-
-    public void resetBoard() {
-    	resetWalls();
-    	updatePlayerPawnPosition(4, 0, 1);
-    	updatePlayerPawnPosition(4, 8, 2);
-    	updatePlayerWallCount(10, 1);
-    	updatePlayerWallCount(10, 2);
-    	updatePlayerMoveCount(0, 1);
-    	updatePlayerMoveCount(0, 2);
+    	controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL, controller.getCurrentPlayer().getID());
     }
 }
