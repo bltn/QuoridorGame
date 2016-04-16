@@ -120,47 +120,126 @@ public class ChallengeBoard extends Board{
 	}
 
     public boolean movePawn(int posX, int posY) {
+        if (getPlayer3() == null) {
             if (getCurrentPlayer() == getPlayer1()) {
-            if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY()) {
+                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY()) {
                     throw new IllegalArgumentException("Position is occupied");
-            }
-            else {
+                }
+                else {
+                    System.out.println("not occupied");
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
-                            getPlayer1().setPosition(getPosition(posX, posY));
-                            getCurrentPlayer().incrementMoveCount();
-                            if (getPosition(posX, posY).isBottomRightCorner()) {
-                                    reset();
-                                    return true;
-                            }
-                            switchPlayer();
-                            return false;
+                        getPlayer1().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isBottomRightCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException("That isn't a valid move");
+                    }
+                }
+            }
+            else if (getCurrentPlayer() == getPlayer2()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY()) {
+                    throw new IllegalArgumentException("Position is occupied");
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer2().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isTopLeftCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException("That isn't a valid move.");
+                    }
+                }
+            }
+        }
+        else {
+            if (getCurrentPlayer() == getPlayer1()) {
+                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException("Position is occupied");
+                } else {
+                    System.out.println("not occupied");
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer1().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isBottomRightCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException("That isn't a valid move");
+                    }
+                }
+            } else if (getCurrentPlayer() == getPlayer2()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException("Position is occupied");
+                } else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer2().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isTopLeftCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException("That isn't a valid move.");
+                    }
+                }
+            }
+            else if (getCurrentPlayer() == getPlayer3()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException("Position is occupied");
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer3().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isTopRightCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
                     }
                     else {
-                            throw new IllegalArgumentException("That isn't a valid move");
+                        throw new IllegalArgumentException("That isn't a valid move.");
                     }
+                }
             }
-    }
-    else if (getCurrentPlayer() == getPlayer2()) {
-            if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY()) {
+            else if (getCurrentPlayer() == getPlayer4()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY()) {
                     throw new IllegalArgumentException("Position is occupied");
-            }
-            else {
+                }
+                else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
-                            getPlayer2().setPosition(getPosition(posX, posY));
-                            getCurrentPlayer().incrementMoveCount();
-                            if (getPosition(posX, posY).isTopLeftCorner()) {
-                                    reset();
-                                    return true;
-                            }
-                            switchPlayer();
-                            return false;
+                        getPlayer4().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isBottomLeftCorner()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
                     }
                     else {
-                            throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException("That isn't a valid move.");
                     }
+                }
             }
-    }
-            return false;
+        }
+        return false;
     }
 
     private void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
