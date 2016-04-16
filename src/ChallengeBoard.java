@@ -12,8 +12,8 @@ public class ChallengeBoard extends Board{
         initialisePlayer1(getPosition(0, 0));
         initialisePlayer2(getPosition(8, 8));
 		if (numberOfPlayers == 4) {
-			initialisePlayer3(getPosition(0, 4));
-			initialisePlayer4(getPosition(8, 4));
+			initialisePlayer3(getPosition(0, 8));
+			initialisePlayer4(getPosition(8, 0));
 		}
         setCurrentPlayer(getPlayer1());
         wallOwnershipRecords = new WallOwnershipCollection();
