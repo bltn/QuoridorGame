@@ -3,6 +3,8 @@
  * @author Thai Hoang
  * @author Khadija Patel
  */
+import sun.security.ssl.Debug;
+
 import java.util.ArrayList;
 
 
@@ -89,12 +91,26 @@ public abstract class Board {
     }
 
     public void switchPlayer() {
-            if (currentPlayer == player1) {
-                    currentPlayer = player2;
-            }
-            else if (currentPlayer == player2) {
-                    currentPlayer = player1;
-            }
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
+            System.out.println("switched to player2.");
+        }
+        else if (currentPlayer == player2 && numberOfPlayers == 2) {
+            currentPlayer = player1;
+            System.out.println("switched to player1.");
+        }
+        else if (currentPlayer == player2 && numberOfPlayers == 4) {
+            currentPlayer = player3;
+            System.out.println("switched to player3.");
+        } else if (currentPlayer == player3) {
+            currentPlayer = player4;
+            System.out.println("switched to player4.");
+        }
+        else if (currentPlayer == player4) {
+            currentPlayer = player1;
+            System.out.println("switched to player1 from 4.");
+        }
+        System.out.println(currentPlayer.getPosition().getX() + ", " + currentPlayer.getPosition().getY());
     }
 
     /**
