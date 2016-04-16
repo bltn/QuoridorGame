@@ -20,7 +20,7 @@ public class LocalGameControllerTest extends Application {
 		};
 		t.setDaemon(true);
 		t.start();
-		board = new Board();
+		board = new StandardBoard();
 		gui = new LocalBoardGUI();
 		controller = new LocalGameController<>(gui, board);
 		gui.setController(controller);
@@ -32,7 +32,7 @@ public class LocalGameControllerTest extends Application {
 	@Test
 	public void placeWallTest() {
 
-		controller.placeWall(4, 5, PositionWallLocation.BOTTOM, 5, 5, PositionWallLocation.BOTTOM, 4, 6, PositionWallLocation.TOP, 5, 6, PositionWallLocation.TOP);
+		controller.placeWall(4, 5, WallPlacement.HORIZONTAL, 1);
 
 		assertEquals(true, board.getPosition(4, 5).hasBottomWall());
 		assertEquals(true, board.getPosition(5, 5).hasBottomWall());
@@ -41,7 +41,7 @@ public class LocalGameControllerTest extends Application {
 		assertEquals(9, board.getPreviousPlayer().getWallCount());
 		assertEquals(1, board.getPreviousPlayer().getMoveCount());
 
-		controller.placeWall(3, 0, PositionWallLocation.RIGHT, 3, 1, PositionWallLocation.RIGHT, 4, 0, PositionWallLocation.LEFT, 4, 1, PositionWallLocation.LEFT);
+		controller.placeWall(3, 0, WallPlacement.VERTICAL, 2);
 
 		assertEquals(true, board.getPosition(3, 0).hasRightWall());
 		assertEquals(true, board.getPosition(3, 1).hasRightWall());
@@ -60,7 +60,7 @@ public class LocalGameControllerTest extends Application {
 		int oneAcross = controller.getCurrentPlayer().getPosition().getX() + 1;
 		int expectedY = controller.getCurrentPlayer().getPosition().getY();
 		int initialMoveCount = controller.getCurrentPlayer().getMoveCount();
-		controller.movePawn(oneAcross, controller.getCurrentPlayer().getPosition().getY());
+		controller.movePawn(oneAcross, controller.getCurrentPlayer().getPosition().getY(), 1);
 		assertEquals(oneAcross, board.getPreviousPlayer().getPosition().getX());
 		assertEquals(expectedY, board.getPreviousPlayer().getPosition().getY());
 		assertEquals((initialMoveCount + 1), board.getPreviousPlayer().getMoveCount());
@@ -70,7 +70,7 @@ public class LocalGameControllerTest extends Application {
 		int initialY = controller.getCurrentPlayer().getPosition().getY();
 		Player startingPlayer = controller.getCurrentPlayer();
 		try {
-			controller.movePawn(5, 5);
+			controller.movePawn(5, 5, 2);
 		} catch (IllegalArgumentException e) {
 			// do nothing
 		}

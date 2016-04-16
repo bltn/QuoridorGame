@@ -17,7 +17,7 @@ public class BoardTest {
 
 	@BeforeClass
 	public static void setUp() {
-		board = new Board();
+		board = new StandardBoard();
         player1 = board.getPlayer1();
         player2 = board.getPlayer2();
 	}
