@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 
 /**
- *
+ * @author Thai Hoang
  * @author Khadija Patel
  */
 
@@ -23,6 +23,15 @@ public class StandardBoard extends Board {
 	        		assignWallsFromTopLeftClockwise(topLeft, orientation);
 	    			getCurrentPlayer().incrementMoveCount();
 	    			getCurrentPlayer().decrementWallCount();
+	    			
+					if (Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
+							&& Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
+					} else {
+						//removeWallsFromPosition(topLeft, orientation); //Need a method like this one from challengeBoard
+						throw new IllegalStateException("Can't block like that");
+					}
+	    			
+	    			
 	    			switchPlayer();
 	        	} else {
 	        		throw new IllegalStateException("Move is invalid");

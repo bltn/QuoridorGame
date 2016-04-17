@@ -3,7 +3,7 @@
  *
  * @author Jordan Bird
  * @author Ben Lawton
- * 
+ * @author Thai Hoang
  */
 public class Position
 {

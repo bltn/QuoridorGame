@@ -1,4 +1,5 @@
 /**
+ *
  * @author Ben Lawton
  * @author Thai Hoang
  * @author Khadija Patel
@@ -11,13 +12,25 @@ public abstract class Board {
     // 2D array for Positions
     private Position positions[][];
 
-    // Positions with walls assigned to them, tracked for a more efficient reset
+    public void setPositions(Position[][] positions) {
+		this.positions = positions;
+	}
+
+	// Positions with walls assigned to them, tracked for a more efficient reset
     private ArrayList<Position> walledOffPositions;
 
-    private Player player1;
+    public void setPlayer1(Player player1) {
+		this.player1 = player1;
+	}
+
+	public void setPlayer2(Player player2) {
+		this.player2 = player2;
+	}
+
+	private Player player1;
     private Player player2;
 
-    private Player currentPlayer;
+	private Player currentPlayer;
 
     /**
      * Constructor for an object of class Board
@@ -77,6 +90,11 @@ public abstract class Board {
             }
     }
 
+    public Position[][] getPositions() {
+		return positions;
+	}
+
+    
     /**
      * @param posX x coordinates of the position
      * @param posY y coordinates of the position
