@@ -74,6 +74,14 @@ public class GameServer {
 			player2IOThread.sendMessage("bootGUI");
 			player1IOThread.sendMessage("setID " + 1);
 			player2IOThread.sendMessage("setID " + 2);
+			if (numberOfPlayers == 4) {
+				controller.setPlayer3IO(player3IOThread);
+				controller.setPlayer4IO(player4IOThread);
+				player3IOThread.sendMessage("bootGUI");
+				player4IOThread.sendMessage("bootGUI");
+				player3IOThread.sendMessage("setID " + 3);
+				player4IOThread.sendMessage("setID " + 4);
+			}
             showAlert("Game has begun");
 		} catch (IOException e) {
             showAlert("There was a problem with a client joining the server");

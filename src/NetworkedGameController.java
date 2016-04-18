@@ -4,6 +4,8 @@ public class NetworkedGameController implements Controller {
 
 	private ClientSocketIOThread player1IO;
 	private ClientSocketIOThread player2IO;
+	private ClientSocketIOThread player3IO;
+	private ClientSocketIOThread player4IO;
 
 	private Board board;
 
@@ -20,6 +22,18 @@ public class NetworkedGameController implements Controller {
 	public void setPlayer2IO(ClientSocketIOThread ioThread) {
 		if (player2IO == null) {
 			this.player2IO = ioThread;
+		}
+	}
+
+	public void setPlayer3IO(ClientSocketIOThread ioThread) {
+		if (player3IO == null) {
+			this.player3IO = ioThread;
+		}
+	}
+
+	public void setPlayer4IO(ClientSocketIOThread ioThread) {
+		if (player4IO == null) {
+			this.player4IO = ioThread;
 		}
 	}
 
