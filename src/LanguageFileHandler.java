@@ -44,6 +44,11 @@ public class LanguageFileHandler {
 			filePath = "src/lang/Spanish.txt";
 		}
 		
+		if(language == "Chinese")
+		{
+			filePath = "src/lang/Chinese.txt";
+		}
+		
 		
 		
 		FileInputStream fs= new FileInputStream(filePath);
