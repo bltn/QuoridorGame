@@ -25,6 +25,10 @@ import javax.sound.midi.SysexMessage;
  * @author Junaid Rasheed
  * @author Jordan Bird
  *
+<<<<<<< HEAD
+=======
+ * @version 08/04/2016
+>>>>>>> 7d36e8c7006db39063af263c7a1a7e34f104b448
  */
 public class MenuGUI extends Application {
 
@@ -36,13 +40,14 @@ public class MenuGUI extends Application {
     private Button quitButton;
     private Button multiplayerButton;
 
-    public MenuGUI() {
+    public MenuGUI() throws IOException {
+    	LanguageFileHandler language = new LanguageFileHandler("English");
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();
-        startButton = new Button("Start");
-        quitButton = new Button("Quit");
-        multiplayerButton = new Button("Multiplayer");
+        startButton = new Button(language.getStart());
+        quitButton = new Button(language.getQuit());
+        multiplayerButton = new Button(language.getMultiplayer());
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
