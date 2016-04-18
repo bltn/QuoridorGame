@@ -1,0 +1,12 @@
+Commencer
+Mode multijoueur
+Quitter
+Déplacer
+Joueur 1
+Joueur 2
+Mur
+Indice
+Rejoins une partie
+Entrez l'adresse IP et l'adresse de port pour votre machine
+Créer serveur
+Se connecter au jeu
