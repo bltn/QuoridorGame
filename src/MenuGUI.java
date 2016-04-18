@@ -37,8 +37,10 @@ public class MenuGUI extends Application {
     private Button quitButton;
     private Button multiplayerButton;
 
-    public MenuGUI() throws IOException {
-    	LanguageFileHandler language = new LanguageFileHandler("English");
+    public MenuGUI(String languageName, String theme) throws IOException {
+    	theme += ".txt";
+    	scene.getStylesheets().add(theme);
+    	LanguageFileHandler language = new LanguageFileHandler(languageName);
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();
@@ -46,7 +48,7 @@ public class MenuGUI extends Application {
         quitButton = new Button(language.getQuit());
         multiplayerButton = new Button(language.getMultiplayer());
         scene = new Scene(introPane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
+        
         
         
         
@@ -115,7 +117,5 @@ public class MenuGUI extends Application {
         });
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+   
 }
