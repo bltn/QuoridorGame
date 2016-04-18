@@ -24,11 +24,7 @@ import javax.sound.midi.SysexMessage;
 /**
  * @author Junaid Rasheed
  * @author Jordan Bird
- *
-<<<<<<< HEAD
-=======
  * @version 08/04/2016
->>>>>>> 7d36e8c7006db39063af263c7a1a7e34f104b448
  */
 public class MenuGUI extends Application {
 
