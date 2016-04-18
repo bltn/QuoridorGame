@@ -37,13 +37,13 @@ public class MenuGUI extends Application {
     private Button multiplayerButton;
 
     public MenuGUI() throws IOException {
-    	LanguageFileHandler language = new LanguageFileHandler("English");
+    	LanguageFileHandler.setLanguage("French");
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();
-        startButton = new Button(language.getStart());
-        quitButton = new Button(language.getQuit());
-        multiplayerButton = new Button(language.getMultiplayer());
+        startButton = new Button(LanguageFileHandler.getStart());
+        quitButton = new Button(LanguageFileHandler.getQuit());
+        multiplayerButton = new Button(LanguageFileHandler.getMultiplayer());
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }

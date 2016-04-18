@@ -10,42 +10,43 @@ import java.io.InputStreamReader;
 
 
 public class LanguageFileHandler {
-	
-	String filePath;
-	private BufferedReader br;
-	
-	private String start;
-	private String multiplayer;
-	private String quit;
-	private String moves;
-	private String player2;
-	private String player1;
-	private String walls;
-	private String joinGame;
-	private String hint;
-	private String createServer;
-	private String multiplayerInstructions;
-	private String connect;
 
-	public LanguageFileHandler(String language) throws IOException{
-		
-		if(language == "English")
-		{
-			filePath = "src/lang/English.txt";
+	private static String filePath;
+	private static BufferedReader br;
+
+	private static String start;
+	private static String multiplayer;
+	private static String quit;
+	private static String moves;
+	private static String player2;
+	private static String player1;
+	private static String walls;
+	private static String joinGame;
+	private static String hint;
+	private static String createServer;
+	private static String multiplayerInstructions;
+	private static String connect;
+
+	public static void setLanguage(String language) throws IOException {
+		switch (language) {
+			case "English": {
+				filePath = "src/lang/English.txt";
+				break;
+			}
+			case "French": {
+				filePath = "src/lang/French.txt";
+				break;
+			}
+			case "Spanish": {
+				filePath = "src/lang/Spanish.txt";
+				break;
+			}
+			default: {
+				filePath = "src/lang/English.txt";
+				break;
+			}
 		}
-		
-		if(language == "French")
-		{
-			filePath = "src/lang/French.txt";
-		}
-		
-		if(language == "Spanish")
-		{
-			filePath = "src/lang/Spanish.txt";
-		}
-		
-		
-		
+
 		FileInputStream fs= new FileInputStream(filePath);
 		br = new BufferedReader(new InputStreamReader(fs));
 		start = br.readLine();
@@ -60,68 +61,116 @@ public class LanguageFileHandler {
 		multiplayerInstructions = br.readLine();
 		createServer = br.readLine();
 		connect = br.readLine();
-		
+
 		System.out.println(start);
 	}
-	
-	public String getStart()
+
+	public static String getStart()
 	{
-		return start;
+		if (start != null) {
+			return start;
+		} else {
+			return "Start";
+		}
 	}
-	
-	public String getMultiplayer()
+
+	public static String getMultiplayer()
 	{
-		return multiplayer;
+		if (multiplayer != null) {
+			return multiplayer;
+		} else {
+			return "Multiplayer";
+		}
 	}
-	
-	public String getQuit()
+
+	public static String getQuit()
 	{
-		return quit;
+		if (quit != null) {
+			return quit;
+		} else {
+			return "Quit";
+		}
 	}
-	
-	public String getMoves()
+
+	public static String getMoves()
 	{
-		return moves;
+		if (moves != null) {
+			return moves;
+		} else {
+			return "Moves";
+		}
 	}
-	
-	public String getPlayer1()
+
+	public static String getPlayer1()
 	{
-		return player1;
+		if (player1 != null) {
+			return player1;
+		} else {
+			return "Player 1";
+		}
 	}
-	
-	public String getPlayer2()
+
+	public static String getPlayer2()
 	{
-		return player2;
+		if (player2 != null) {
+			return player2;
+		} else {
+			return "Player 2";
+		}
 	}
-	
-	public String getWalls()
+
+	public static String getWalls()
 	{
-		return walls;
+		if (walls != null) {
+			return walls;
+		} else {
+			return "Walls";
+		}
 	}
-	
-	public String getHint()
+
+	public static String getHint()
 	{
-		return hint;
+		if (hint != null) {
+			return hint;
+		} else {
+			return "Hint";
+		}
 	}
-	
-	public String getJoinGame()
+
+	public static String getJoinGame()
 	{
-		return joinGame;
+		if (joinGame != null) {
+			return joinGame;
+		} else {
+			return "Join game";
+		}
 	}
-	
-	public String getMP()
+
+	public static String getMP()
 	{
-		return multiplayerInstructions;
+		if (multiplayerInstructions != null) {
+			return multiplayerInstructions;
+		} else {
+			return "Enter the IP and port address for your machine";
+		}
 	}
-	
-	public String getCreateServer()
+
+	public static String getCreateServer()
 	{
-		return createServer;
+		if (createServer != null) {
+			return createServer;
+		} else {
+			return "Create server";
+		}
 	}
-	
-	public String getConnect()
+
+	public static String getConnect()
 	{
-		return connect;
+		if (connect != null) {
+			return connect;
+		} else {
+			return "Connect to game";
+		}
 	}
-	
+
 }
