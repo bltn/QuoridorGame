@@ -30,6 +30,7 @@ public class ConnectionGUI extends Application {
 	private VBox buttonBox;
 	private Button createServerButton;
 	private Button connectToServerButton;
+	private Button connectTo4PServerButton;
 	private Label IPandPortInfo;
 	private TextField IPAddressField;
 	private TextField portField;
@@ -45,7 +46,8 @@ public class ConnectionGUI extends Application {
         joinText.textProperty().bind(joinTextValue);
 		buttonBox = new VBox();
 		createServerButton = new Button("Create game server");
-		connectToServerButton = new Button("Connect to game");
+		connectToServerButton = new Button("Connect to 2P game");
+		connectTo4PServerButton = new Button("Connect to 4P game");
 		scene = new Scene(pane, 600, 800);
 		scene.getStylesheets().add("Theme.css");
 		IPandPortInfo = new Label("Enter the IP and port address for your machine.");
@@ -85,7 +87,7 @@ public class ConnectionGUI extends Application {
 	public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton);
+        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton, connectTo4PServerButton);
         buttonBox.setAlignment(Pos.CENTER);
         createServerButton.setPrefWidth(270);
         createServerButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -113,7 +115,7 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
-                GUI gui = new NetworkedBoardGUI();
+                GUI gui = new NetworkedBoardGUI(2);
 				GameClient client = new GameClient(gui);
                 client.connectToServer(IPAddress, portNumber);
                 while (client.guiIsLaunched() == false) {
@@ -130,6 +132,29 @@ public class ConnectionGUI extends Application {
                 }
             }
         });
+		connectTo4PServerButton.setPrefWidth(270);
+		connectTo4PServerButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				IPAddress = IPAddressField.getText();
+				portNumber = Integer.parseInt(portField.getText());
+				GUI gui = new NetworkedBoardGUI(4);
+				GameClient client = new GameClient(gui);
+				client.connectToServer(IPAddress, portNumber);
+				while (client.guiIsLaunched() == false) {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						System.out.println(e.getMessage());
+					}
+					if (client.guiCanBeLaunched()) {
+						client.setGUILaunched(true);
+						((NetworkedBoardGUI) gui).setClient(client);
+						gui.start(new Stage());
+					}
+				}
+			}
+		});
     }
 
 	private String askForGameMode() {
