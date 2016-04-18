@@ -1,12 +1,8 @@
 import javafx.scene.control.Alert;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class GameServer {
 
@@ -14,13 +10,17 @@ public class GameServer {
 
 	private ClientSocketIOThread player1IOThread;
 	private ClientSocketIOThread player2IOThread;
+	private ClientSocketIOThread player3IOThread;
+	private ClientSocketIOThread player4IOThread;
 
 	private NetworkedGameController controller;
+	private int numberOfPlayers;
 
     private Alert alert;
 
-	public GameServer(NetworkedGameController controller) {
+	public GameServer(NetworkedGameController controller, int numberOfPlayers) {
 		this.controller = controller;
+		this.numberOfPlayers = numberOfPlayers;
         alert = new Alert(Alert.AlertType.CONFIRMATION, "");
     }
 
@@ -42,7 +42,7 @@ public class GameServer {
 		try {
             showAlert("Waiting for players to join");
 			int socketCount = 0;
-			while (socketCount < 2) {
+			while (socketCount < numberOfPlayers) {
 				if (socketCount == 0) {
 					player1IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
                     showAlert("Player 1 has joined");
@@ -52,6 +52,16 @@ public class GameServer {
 					player2IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
                     showAlert("Player 2 has joined");
 					System.out.println("Client socket # 2 I/O thread booted up");
+				}
+				else if (socketCount == 2) {
+					player3IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+					showAlert("Player 3 has joined");
+					System.out.println("Client socket # 3 I/O thread booted up");
+				}
+				else if (socketCount == 3) {
+					player4IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+					showAlert("Player 4 has joined");
+					System.out.println("Client socket # 4 I/O thread booted up");
 				}
 				socketCount++;
 			}
@@ -64,6 +74,14 @@ public class GameServer {
 			player2IOThread.sendMessage("bootGUI");
 			player1IOThread.sendMessage("setID " + 1);
 			player2IOThread.sendMessage("setID " + 2);
+			if (numberOfPlayers == 4) {
+				controller.setPlayer3IO(player3IOThread);
+				controller.setPlayer4IO(player4IOThread);
+				player3IOThread.sendMessage("bootGUI");
+				player4IOThread.sendMessage("bootGUI");
+				player3IOThread.sendMessage("setID " + 3);
+				player4IOThread.sendMessage("setID " + 4);
+			}
             showAlert("Game has begun");
 		} catch (IOException e) {
             showAlert("There was a problem with a client joining the server");
@@ -75,6 +93,10 @@ public class GameServer {
 	private void initThreads() {
 		player1IOThread.start();
 		player2IOThread.start();
+		if (numberOfPlayers == 4) {
+			player3IOThread.start();
+			player4IOThread.start();
+		}
 	}
 
     private void showAlert(String alertText) {

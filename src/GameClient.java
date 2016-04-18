@@ -5,7 +5,6 @@ import java.net.Socket;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 public class GameClient extends Thread {
 
@@ -143,10 +142,14 @@ public class GameClient extends Thread {
 					int player1Y = Integer.parseInt(commands[2]);
 					int player2X = Integer.parseInt(commands[3]);
 					int player2Y = Integer.parseInt(commands[4]);
+					int player3X = Integer.parseInt(commands[5]);
+					int player3Y = Integer.parseInt(commands[6]);
+					int player4X = Integer.parseInt(commands[7]);
+					int player4Y = Integer.parseInt(commands[8]);
 					Platform.runLater(new Runnable() {
 					   @Override
 					   public void run() {
-					      gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y);
+					      gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y, player3X, player3Y, player4X, player4Y);
 					   }
 					});
 				}

@@ -90,9 +90,9 @@ public class MenuGUI extends Application {
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				GUI gui = new NetworkedBoardGUI();
+				GUI gui = new NetworkedBoardGUI(2);
 				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard(2)));
+				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
 				ConnectionGUI connGUI = new ConnectionGUI();
 				connGUI.start(new Stage());
 			}

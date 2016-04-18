@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  * @author Ben Lawton
  * @author Jordan Bird
  *
- * @version 12/02/2016
+ * @version 18/04/2016
  */
 public class NetworkedBoardGUI extends Application implements GUI {
 
@@ -31,6 +31,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private final int width = 17;
     private final int height = 17;
     private final HBox player2StatsPane = new HBox(120);
+    private final HBox player3StatsPane = new HBox(120);
+    private final HBox player4StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
     private final HBox currentPlayerPane = new HBox();
@@ -55,20 +57,33 @@ public class NetworkedBoardGUI extends Application implements GUI {
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
+
+    private Text player3Moves;
+    private int player3WallCount;
+    private Text player3Walls;
+
+    private Text player4Moves;
+    private int player4WallCount;
+    private Text player4Walls;
+
     //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
+    private Circle thirdPawn;
+    private Circle fourthPawn;
     private Text assignedIDText;
 
     private GameClient client;
+    private int numberOfPlayers;
 
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
+     * @param numberOfPlayers Number of players in the game
      */
-    public NetworkedBoardGUI() {
+    public NetworkedBoardGUI(int numberOfPlayers) {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
@@ -77,6 +92,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
+        thirdPawn = new Circle(15);
+        fourthPawn = new Circle(15);
         player1Moves = new Text("Moves: " + 0);
         currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
@@ -84,7 +101,14 @@ public class NetworkedBoardGUI extends Application implements GUI {
         player2Moves = new Text("Moves: " + 0);
         player2WallCount = 10;
         player2Walls = new Text("Walls: " + player2WallCount);
+        player3Moves = new Text("Moves: " + 0);
+        player3WallCount = 10;
+        player3Walls = new Text("Walls: " + player3WallCount);
+        player4Moves = new Text("Moves: " + 0);
+        player4WallCount = 10;
+        player4Walls = new Text("Walls: " + player3WallCount);
         errorPaneText = new Text("");
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void setController(Controller controller) {
@@ -108,13 +132,21 @@ public class NetworkedBoardGUI extends Application implements GUI {
         primaryStage.show();
     }
 
-    public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y) {
+    public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y, int player3X, int player3Y, int player4X, int player4Y) {
     	player1X *= 2;
     	player1Y *= 2;
-    	player2X *= 2;
-    	player2Y *= 2;
+        player2X *= 2;
+        player2Y *= 2;
+        player3X *= 2;
+        player3Y *= 2;
+        player4X *= 2;
+        player4Y *= 2;
     	setPawn(firstPawn, Color.ORANGE, player1X, player1Y);
     	setPawn(secondPawn, Color.GREEN, player2X, player2Y);
+        if (numberOfPlayers == 4) {
+            setPawn(thirdPawn, Color.BLUE, player3X, player3Y);
+            setPawn(fourthPawn, Color.RED, player4X, player4Y);
+        }
     }
 
     /**
@@ -129,9 +161,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        if (numberOfPlayers == 2) {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        } else {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);
+        }
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player3StatsPane.setAlignment(Pos.CENTER);
+        player3StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player4StatsPane.setAlignment(Pos.CENTER);
+        player4StatsPane.setPadding(new Insets(5, 0, 5, 0));
         currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
         errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
@@ -228,6 +268,23 @@ public class NetworkedBoardGUI extends Application implements GUI {
         Text player2Title = new Text("Player 2");
         player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
+        if (numberOfPlayers == 4) {
+            player3Walls.setTextAlignment(TextAlignment.CENTER);
+            player3Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player3Moves.setTextAlignment(TextAlignment.CENTER);
+            player3Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player3Title = new Text("Player 3");
+            player3Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player3StatsPane.getChildren().addAll(player3Moves, player3Title, player3Walls);
+
+            player4Walls.setTextAlignment(TextAlignment.CENTER);
+            player4Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player4Moves.setTextAlignment(TextAlignment.CENTER);
+            player4Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player4Title = new Text("Player 4");
+            player4Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player4StatsPane.getChildren().addAll(player4Moves, player4Title, player4Walls);
+        }
     }
 
     /**
@@ -280,6 +337,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	else if (playerID == 2) {
     		player2Moves.setText("Moves: " + moveCount);
     	}
+        else if (playerID == 3) {
+            player3Moves.setText("Moves: " + moveCount);
+        }
+        else if (playerID == 4) {
+            player4Moves.setText("Moves: " + moveCount);
+        }
     }
 
     public void updatePlayerWallCount(int wallCount, int playerID) {
@@ -290,7 +353,15 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	else if (playerID == 2) {
     		player2WallCount = wallCount;
             player2Walls.setText("Walls: " + player2WallCount);
-    	}
+        }
+        else if (playerID == 3) {
+            player3WallCount = wallCount;
+            player3Walls.setText("Walls: " + player3WallCount);
+        }
+        else if (playerID == 4) {
+            player4WallCount = wallCount;
+            player4Walls.setText("Walls: " + player4WallCount);
+        }
     }
 
     public void updatePlayerPawnPosition(int x, int y, int playerID) {
@@ -308,6 +379,16 @@ public class NetworkedBoardGUI extends Application implements GUI {
             boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
             boardPane.getChildren().add(secondPawn);
     	}
+        else if (playerID == 3) {
+            boardPane.getChildren().remove(thirdPawn);
+            boardPane.setConstraints(thirdPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(thirdPawn);
+        }
+        else if (playerID == 4) {
+            boardPane.getChildren().remove(fourthPawn);
+            boardPane.setConstraints(fourthPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(fourthPawn);
+        }
     }
 
     /**
@@ -319,7 +400,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     	else if (playerID == 2) {
     		currentPlayerText.setText("Player 2's turn...");
-    	}
+        } else if (playerID == 3) {
+            currentPlayerText.setText("Player 3's turn...");
+        } else if (playerID == 4) {
+            currentPlayerText.setText("Player 4's turn...");
+        }
     }
 
     public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
@@ -339,7 +424,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
 	    		grids[topY][topX].setStroke(Color.GREEN);
 	    		grids[bottomY][bottomX].setFill(Color.GREEN);
 	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
-    		}
+            } else if (playerID == 3) {
+                grids[topY][topX].setFill(Color.BLUE);
+                grids[topY][topX].setStroke(Color.BLUE);
+                grids[bottomY][bottomX].setFill(Color.BLUE);
+                grids[bottomY][bottomX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[topY][topX].setFill(Color.RED);
+                grids[topY][topX].setStroke(Color.RED);
+                grids[bottomY][bottomX].setFill(Color.RED);
+                grids[bottomY][bottomX].setStroke(Color.RED);
+            }
     		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
             	@Override
             	public void handle(MouseEvent event) {
@@ -362,7 +457,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
 	    		grids[leftY][leftX].setStroke(Color.GREEN);
 	    		grids[rightY][rightX].setFill(Color.GREEN);
 	    		grids[rightY][rightX].setStroke(Color.GREEN);
-    		}
+            } else if (playerID == 3) {
+                grids[leftY][leftX].setFill(Color.BLUE);
+                grids[leftY][leftX].setStroke(Color.BLUE);
+                grids[rightY][rightX].setFill(Color.BLUE);
+                grids[rightY][rightX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[leftY][leftX].setFill(Color.RED);
+                grids[leftY][leftX].setStroke(Color.RED);
+                grids[rightY][rightX].setFill(Color.RED);
+                grids[rightY][rightX].setStroke(Color.RED);
+            }
     		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
             	@Override
             	public void handle(MouseEvent event) {
