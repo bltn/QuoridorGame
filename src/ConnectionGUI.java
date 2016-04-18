@@ -93,11 +93,15 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
             	String mode = askForGameMode();
             	GameServer server;
-            	if (mode.equals("Challenge")) {
-            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)));
-            	} else {
-            		server = new GameServer(new NetworkedGameController(new StandardBoard(2)));
-            	}
+            	if (mode.equals("2P Challenge")) {
+            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)), 2);
+            	} else if (mode.equals("2P Standard")){
+            		server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
+            	} else if (mode.equals("4P Standard")) {
+					server = new GameServer(new NetworkedGameController(new StandardBoard(4)), 4);
+				} else {
+					server = new GameServer(new NetworkedGameController(new ChallengeBoard(4)), 4);
+				}
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 server.initialiseServer(IPAddress, portNumber);
@@ -131,10 +135,12 @@ public class ConnectionGUI extends Application {
 	private String askForGameMode() {
 		String mode = null;
 		ArrayList<String> choices = new ArrayList();
-		choices.add("Standard");
-		choices.add("Challenge");
+		choices.add("2P Standard");
+		choices.add("2P Challenge");
+		choices.add("4P Standard");
+		choices.add("4P Challenge");
 
-		ChoiceDialog<String> dialog = new ChoiceDialog<>("Standard", choices);
+		ChoiceDialog<String> dialog = new ChoiceDialog<>("2P Standard", choices);
 		dialog.setTitle("Game modes");
 		dialog.setHeaderText("Choose a game mode");
 		dialog.setContentText("Choose a mode:");
