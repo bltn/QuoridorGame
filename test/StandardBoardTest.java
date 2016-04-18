@@ -9,7 +9,7 @@ import org.junit.Test;
  * @author Thai Con
  * @author Ben Lawton
  */
-public class BoardTest {
+public class StandardBoardTest {
 
 	private static Board board;
     private static Player player1;
@@ -17,18 +17,9 @@ public class BoardTest {
 
 	@BeforeClass
 	public static void setUp() {
-		board = new Board();
+		board = new StandardBoard();
         player1 = board.getPlayer1();
         player2 = board.getPlayer2();
-	}
-
-	@Test
-	public void testGetPosition() {
-		int x = 0;
-		int y = 8;
-
-		assertEquals(x, board.getPosition(x, y).getX());
-		assertEquals(y, board.getPosition(x, y).getY());
 	}
 
 	@Test
@@ -50,9 +41,15 @@ public class BoardTest {
 		ArrayList<Position> occupiablePositions = board.getCurrentPlayerOccupiablePositions();
 
 		assertEquals(3, occupiablePositions.size());
-		assertEquals(true, containsCoordinates(occupiablePositions, 5, 0));
-		assertEquals(true, containsCoordinates(occupiablePositions, 3, 0));
-		assertEquals(true, containsCoordinates(occupiablePositions, 4, 1));
+		if (board.getCurrentPlayer().getID() == 1) {
+			assertEquals(true, containsCoordinates(occupiablePositions, 5, 0));
+			assertEquals(true, containsCoordinates(occupiablePositions, 3, 0));
+			assertEquals(true, containsCoordinates(occupiablePositions, 4, 1));
+		} else if (board.getCurrentPlayer().getID() == 2) {
+			assertEquals(true, containsCoordinates(occupiablePositions, 4, 7));
+			assertEquals(true, containsCoordinates(occupiablePositions, 5, 8));
+			assertEquals(true, containsCoordinates(occupiablePositions, 3, 8));
+		}
 	}
 
 	@Test
@@ -67,30 +64,6 @@ public class BoardTest {
 		// make sure inner positions don't get any premature wall assignments
 		assertEquals(false, board.getPosition(4, 4).hasTopWall());
 	}
-
-	/**
-	 * @param positions the collection of positions
-	 * @param xCoord the x coordinate of the position being searched for
-	 * @param yCoord the y coordinate of the position being searched for
-	 * @return whether or not the given ArrayList of positions contains a position with the given coordinates
-	 */
-	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {
-		boolean containsCoordinates = false;
-		for (Position pos : positions) {
-			if (pos.getY() == yCoord && pos.getX() == xCoord) {
-				containsCoordinates = true;
-			}
-		}
-		return containsCoordinates;
-	}
-
-    @Test
-    /**
-     * Test that the starting player at the beginning of the game is player 1
-     */
-    public void testCurrentPlayer() {
-        assertEquals(player1, board.getCurrentPlayer());
-    }
 
     @Test
     /**
@@ -128,4 +101,31 @@ public class BoardTest {
         assertEquals(player1.getPosition(), board.getPosition(4, 4));
         assertEquals(player2.getPosition(), board.getPosition(4, 5));
     }
+
+    @Test
+    public void placeVerticalWallTest() {
+    	int topLeftX = 2;
+    	int topLeftY = 5;
+
+    	Position topLeft = board.getPosition(topLeftX, topLeftY);
+    	Position topRight = board.getPosition((topLeftX + 1), topLeftY);
+    	Position bottomRight = board.getPosition((topLeftX + 1), (topLeftY + 1));
+    	Position bottomLeft = board.getPosition(topLeftX, (topLeftY + 1));
+
+    	board.placeWalls(topLeftX, topLeftY, WallPlacement.VERTICAL);
+    	assertEquals(true, topLeft.hasRightWall());
+    	assertEquals(true, topRight.hasLeftWall());
+    	assertEquals(true, bottomRight.hasLeftWall());
+    	assertEquals(true, bottomLeft.hasRightWall());
+    }
+
+	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {
+		boolean containsCoordinates = false;
+		for (Position pos : positions) {
+			if (pos.getY() == yCoord && pos.getX() == xCoord) {
+				containsCoordinates = true;
+			}
+		}
+		return containsCoordinates;
+	}
 }
