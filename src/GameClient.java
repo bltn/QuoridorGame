@@ -66,7 +66,7 @@ public class GameClient extends Thread {
 				initThread();
                 showAlert("Connected to server");
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				SystemLogger.logError(e.getMessage());
                 showAlert("Error connecting to server");
 			}
 		}
@@ -152,7 +152,7 @@ public class GameClient extends Thread {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 

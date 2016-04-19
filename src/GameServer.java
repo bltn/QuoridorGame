@@ -32,7 +32,7 @@ public class GameServer {
 				listenForConnectionRequests();
 			} catch (Exception e) {
 				e.printStackTrace();
-                showAlert("Error creating server");
+                showAlert("Error creating server. Please restart and try again.");
 				System.out.println("There was an error creating the server");
 			}
 		}
@@ -45,13 +45,15 @@ public class GameServer {
 			while (socketCount < 2) {
 				if (socketCount == 0) {
 					player1IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    SystemLogger.logInfo("Client socket # 1 I/O thread booted up");
+                    SystemLogger.logInfo("Player 1 joined game");
                     showAlert("Player 1 has joined");
-					System.out.println("Client socket # 1 I/O thread booted up");
 				}
 				else if (socketCount == 1) {
 					player2IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    SystemLogger.logInfo("Client socket # 2 I/O thread booted up");
+                    SystemLogger.logInfo("Player 2 joined game");
                     showAlert("Player 2 has joined");
-					System.out.println("Client socket # 2 I/O thread booted up");
 				}
 				socketCount++;
 			}
@@ -64,11 +66,11 @@ public class GameServer {
 			player2IOThread.sendMessage("bootGUI");
 			player1IOThread.sendMessage("setID " + 1);
 			player2IOThread.sendMessage("setID " + 2);
+			SystemLogger.logInfo("Game begun");
             showAlert("Game has begun");
 		} catch (IOException e) {
             showAlert("There was a problem with a client joining the server");
-			System.out.println("IOException caught on the client side.");
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 
