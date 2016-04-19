@@ -76,6 +76,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private Text assignedIDText;
 
     private GameClient client;
+
     private int numberOfPlayers;
 
     /**
@@ -133,17 +134,18 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y, int player3X, int player3Y, int player4X, int player4Y) {
+        System.out.println("Setting initial positions");
     	player1X *= 2;
     	player1Y *= 2;
         player2X *= 2;
         player2Y *= 2;
-        player3X *= 2;
-        player3Y *= 2;
-        player4X *= 2;
-        player4Y *= 2;
     	setPawn(firstPawn, Color.ORANGE, player1X, player1Y);
     	setPawn(secondPawn, Color.GREEN, player2X, player2Y);
         if (numberOfPlayers == 4) {
+            player3X *= 2;
+            player3Y *= 2;
+            player4X *= 2;
+            player4Y *= 2;
             setPawn(thirdPawn, Color.BLUE, player3X, player3Y);
             setPawn(fourthPawn, Color.RED, player4X, player4Y);
         }
@@ -600,5 +602,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
         client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 }

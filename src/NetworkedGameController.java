@@ -37,6 +37,22 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
+	public ClientSocketIOThread getPlayer4IO() {
+		return player4IO;
+	}
+
+	public ClientSocketIOThread getPlayer3IO() {
+		return player3IO;
+	}
+
+	public ClientSocketIOThread getPlayer2IO() {
+		return player2IO;
+	}
+
+	public ClientSocketIOThread getPlayer1IO() {
+		return player1IO;
+	}
+
 	@Override
 	public Player getCurrentPlayer() {
 		return board.getCurrentPlayer();
