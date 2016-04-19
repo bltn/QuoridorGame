@@ -2,17 +2,17 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ChallengeBoardTest {
 
-	private static Board board;
-	private static Player player1;
-	private static Player player2;
+	private Board board;
+	private Player player1;
+	private Player player2;
 
-	@BeforeClass
-	public static void setUp() {
+	@Before
+	public void setUp() {
 		board = new ChallengeBoard();
 		player1 = board.getPlayer1();
 		player2 = board.getPlayer2();
@@ -144,6 +144,16 @@ public class ChallengeBoardTest {
     	assertEquals(false, topRight.hasBottomWall());
     	assertEquals(false, bottomLeft.hasTopWall());
     	assertEquals(false, bottomRight.hasTopWall());
+    }
+
+    @Test
+    public void winningMoveTest() {
+    	// move player1 to the left of his/her winning move
+    	board.getPlayer1().setPosition(board.getPosition(7, 8));
+    	board.getPlayer2().setPosition(board.getPosition(8, 7));
+
+    	boolean gameOver = board.movePawn(8, 8);
+    	assertEquals(true, gameOver);
     }
 
 	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {
