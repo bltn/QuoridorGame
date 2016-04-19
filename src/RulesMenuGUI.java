@@ -21,14 +21,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-/**
- * @author Khadija Patel
- *
- */
 public class RulesMenuGUI extends Application {
 
     private Scene scene;
-    private GridPane introPane;
+    private GridPane pane;
     private Text introText;
     private Text standardText;
     private Text challengeText;
@@ -45,52 +41,59 @@ public class RulesMenuGUI extends Application {
     private Stage primaryStage;
 
     public RulesMenuGUI() {
-        introPane = new GridPane();
+    	pane = new GridPane();
         introText = new Text("Rules");
-        buttonBox = new VBox(10);
+        buttonBox = new VBox(100);
         standardText = new Text("Standard Rules:");
         challengeText= new Text("Challenge Rules:");
+        
         standardButtonBox = new HBox(10);
         challengeButtonBox = new HBox(10);
         quitButtonBox = new HBox(10);
 
-        
+        //add a icon into the 2P standard button
         Image standard2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newStandard2 = new ImageView(standard2);
         newStandard2.setFitHeight(20);
         newStandard2.setFitWidth(20);
         standardButton = new Button("2P Standard",newStandard2);
         
+        //add a icon into the 4P standard button
         Image standard4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView newStandard4 = new ImageView(standard4);
         newStandard4.setFitHeight(20);
         newStandard4.setFitWidth(45);
         fourPlayerStandardButton = new Button("4P Standard",newStandard4);
         
+        //add a icon into the 2P challenge button
         Image challenge2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView NewChallenge2 = new ImageView(challenge2);
         NewChallenge2.setFitHeight(20);
         NewChallenge2.setFitWidth(20);
         challengeButton = new Button("2P Challenge",NewChallenge2);
-        
+       
+        //add a icon into the 4P challenge button
         Image challenge4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView NewChallenge4 = new ImageView(challenge4);
         NewChallenge4.setFitHeight(20);
         NewChallenge4.setFitWidth(45);
         fourPlayerChallengeButton = new Button("4P Challenge",NewChallenge4);
         
+        // add a icon into the quit button
         Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
         ImageView newQuit = new ImageView(quit);
         newQuit.setFitHeight(20);
         newQuit.setFitWidth(20);
         quitButton = new Button("Quit",newQuit);
         
+        // add a icon into the back button
         Image back = new Image(getClass().getResourceAsStream("icons/back.png"));
         ImageView newBack = new ImageView(back);
         newBack.setFitHeight(20);
         newBack.setFitWidth(20);
         backButton = new Button("Back",newBack);
         
+        //add background image
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
         BackgroundSize.AUTO, false, false, true, true);
@@ -98,11 +101,9 @@ public class RulesMenuGUI extends Application {
         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
         BackgroundPosition.CENTER, size);
         
-        introPane.setBackground(new Background(bimg));
-        scene = new Scene(introPane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
-        
-        
+        pane.setBackground(new Background(bimg));
+        scene = new Scene(pane, 600, 400);
+        scene.getStylesheets().add("Theme.css");     
     }
 
     @Override
@@ -119,14 +120,15 @@ public class RulesMenuGUI extends Application {
      * create the pane for the title
      */
     public void setIntroPane() {
-        introPane.setAlignment(Pos.CENTER);
-        introPane.setHgap(25);
-        introPane.setVgap(100);
-        introPane.add(buttonBox, 0, 1);
-        introPane.add(introText, 0, 0, 1, 1);
-        introText.setId("text");
+    	pane.setAlignment(Pos.CENTER);
+        pane.setHgap(25);
+        pane.setVgap(100);
+        pane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
+        pane.add(introText, 0, 0, 1, 1);
+        introText.setId("text");
+
     }
 
     /**
@@ -136,13 +138,30 @@ public class RulesMenuGUI extends Application {
         standardText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         challengeText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
-        standardButtonBox.getChildren().addAll(standardText, standardButton, fourPlayerStandardButton);
-        challengeButtonBox.getChildren().addAll(challengeText, challengeButton, fourPlayerChallengeButton);
-        quitButtonBox.getChildren().addAll(backButton, quitButton);
-        quitButtonBox.setAlignment(Pos.CENTER_RIGHT);
-        standardButtonBox.setAlignment(Pos.CENTER_RIGHT);
-        challengeButtonBox.setAlignment(Pos.CENTER_RIGHT);
-        buttonBox.getChildren().addAll(standardButtonBox, challengeButtonBox, quitButtonBox);
+        buttonBox.setSpacing(10);
+        buttonBox.getChildren().addAll(introText, standardButtonBox, challengeButtonBox,quitButtonBox);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(15, 15, 15, 15));
+        
+		backButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+		quitButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	quitButtonBox.getChildren().addAll(backButton, quitButton);
+    	quitButtonBox.setSpacing(10);
+    	quitButtonBox.setAlignment(Pos.CENTER_RIGHT);
+    	
+
+    	standardButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	fourPlayerStandardButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	standardButtonBox.getChildren().addAll(standardText, standardButton, fourPlayerStandardButton);
+    	standardButtonBox.setSpacing(10);
+    	standardButtonBox.setAlignment(Pos.CENTER);
+    	
+    	challengeButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	fourPlayerChallengeButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	challengeButtonBox.getChildren().addAll(challengeText, challengeButton, fourPlayerChallengeButton);
+    	challengeButtonBox.setSpacing(10);
+    	challengeButtonBox.setAlignment(Pos.CENTER);
+    	
         standardButton.setPrefWidth(200);
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override

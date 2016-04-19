@@ -20,11 +20,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 
-/**
- * @author Junaid Rasheed
- * @author Jordan Bird
- *
- */
 public class MenuGUI extends Application {
 
     private Scene scene;
@@ -62,6 +57,7 @@ public class MenuGUI extends Application {
          NewMultiplayer.setFitWidth(20);
          multiplayerButton = new Button("Multiplayer",NewMultiplayer);
         
+         //add background image
          Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
          BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
          BackgroundSize.AUTO, false, false, true, true);
@@ -72,7 +68,6 @@ public class MenuGUI extends Application {
          introPane.setBackground(new Background(bimg));
          scene = new Scene(introPane, 600, 400);
          scene.getStylesheets().add("Theme.css");
-         
     }
 
     @Override
