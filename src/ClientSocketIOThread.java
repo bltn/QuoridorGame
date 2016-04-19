@@ -46,7 +46,7 @@ public class ClientSocketIOThread extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ClientSocketIOThread extends Thread {
 		try {
 			this.sisterOut = new PrintWriter(sisterSocket.getOutputStream(), true);
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 
@@ -105,7 +105,7 @@ public class ClientSocketIOThread extends Thread {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 
