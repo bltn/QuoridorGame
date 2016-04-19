@@ -39,7 +39,11 @@ public class ClientSocketIOThread extends Thread {
 					placeWall(commands);
 				}
 				else if (commands[0].equals("start-coordinates")) {
-					out.println("coordinate " + controller.getPlayer1X() + " " + controller.getPlayer1Y() + " " + controller.getPlayer2X() + " " + controller.getPlayer2Y() + " " + controller.getPlayer3X() + " " + controller.getPlayer3Y() + " " + controller.getPlayer4X() + " " + controller.getPlayer4Y());
+					String coordinates = "coordinate " + controller.getPlayer1X() + " " + controller.getPlayer1Y() + " " + controller.getPlayer2X() + " " + controller.getPlayer2Y();
+					if(controller.getPlayer3IO() != null) {
+						coordinates +=  " " + controller.getPlayer3X() + " " + controller.getPlayer3Y() + " " + controller.getPlayer4X() + " " + controller.getPlayer4Y();
+					}
+					out.println(coordinates);
 				}
 				else if (commands[0].equals("remove-wall")) {
 					removeWall(commands);
