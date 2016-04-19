@@ -1,6 +1,11 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+import com.sun.prism.paint.Color;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,8 +13,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -21,36 +34,58 @@ public class ConnectionGUI extends Application {
 
 	private Scene scene;
 	private GridPane pane;
-	private Label joinText;
+	private Text joinText;
     private static StringProperty joinTextValue;
 	private VBox buttonBox;
 	private Button createServerButton;
 	private Button connectToServerButton;
-	private Label IPandPortInfo;
+	private Button connectTo4PServerButton;
+	private Text IPandPortInfo;
 	private TextField IPAddressField;
 	private TextField portField;
 	private String IPAddress;
 	private int portNumber;
-	private GameServer server;
-	private GameClient client;
 
-	public ConnectionGUI(GameServer server, GameClient client) {
-		this.server = server;
-		this.client = client;
+	public ConnectionGUI() {
 		IPAddress = "localhost";
 		portNumber = 33333;
 		pane = new GridPane();
-		joinText = new Label();
-        joinTextValue = new SimpleStringProperty("Join the game");
-        joinText.textProperty().bind(joinTextValue);
+		joinText = new Text("Join the Game:");
 		buttonBox = new VBox();
-		createServerButton = new Button("Create game server");
-		connectToServerButton = new Button("Connect to game");
+	
 		scene = new Scene(pane, 600, 800);
-		scene.getStylesheets().add("Theme.css");
-		IPandPortInfo = new Label("Enter the IP and port address for your machine.");
+		IPandPortInfo = new Text("Enter the IP and port address for your machine.");
 		IPAddressField = new TextField(IPAddress);
 		portField = new TextField("" + portNumber);
+		
+		Image server = new Image(getClass().getResourceAsStream("icons/server.png"));
+        ImageView newServerButton = new ImageView(server);
+        newServerButton.setFitHeight(20);
+        newServerButton.setFitWidth(40);
+        createServerButton = new Button("Create game server",newServerButton);
+		
+		Image standard = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
+        ImageView newStandardButton = new ImageView(standard);
+        newStandardButton.setFitHeight(20);
+        newStandardButton.setFitWidth(20);
+        connectToServerButton = new Button("Connect to 2P game",newStandardButton);
+        
+        Image fourplayer = new Image(getClass().getResourceAsStream("icons/4players.png"));
+        ImageView new4PButton = new ImageView(fourplayer);
+        new4PButton.setFitHeight(20);
+        new4PButton.setFitWidth(45);
+        connectTo4PServerButton = new Button("Connect to 4P game",new4PButton);
+        
+	    Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
+	    BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
+	    BackgroundSize.AUTO, false, false, true, true);
+	    BackgroundImage bimg = new BackgroundImage(background,
+	    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+	    BackgroundPosition.CENTER, size);
+	        
+	    pane.setBackground(new Background(bimg));
+	    scene.getStylesheets().add("Theme.css");
+
 	}
 
 	@Override
@@ -78,19 +113,37 @@ public class ConnectionGUI extends Application {
         pane.setVgap(100);
         pane.add(buttonBox, 0, 1);
         joinText.setTextAlignment(TextAlignment.CENTER);
-        joinText.setFont(Font.font("Calibri", FontWeight.BOLD, 50));
+        joinText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
         pane.add(joinText, 0, 0, 1, 1);
+
+        joinText.setId("text");
     }
 
 	public void setButtons() {
+		createServerButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+		connectToServerButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+		connectTo4PServerButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+		IPandPortInfo.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+	//	IPandPortInfo.setFill(Color.RED);
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton);
+        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton, connectTo4PServerButton);
         buttonBox.setAlignment(Pos.CENTER);
         createServerButton.setPrefWidth(270);
         createServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	String mode = askForGameMode();
+            	GameServer server;
+            	if (mode.equals("2P Challenge")) {
+            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)), 2);
+            	} else if (mode.equals("2P Standard")){
+            		server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
+            	} else if (mode.equals("4P Standard")) {
+					server = new GameServer(new NetworkedGameController(new StandardBoard(4)), 4);
+				} else {
+					server = new GameServer(new NetworkedGameController(new ChallengeBoard(4)), 4);
+				}
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 server.initialiseServer(IPAddress, portNumber);
@@ -102,8 +155,9 @@ public class ConnectionGUI extends Application {
             public void handle(ActionEvent event) {
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
+                GUI gui = new NetworkedBoardGUI(2);
+				GameClient client = new GameClient(gui);
                 client.connectToServer(IPAddress, portNumber);
-                GUI gui = (NetworkedBoardGUI)client.getGUI();
                 while (client.guiIsLaunched() == false) {
                 	try {
 						Thread.sleep(500);
@@ -118,5 +172,48 @@ public class ConnectionGUI extends Application {
                 }
             }
         });
+		connectTo4PServerButton.setPrefWidth(270);
+		connectTo4PServerButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				IPAddress = IPAddressField.getText();
+				portNumber = Integer.parseInt(portField.getText());
+				GUI gui = new NetworkedBoardGUI(4);
+				GameClient client = new GameClient(gui);
+				client.connectToServer(IPAddress, portNumber);
+				while (client.guiIsLaunched() == false) {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						System.out.println(e.getMessage());
+					}
+					if (client.guiCanBeLaunched()) {
+						client.setGUILaunched(true);
+						((NetworkedBoardGUI) gui).setClient(client);
+						gui.start(new Stage());
+					}
+				}
+			}
+		});
     }
+
+	private String askForGameMode() {
+		String mode = null;
+		ArrayList<String> choices = new ArrayList();
+		choices.add("2P Standard");
+		choices.add("2P Challenge");
+		choices.add("4P Standard");
+		choices.add("4P Challenge");
+
+		ChoiceDialog<String> dialog = new ChoiceDialog<>("2P Standard", choices);
+		dialog.setTitle("Game modes");
+		dialog.setHeaderText("Choose a game mode");
+		dialog.setContentText("Choose a mode:");
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			mode = result.get();
+		}
+		return mode;
+	}
 }
