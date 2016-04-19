@@ -15,11 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * @author Junaid Rasheed
- * @author Jordan Bird
- * @version 08/04/2016
- */
 public class MenuGUI extends Application {
 
     private Scene scene;

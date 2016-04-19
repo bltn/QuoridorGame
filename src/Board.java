@@ -1,10 +1,4 @@
-/**
- * @author Ben Lawton
- * @author Thai Hoang
- * @author Khadija Patel
- */
 import java.util.ArrayList;
-
 
 public abstract class Board {
 

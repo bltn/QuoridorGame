@@ -3,12 +3,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * @author Jordan Bird
- * @version 4/4/2016
- */
-
-
 public class LanguageFileHandler {
 
 	private static String filePath;

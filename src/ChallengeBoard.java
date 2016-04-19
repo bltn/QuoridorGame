@@ -1,11 +1,6 @@
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Khadija Patel
- */
-
 public class ChallengeBoard extends Board{
 
     private WallOwnershipCollection wallOwnershipRecords;

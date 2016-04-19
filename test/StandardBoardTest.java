@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * @author Thai Con
- * @author Ben Lawton
- */
 public class StandardBoardTest {
 
 	private static Board board;
@@ -117,6 +113,23 @@ public class StandardBoardTest {
     	assertEquals(true, topRight.hasLeftWall());
     	assertEquals(true, bottomRight.hasLeftWall());
     	assertEquals(true, bottomLeft.hasRightWall());
+    }
+
+    @Test
+    public void placeHorizontalWallTest() {
+    	int topLeftX = 6;
+    	int topLeftY = 2;
+
+    	Position topLeft = board.getPosition(topLeftX, topLeftY);
+    	Position topRight = board.getPosition((topLeftX + 1), topLeftY);
+    	Position bottomRight = board.getPosition((topLeftX + 1), (topLeftY + 1));
+    	Position bottomLeft = board.getPosition(topLeftX, (topLeftY + 1));
+
+    	board.placeWalls(topLeftX, topLeftY, WallPlacement.HORIZONTAL);
+    	assertEquals(true, topLeft.hasBottomWall());
+    	assertEquals(true, topRight.hasBottomWall());
+    	assertEquals(true, bottomLeft.hasTopWall());
+    	assertEquals(true, bottomRight.hasTopWall());
     }
 
 	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {

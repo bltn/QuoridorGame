@@ -37,8 +37,13 @@ public class ChallengeBoardTest {
 		ArrayList<Position> occupiablePositions = board.getCurrentPlayerOccupiablePositions();
 
 		assertEquals(2, occupiablePositions.size());
-		assertEquals(true, containsCoordinates(occupiablePositions, 1, 0));
-		assertEquals(true, containsCoordinates(occupiablePositions, 0, 1));
+		if (board.getCurrentPlayer().getID() == 1) {
+			assertEquals(true, containsCoordinates(occupiablePositions, 1, 0));
+			assertEquals(true, containsCoordinates(occupiablePositions, 0, 1));
+		} else if (board.getCurrentPlayer().getID() == 2) {
+			assertEquals(true, containsCoordinates(occupiablePositions, 8, 7));
+			assertEquals(true, containsCoordinates(occupiablePositions, 7, 8));
+		}
 	}
 
 	@Test
@@ -86,6 +91,59 @@ public class ChallengeBoardTest {
         board.movePawn(4, 4);
         assertEquals(player1.getPosition(), board.getPosition(1, 0));
         assertEquals(player2.getPosition(), board.getPosition(8, 7));
+    }
+
+	@Test
+    public void placeVerticalWallTest() {
+    	int topLeftX = 2;
+    	int topLeftY = 5;
+
+    	Position topLeft = board.getPosition(topLeftX, topLeftY);
+    	Position topRight = board.getPosition((topLeftX + 1), topLeftY);
+    	Position bottomRight = board.getPosition((topLeftX + 1), (topLeftY + 1));
+    	Position bottomLeft = board.getPosition(topLeftX, (topLeftY + 1));
+
+    	board.placeWalls(topLeftX, topLeftY, WallPlacement.VERTICAL);
+    	assertEquals(true, topLeft.hasRightWall());
+    	assertEquals(true, topRight.hasLeftWall());
+    	assertEquals(true, bottomRight.hasLeftWall());
+    	assertEquals(true, bottomLeft.hasRightWall());
+    }
+
+    @Test
+    public void placeHorizontalWallTest() {
+    	int topLeftX = 6;
+    	int topLeftY = 2;
+
+    	Position topLeft = board.getPosition(topLeftX, topLeftY);
+    	Position topRight = board.getPosition((topLeftX + 1), topLeftY);
+    	Position bottomRight = board.getPosition((topLeftX + 1), (topLeftY + 1));
+    	Position bottomLeft = board.getPosition(topLeftX, (topLeftY + 1));
+
+    	board.placeWalls(topLeftX, topLeftY, WallPlacement.HORIZONTAL);
+    	assertEquals(true, topLeft.hasBottomWall());
+    	assertEquals(true, topRight.hasBottomWall());
+    	assertEquals(true, bottomLeft.hasTopWall());
+    	assertEquals(true, bottomRight.hasTopWall());
+    }
+
+    @Test
+    public void removeWallHorizontalTest() {
+    	int topLeftX = 6;
+    	int topLeftY = 2;
+
+    	Position topLeft = board.getPosition(topLeftX, topLeftY);
+    	Position topRight = board.getPosition((topLeftX + 1), topLeftY);
+    	Position bottomRight = board.getPosition((topLeftX + 1), (topLeftY + 1));
+    	Position bottomLeft = board.getPosition(topLeftX, (topLeftY + 1));
+    	// ensure the wall-to-be-removed is present
+    	board.placeWalls(topLeftX, topLeftY, WallPlacement.HORIZONTAL);
+    	assertEquals(true, topLeft.hasBottomWall());
+    	((ChallengeBoard) board).removeWalls(topLeftX, topLeftY, WallPlacement.HORIZONTAL);
+    	assertEquals(false, topLeft.hasBottomWall());
+    	assertEquals(false, topRight.hasBottomWall());
+    	assertEquals(false, bottomLeft.hasTopWall());
+    	assertEquals(false, bottomRight.hasTopWall());
     }
 
 	private boolean containsCoordinates(ArrayList<Position> positions, int xCoord, int yCoord) {
