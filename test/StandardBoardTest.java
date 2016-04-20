@@ -13,9 +13,7 @@ public class StandardBoardTest {
 
 	@Before
 	public void setUp() {
-		board = new StandardBoard();
-        player1 = board.getPlayer1();
-        player2 = board.getPlayer2();
+		board = new StandardBoard(2);
 	}
 
 	@Test

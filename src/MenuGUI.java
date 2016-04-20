@@ -12,7 +12,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class MenuGUI extends Application {
@@ -26,7 +25,7 @@ public class MenuGUI extends Application {
     private Button multiplayerButton;
 
     public MenuGUI() throws IOException {
-    	LanguageFileHandler.setLanguage("French");
+    	LanguageFileHandler.setLanguage("English");
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();

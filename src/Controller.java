@@ -17,8 +17,17 @@ public interface Controller {
 
     public int getPlayer2Y();
 
+    public int getPlayer3X();
+
+    public int getPlayer3Y();
+
+    public int getPlayer4X();
+
+    public int getPlayer4Y();
+
     public void resetGame();
 
 	public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID);
+
 
 }
