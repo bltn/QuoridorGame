@@ -1,4 +1,4 @@
 
 public enum WallPlacement {
-	VERTICAL, HORIZONTAL;
+	VERTICAL, HORIZONTAL, NULL;
 }

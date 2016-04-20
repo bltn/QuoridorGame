@@ -33,12 +33,14 @@ public class RulesMenuGUI extends Application {
     private Button standardButton;
     private Button challengeButton;
     private Stage primaryStage;
+	private Button AIButton;
 
     public RulesMenuGUI() {
         introPane = new GridPane();
         introText = new Text("Please pick the set of rules you would like to play with:");
         buttonBox = new VBox();
         quitButton = new Button("Quit");
+        AIButton = new Button("AI");
         standardButton = new Button("Standard Rules");
         challengeButton = new Button("Challenge Rules");
         scene = new Scene(introPane, 600, 400);
@@ -74,10 +76,24 @@ public class RulesMenuGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
+        buttonBox.getChildren().add(AIButton);
         buttonBox.getChildren().add(standardButton);
         buttonBox.getChildren().add(challengeButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
+        
+        AIButton.setPrefWidth(200);
+        AIButton.setOnAction(new EventHandler<ActionEvent>(){
+        	@Override
+        	public void handle(ActionEvent event) {
+    			LocalBoardGUI gui = new LocalBoardGUI();
+    			StandardBoard board = new StandardBoard();
+            	Controller controller = new AIGameController(gui, board);
+            	gui.setController(controller);
+            	gui.start(new Stage());
+            	primaryStage.close();
+        	}
+        });
         standardButton.setPrefWidth(200);
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override

@@ -1,3 +1,12 @@
+
+/**
+ * Models the coordination of any board object
+ *
+ * @author Jordan Bird
+ * @author Ben Lawton
+ * @author Thai Hoang
+ */
+
 public class Position
 {
 	// Position's coordinates on the grid
@@ -17,8 +26,35 @@ public class Position
     private boolean hasRightWall;
     private boolean hasBottomWall;
     private boolean hasLeftWall;
+    
+    private Position camefrom;
+    public Position getCamefrom() {
+		return camefrom;
+	}
 
-    /**
+	public void setCamefrom(Position camefrom) {
+		this.camefrom = camefrom;
+	}
+
+	private boolean Visited=false;
+    public boolean isVisited() {
+		return Visited;
+	}
+
+	public void setVisited(boolean visited) {
+		Visited = visited;
+	}
+
+	private int costsofar;
+	public int getCostsofar() {
+		return costsofar;
+	}
+
+	public void setCostsofar(int costsofar) {
+		this.costsofar = costsofar;
+	}
+
+	/**
      * Constructor for objects of class Position
      * @param  x   the X value
      * @param  y   the Y value
