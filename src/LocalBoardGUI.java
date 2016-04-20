@@ -16,13 +16,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-/**
- * @author Junaid Rasheed
- * @author Jack Zhang
- * @author Ben Lawton
- * @author Jordan Bird
- *
- */
 public class LocalBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
@@ -344,40 +337,6 @@ public class LocalBoardGUI extends Application implements GUI {
             });
     	}
     }
-
-    public void removeWallDisplay(int x, int y, PositionWallLocation relativeLocation) {
-		x *= 2;
-		y *= 2;
-
-		switch (relativeLocation) {
-			case LEFT: {
-	            x -= 1;
-	            break;
-	        }
-	        case RIGHT: {
-	            x += 1;
-	            break;
-	        }
-	        case TOP: {
-	            y -= 1;
-	            break;
-	        }
-	        case BOTTOM: {
-	            y += 1;
-	            break;
-	        }
-		}
-		final int innerX = x;
-		final int innerY = y;
-		grids[y][x].setFill(Color.GREY);
-		grids[y][x].setStroke(Color.GREY);
-		grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                placeWall(innerX, innerY);
-            }
-        });
-	}
 
     public void displayErrorMessage(String message) {
     	errorPaneText.setText(message);

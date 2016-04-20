@@ -67,16 +67,14 @@ public class ChallengeBoard extends Board {
 				Position topLeft = getPosition(topLeftX, topLeftY);
 				if (wallPlacementIsValid(topLeft, orientation)) {
 					assignWallsFromTopLeftClockwise(topLeft, orientation);
-					
 
+					if (!Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
+							|| !Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
 
-					if (Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
-							&& Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
-					} else {
 						removeWallsFromPosition(topLeft, orientation);
 						throw new IllegalStateException("Can't block like that");
 					}
-					
+
 					getCurrentPlayer().decrementWallCount();
 					getCurrentPlayer().incrementMoveCount();
 					switchPlayer();

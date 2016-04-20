@@ -1,15 +1,11 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -19,13 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import javax.sound.midi.SysexMessage;
-
-/**
- * @author Junaid Rasheed
- * @author Jordan Bird
- *
- */
 public class MenuGUI extends Application {
 
     private Scene scene;
@@ -36,13 +25,14 @@ public class MenuGUI extends Application {
     private Button quitButton;
     private Button multiplayerButton;
 
-    public MenuGUI() {
+    public MenuGUI() throws IOException {
+    	LanguageFileHandler.setLanguage("French");
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();
-        startButton = new Button("Start");
-        quitButton = new Button("Quit");
-        multiplayerButton = new Button("Multiplayer");
+        startButton = new Button(LanguageFileHandler.getStart());
+        quitButton = new Button(LanguageFileHandler.getQuit());
+        multiplayerButton = new Button(LanguageFileHandler.getMultiplayer());
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add("Theme.css");
     }
@@ -98,9 +88,6 @@ public class MenuGUI extends Application {
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				GUI gui = new NetworkedBoardGUI();
-				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer(new NetworkedGameController(new StandardBoard()));
 				ConnectionGUI connGUI = new ConnectionGUI();
 				connGUI.start(new Stage());
 			}

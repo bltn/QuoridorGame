@@ -1,11 +1,12 @@
+
 /**
  *
  * @author Ben Lawton
  * @author Thai Hoang
  * @author Khadija Patel
  */
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 public abstract class Board {
 
@@ -200,14 +201,11 @@ public abstract class Board {
                         positions[y][x] = new Position(x, y);
                 }
         }
-        //mark top positions as winners
-        for (int x = 0; x < 9; x++) {
-                positions[0][0].setTopCorner();
-        }
-        //mark bottom positions as winners
-        for (int x = 0; x < 9; x++) {
-                positions[8][8].setBottomCorner();
-        }
+        //mark top left position as winner
+        positions[0][0].setTopCorner();
+
+        //mark bottom right position as winner
+        positions[8][8].setBottomCorner();
 
         //set the board's top borders (walls)
         for (int x = 0; x < 9; x++) {

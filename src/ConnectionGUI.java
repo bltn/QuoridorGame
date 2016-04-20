@@ -93,6 +93,7 @@ public class ConnectionGUI extends Application {
         createServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	SystemLogger.init();
             	String mode = askForGameMode();
             	GameServer server;
             	if (mode.equals("Challenge")) {
@@ -109,6 +110,7 @@ public class ConnectionGUI extends Application {
         connectToServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	SystemLogger.init();
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 GUI gui = new NetworkedBoardGUI();
@@ -118,7 +120,7 @@ public class ConnectionGUI extends Application {
                 	try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						System.out.println(e.getMessage());
+						SystemLogger.logError(e.getMessage());
 					}
                 	if (client.guiCanBeLaunched()) {
                 		client.setGUILaunched(true);

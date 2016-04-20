@@ -1,0 +1,12 @@
+comienzo
+multijugador
+Dejar
+mueve
+El jugador 1
+El jugador 2
+paredes
+Insinuación
+Unete al juego
+Introduzca la dirección IP y puerto para su máquina
+crear servidor
+Conecte al juego

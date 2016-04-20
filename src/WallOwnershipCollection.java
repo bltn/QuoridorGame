@@ -15,6 +15,10 @@ public class WallOwnershipCollection {
 		}
 	}
 
+	public int size() {
+		return this.ownershipRecords.size();
+	}
+
 	public void removeRecord(Position position, WallPlacement orientation) {
 		Iterator<WallOwnershipRecord> iter = ownershipRecords.iterator();
 		while (iter.hasNext()) {

@@ -1,3 +1,4 @@
+
 /**
  * Models the coordination of any board object
  *
@@ -5,6 +6,7 @@
  * @author Ben Lawton
  * @author Thai Hoang
  */
+
 public class Position
 {
 	// Position's coordinates on the grid
@@ -14,7 +16,7 @@ public class Position
     // is at the top or bottom of the grid
     private boolean isTop;
     private boolean isBottom;
-    
+
     //is at the top corner or bottom corner of the grid
     private boolean isTopCorner;
     private boolean isBottomCorner;
@@ -124,7 +126,7 @@ public class Position
 			isBottom = true;
 		}
 	}
-        
+
         	/**
 	 * set as a top corner of the board position
 	 */

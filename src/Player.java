@@ -1,3 +1,4 @@
+
 import java.util.LinkedList;
 
 /**
@@ -6,6 +7,7 @@ import java.util.LinkedList;
  *
  *  @version 12/02/2016
  */
+
 
 public class Player
 {
@@ -17,9 +19,6 @@ public class Player
     private int moveCount;
     private Position previousPos;
 
-    
-
-	
 
 	public Player(Position position, int ID)
     {

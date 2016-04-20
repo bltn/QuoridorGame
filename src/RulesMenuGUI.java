@@ -21,10 +21,6 @@ import java.io.IOException;
 
 import javax.sound.midi.SysexMessage;
 
-/**
- * @author Khadija Patel
- *
- */
 public class RulesMenuGUI extends Application {
 
     private Scene scene;
