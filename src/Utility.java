@@ -137,7 +137,7 @@ public class Utility {
 		return result;
 	}
 	
-	public static int AstarPath(Position[][] grid, Position start, int finish) {
+	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
@@ -157,7 +157,7 @@ public class Utility {
 			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
 			if (pos.getY() == finish) {
 				done = pos.getCostsofar();
-				System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
+				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
@@ -173,13 +173,57 @@ public class Utility {
 
 			}
 		}
-		System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
+		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
 		reset(grid);
-		System.out.println(done);
+		//System.out.println(done);
 		//System.out.println(toString(grid));
 		return done;
 	}
 
+	public static boolean shortesrPath(int lenght,Position[][] grid, Position start, int finish) {
+		//Stack<Position> stack = new Stack();
+		Comparator<Position> comparator = new PositionComparator();
+		PositionComparator.goal=finish;
+
+		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
+		Queue<Position> queue1 = new LinkedList<Position>();
+		boolean done = false; // set true when the finish position is reached
+		Position startgrid = grid[start.getY()][start.getX()];
+		startgrid.setCostsofar(0);
+		queue.add(startgrid);
+
+		while (!queue.isEmpty()) {
+			Position pos = queue.remove();
+			grid[pos.getY()][pos.getX()].setVisited(true); // this cell has been tried
+			
+			//System.out.println(indexof(grid, pos)+"|"+"currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
+			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
+			if (pos.getY() == finish) {
+				done = true;
+				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
+				lenght=pos.getCostsofar();
+				break;
+			} else {
+				int length = pos.getCostsofar()+1;
+								
+				if (!pos.hasTopWall())
+					push_new_pos(grid, queue, pos.getY() - 1, pos.getX(),length);
+				if (!pos.hasBottomWall())
+					push_new_pos(grid, queue, pos.getY() + 1, pos.getX(),length);
+				if (!pos.hasLeftWall())
+					push_new_pos(grid, queue, pos.getY(), pos.getX() - 1,length);
+				if (!pos.hasRightWall())
+					push_new_pos(grid, queue, pos.getY(), pos.getX() + 1,length);
+
+			}
+		}
+		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
+		reset(grid);
+		//System.out.println(done);
+		//System.out.println(toString(grid));
+		return done;
+	}
+	
 	public static boolean AstarSearch(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
@@ -200,7 +244,7 @@ public class Utility {
 			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
 			if (pos.getY() == finish) {
 				done = true;
-				System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
+				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
@@ -216,9 +260,9 @@ public class Utility {
 
 			}
 		}
-		System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
+		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
 		reset(grid);
-		System.out.println(done);
+		//System.out.println(done);
 		//System.out.println(toString(grid));
 		return done;
 	}
@@ -286,6 +330,33 @@ public class Utility {
 		return result;
 	}
 
+	
+	public static Position clone(Position pos){
+		Position clone = new Position(pos.getX(),pos.getY());
+		
+			if(pos.hasBottomWall())clone.setHasBottomWall(true);
+			if(!pos.hasBottomWall())clone.setHasBottomWall(false);
+			if(pos.hasTopWall())clone.setHasTopWall(true);
+			if(!pos.hasTopWall())clone.setHasTopWall(false);
+			if(pos.hasLeftWall())clone.setHasLeftWall(true);
+			if(!pos.hasLeftWall())clone.setHasLeftWall(false);
+			if(pos.hasRightWall())clone.setHasRightWall(true);
+			if(!pos.hasRightWall())clone.setHasRightWall(false);
+		
+		return clone;
+	}
+	
+	public static Position[][] clone(Position[][] grid){
+		Position[][] clone = new Position[grid.length][grid[0].length];
+		
+		for (int row = 0; row < grid.length; row++) {
+			for (int column = 0; column < grid[0].length;column++) {
+				clone[row][column]=clone(grid[row][column]);
+			}
+		}		
+		return clone;
+	}
+	
 	private static class PositionComparator implements Comparator<Position>
 	{
 		public static int goal;
@@ -315,5 +386,7 @@ public class Utility {
 	        return 0;
 	}
 	}
+
+	
 	
 }

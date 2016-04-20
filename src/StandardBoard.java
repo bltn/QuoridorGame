@@ -21,17 +21,16 @@ public class StandardBoard extends Board {
 	    		Position topLeft = getPosition(topLeftX, topLeftY);
 	    		if (wallPlacementIsValid(topLeft, orientation)) {
 	        		assignWallsFromTopLeftClockwise(topLeft, orientation);
-	    			getCurrentPlayer().incrementMoveCount();
-	    			getCurrentPlayer().decrementWallCount();
-	    			
+	    				    			
 					if (Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
 							&& Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
 					} else {
-						//removeWallsFromPosition(topLeft, orientation); //Need a method like this one from challengeBoard
+						unassignWalls(topLeft, orientation); //Need a method like this one from challengeBoard
 						throw new IllegalStateException("Can't block like that");
 					}
 	    			
-	    			
+	    			getCurrentPlayer().incrementMoveCount();
+	    			getCurrentPlayer().decrementWallCount();
 	    			switchPlayer();
 	        	} else {
 	        		throw new IllegalStateException("Move is invalid");
@@ -79,8 +78,7 @@ public class StandardBoard extends Board {
                             }
                             switchPlayer();
                             return false;
-                    }
-                    else {
+                    }else {
                             throw new IllegalArgumentException("That isn't a valid move.");
                     }
             }
@@ -88,6 +86,8 @@ public class StandardBoard extends Board {
             return false;
     }
 
+    
+    
     private void reset() {
             getPlayer1().setMoveCount(0);
             getPlayer2().setMoveCount(0);
@@ -99,7 +99,7 @@ public class StandardBoard extends Board {
             resetWalledOffPositions();
     }
 
-   private void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
+   public void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
 	   Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
  	   Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
  	   Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
@@ -125,7 +125,24 @@ public class StandardBoard extends Board {
 	   }
    }
 
-   private boolean wallPlacementIsValid(Position topLeft, WallPlacement orientation) {
+   public void unassignWalls(Position topLeft, WallPlacement orientation) {
+		Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
+		Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
+		Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
+		if (orientation == WallPlacement.VERTICAL) {
+			topLeft.setHasRightWall(false);
+			topRight.setHasLeftWall(false);
+			bottomRight.setHasLeftWall(false);
+			bottomLeft.setHasRightWall(false);
+		} else if (orientation == WallPlacement.HORIZONTAL) {
+			topLeft.setHasBottomWall(false);
+			topRight.setHasBottomWall(false);
+			bottomRight.setHasTopWall(false);
+			bottomLeft.setHasTopWall(false);
+		}
+	}
+   
+   public boolean wallPlacementIsValid(Position topLeft, WallPlacement orientation) {
 
 		boolean isValid = true;
 
