@@ -28,12 +28,11 @@ public class AI {
 				PossibleWallMoves.add(WallMove2);
 			}
 		}
-
 	}
 
-	public Move Minimax(StandardBoard board, int a, int b, int depth) {
+	public Move Minimax(StandardBoard board, int depth) {
 
-		int highestScore = -1;
+		int highestScore = -10000;
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(board);
@@ -50,22 +49,19 @@ public class AI {
 
 			if (isBlock(board, move) == true) {
 				//System.out.println("not block");
-				if(highestScore<Min(board, a, b, depth - 1)){
-					highestScore=Min(board, a, b, depth - 1);
-					bestMove = move;
-					
+				if(highestScore<Min(board, -10000, 10000, depth - 1)){
+					highestScore=Min(board, -10000, 10000, depth - 1);
+					bestMove = move;					
 				}
 				//highestScore = Math.max(Min(board, a, b, depth - 1), highestScore);
 				//a = Math.max(a, highestScore);
-
-
 			}
 
 			unmove(board, move);
 
 			// if(b<=a)break;
 		}
-		System.out.println(bestMove.getX() + " " + bestMove.getY() + " " + bestMove.getOrientation() + " bestmove minimax");
+		//System.out.println(bestMove.getX() + " " + bestMove.getY() + " " + bestMove.getOrientation() + " bestmove minimax");
 		return bestMove;
 	}
 
@@ -76,7 +72,7 @@ public class AI {
 			return evaluate(board);
 		}
 
-		int lowestScore = 200;
+		int lowestScore = 10000;
 		ArrayList<Move> moves = PossibleMoves(board);
 
 		Iterator<Move> iterator = moves.iterator();
@@ -113,7 +109,7 @@ public class AI {
 			return evaluate(board);
 		}
 
-		int highestScore = -1;
+		int highestScore = -10000;
 		ArrayList<Move> moves = PossibleMoves(board);
 		// Set<Integer> keySet = moves.keySet();
 		Iterator<Move> iterator = moves.iterator();
@@ -148,13 +144,13 @@ public class AI {
 
 		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);//8
 
-		int AIlenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),8);//0
-		int f2 = (8-board.getPlayer1().getPosition().getY())- (board.getPlayer2().getPosition().getY()-0);
-		int PlayerWalls = board.getPlayer1().getWallCount();
-		int AIWalls = board.getPlayer2().getWallCount();
+		int AIlenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),0);//0
+		//int f2 = (8-board.getPlayer1().getPosition().getY())- (board.getPlayer2().getPosition().getY()-0);
+		//int PlayerWalls = board.getPlayer1().getWallCount();
+		//int AIWalls = board.getPlayer2().getWallCount();
 		Random random = new Random();
-		int randomNumber = random.nextInt(10) + 1;
-		return (PlayerLenght-AIlenght) ;// +f2 (AIWalls -20 *  + randomNumber - AIlenght
+		int randomNumber = random.nextInt(2);
+		return (PlayerLenght- AIlenght)+ randomNumber  ;// +f2 (AIWalls -20 *  
 		// PlayerWalls)PlayerLenght
 
 	}
