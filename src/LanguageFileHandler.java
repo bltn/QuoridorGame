@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -21,7 +22,7 @@ public class LanguageFileHandler {
 	private static String multiplayerInstructions;
 	private static String connect;
 
-	public static void setLanguage(String language) throws IOException {
+	public static void setLanguage(String language) {
 		switch (language) {
 			case "English": {
 				filePath = "src/lang/English.txt";
@@ -41,25 +42,30 @@ public class LanguageFileHandler {
 			}
 		}
 
-		FileInputStream fs= new FileInputStream(filePath);
-		br = new BufferedReader(new InputStreamReader(fs));
-		start = br.readLine();
-		multiplayer = br.readLine();
-		quit = br.readLine();
-		moves = br.readLine();
-		player1 = br.readLine();
-		player2 = br.readLine();
-		walls = br.readLine();
-		hint = br.readLine();
-		joinGame = br.readLine();
-		multiplayerInstructions = br.readLine();
-		createServer = br.readLine();
-		connect = br.readLine();
-
-		System.out.println(start);
+		FileInputStream fs;
+		try {
+			fs = new FileInputStream(filePath);
+			br = new BufferedReader(new InputStreamReader(fs));
+			start = br.readLine();
+			multiplayer = br.readLine();
+			quit = br.readLine();
+			moves = br.readLine();
+			player1 = br.readLine();
+			player2 = br.readLine();
+			walls = br.readLine();
+			hint = br.readLine();
+			joinGame = br.readLine();
+			multiplayerInstructions = br.readLine();
+			createServer = br.readLine();
+			connect = br.readLine();
+		} catch (FileNotFoundException e) {
+			SystemLogger.logError(e.getMessage());
+		} catch (IOException e) {
+			SystemLogger.logError(e.getMessage());
+		}
 	}
 
-	public static String getStart()
+	public static String getLocalMode()
 	{
 		if (start != null) {
 			return start;

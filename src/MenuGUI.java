@@ -12,7 +12,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.io.IOException;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 
 public class MenuGUI extends Application {
 
@@ -24,16 +30,45 @@ public class MenuGUI extends Application {
     private Button quitButton;
     private Button multiplayerButton;
 
-    public MenuGUI() throws IOException {
-    	LanguageFileHandler.setLanguage("English");
-        introPane = new GridPane();
-        introText = new Text("Quoridor");
-        buttonBox = new VBox();
-        startButton = new Button(LanguageFileHandler.getStart());
-        quitButton = new Button(LanguageFileHandler.getQuit());
-        multiplayerButton = new Button(LanguageFileHandler.getMultiplayer());
-        scene = new Scene(introPane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
+    public MenuGUI() {
+    	LanguageFileHandler.setLanguage("French");
+    	introPane = new GridPane();
+    	introText = new Text("Quoridor");
+    	buttonBox = new VBox();
+    	introText.setId("text");
+
+    	// add a icon into the start button
+    	Image start = new Image(getClass().getResourceAsStream("icons/start.png"));
+    	ImageView changeSizeOfStart = new ImageView(start);
+    	changeSizeOfStart.setFitHeight(20);
+    	changeSizeOfStart.setFitWidth(20);
+    	startButton = new Button(LanguageFileHandler.getLocalMode(),changeSizeOfStart);
+
+    	//add a icon into quit button
+    	Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
+    	ImageView newQuit = new ImageView(quit);
+    	newQuit.setFitHeight(20);
+    	newQuit.setFitWidth(20);
+    	quitButton = new Button(LanguageFileHandler.getQuit(),newQuit);
+
+    	//add a icon into the multiplayer button
+    	Image multiplayer = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
+    	ImageView NewMultiplayer = new ImageView(multiplayer);
+    	NewMultiplayer.setFitHeight(20);
+    	NewMultiplayer.setFitWidth(20);
+    	multiplayerButton = new Button(LanguageFileHandler.getMultiplayer(),NewMultiplayer);
+
+    	//add background image
+    	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
+    	BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
+		BackgroundSize.AUTO, false, false, true, true);
+    	BackgroundImage bimg = new BackgroundImage(background,
+		BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+		BackgroundPosition.CENTER, size);
+
+    	introPane.setBackground(new Background(bimg));
+    	scene = new Scene(introPane, 600, 400);
+    	scene.getStylesheets().add("Theme.css");
     }
 
     @Override
@@ -54,7 +89,7 @@ public class MenuGUI extends Application {
         introPane.setVgap(100);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
-        introText.setFont(Font.font("Calibri", FontWeight.BOLD, 50));
+        introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
         introPane.add(introText, 0, 0, 1, 1);
     }
 
@@ -68,7 +103,7 @@ public class MenuGUI extends Application {
         buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
-        startButton.setPrefWidth(150);
+        startButton.setPrefWidth(350);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -76,14 +111,14 @@ public class MenuGUI extends Application {
             	gui.start(new Stage());
             };
         });
-        quitButton.setPrefWidth(150);
+        quitButton.setPrefWidth(350);
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 System.exit(0);
             }
         });
-        multiplayerButton.setPrefWidth(150);
+        multiplayerButton.setPrefWidth(350);
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

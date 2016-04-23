@@ -1,4 +1,4 @@
-Start
+Local game
 Multiplayer
 Quit
 Moves
