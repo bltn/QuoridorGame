@@ -150,6 +150,14 @@ public class MenuGUI extends Application {
         scene.getStylesheets().add(SettingsGUI.theme);
     }
 
+    public void updateLanguage() {
+        LanguageFileHandler.setLanguage(SettingsGUI.language);
+        startButton.setText(LanguageFileHandler.getLocalMode());
+        quitButton.setText(LanguageFileHandler.getQuit());
+        multiplayerButton.setText(LanguageFileHandler.getMultiplayer());
+        settingsButton.setText(LanguageFileHandler.getSettings());
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
