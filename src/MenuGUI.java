@@ -31,7 +31,7 @@ public class MenuGUI extends Application {
     private Button multiplayerButton;
 
     public MenuGUI() {
-    	LanguageFileHandler.setLanguage("French");
+    	LanguageFileHandler.setLanguage("English");
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
     	buttonBox = new VBox();
@@ -69,7 +69,7 @@ public class MenuGUI extends Application {
     	introPane.setBackground(new Background(bimg));
     	scene = new Scene(introPane, 600, 400);
     	scene.getStylesheets().add("Theme.css");
-    }
+	}
 
     @Override
     public void start(Stage primaryStage) {

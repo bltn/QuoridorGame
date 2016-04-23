@@ -1,0 +1,38 @@
+/**
+ * Stylesheet for Quoridor - Team 16
+ * @author Jordan Bird
+ */
+
+
+ .background {
+
+ 	-fx-background-color: #2E9AFE;
+
+ }
+
+.button {
+    -fx-padding: 10 25 10 25;
+    -fx-border-color: #cc9900;
+    -fx-border-width: 5;
+    -fx-background-radius: 0;
+    -fx-background-color: #003399;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 12pt;
+    -fx-text-shadow: 2px 2px #ff0000;
+    -fx-text-fill: #e9e9e9;
+}
+
+.button:hover {
+    -fx-background-color: #81BEF7;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #81BEF7;
+}
+
+
+.button:disabled, .button:default:disabled {
+    -fx-background-color: #A4A4A4;
+    -fx-text-fill: black;
+}
