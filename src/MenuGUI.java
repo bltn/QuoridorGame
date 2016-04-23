@@ -33,7 +33,7 @@ public class MenuGUI extends Application {
     private Button settingsButton;
 
     public MenuGUI() {
-    	LanguageFileHandler.setLanguage("English");
+    	LanguageFileHandler.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
     	buttonBox = new VBox();
@@ -73,9 +73,7 @@ public class MenuGUI extends Application {
 
     	introPane.setBackground(new Background(bimg));
     	scene = new Scene(introPane, 600, 400);
-    	scene.getStylesheets().add("Theme.css");
-        // Remove the stylesheet currently in use
-        //scene.getStylesheets().remove(scene.getStylesheets().get(0));
+    	scene.getStylesheets().add(SettingsGUI.theme);
 	}
 
     @Override
@@ -135,13 +133,21 @@ public class MenuGUI extends Application {
             }
         });
         settingsButton.setPrefWidth(350);
+        MenuGUI menuGUIReference = this;
         settingsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SettingsGUI settingsGUI = new SettingsGUI();
+                SettingsGUI settingsGUI = new SettingsGUI(menuGUIReference);
                 settingsGUI.start(new Stage());
             }
         });
+    }
+
+    public void updateTheme() {
+        // Remove the currently loaded stylesheet
+        scene.getStylesheets().remove(scene.getStylesheets().get(0));
+        // Add the new stylesheet
+        scene.getStylesheets().add(SettingsGUI.theme);
     }
 
     public static void main(String[] args) {

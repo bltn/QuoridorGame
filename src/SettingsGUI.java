@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -29,11 +30,14 @@ public class SettingsGUI extends Application{
     private Button protanopiaButton;
     private Button tritanopiaButton;
     private Button deuteranopiaButton;
+    private MenuGUI menuGUI;
 
-    public String language = "English";
-    public String theme = "Theme.css";
+    public static String language = "English";
+    public static String theme = "Theme.css";
 
-    public SettingsGUI() {
+    public SettingsGUI(MenuGUI menuGUI) {
+        this.menuGUI = menuGUI;
+
         settingsPane = new GridPane();
 
         languageText = new Text("Language");
@@ -122,6 +126,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 theme = "Theme.css";
                 updateTheme();
+                menuGUI.updateTheme();
             };
         });
 
@@ -131,6 +136,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 theme = "protanopia.css";
                 updateTheme();
+                menuGUI.updateTheme();
             };
         });
 
@@ -140,6 +146,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 theme = "tritanopia.css";
                 updateTheme();
+                menuGUI.updateTheme();
             };
         });
 
@@ -149,6 +156,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 theme = "deuteranopia.css";
                 updateTheme();
+                menuGUI.updateTheme();
             };
         });
     }
