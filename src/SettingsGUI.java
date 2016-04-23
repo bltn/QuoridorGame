@@ -120,7 +120,8 @@ public class SettingsGUI extends Application{
         standardButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LanguageFileHandler.setLanguage("English");
+                theme = "Theme.css";
+                updateTheme();
             };
         });
 
@@ -128,7 +129,8 @@ public class SettingsGUI extends Application{
         protanopiaButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LanguageFileHandler.setLanguage("French");
+                theme = "protanopia.css";
+                updateTheme();
             };
         });
 
@@ -136,7 +138,8 @@ public class SettingsGUI extends Application{
         tritanopiaButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LanguageFileHandler.setLanguage("Spanish");
+                theme = "tritanopia.css";
+                updateTheme();
             };
         });
 
@@ -144,7 +147,8 @@ public class SettingsGUI extends Application{
         deuteranopiaButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LanguageFileHandler.setLanguage("Chinese");
+                theme = "deuteranopia.css";
+                updateTheme();
             };
         });
     }
