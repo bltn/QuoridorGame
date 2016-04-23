@@ -36,6 +36,10 @@ public class LanguageFileHandler {
 				filePath = "src/lang/Spanish.txt";
 				break;
 			}
+			case "Chinese": {
+				filePath = "src/lang/Chinese.txt";
+				break;
+			}
 			default: {
 				filePath = "src/lang/English.txt";
 				break;
