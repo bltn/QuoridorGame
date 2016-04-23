@@ -21,6 +21,7 @@ public class LanguageFileHandler {
 	private static String createServer;
 	private static String multiplayerInstructions;
 	private static String connect;
+	private static String settings;
 
 	public static void setLanguage(String language) {
 		switch (language) {
@@ -62,6 +63,7 @@ public class LanguageFileHandler {
 			multiplayerInstructions = br.readLine();
 			createServer = br.readLine();
 			connect = br.readLine();
+			settings = br.readLine();
 		} catch (FileNotFoundException e) {
 			SystemLogger.logError(e.getMessage());
 		} catch (IOException e) {
@@ -93,6 +95,14 @@ public class LanguageFileHandler {
 			return quit;
 		} else {
 			return "Quit";
+		}
+	}
+
+	public static String getSettings() {
+		if (settings != null) {
+			return settings;
+		} else {
+			return "Settings";
 		}
 	}
 
