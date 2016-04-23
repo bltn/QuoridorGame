@@ -13,7 +13,7 @@ public class ChallengeBoardTest {
 
 	@Before
 	public void setUp() {
-		board = new ChallengeBoard();
+		board = new ChallengeBoard(2);
 		player1 = board.getPlayer1();
 		player2 = board.getPlayer2();
 	}
@@ -48,11 +48,11 @@ public class ChallengeBoardTest {
 
 	@Test
 	public void testBoardInitialisation() {
-		assertEquals(true, (board.getPosition(0, 0).hasTopWall() && board.getPosition(0, 0).isTopCorner()));
+		assertEquals(true, (board.getPosition(0, 0).hasTopWall() && board.getPosition(0, 0).isTopLeftCorner()));
 		assertEquals(true, board.getPosition(4, 8).hasBottomWall());
 		assertEquals(true, board.getPosition(0, 4).hasLeftWall());
 		assertEquals(true, board.getPosition(8, 4).hasRightWall());
-		assertEquals(true, board.getPosition(8, 8).isBottomCorner());
+		assertEquals(true, board.getPosition(8, 8).isBottomRightCorner());
 		// make sure inner positions don't get any premature wall assignments
 		assertEquals(false, board.getPosition(4, 4).hasTopWall());
 	}

@@ -25,11 +25,11 @@ public class LocalGameControllerTest extends Application {
 
                     @Override
                     public void run() {
-                        gui = new LocalBoardGUI();
+                        gui = new LocalBoardGUI(2);
                         gui.start(new Stage());
                     }
                 });
-				board = new StandardBoard();
+				board = new StandardBoard(2);
 				controller = new LocalGameController<>(gui, board);
 				gui.setController(controller);
 
@@ -68,11 +68,11 @@ public class LocalGameControllerTest extends Application {
 
                     @Override
                     public void run() {
-                        gui = new LocalBoardGUI();
+                        gui = new LocalBoardGUI(2);
                         gui.start(new Stage());
                     }
                 });
-				board = new StandardBoard();
+				board = new StandardBoard(2);
 				controller = new LocalGameController<>(gui, board);
 				gui.setController(controller);
 

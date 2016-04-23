@@ -84,6 +84,16 @@ public class LocalGameController<T> implements Controller {
     	gui.updatePlayerPawnPosition(player1.getPosition().getX(), player1.getPosition().getY(), 1);
     	gui.updatePlayerPawnPosition(player2.getPosition().getX(), player2.getPosition().getY(), 2);
 		gui.resetWalls();
+        if (board.getPlayer3() != null) {
+            Player player3 = board.getPlayer3();
+            Player player4 = board.getPlayer4();
+            gui.updatePlayerMoveCount(player3.getMoveCount(), 3);
+            gui.updatePlayerMoveCount(player4.getMoveCount(), 4);
+            gui.updatePlayerWallCount(player3.getWallCount(), 3);
+            gui.updatePlayerWallCount(player4.getWallCount(), 4);
+            gui.updatePlayerPawnPosition(player3.getPosition().getX(), player3.getPosition().getY(), 3);
+            gui.updatePlayerPawnPosition(player4.getPosition().getX(), player4.getPosition().getY(), 4);
+        }
     }
 
 	@Override
@@ -104,5 +114,25 @@ public class LocalGameController<T> implements Controller {
 	@Override
 	public int getPlayer2Y() {
 		return board.getPlayer2().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer3X() {
+		return board.getPlayer3().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer3Y() {
+		return board.getPlayer3().getPosition().getY();
+	}
+
+	@Override
+	public int getPlayer4X() {
+		return board.getPlayer4().getPosition().getX();
+	}
+
+	@Override
+	public int getPlayer4Y() {
+		return board.getPlayer4().getPosition().getY();
 	}
 }
