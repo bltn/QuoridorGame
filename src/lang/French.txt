@@ -1,4 +1,4 @@
-Commencer
+Jeu local
 Mode multijoueur
 Quitter
 Déplacer
