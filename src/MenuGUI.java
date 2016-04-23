@@ -1,32 +1,19 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
-import javax.sound.midi.SysexMessage;
-
-/**
- * @author Junaid Rasheed
- * @author Jordan Bird
- *
- * @version 08/04/2016
- */
 public class MenuGUI extends Application {
 
     private Scene scene;
@@ -37,21 +24,16 @@ public class MenuGUI extends Application {
     private Button quitButton;
     private Button multiplayerButton;
 
-    public MenuGUI(String languageName, String theme) throws IOException {
-    	theme += ".txt";
-    	scene.getStylesheets().add(theme);
-    	LanguageFileHandler language = new LanguageFileHandler(languageName);
+    public MenuGUI() throws IOException {
+    	LanguageFileHandler.setLanguage("English");
         introPane = new GridPane();
         introText = new Text("Quoridor");
         buttonBox = new VBox();
-        startButton = new Button(language.getStart());
-        quitButton = new Button(language.getQuit());
-        multiplayerButton = new Button(language.getMultiplayer());
+        startButton = new Button(LanguageFileHandler.getStart());
+        quitButton = new Button(LanguageFileHandler.getQuit());
+        multiplayerButton = new Button(LanguageFileHandler.getMultiplayer());
         scene = new Scene(introPane, 600, 400);
-        
-        
-        
-        
+        scene.getStylesheets().add("Theme.css");
     }
 
     @Override
@@ -90,10 +72,7 @@ public class MenuGUI extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	LocalBoardGUI gui = new LocalBoardGUI();
-            	Board board = new Board();
-            	Controller controller = new LocalGameController(gui, board);
-            	gui.setController(controller);
+            	RulesMenuGUI gui = new RulesMenuGUI();
             	gui.start(new Stage());
             };
         });
@@ -105,17 +84,16 @@ public class MenuGUI extends Application {
             }
         });
         multiplayerButton.setPrefWidth(150);
-        multiplayerButton.setOnAction(new EventHandler<ActionEvent>(){
+        multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				GUI gui = new NetworkedBoardGUI();
-				GameClient client = new GameClient(gui);
-				GameServer server = new GameServer(new NetworkedGameController(new Board()));
-				ConnectionGUI connGUI = new ConnectionGUI(server, client);
+				ConnectionGUI connGUI = new ConnectionGUI();
 				connGUI.start(new Stage());
 			}
         });
     }
 
-   
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

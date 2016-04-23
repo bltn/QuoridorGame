@@ -1,34 +1,24 @@
-/**
- * @author Jordan Bird
- * @author Ben Lawton
- * 
- *  @version 12/02/2016
- */
-
 public class Player
 {
+	private int ID;
     private Position position;
-    private int xCoord;
-    private int yCoord;
     private boolean startedAtTop;
     private boolean startedAtBottom;
+    private boolean startedAtLeft;
+    private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
 
-    /**
-     * Constructor for objects of class Player
-     *
-     * @param posX the starting X position of the player
-     * @param posY the starting Y position of the player
-     * @param walls the amount of walls the player has
-     */
-    public Player(int posX, int posY)
+    public Player(Position position, int ID)
     {
-    	xCoord = posX;
-    	yCoord = posY;
-        position = new Position(posX, posY);
+    	this.ID = ID;
+        this.position = position;
         wallCount = 10;
         moveCount = 0;
+    }
+
+    public int getID() {
+    	return ID;
     }
 
     public int getWallCount() {
@@ -59,63 +49,56 @@ public class Player
     	return wallCount > 0;
     }
 
-    /**
-     * Sets the player's X coordinate
-     *
-     * @param  set   the change to be made to the X co-ordinate
-     */
-    public void setX(int posX)
-    {
-        xCoord = posX;
-    }
-
-     /**
-     * Sets the player's Y coordinate
-     *
-     * @param  set   the change to be made to the Y co-ordinate
-     */
-    public void setY(int posY)
-    {
-        yCoord = posY;
-    }
-
-    public int getX()
-    {
-        return xCoord;
-    }
-
-    public int getY()
-    {
-        return yCoord;
-    }
-
-     /**
-     * Gets the position of the Player
-     *
-     * @return  position   an Array containing the position
-     */
     public Position getPosition()
     {
         return position;
     }
 
+    public void setPosition(Position position) {
+    	this.position = position;
+    }
+
     public void setStartedAtTop() {
-    	if (!startedAtBottom) {
+    	if (!startedAtBottom && !startedAtLeft && !startedAtRight) {
     		startedAtTop = true;
     	}
     }
 
     public void setStartedAtBottom() {
-    	if (!startedAtTop) {
+    	if (!startedAtTop && !startedAtLeft && !startedAtRight) {
     		startedAtBottom = true;
     	}
     }
 
+    public void setStartedAtLeft() {
+        if (!startedAtBottom && !startedAtTop && !startedAtRight) {
+            startedAtLeft = true;
+        }
+    }
+
+    public void setStartedAtRight() {
+        if (!startedAtBottom && !startedAtTop && !startedAtLeft) {
+            startedAtRight = true;
+        }
+    }
+
     public boolean startedAtTop() {
-    	return startedAtTop;
+        return startedAtTop;
     }
 
     public boolean startedAtBottom() {
-    	return startedAtBottom;
+        return startedAtBottom;
     }
+
+    public boolean startedAtLeft() {
+        return startedAtLeft;
+    }
+
+    public boolean startedAtRight() {
+        return startedAtRight;
+    }
+
+	public void incrementWallCount() {
+		wallCount++;
+	}
 }
