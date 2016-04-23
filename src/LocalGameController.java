@@ -3,13 +3,6 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
-/**
- * @author Ben Lawton
- * @author Khadija Patel
- * @author Jordan Bird
- *
- */
 public class LocalGameController<T> implements Controller {
 
     // The game board and its positions' logic

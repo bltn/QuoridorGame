@@ -1,11 +1,3 @@
-/**
- * Models the coordination of any board object
- *
- * @author Jordan Bird
- * @author Ben Lawton
- * @author Junaid Rasheed
- * 
- */
 public class Position
 {
 	// Position's coordinates on the grid
@@ -19,8 +11,7 @@ public class Position
     // is at the left or right of the grid
     private boolean isLeft;
     private boolean isRight;
-    
-    //is at the top corner or bottom corner of the grid
+
     private boolean isTopLeftCorner;
     private boolean isBottomRightCorner;
     private boolean isTopRightCorner;
@@ -78,11 +69,15 @@ public class Position
     /**
      * @return whether it's at the left of the board
      */
-    public boolean isLeft() { return isLeft; }
+    public boolean isLeft() {
+    	return isLeft;
+    }
     /**
      * @return whether it's at the right of the board
      */
-    public boolean isRight() { return isRight; }
+    public boolean isRight() {
+    	return isRight;
+    }
     /**
      * @return whether it's at the top left of the board
      */

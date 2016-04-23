@@ -1,11 +1,3 @@
-/**
- * @author Jordan Bird
- * @author Ben Lawton
- * @author Junaid Rasheed
- *
- *  @version 12/02/2016
- */
-
 public class Player
 {
 	private int ID;

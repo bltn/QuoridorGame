@@ -16,14 +16,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-/**
- * @author Junaid Rasheed
- * @author Jack Zhang
- * @author Ben Lawton
- * @author Jordan Bird
- *
- * @version 18/04/2016
- */
 public class NetworkedBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window

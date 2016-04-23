@@ -1,8 +1,4 @@
-/**
- *
- * @author Khadija Patel
- * @author Junaid Rasheed
- */
+import java.util.ArrayList;
 
 public class ChallengeBoard extends Board{
 
@@ -130,7 +126,6 @@ public class ChallengeBoard extends Board{
                     throw new IllegalArgumentException("Position is occupied");
                 }
                 else {
-                    System.out.println("not occupied");
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                         getPlayer1().setPosition(getPosition(posX, posY));
                         getCurrentPlayer().incrementMoveCount();
@@ -170,7 +165,6 @@ public class ChallengeBoard extends Board{
                 if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
                     throw new IllegalArgumentException("Position is occupied");
                 } else {
-                    System.out.println("not occupied");
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                         getPlayer1().setPosition(getPosition(posX, posY));
                         getCurrentPlayer().incrementMoveCount();

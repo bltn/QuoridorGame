@@ -1,12 +1,4 @@
-/**
- * @author Ben Lawton
- * @author Thai Hoang
- * @author Khadija Patel
- * @author Junaid Rasheed
- */
-
 import java.util.ArrayList;
-
 
 public abstract class Board {
 
@@ -49,9 +41,13 @@ public abstract class Board {
             return player2;
     }
 
-    public Player getPlayer3() { return player3; }
+    public Player getPlayer3() {
+    	return player3;
+    }
 
-    public Player getPlayer4() { return player4; }
+    public Player getPlayer4() {
+    	return player4;
+    }
 
     public void initialisePlayer1(Position startingPosition) {
     	if (player1 == null) {
@@ -116,7 +112,6 @@ public abstract class Board {
         else if (currentPlayer == player4) {
             currentPlayer = player1;
         }
-        System.out.println(currentPlayer.getPosition().getX() + ", " + currentPlayer.getPosition().getY());
     }
 
     /**
