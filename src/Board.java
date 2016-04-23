@@ -112,7 +112,6 @@ public abstract class Board {
         else if (currentPlayer == player4) {
             currentPlayer = player1;
         }
-        System.out.println(currentPlayer.getPosition().getX() + ", " + currentPlayer.getPosition().getY());
     }
 
     /**
