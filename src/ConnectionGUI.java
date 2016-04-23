@@ -1,6 +1,7 @@
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -106,7 +107,7 @@ public class ConnectionGUI extends Application {
 	    BackgroundPosition.CENTER, size);
 	    pane.setBackground(new Background(bimg));
 
-	    scene.getStylesheets().add("Theme.css");
+	    scene.getStylesheets().add(SettingsGUI.theme);
 	}
 
 	@Override

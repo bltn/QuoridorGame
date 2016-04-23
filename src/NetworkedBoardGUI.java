@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.util.Set;
+
 public class NetworkedBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
@@ -119,7 +121,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
         setButtons();
         setPlayerStats();
         client.requestInitialPlayerPawnPositions();
-        scene.getStylesheets().add("Theme.css");
+        scene.getStylesheets().add(SettingsGUI.theme);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
         primaryStage.show();
