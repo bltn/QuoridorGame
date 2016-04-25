@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import static javafx.application.Application.launch;
 
@@ -32,15 +33,34 @@ public class GameOverGUI extends Application {
     private Button newGameButton;
     private Controller controller;
     private Stage primaryStage;
+    private int winnerID;
+    private Text winnerName;
+    private int numberOfPlayers;
 
 
-    public GameOverGUI(Controller controller) {
+    public GameOverGUI(Controller controller, int winnerID, int numberOfPlayers) {
     	this.controller = controller;
+        this.winnerID = winnerID;
+        this.numberOfPlayers = numberOfPlayers;
         introPane = new GridPane();
         introText = new Text(Translate.gameOver());
         buttonBox = new VBox();
         quitButton = new Button(Translate.quit());
         newGameButton = new Button(Translate.newGame());
+        switch (winnerID) {
+            case 1:
+                winnerName = new Text(Translate.winner() + ": " + MenuGUI.player1Name.getText());
+                break;
+            case 2:
+                winnerName = new Text(Translate.winner() + ": " + MenuGUI.player2Name.getText());
+                break;
+            case 3:
+                winnerName = new Text(Translate.winner() + ": " + MenuGUI.player3Name.getText());
+                break;
+            case 4:
+                winnerName = new Text(Translate.winner() + ": " + MenuGUI.player4Name.getText());
+                break;
+        }
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add(SettingsGUI.theme);
     }
@@ -74,6 +94,7 @@ public class GameOverGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
+        buttonBox.getChildren().add(winnerName);
         buttonBox.getChildren().add(quitButton);
         buttonBox.getChildren().add(newGameButton);
         buttonBox.setAlignment(Pos.CENTER);
@@ -94,5 +115,22 @@ public class GameOverGUI extends Application {
             	primaryStage.close();
             };
         });
+    }
+
+    /**
+     * Store the winner in a csv file
+     */
+    public void writeStatsToCSV() throws IOException {
+        FileWriter fileWriter = new FileWriter("winners.csv", true);
+        if (numberOfPlayers == 2) {
+            // Write empty rows for players that did not player
+            fileWriter.write(MenuGUI.player1Name.getText() + ", " + MenuGUI.player2Name.getText() + ", "
+                    + ", " + ", " + winnerName.getText() + "\n");
+        } else {
+            fileWriter.write(MenuGUI.player1Name.getText() + ", " + MenuGUI.player2Name.getText() + ", "
+                    + MenuGUI.player3Name.getText() + ", " + MenuGUI.player4Name.getText() + ", "
+                    + winnerName.getText() + "\n");
+        }
+        fileWriter.close();
     }
 }

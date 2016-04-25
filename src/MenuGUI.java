@@ -1,13 +1,13 @@
+import com.sun.javafx.font.freetype.HBGlyphLayout;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -15,17 +15,18 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 
 public class MenuGUI extends Application {
 
     private Scene scene;
     private GridPane introPane;
     private Text introText;
+    public static TextField player1Name;
+    public static TextField player2Name;
+    public static TextField player3Name;
+    public static TextField player4Name;
+    private HBox nameBoxRow1;
+    private HBox nameBoxRow2;
     private VBox buttonBox;
     private Button startButton;
     private Button quitButton;
@@ -36,6 +37,12 @@ public class MenuGUI extends Application {
     	Translate.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
+        player1Name = new TextField("Player 1");
+        player2Name = new TextField("Player 2");
+        player3Name = new TextField("Player 3");
+        player4Name = new TextField("Player 4");
+        nameBoxRow1 = new HBox();
+        nameBoxRow2 = new HBox();
     	buttonBox = new VBox();
     	introText.setId("text");
 
@@ -91,7 +98,7 @@ public class MenuGUI extends Application {
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
         introPane.setHgap(25);
-        introPane.setVgap(70);
+        introPane.setVgap(5);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -104,6 +111,11 @@ public class MenuGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
+        nameBoxRow1.setSpacing(10);
+        nameBoxRow2.setSpacing(10);
+        nameBoxRow1.getChildren().addAll(player1Name, player2Name);
+        nameBoxRow2.getChildren().addAll(player3Name, player4Name);
+        buttonBox.getChildren().addAll(nameBoxRow1, nameBoxRow2);
         buttonBox.getChildren().add(startButton);
         buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(settingsButton);
@@ -121,7 +133,7 @@ public class MenuGUI extends Application {
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.exit(0);
+            	System.exit(0);
             }
         });
         multiplayerButton.setPrefWidth(350);
