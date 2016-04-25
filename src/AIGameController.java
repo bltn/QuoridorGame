@@ -15,8 +15,6 @@ public class AIGameController<T> implements Controller {
 		this.board = board;
 		this.gui = gui;
 		AI = new AI(board);
-		// System.out.println(Utility.toString(AI.getBoard().getPositions()));
-		// System.out.println(AI.getPossibleWallMoves().get(0).getTopleft());
 	}
 
 	public Player getCurrentPlayer() {
@@ -39,40 +37,22 @@ public class AIGameController<T> implements Controller {
 	}
 
 	public void AImove() {
-
-		if (board.getCurrentPlayer() == board.getPlayer1())
+		if (board.getCurrentPlayer() == board.getPlayer1()) {
 			return;
-		StandardBoard new1 = AI.clone(board);
-
-		Move move = AI.Minimax(new1, 2);
-		// System.out.println(move.getX()+" "+move.getY());
-		if (move == null) {
-			System.out.println("ok null");
 		}
+		StandardBoard new1 = AI.clone(board);
+		Move move = AI.Minimax(new1, 2);
 		if (move.getOrientation() != WallPlacement.NULL) {
-
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 			WallPlacement orientation = move.getOrientation();
-			//System.out.println(move.getX() + " " + move.getY() + move.getOrientation() + " AI");
-
 			placeWall(topLeftX, topLeftY, orientation, board.getCurrentPlayer().getID());
-
 		}
-
 		if (move.getOrientation() == WallPlacement.NULL) {
-
-			// Position topLeft = move.getTopleft();
 			int posX = move.getX();
 			int posY = move.getY();
-
-			//System.out.println(move.getX() + " " + move.getY() + " AI");
-
 			movePawn(posX, posY, board.getCurrentPlayer().getID());
-
 		}
-
-
 	}
 
 	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
@@ -82,31 +62,12 @@ public class AIGameController<T> implements Controller {
 			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
 			gui.updatePlayerWallCount(board.getPreviousPlayer().getWallCount(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
-			//System.out.println(topLeftX + " " + topLeftY + " " + orientation + " human");
 			AImove();
 		} catch (IllegalStateException e) {
-			//
-			e.printStackTrace();
 			gui.displayErrorMessage(e.getMessage());
 		}
 	}
 
-	/*
-	 * public void removeWall(int topLeftX, int topLeftY, WallPlacement
-	 * orientation, int playerID) {
-	 *
-	 * Position topLeft=board.getPosition(topLeftX, topLeftY); boolean
-	 * wallsRemoved = board.unassignWalls(topLeft,orientation); if
-	 * (wallsRemoved) { gui.removeWallDisplay(topLeftX, topLeftY, orientation);
-	 * gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(),
-	 * board.getPreviousPlayer().getID());
-	 * gui.updatePlayerWallCount(board.getCurrentPlayer().getWallCount(),
-	 * board.getCurrentPlayer().getID());
-	 * gui.updateActivePlayer(board.getCurrentPlayer().getID()); } else {
-	 * gui.displayErrorMessage("You can't remove that wall"); }
-	 *
-	 * }
-	 */
 	public void movePawn(int posX, int posY, int playerID) {
 		try {
 			boolean gameOver = board.movePawn(posX, posY);
@@ -120,8 +81,6 @@ public class AIGameController<T> implements Controller {
 			}
 			AImove();
 		} catch (IllegalArgumentException e) {
-			System.out.println(posX + " " + posY + " " + playerID + "");
-			e.printStackTrace();
 			gui.displayErrorMessage(e.getMessage());
 		}
 	}

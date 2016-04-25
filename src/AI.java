@@ -21,7 +21,6 @@ public class AI {
 		PossibleWallMoves = new ArrayList<Move>(128);
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				//Position topLeft = new Position(y, x);// AIBoard.getPositions()[x][y]
 				Move WallMove1 = new Move(y, x, WallPlacement.VERTICAL);
 				Move WallMove2 = new Move(y, x, WallPlacement.HORIZONTAL);
 				PossibleWallMoves.add(WallMove1);
@@ -31,43 +30,31 @@ public class AI {
 	}
 
 	public Move Minimax(StandardBoard board, int depth) {
-
 		int highestScore = -10000;
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(board);
 		Iterator<Move> iterator = moves.iterator();
-		// System.out.println(moves.size()+" Minimax");
 
 		while (iterator.hasNext()) {
-
 			Move move = iterator.next();
 			if (isValid(board, move) == false)
 				continue;
-			//System.out.println(move.getX() + " " + move.getY() + " " + move.getOrientation() + " move minimax");
 			StandardBoard result = move(board, move);
 
 			if (isBlock(board, move) == true) {
-				//System.out.println("not block");
 				if(highestScore<Min(board, -10000, 10000, depth - 1)){
 					highestScore=Min(board, -10000, 10000, depth - 1);
 					bestMove = move;
 				}
-				//highestScore = Math.max(Min(board, a, b, depth - 1), highestScore);
-				//a = Math.max(a, highestScore);
 			}
 
 			unmove(board, move);
-
-			// if(b<=a)break;
 		}
-		//System.out.println(bestMove.getX() + " " + bestMove.getY() + " " + bestMove.getOrientation() + " bestmove minimax");
 		return bestMove;
 	}
 
 	private int Min(StandardBoard board, int a, int b, int depth) {
-
-
 		if (depth == 0) {
 			return evaluate(board);
 		}
@@ -80,11 +67,8 @@ public class AI {
 		while (iterator.hasNext()) {
 
 			Move move = iterator.next();
-			// StandardBoard newBoard =clone(board);
 			if (isValid(board, move) == false)
 				continue;
-			// System.out.println(move.getX()+" "+move.getY()+"
-			// "+move.getOrientation()+" move min");
 			StandardBoard result = move(board, move);
 
 			if (isBlock(board, move) == true) {
@@ -92,9 +76,7 @@ public class AI {
 				lowestScore = Math.min(Max(board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
 			}
-
 			unmove(board, move);
-
 			if (b <= a)
 				break;
 		}
@@ -103,25 +85,19 @@ public class AI {
 	}
 
 	private int Max(StandardBoard board, int a, int b, int depth) {
-
-
 		if (depth == 0) {
 			return evaluate(board);
 		}
 
 		int highestScore = -10000;
 		ArrayList<Move> moves = PossibleMoves(board);
-		// Set<Integer> keySet = moves.keySet();
 		Iterator<Move> iterator = moves.iterator();
-		// System.out.println(moves.size()+" Max");
 
 		while (iterator.hasNext()) {
 			Move move = iterator.next();
 
 			if (isValid(board, move) == false)
 				continue;
-			// System.out.println(move.getX()+" "+move.getY()+"
-			// "+move.getOrientation()+" move max");
 			StandardBoard result = move(board, move);
 
 			if (isBlock(board, move) == true) {
@@ -129,8 +105,6 @@ public class AI {
 				highestScore = Math.max(Min(board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
-			// System.out.println(move.getX()+" "+move.getY()+"
-			// "+move.getOrientation()+" unmove max");
 			unmove(board, move);
 
 			if (b <= a)
@@ -144,15 +118,10 @@ public class AI {
 
 		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);//8
 
-		int AIlenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),0);//0
-		//int f2 = (8-board.getPlayer1().getPosition().getY())- (board.getPlayer2().getPosition().getY()-0);
-		//int PlayerWalls = board.getPlayer1().getWallCount();
-		//int AIWalls = board.getPlayer2().getWallCount();
+		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),0);//0
 		Random random = new Random();
 		int randomNumber = random.nextInt(2);
-		return (PlayerLenght- AIlenght)+ randomNumber  ;// +f2 (AIWalls -20 *
-		// PlayerWalls)PlayerLenght
-
+		return (PlayerLenght- AILength)+ randomNumber  ;
 	}
 
 	public boolean isBlock(StandardBoard board, Move move) {
@@ -178,14 +147,11 @@ public class AI {
 		if (move.getOrientation() == WallPlacement.NULL) {
 			if (!validPawnMove) {
 				valid = false;
-				//System.out.println(validPawnMove + " Minimax1");
 			}
 		} else {
 			if (hasWall == false || wallPlacement == false) {
 				valid = false;
-				// System.out.println(!wallPlacement+" Minimax1"+!hasWall);
-				// System.out.println(board.getCurrentPlayer().getWallCount());
-			} // !p1block || !p2block ||
+			}
 
 		}
 
@@ -198,17 +164,12 @@ public class AI {
 		if (move.getOrientation() == WallPlacement.NULL) {
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
-			//Board.movePawn(move.getX(), move.getY());
-			//System.out.println(move.getX() + " " + move.getY() + " move Pawn");
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 			Position topLeft = Board.getPosition(topLeftX, topLeftY);
 			Board.assignWallsFromTopLeftClockwise(topLeft, move.getOrientation());
-			// Board.getCurrentPlayer().decrementWallCount();
 			Board.switchPlayer();
-			// Board.assignWallsFromTopLeftClockwise(move,move.getOrientation());
-			// Board.switchPlayer();
 		}
 
 		return Board;
@@ -222,8 +183,6 @@ public class AI {
 			Position last = Board.getCurrentPlayer().getPreviousPos();
 			Board.getCurrentPlayer().setPosition(last);
 
-			//Board.movePawn(last.getX(), last.getY());
-			//System.out.println(move.getX() + " " + move.getY() + " unmove Pawn");
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
@@ -240,15 +199,6 @@ public class AI {
 	public StandardBoard clone(StandardBoard Board) {
 
 		StandardBoard clone = new StandardBoard(2);
-		/*
-		 * Position[][] positions = Board.getPositions();
-		 *
-		 * Position[][] clonePositions = new Position[positions.length][]; for
-		 * (int i = 0; i < positions.length; i++) { Position[] aPositions =
-		 * positions[i]; int aLength = aPositions.length; clonePositions[i] =
-		 * new Position[aLength]; System.arraycopy(aPositions, 0,
-		 * clonePositions[i], 0, aLength); }
-		 */
 		Position[][] clonePositions = Utility.clone(Board.getPositions());
 		clone.setPositions(clonePositions);
 
