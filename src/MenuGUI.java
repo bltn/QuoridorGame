@@ -33,7 +33,7 @@ public class MenuGUI extends Application {
     private Button settingsButton;
 
     public MenuGUI() {
-    	LanguageFileHandler.setLanguage(SettingsGUI.language);
+    	Translate.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
     	buttonBox = new VBox();
@@ -44,24 +44,24 @@ public class MenuGUI extends Application {
     	ImageView changeSizeOfStart = new ImageView(start);
     	changeSizeOfStart.setFitHeight(20);
     	changeSizeOfStart.setFitWidth(20);
-    	startButton = new Button(LanguageFileHandler.getLocalMode(),changeSizeOfStart);
+    	startButton = new Button(Translate.localMode(),changeSizeOfStart);
 
     	//add a icon into quit button
     	Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
     	ImageView newQuit = new ImageView(quit);
     	newQuit.setFitHeight(20);
     	newQuit.setFitWidth(20);
-    	quitButton = new Button(LanguageFileHandler.getQuit(),newQuit);
+    	quitButton = new Button(Translate.quit(),newQuit);
 
     	//add a icon into the multiplayer button
     	Image multiplayer = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
     	ImageView NewMultiplayer = new ImageView(multiplayer);
     	NewMultiplayer.setFitHeight(20);
     	NewMultiplayer.setFitWidth(20);
-    	multiplayerButton = new Button(LanguageFileHandler.getMultiplayer(),NewMultiplayer);
+    	multiplayerButton = new Button(Translate.multiplayer(),NewMultiplayer);
 
         // Settings button
-        settingsButton = new Button(LanguageFileHandler.getSettings());
+        settingsButton = new Button(Translate.settings());
 
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -151,11 +151,11 @@ public class MenuGUI extends Application {
     }
 
     public void updateLanguage() {
-        LanguageFileHandler.setLanguage(SettingsGUI.language);
-        startButton.setText(LanguageFileHandler.getLocalMode());
-        quitButton.setText(LanguageFileHandler.getQuit());
-        multiplayerButton.setText(LanguageFileHandler.getMultiplayer());
-        settingsButton.setText(LanguageFileHandler.getSettings());
+        Translate.setLanguage(SettingsGUI.language);
+        startButton.setText(Translate.localMode());
+        quitButton.setText(Translate.quit());
+        multiplayerButton.setText(Translate.multiplayer());
+        settingsButton.setText(Translate.settings());
     }
 
     public static void main(String[] args) {

@@ -11,3 +11,22 @@ Introduzca la dirección IP y puerto para su máquina
 crear servidor
 Conecte al juego
 ajustes
+No se puede bloquear por completo a otro jugador
+Mover no es válido
+Usted no tiene ninguna pared
+Posición es ocupada
+modo Práctica
+disposiciones de referencia
+reglas del desafío
+estándar de 2 jugadores
+estándar de 4 jugadores
+desafío de 2 jugadores
+desafío de 4 jugadores
+espalda
+movimientos disponibles
+Juego terminado
+Conectarse a 4 jugador del juego
+Conectarse a 2 jugador del juego
+Modos de juego
+Elija un modo de juego
+modo

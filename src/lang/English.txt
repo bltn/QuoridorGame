@@ -11,3 +11,22 @@ Enter the IP and port address for your machine
 Create server
 Connect to game
 Settings
+You can't completely block another player
+Move is invalid
+You don't have any walls
+Position is occupied
+Practise mode
+Standard rules
+Challenge rules
+2P Standard
+4P Standard
+2P Challenge
+4P Challenge
+Back
+Available moves
+Game over
+Connect to 4P game
+Connect to 2P game
+Game modes
+Choose a game mode
+mode

@@ -37,10 +37,10 @@ public class GameOverGUI extends Application {
     public GameOverGUI(Controller controller) {
     	this.controller = controller;
         introPane = new GridPane();
-        introText = new Text("Game Over");
+        introText = new Text(Translate.gameOver());
         buttonBox = new VBox();
-        quitButton = new Button("Quit");
-        newGameButton = new Button("New Game");
+        quitButton = new Button(Translate.quit());
+        newGameButton = new Button(Translate.newGame());
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add(SettingsGUI.theme);
     }

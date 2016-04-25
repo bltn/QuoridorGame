@@ -88,7 +88,7 @@ public class SettingsGUI extends Application{
             @Override
             public void handle(ActionEvent event) {
                 language = "English";
-                LanguageFileHandler.setLanguage(language);
+                Translate.setLanguage(language);
                 menuGUI.updateLanguage();
             };
         });
@@ -98,7 +98,7 @@ public class SettingsGUI extends Application{
             @Override
             public void handle(ActionEvent event) {
                 language = "French";
-                LanguageFileHandler.setLanguage(language);
+                Translate.setLanguage(language);
                 menuGUI.updateLanguage();
             };
         });
@@ -108,7 +108,7 @@ public class SettingsGUI extends Application{
             @Override
             public void handle(ActionEvent event) {
                 language = "Spanish";
-                LanguageFileHandler.setLanguage(language);
+                Translate.setLanguage(language);
                 menuGUI.updateLanguage();
             };
         });
@@ -118,7 +118,7 @@ public class SettingsGUI extends Application{
             @Override
             public void handle(ActionEvent event) {
                 language = "Chinese";
-                LanguageFileHandler.setLanguage(language);
+                Translate.setLanguage(language);
                 menuGUI.updateLanguage();
             };
         });
