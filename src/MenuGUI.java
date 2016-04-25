@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -26,6 +27,7 @@ public class MenuGUI extends Application {
     private Scene scene;
     private GridPane introPane;
     private Text introText;
+    public TextField nameTextField;
     private VBox buttonBox;
     private Button startButton;
     private Button quitButton;
@@ -36,6 +38,7 @@ public class MenuGUI extends Application {
     	LanguageFileHandler.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
+        nameTextField = new TextField("Enter your name");
     	buttonBox = new VBox();
     	introText.setId("text");
 
@@ -91,7 +94,7 @@ public class MenuGUI extends Application {
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
         introPane.setHgap(25);
-        introPane.setVgap(70);
+        introPane.setVgap(40);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -104,6 +107,7 @@ public class MenuGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
+        buttonBox.getChildren().add(nameTextField);
         buttonBox.getChildren().add(startButton);
         buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(settingsButton);
@@ -121,7 +125,7 @@ public class MenuGUI extends Application {
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.exit(0);
+                
             }
         });
         multiplayerButton.setPrefWidth(350);
