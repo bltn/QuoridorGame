@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,9 +30,10 @@ public class MenuGUI extends Application {
     private Button startButton;
     private Button quitButton;
     private Button multiplayerButton;
+    private Button settingsButton;
 
     public MenuGUI() {
-    	LanguageFileHandler.setLanguage("English");
+    	LanguageFileHandler.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
     	buttonBox = new VBox();
@@ -58,6 +60,9 @@ public class MenuGUI extends Application {
     	NewMultiplayer.setFitWidth(20);
     	multiplayerButton = new Button(LanguageFileHandler.getMultiplayer(),NewMultiplayer);
 
+        // Settings button
+        settingsButton = new Button(LanguageFileHandler.getSettings());
+
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
     	BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
@@ -68,7 +73,7 @@ public class MenuGUI extends Application {
 
     	introPane.setBackground(new Background(bimg));
     	scene = new Scene(introPane, 600, 400);
-    	scene.getStylesheets().add("Theme.css");
+    	scene.getStylesheets().add(SettingsGUI.theme);
 	}
 
     @Override
@@ -86,7 +91,7 @@ public class MenuGUI extends Application {
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
         introPane.setHgap(25);
-        introPane.setVgap(100);
+        introPane.setVgap(70);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -101,6 +106,7 @@ public class MenuGUI extends Application {
         buttonBox.setSpacing(10);
         buttonBox.getChildren().add(startButton);
         buttonBox.getChildren().add(multiplayerButton);
+        buttonBox.getChildren().add(settingsButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
         startButton.setPrefWidth(350);
@@ -120,12 +126,36 @@ public class MenuGUI extends Application {
         });
         multiplayerButton.setPrefWidth(350);
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				ConnectionGUI connGUI = new ConnectionGUI();
-				connGUI.start(new Stage());
-			}
+            @Override
+            public void handle(ActionEvent event) {
+                ConnectionGUI connGUI = new ConnectionGUI();
+                connGUI.start(new Stage());
+            }
         });
+        settingsButton.setPrefWidth(350);
+        MenuGUI menuGUIReference = this;
+        settingsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SettingsGUI settingsGUI = new SettingsGUI(menuGUIReference);
+                settingsGUI.start(new Stage());
+            }
+        });
+    }
+
+    public void updateTheme() {
+        // Remove the currently loaded stylesheet
+        scene.getStylesheets().remove(scene.getStylesheets().get(0));
+        // Add the new stylesheet
+        scene.getStylesheets().add(SettingsGUI.theme);
+    }
+
+    public void updateLanguage() {
+        LanguageFileHandler.setLanguage(SettingsGUI.language);
+        startButton.setText(LanguageFileHandler.getLocalMode());
+        quitButton.setText(LanguageFileHandler.getQuit());
+        multiplayerButton.setText(LanguageFileHandler.getMultiplayer());
+        settingsButton.setText(LanguageFileHandler.getSettings());
     }
 
     public static void main(String[] args) {

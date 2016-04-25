@@ -42,7 +42,7 @@ public class GameOverGUI extends Application {
         quitButton = new Button("Quit");
         newGameButton = new Button("New Game");
         scene = new Scene(introPane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
+        scene.getStylesheets().add(SettingsGUI.theme);
     }
 
     @Override

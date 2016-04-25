@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.util.Set;
+
 public class LocalBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
@@ -121,7 +123,7 @@ public class LocalBoardGUI extends Application implements GUI {
             setPawn(thirdPawn, Color.BLUE, (controller.getPlayer3X() * 2), (controller.getPlayer3Y() * 2));
             setPawn(fourthPawn, Color.RED, (controller.getPlayer4X() * 2), (controller.getPlayer4Y() * 2));
         }
-        scene.getStylesheets().add("Theme.css");
+        scene.getStylesheets().add(SettingsGUI.theme);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
         primaryStage.show();

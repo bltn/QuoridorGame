@@ -10,3 +10,4 @@ Rejoins une partie
 Entrez l'adresse IP et l'adresse de port pour votre machine
 Créer serveur
 Se connecter au jeu
+Paramètres
