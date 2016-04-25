@@ -9,7 +9,7 @@ import java.util.Stack;
 import sun.applet.Main;
 
 /**
- * 
+ *
  * @author Thai Hoang
  *
  * @version 06/04/2016
@@ -17,18 +17,12 @@ import sun.applet.Main;
 
 public class Utility {
 
-	public Utility() {
-
-	}
+	public Utility() {}
 
 	public static void main(String[] args) {
-
 		Utility u = new Utility();
 		Position start = new Position(10, 10);
 		Position goal = new Position(0, 0);
-		System.out.println("start");
-		//u.BreadthFirstSearch(grid1, start, 0);
-		System.out.println("end");
 	}
 
 	public static int[][] grid1 = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -50,29 +44,24 @@ public class Utility {
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, };
 
 	public boolean A(int[][] grid, Position start, int finish) {
-		
+
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		
+
 		boolean done = false; // set true when the finish position is reached
 		Position pos;
 		queue.add(start);
 		grid[start.getX()][start.getY()] = 2;
 		while (!queue.isEmpty()) {
-			//System.out.println(stack.size());
 			pos = queue.remove();
-
-			//grid[pos.getX()][pos.getY()] = 2; // this cell has been tried
-			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
 			if (pos.getX() == finish) {
 				done = true;
-				System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
-				
+
 				if (grid[pos.getX()][pos.getY() - 1] == 1)
 					add_new_pos(grid, queue, pos.getX(), pos.getY() - 2, length);
 				if (grid[pos.getX()][pos.getY() + 1] == 1)
@@ -81,14 +70,9 @@ public class Utility {
 					add_new_pos(grid, queue, pos.getX() - 2, pos.getY(), length);
 				if (grid[pos.getX() + 1][pos.getY()] == 1)
 					add_new_pos(grid, queue, pos.getX() + 2, pos.getY(), length);
-				
 			}
-		}		
-		System.out.println(" X:" + ((start.getX()-1)/2) + " Y:"+ ((start.getY()-1)/2) );
-		//System.out.println(toString(grid));
+		}
 		reset(grid);
-		//System.out.println(done);
-
 		return done;
 	}
 
@@ -103,9 +87,7 @@ public class Utility {
 	private void add_new_pos(int[][] grid, PriorityQueue<Position> stack, int x, int y, int length) {
 		if (valid(grid, x, y)) {
 			Position next = new Position(x, y);
-
 			next.setCostsofar(length);
-			//PositionComparator.costsofar=length;
 			stack.add(next);
 			grid[x][y] = 2;
 		}
@@ -113,37 +95,32 @@ public class Utility {
 
 	private boolean valid(int[][] grid, int row, int column) {
 		boolean result = false;
-
 		/* Check if cell is in the bounds of the maze */
 		if (row >= 0 && row < grid.length && column >= 0 && column < grid[row].length)
 			/* Check if cell is not blocked and not previously tried */
 			if (grid[row][column] == 1)
 				result = true;
-
 		return result;
 	}
 
 	public String toString(int[][] grid) {
 		String result = "\n";
-
 		// Print the grid line by line
 		for (int row = 0; row < grid.length; row++) {
 			// Print each element in a line
 			for (int column = 0; column < grid[row].length; column++)
 				result += grid[row][column] + ".";
-
 			result += "\n";
 		}
 		return result;
 	}
-	
+
 	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
-
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		
+
 		int done = 0; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -152,16 +129,11 @@ public class Utility {
 		while (!queue.isEmpty()) {
 			Position pos = queue.remove();
 			grid[pos.getY()][pos.getX()].setVisited(true); // this cell has been tried
-			
-			//System.out.println(indexof(grid, pos)+"|"+"currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
-			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
 			if (pos.getY() == finish) {
 				done = pos.getCostsofar();
-				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
-				
 				if (!pos.hasTopWall())
 					push_new_pos(grid, queue, pos.getY() - 1, pos.getX(),length);
 				if (!pos.hasBottomWall())
@@ -170,18 +142,13 @@ public class Utility {
 					push_new_pos(grid, queue, pos.getY(), pos.getX() - 1,length);
 				if (!pos.hasRightWall())
 					push_new_pos(grid, queue, pos.getY(), pos.getX() + 1,length);
-
 			}
 		}
-		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
 		reset(grid);
-		//System.out.println(done);
-		//System.out.println(toString(grid));
 		return done;
 	}
 
 	public static boolean shortesrPath(int lenght,Position[][] grid, Position start, int finish) {
-		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
 
@@ -195,17 +162,13 @@ public class Utility {
 		while (!queue.isEmpty()) {
 			Position pos = queue.remove();
 			grid[pos.getY()][pos.getX()].setVisited(true); // this cell has been tried
-			
-			//System.out.println(indexof(grid, pos)+"|"+"currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
-			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
+
 			if (pos.getY() == finish) {
 				done = true;
-				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				lenght=pos.getCostsofar();
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
-								
 				if (!pos.hasTopWall())
 					push_new_pos(grid, queue, pos.getY() - 1, pos.getX(),length);
 				if (!pos.hasBottomWall())
@@ -214,18 +177,13 @@ public class Utility {
 					push_new_pos(grid, queue, pos.getY(), pos.getX() - 1,length);
 				if (!pos.hasRightWall())
 					push_new_pos(grid, queue, pos.getY(), pos.getX() + 1,length);
-
 			}
 		}
-		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
 		reset(grid);
-		//System.out.println(done);
-		//System.out.println(toString(grid));
 		return done;
 	}
-	
+
 	public static boolean AstarSearch(Position[][] grid, Position start, int finish) {
-		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
 
@@ -239,16 +197,13 @@ public class Utility {
 		while (!queue.isEmpty()) {
 			Position pos = queue.remove();
 			grid[pos.getY()][pos.getX()].setVisited(true); // this cell has been tried
-			
-			//System.out.println(indexof(grid, pos)+"|"+"currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
-			//System.out.println("currentX:" + pos.getX() + "currentY:" + pos.getY() + "|goal:" + finish);
+
 			if (pos.getY() == finish) {
 				done = true;
-				//System.out.print("Shortest path:"+ (pos.getCostsofar())+" ");
 				break;
 			} else {
 				int length = pos.getCostsofar()+1;
-				
+
 				if (!pos.hasTopWall())
 					push_new_pos(grid, queue, pos.getY() - 1, pos.getX(),length);
 				if (!pos.hasBottomWall())
@@ -257,20 +212,14 @@ public class Utility {
 					push_new_pos(grid, queue, pos.getY(), pos.getX() - 1,length);
 				if (!pos.hasRightWall())
 					push_new_pos(grid, queue, pos.getY(), pos.getX() + 1,length);
-
 			}
 		}
-		//System.out.println(" Y:"+ start.getY() + " X:" + start.getX()) ;
 		reset(grid);
-		//System.out.println(done);
-		//System.out.println(toString(grid));
 		return done;
 	}
 
 	private static String indexof(Position[][] arr,Position pos){
-		
-		String index=""; 
-		
+		String index="";
 		for (int i = 0 ; i < arr.length; i++)
 		    for(int j = 0 ; j < arr[i].length ; j++)
 		    {
@@ -280,9 +229,8 @@ public class Utility {
 		         }
 		    }
 		return index;
-		
 	}
-	
+
 	private static void reset(Position[][] grid) {
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[row].length; column++)
@@ -294,26 +242,22 @@ public class Utility {
 		if (valid(grid, x, y)) {
 			grid[x][y].setVisited(true);
 			grid[x][y].setCostsofar(length);
-			queue.add(grid[x][y]);			
+			queue.add(grid[x][y]);
 		}
 	}
 
 	private static boolean valid(Position[][] grid, int row, int column) {
 		boolean result = false;
-
 		/* Check if cell is in the bounds of the maze */
 		if (row >= 0 && row < grid.length && column >= 0 && column < grid[row].length)
-
 			/* Check if cell is not blocked and not previously tried */
 			if (grid[row][column].isVisited() == false)
 				result = true;
-
 		return result;
 	}
 
 	public static String toString(Position[][] grid) {
 		String result = "\n";
-
 		// Print the grid line by line
 		for (int row = 0; row < grid.length; row++) {
 			// Print each element in a line
@@ -326,14 +270,13 @@ public class Utility {
 			}
 			result += "\n";
 		}
-		// result += grid[8][4].getY() + "" + grid[8][4].getX();
 		return result;
 	}
 
-	
+
 	public static Position clone(Position pos){
 		Position clone = new Position(pos.getX(),pos.getY());
-		
+
 			if(pos.hasBottomWall())clone.setHasBottomWall(true);
 			if(!pos.hasBottomWall())clone.setHasBottomWall(false);
 			if(pos.hasTopWall())clone.setHasTopWall(true);
@@ -342,21 +285,21 @@ public class Utility {
 			if(!pos.hasLeftWall())clone.setHasLeftWall(false);
 			if(pos.hasRightWall())clone.setHasRightWall(true);
 			if(!pos.hasRightWall())clone.setHasRightWall(false);
-		
+
 		return clone;
 	}
-	
+
 	public static Position[][] clone(Position[][] grid){
 		Position[][] clone = new Position[grid.length][grid[0].length];
-		
+
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length;column++) {
 				clone[row][column]=clone(grid[row][column]);
 			}
-		}		
+		}
 		return clone;
 	}
-	
+
 	private static class PositionComparator implements Comparator<Position>
 	{
 		public static int goal;
@@ -366,9 +309,9 @@ public class Utility {
 	    public int compare(Position x, Position y)
 	    {
 			int Xgoal = Math.abs((goal-x.getY()));
-			
+
 			int X = x.getCostsofar()+Xgoal;//(1)*2+
-			
+
 
 			int Ygoal = Math.abs((goal-y.getY()));
 
@@ -384,9 +327,6 @@ public class Utility {
 	            return 1;
 	        }
 	        return 0;
+	    }
 	}
-	}
-
-	
-	
 }

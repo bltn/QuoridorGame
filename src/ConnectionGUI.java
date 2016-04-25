@@ -214,7 +214,7 @@ public class ConnectionGUI extends Application {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						System.out.println(e.getMessage());
+						SystemLogger.logError(e.getMessage());
 					}
 					if (client.guiCanBeLaunched()) {
 						client.setGUILaunched(true);
