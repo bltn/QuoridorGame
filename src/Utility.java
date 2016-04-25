@@ -9,9 +9,7 @@ import java.util.Stack;
 import sun.applet.Main;
 
 /**
- *
  * @author Thai Hoang
- *
  * @version 06/04/2016
  */
 

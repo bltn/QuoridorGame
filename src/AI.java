@@ -6,10 +6,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * @author Thai Hoang
- */
-
 public class AI {
 
 	private StandardBoard AIBoard;
