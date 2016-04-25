@@ -66,7 +66,7 @@ public class LocalGameController<T> implements Controller {
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
-                GameOverGUI gui = new GameOverGUI((Controller) this);
+                GameOverGUI gui = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID());
                 gui.start(new Stage());
 			}
     	} catch (IllegalArgumentException e) {

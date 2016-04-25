@@ -21,10 +21,10 @@ public class MenuGUI extends Application {
     private Scene scene;
     private GridPane introPane;
     private Text introText;
-    public TextField player1Name;
-    public TextField player2Name;
-    public TextField player3Name;
-    public TextField player4Name;
+    public static TextField player1Name;
+    public static TextField player2Name;
+    public static TextField player3Name;
+    public static TextField player4Name;
     private HBox nameBoxRow1;
     private HBox nameBoxRow2;
     private VBox buttonBox;

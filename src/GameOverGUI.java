@@ -32,15 +32,37 @@ public class GameOverGUI extends Application {
     private Button newGameButton;
     private Controller controller;
     private Stage primaryStage;
+    private int winnerID;
+    private Text winnerName;
 
 
-    public GameOverGUI(Controller controller) {
+    public GameOverGUI(Controller controller, int winnerID) {
     	this.controller = controller;
         introPane = new GridPane();
         introText = new Text("Game Over");
         buttonBox = new VBox();
         quitButton = new Button("Quit");
         newGameButton = new Button("New Game");
+        this.winnerID = winnerID;
+        System.out.println(winnerID);
+        System.out.println(MenuGUI.player1Name.getText());
+        System.out.println(MenuGUI.player2Name.getText());
+        System.out.println(MenuGUI.player3Name.getText());
+        System.out.println(MenuGUI.player4Name.getText());
+        switch (winnerID) {
+            case 1:
+                winnerName = new Text("Winner: " + MenuGUI.player1Name.getText());
+                break;
+            case 2:
+                winnerName = new Text("Winner: " + MenuGUI.player2Name.getText());
+                break;
+            case 3:
+                winnerName = new Text("Winner: " + MenuGUI.player3Name.getText());
+                break;
+            case 4:
+                winnerName = new Text("Winner: " + MenuGUI.player4Name.getText());
+                break;
+        }
         scene = new Scene(introPane, 600, 400);
         scene.getStylesheets().add(SettingsGUI.theme);
     }
@@ -74,6 +96,7 @@ public class GameOverGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
+        buttonBox.getChildren().add(winnerName);
         buttonBox.getChildren().add(quitButton);
         buttonBox.getChildren().add(newGameButton);
         buttonBox.setAlignment(Pos.CENTER);
