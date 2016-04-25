@@ -15,104 +15,7 @@ import sun.applet.Main;
 
 public class Utility {
 
-	public Utility() {}
-
-	public static void main(String[] args) {
-		Utility u = new Utility();
-		Position start = new Position(10, 10);
-		Position goal = new Position(0, 0);
-	}
-
-	public static int[][] grid1 = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, };
-
-	public boolean A(int[][] grid, Position start, int finish) {
-
-		Comparator<Position> comparator = new PositionComparator();
-		PositionComparator.goal=finish;
-
-		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-
-		boolean done = false; // set true when the finish position is reached
-		Position pos;
-		queue.add(start);
-		grid[start.getX()][start.getY()] = 2;
-		while (!queue.isEmpty()) {
-			pos = queue.remove();
-			if (pos.getX() == finish) {
-				done = true;
-				break;
-			} else {
-				int length = pos.getCostsofar()+1;
-
-				if (grid[pos.getX()][pos.getY() - 1] == 1)
-					add_new_pos(grid, queue, pos.getX(), pos.getY() - 2, length);
-				if (grid[pos.getX()][pos.getY() + 1] == 1)
-					add_new_pos(grid, queue, pos.getX(), pos.getY() + 2, length);
-				if (grid[pos.getX() - 1][pos.getY()] == 1)
-					add_new_pos(grid, queue, pos.getX() - 2, pos.getY(), length);
-				if (grid[pos.getX() + 1][pos.getY()] == 1)
-					add_new_pos(grid, queue, pos.getX() + 2, pos.getY(), length);
-			}
-		}
-		reset(grid);
-		return done;
-	}
-
-	private void reset(int[][] grid) {
-		for (int row = 0; row < grid.length; row++) {
-			for (int column = 0; column < grid[row].length; column++)
-				if (grid[row][column] > 1)
-					grid[row][column] = 1;
-		}
-	}
-
-	private void add_new_pos(int[][] grid, PriorityQueue<Position> stack, int x, int y, int length) {
-		if (valid(grid, x, y)) {
-			Position next = new Position(x, y);
-			next.setCostsofar(length);
-			stack.add(next);
-			grid[x][y] = 2;
-		}
-	}
-
-	private boolean valid(int[][] grid, int row, int column) {
-		boolean result = false;
-		/* Check if cell is in the bounds of the maze */
-		if (row >= 0 && row < grid.length && column >= 0 && column < grid[row].length)
-			/* Check if cell is not blocked and not previously tried */
-			if (grid[row][column] == 1)
-				result = true;
-		return result;
-	}
-
-	public String toString(int[][] grid) {
-		String result = "\n";
-		// Print the grid line by line
-		for (int row = 0; row < grid.length; row++) {
-			// Print each element in a line
-			for (int column = 0; column < grid[row].length; column++)
-				result += grid[row][column] + ".";
-			result += "\n";
-		}
-		return result;
-	}
-
+	
 	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
@@ -272,7 +175,7 @@ public class Utility {
 	}
 
 
-	public static Position clone(Position pos){
+	private static Position clone(Position pos){
 		Position clone = new Position(pos.getX(),pos.getY());
 
 			if(pos.hasBottomWall())clone.setHasBottomWall(true);
@@ -287,7 +190,7 @@ public class Utility {
 		return clone;
 	}
 
-	public static Position[][] clone(Position[][] grid){
+	private static Position[][] clone(Position[][] grid){
 		Position[][] clone = new Position[grid.length][grid[0].length];
 
 		for (int row = 0; row < grid.length; row++) {
@@ -298,10 +201,26 @@ public class Utility {
 		return clone;
 	}
 
+	public static StandardBoard clone(StandardBoard Board) {
+
+		StandardBoard clone = new StandardBoard(2);
+		Position[][] clonePositions = Utility.clone(Board.getPositions());
+		clone.setPositions(clonePositions);
+
+		clone.setPlayer1(new Player(Board.getPlayer1().getPosition(), Board.getPlayer1().getID()));
+		clone.getPlayer1().setWallCount(Board.getPlayer1().getWallCount());
+		clone.setPlayer2(new Player(Board.getPlayer2().getPosition(), Board.getPlayer2().getID()));
+		clone.getPlayer2().setWallCount(Board.getPlayer2().getWallCount());
+		if (Board.getCurrentPlayer() == Board.getPlayer1()) {
+			clone.setCurrentPlayer(clone.getPlayer1());
+		} else {
+			clone.setCurrentPlayer(clone.getPlayer2());
+		}
+		return clone;
+	}
 	private static class PositionComparator implements Comparator<Position>
 	{
 		public static int goal;
-		public static int costsofar;
 
 		@Override
 	    public int compare(Position x, Position y)
