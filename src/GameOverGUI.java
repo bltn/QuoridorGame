@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import static javafx.application.Application.launch;
 
@@ -34,16 +35,18 @@ public class GameOverGUI extends Application {
     private Stage primaryStage;
     private int winnerID;
     private Text winnerName;
+    private int numberOfPlayers;
 
 
-    public GameOverGUI(Controller controller, int winnerID) {
+    public GameOverGUI(Controller controller, int winnerID, int numberOfPlayers) {
     	this.controller = controller;
+        this.winnerID = winnerID;
+        this.numberOfPlayers = numberOfPlayers;
         introPane = new GridPane();
         introText = new Text("Game Over");
         buttonBox = new VBox();
         quitButton = new Button("Quit");
         newGameButton = new Button("New Game");
-        this.winnerID = winnerID;
         System.out.println(winnerID);
         System.out.println(MenuGUI.player1Name.getText());
         System.out.println(MenuGUI.player2Name.getText());
@@ -117,5 +120,22 @@ public class GameOverGUI extends Application {
             	primaryStage.close();
             };
         });
+    }
+
+    /**
+     * Store the winner in a csv file
+     */
+    public void writeStatsToCSV() throws IOException{
+        FileWriter fileWriter = new FileWriter("winners.csv", true);
+        if (numberOfPlayers == 2) {
+            // Write empty rows for players that did not player
+            fileWriter.write(MenuGUI.player1Name.getText() + ", " + MenuGUI.player2Name.getText() + ", "
+                    + ", " + ", " + winnerName.getText() + "\n");
+        } else {
+            fileWriter.write(MenuGUI.player1Name.getText() + ", " + MenuGUI.player2Name.getText() + ", "
+                    + MenuGUI.player3Name.getText() + ", " + MenuGUI.player4Name.getText() + ", "
+                    + winnerName.getText() + "\n");
+        }
+        fileWriter.close();
     }
 }
