@@ -25,8 +25,10 @@ desafío de 4 jugadores
 espalda
 movimientos disponibles
 Juego terminado
+Nuevo juego
 Conectarse a 4 jugador del juego
 Conectarse a 2 jugador del juego
 Modos de juego
 Elija un modo de juego
 modo
+Ganador
