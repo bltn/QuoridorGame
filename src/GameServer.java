@@ -28,12 +28,11 @@ public class GameServer {
 		if (portAddress <= 65535) {
 			try {
 				serverSocket = new ServerSocket(portAddress, 8, InetAddress.getByName(IPAddress));
-				System.out.println("Server created");
+				SystemLogger.logInfo("Server created");
 				listenForConnectionRequests();
 			} catch (Exception e) {
-				e.printStackTrace();
+				SystemLogger.logError(e.getMessage());
                 showAlert("Error creating server. Please restart and try again.");
-				System.out.println("There was an error creating the server");
 			}
 		}
 	}
@@ -57,13 +56,15 @@ public class GameServer {
 				}
 				else if (socketCount == 2) {
 					player3IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    SystemLogger.logInfo("Client socket # 3 I/O thread booted up");
+                    SystemLogger.logInfo("Player 3 joined game");
 					showAlert("Player 3 has joined");
-					System.out.println("Client socket # 3 I/O thread booted up");
 				}
 				else if (socketCount == 3) {
 					player4IOThread = new ClientSocketIOThread(serverSocket.accept(), controller);
+                    SystemLogger.logInfo("Client socket # 4 I/O thread booted up");
+                    SystemLogger.logInfo("Player 4 joined game");
 					showAlert("Player 4 has joined");
-					System.out.println("Client socket # 4 I/O thread booted up");
 				}
 				socketCount++;
 			}

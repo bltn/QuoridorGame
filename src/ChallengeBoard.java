@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class ChallengeBoard extends Board{
+public class ChallengeBoard extends Board {
 
     private WallOwnershipCollection wallOwnershipRecords;
 
@@ -65,19 +65,27 @@ public class ChallengeBoard extends Board{
 
     public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {
 		if (getCurrentPlayer().hasWalls()) {
-	    	if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
-	    		Position topLeft = getPosition(topLeftX, topLeftY);
-	    		if (wallPlacementIsValid(topLeft, orientation)) {
-	    			assignWallsFromTopLeftClockwise(topLeft, orientation);
-	    			getCurrentPlayer().decrementWallCount();
-	    			getCurrentPlayer().incrementMoveCount();
-	    			switchPlayer();
-	    		} else {
-	    			throw new IllegalStateException("Move is invalid");
-	    		}
-	    	} else {
-	    		throw new IllegalStateException("Move is invalid");
-	    	}
+			if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
+				Position topLeft = getPosition(topLeftX, topLeftY);
+				if (wallPlacementIsValid(topLeft, orientation)) {
+					assignWallsFromTopLeftClockwise(topLeft, orientation);
+
+					if (!Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
+							|| !Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
+
+						removeWallsFromPosition(topLeft, orientation);
+						throw new IllegalStateException("You can't completely block another player");
+					}
+
+					getCurrentPlayer().decrementWallCount();
+					getCurrentPlayer().incrementMoveCount();
+					switchPlayer();
+				} else {
+					throw new IllegalStateException("Move is invalid");
+				}
+			} else {
+				throw new IllegalStateException("Move is invalid");
+			}
 		} else {
 			throw new IllegalStateException("You don't have any walls");
 		}
@@ -93,8 +101,7 @@ public class ChallengeBoard extends Board{
 			}
 			if (topLeft.getY() == 8) {
 				isValid = false;
-			}
-			else if (getPosition(topLeft.getX(), (topLeft.getY() + 1)).hasRightWall()) {
+			} else if (getPosition(topLeft.getX(), (topLeft.getY() + 1)).hasRightWall()) {
 				isValid = false;
 			}
 			if (topLeft.hasBottomWall() && getPosition((topLeft.getX() + 1), topLeft.getY()).hasBottomWall()) {
@@ -106,8 +113,7 @@ public class ChallengeBoard extends Board{
 			}
 			if (topLeft.getX() == 8) {
 				isValid = false;
-			}
-			else if (getPosition((topLeft.getX() + 1), topLeft.getY()).hasBottomWall()) {
+			} else if (getPosition((topLeft.getX() + 1), topLeft.getY()).hasBottomWall()) {
 				isValid = false;
 			}
 			if (topLeft.hasRightWall() && getPosition(topLeft.getX(), (topLeft.getY() + 1)).hasRightWall()) {
