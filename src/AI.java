@@ -121,7 +121,7 @@ public class AI {
 		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),0);//0
 		Random random = new Random();
 		int randomNumber = random.nextInt(2);
-		return (PlayerLenght- AILength)+ randomNumber  ;
+		return (PlayerLenght- AILength)+ randomNumber;
 	}
 
 	public boolean isBlock(StandardBoard board, Move move) {
@@ -152,9 +152,7 @@ public class AI {
 			if (hasWall == false || wallPlacement == false) {
 				valid = false;
 			}
-
 		}
-
 		return valid;
 	}
 
@@ -171,18 +169,15 @@ public class AI {
 			Board.assignWallsFromTopLeftClockwise(topLeft, move.getOrientation());
 			Board.switchPlayer();
 		}
-
 		return Board;
 	}
 
 	public static StandardBoard unmove(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
-
 			Board.switchPlayer();
 			Position last = Board.getCurrentPlayer().getPreviousPos();
 			Board.getCurrentPlayer().setPosition(last);
-
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
@@ -190,9 +185,7 @@ public class AI {
 			Position topLeft = Board.getPosition(topLeftX, topLeftY);
 			Board.unassignWalls(topLeft, move.getOrientation());
 			Board.switchPlayer();
-
 		}
-
 		return Board;
 	}
 
@@ -211,14 +204,11 @@ public class AI {
 		} else {
 			clone.setCurrentPlayer(clone.getPlayer2());
 		}
-
 		return clone;
 	}
 
 	public ArrayList<Move> PossiblePawnMoves(StandardBoard currentBoard) {
 		ArrayList<Move> PossiblePawnMoves = new ArrayList<Move>(5);
-
-		//currentBoard.switchPlayer();
 		ArrayList<Position> availablePositions = currentBoard.getCurrentPlayerOccupiablePositions();
 		if (availablePositions.size() > 0) {
 			for (Position pos : availablePositions) {
@@ -226,20 +216,16 @@ public class AI {
 			}
 		}
 		return PossiblePawnMoves;
-
 	}
 
 	public ArrayList<Move> PossibleMoves(StandardBoard currentBoard) {
-
 		ArrayList<Move> PossibleMoves = new ArrayList<Move>(132);
 		PossibleMoves.addAll(PossiblePawnMoves(currentBoard));
 		PossibleMoves.addAll(PossibleWallMoves);
-
 		return PossibleMoves;
 	}
 
 	public ArrayList<Move> PossibleWallMoves() {
-
 		return PossibleWallMoves;
 	}
 
@@ -252,7 +238,6 @@ public class AI {
 	}
 
 	public static void main(String[] args) {
-
 		StandardBoard board = new StandardBoard(2);
 		Position pos = board.getPositions()[0][4];
 		Position pos2 = board.getPositions()[4][0];
@@ -267,14 +252,6 @@ public class AI {
 		StandardBoard result2 = AI.move(result1, move3);
 		StandardBoard result3 = AI.move(result2, move4);
 		StandardBoard result = AI.move(result3, move);
-		//Move ok = AI.Minimax(result,-1,100, 4);
-
-		System.out.println(AI.evaluate(result));
-		// System.out.println(move.getOrientation());
-		// System.out.println(move==pos);
-		// System.out.println(ok.getX() + " " + ok.getY() + " " +
-		// ok.getOrientation());
-
 	}
 
 }
