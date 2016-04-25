@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class NetworkedGameController implements Controller {
@@ -158,8 +159,28 @@ public class NetworkedGameController implements Controller {
                 sendPawnUpdate(prevPlayer);
                 if (gameOver) {
                     resetGame();
+					GameOverGUI gameOverGUI;
+					if (board.getPlayer3() == null) {
+						gameOverGUI = new GameOverGUI(this, board.getPreviousPlayer().getID(), 2);
+					} else {
+						gameOverGUI = new GameOverGUI(this, board.getPreviousPlayer().getID(), 4);
+					}
+					gameOverGUI.writeStatsToCSV();
                 }
 			} catch (IllegalArgumentException e) {
+				if (playerID == 1) {
+					player1IO.sendErrorMessage(e.getMessage());
+				}
+				else if (playerID == 2) {
+					player2IO.sendErrorMessage(e.getMessage());
+				}
+				else if (playerID == 3) {
+					player3IO.sendErrorMessage(e.getMessage());
+				}
+				else if (playerID == 4) {
+					player4IO.sendErrorMessage(e.getMessage());
+				}
+			} catch (IOException e) {
 				if (playerID == 1) {
 					player1IO.sendErrorMessage(e.getMessage());
 				}

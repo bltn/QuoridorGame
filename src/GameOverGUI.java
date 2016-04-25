@@ -47,11 +47,6 @@ public class GameOverGUI extends Application {
         buttonBox = new VBox();
         quitButton = new Button("Quit");
         newGameButton = new Button("New Game");
-        System.out.println(winnerID);
-        System.out.println(MenuGUI.player1Name.getText());
-        System.out.println(MenuGUI.player2Name.getText());
-        System.out.println(MenuGUI.player3Name.getText());
-        System.out.println(MenuGUI.player4Name.getText());
         switch (winnerID) {
             case 1:
                 winnerName = new Text("Winner: " + MenuGUI.player1Name.getText());
