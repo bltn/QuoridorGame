@@ -10,3 +10,4 @@ Unete al juego
 Introduzca la dirección IP y puerto para su máquina
 crear servidor
 Conecte al juego
+ajustes

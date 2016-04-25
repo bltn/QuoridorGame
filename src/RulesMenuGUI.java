@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.sound.midi.SysexMessage;
 
@@ -119,7 +120,7 @@ public class RulesMenuGUI extends Application {
 
         pane.setBackground(new Background(bimg));
         scene = new Scene(pane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
+        scene.getStylesheets().add(SettingsGUI.theme);
     }
 
     @Override
