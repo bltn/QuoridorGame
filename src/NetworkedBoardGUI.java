@@ -126,7 +126,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y, int player3X, int player3Y, int player4X, int player4Y) {
-        System.out.println("Setting initial positions");
     	player1X *= 2;
     	player1Y *= 2;
         player2X *= 2;
