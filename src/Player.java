@@ -36,7 +36,11 @@ public class Player
 		return previousPos.pop();
 	}
 
-
+	public void pushPreviousPos() {		
+		previousPos.push(getPosition());
+	}
+	
+	
     public int getID() {
     	return ID;
     }
@@ -75,8 +79,7 @@ public class Player
         return position;
     }
 
-    public void setPosition(Position position) {
-    	previousPos.push(getPosition());
+    public void setPosition(Position position) {  	
     	this.position = position;
     }
 

@@ -121,18 +121,7 @@ public class AI {
 		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
 	}
 
-	/*
-	private int evaluate(Board board) {
 
-		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);// 8
-		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
-		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
-		int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
-		Random random = new Random();
-		int randomNumber = random.nextInt(10) + 1;
-		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
-	}
-	*/
 	public boolean isBlock(int PlayerLenght, int AILength,StandardBoard board, Move move) {
 		boolean valid = true;
 
@@ -144,19 +133,7 @@ public class AI {
 
 		return valid;
 	}
-	/*
-	public boolean isBlock(StandardBoard board, Move move) {
-		boolean valid = true;
 
-		boolean p1block = Utility.AstarSearch(board.getPositions(), board.getPlayer1().getPosition(), 8);
-		boolean p2block = Utility.AstarSearch(board.getPositions(), board.getPlayer2().getPosition(), 0);
-
-		if (p1block == false || p2block == false)
-			valid = false;
-
-		return valid;
-	}
-*/
 	public boolean isValid(StandardBoard board, Move move) {
 		boolean valid = true;
 
@@ -184,6 +161,7 @@ public class AI {
 	private void move(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
+			Board.getCurrentPlayer().pushPreviousPos();
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
 		} else {
@@ -196,19 +174,19 @@ public class AI {
 
 	}
 
-	private void unmove(StandardBoard AIboard, Move move) {
+	private void unmove(StandardBoard Board, Move move) {
 
-		if (move.getOrientation() == WallPlacement.NULL) {
-			AIboard.switchPlayer();
-			Position last = AIboard.getCurrentPlayer().getPreviousPos();
-			AIboard.getCurrentPlayer().setPosition(last);
+		if (move.getOrientation() == WallPlacement.NULL) {			
+			Board.switchPlayer();
+			Position last = Board.getCurrentPlayer().getPreviousPos();
+			Board.getCurrentPlayer().setPosition(last);
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 
-			Position topLeft = AIboard.getPosition(topLeftX, topLeftY);
-			AIboard.unassignWalls(topLeft, move.getOrientation());
-			AIboard.switchPlayer();
+			Position topLeft = Board.getPosition(topLeftX, topLeftY);
+			Board.unassignWalls(topLeft, move.getOrientation());
+			Board.switchPlayer();
 		}
 
 	}
