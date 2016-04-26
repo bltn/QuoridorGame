@@ -32,3 +32,6 @@ Modos de juego
 Elija un modo de juego
 modo
 Ganador
+Jugar
+Hecho
+Nombres

@@ -32,3 +32,6 @@ Game modes
 Choose a game mode
 mode
 Winner
+Play
+Done
+Names

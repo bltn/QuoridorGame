@@ -76,7 +76,7 @@ public class AIGameController<T> implements Controller {
 					board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
-				GameOverGUI gui = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 2);
+				GameOverGUI gui = new GameOverGUI((Controller) this);
 				gui.start(new Stage());
 			}
 			AImove();

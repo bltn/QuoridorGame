@@ -43,6 +43,9 @@ public class Translate {
 	private static String chooseGameMode;
 	private static String mode;
 	private static String winner;
+	private static String play;
+	private static String done;
+	private static String name;
 
 	public static void setLanguage(String language) {
 		switch (language) {
@@ -106,6 +109,9 @@ public class Translate {
 			chooseGameMode = br.readLine();
 			mode = br.readLine();
 			winner = br.readLine();
+			play = br.readLine();
+			done = br.readLine();
+			name = br.readLine();
 		} catch (FileNotFoundException e) {
 			SystemLogger.logError(e.getMessage());
 		} catch (IOException e) {
@@ -415,6 +421,31 @@ public class Translate {
 			return availableMoves;
 		} else {
 			return "Available moves";
+		}
+	}
+
+	public static String play() {
+		if (play != null) {
+			return play;
+		} else {
+			return "Play";
+		}
+	}
+
+	public static String done() {
+		if (done != null) {
+			return done;
+		} else {
+			return "Done";
+		}
+	}
+
+	public static String name() {
+		if (name != null) {
+			return name;
+		}
+		else {
+			return "name";
 		}
 	}
 }
