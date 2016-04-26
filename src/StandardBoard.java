@@ -17,7 +17,7 @@ public class StandardBoard extends Board {
         if (getPlayer3() == null) {
             if (getCurrentPlayer() == getPlayer1()) {
                 if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -30,13 +30,13 @@ public class StandardBoard extends Board {
                         switchPlayer();
                         return false;
                     } else {
-                        throw new IllegalArgumentException("That isn't a valid move");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             }
             else if (getCurrentPlayer() == getPlayer2()) {
                 if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -49,7 +49,7 @@ public class StandardBoard extends Board {
                         switchPlayer();
                         return false;
                     } else {
-                        throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class StandardBoard extends Board {
         else {
             if (getCurrentPlayer() == getPlayer1()) {
                 if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 } else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                         getPlayer1().setPosition(getPosition(posX, posY));
@@ -69,12 +69,12 @@ public class StandardBoard extends Board {
                         switchPlayer();
                         return false;
                     } else {
-                        throw new IllegalArgumentException("That isn't a valid move");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             } else if (getCurrentPlayer() == getPlayer2()) {
                 if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 } else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
                         getPlayer2().setPosition(getPosition(posX, posY));
@@ -86,13 +86,13 @@ public class StandardBoard extends Board {
                         switchPlayer();
                         return false;
                     } else {
-                        throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             }
             else if (getCurrentPlayer() == getPlayer3()) {
                 if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -106,13 +106,13 @@ public class StandardBoard extends Board {
                         return false;
                     }
                     else {
-                        throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             }
             else if (getCurrentPlayer() == getPlayer4()) {
                 if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+                    throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -126,7 +126,7 @@ public class StandardBoard extends Board {
                         return false;
                     }
                     else {
-                        throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
                 }
             }
@@ -164,20 +164,20 @@ public class StandardBoard extends Board {
 							|| !Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
 
 						unassignWalls(topLeft, orientation);
-						throw new IllegalStateException("You can't completely block another player");
+						throw new IllegalStateException(Translate.blockingMove());
 					}
 
 					getCurrentPlayer().incrementMoveCount();
 					getCurrentPlayer().decrementWallCount();
 					switchPlayer();
 				} else {
-					throw new IllegalStateException("Move is invalid");
+					throw new IllegalStateException(Translate.invalidMove());
 				}
 			} else {
-				throw new IllegalStateException("Move is invalid");
+				throw new IllegalStateException(Translate.invalidMove());
 			}
 		} else {
-			throw new IllegalStateException("You don't have any walls");
+			throw new IllegalStateException(Translate.invalidMove());
 		}
 	}
 
