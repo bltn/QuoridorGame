@@ -83,26 +83,26 @@ public class LocalBoardGUI extends Application implements GUI {
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
         grids = new Rectangle[height][width];
-        highlightPositionsButton = new Button("Hint");
+        highlightPositionsButton = new Button(Translate.availableMoves());
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
         thirdPawn = new Circle(15);
         fourthPawn = new Circle(15);
         drawing = true;
-        player1Moves = new Text("Moves: " + 0);
+        player1Moves = new Text((Translate.moves() + ": ") + 0);
         currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
-        player1Walls = new Text("Walls: " + player1WallCount);
-        player2Moves = new Text("Moves: " + 0);
+        player1Walls = new Text((Translate.walls() + ": ") + player1WallCount);
+        player2Moves = new Text((Translate.moves() + ": ") + 0);
         player2WallCount = 10;
-        player2Walls = new Text("Walls: " + player2WallCount);
-        player3Moves = new Text("Moves: " + 0);
+        player2Walls = new Text((Translate.walls() + ": ") + player2WallCount);
+        player3Moves = new Text((Translate.moves() + ": ") + 0);
         player3WallCount = 10;
-        player3Walls = new Text("Walls: " + player3WallCount);
-        player4Moves = new Text("Moves: " + 0);
+        player3Walls = new Text((Translate.walls() + ": ") + player3WallCount);
+        player4Moves = new Text((Translate.moves() + ": ") + 0);
         player4WallCount = 10;
-        player4Walls = new Text("Walls: " + player3WallCount);
+        player4Walls = new Text((Translate.walls() + ": ") + player3WallCount);
         errorPaneText = new Text("");
         this.numberOfPlayers = numberOfPlayers;
     }
@@ -252,31 +252,31 @@ public class LocalBoardGUI extends Application implements GUI {
 
     public void updatePlayerMoveCount(int moveCount, int playerID) {
     	if (playerID == 1) {
-    		player1Moves.setText("Moves: " + moveCount);
+    		player1Moves.setText((Translate.moves() + ": ") + moveCount);
     	}
     	else if (playerID == 2) {
-    		player2Moves.setText("Moves: " + moveCount);
+    		player2Moves.setText((Translate.moves() + ": ") + moveCount);
     	} else if (playerID == 3) {
-            player3Moves.setText("Moves: " + moveCount);
+            player3Moves.setText((Translate.moves() + ": ") + moveCount);
         } else if (playerID == 4) {
-            player4Moves.setText("Moves: " + moveCount);
+            player4Moves.setText((Translate.moves() + ": ") + moveCount);
         }
     }
 
     public void updatePlayerWallCount(int wallCount, int playerID) {
     	if (playerID == 1) {
     		player1WallCount = wallCount;
-            player1Walls.setText("Walls: " + player1WallCount);
+            player1Walls.setText((Translate.walls() + ": ") + player1WallCount);
     	}
     	else if (playerID == 2) {
     		player2WallCount = wallCount;
-            player2Walls.setText("Walls: " + player2WallCount);
+            player2Walls.setText((Translate.walls() + ": ") + player2WallCount);
     	} else if (playerID == 3) {
             player3WallCount = wallCount;
-            player3Walls.setText("Walls: " + player3WallCount);
+            player3Walls.setText((Translate.walls() + ": ") + player3WallCount);
         } else if (playerID == 4) {
             player4WallCount = wallCount;
-            player4Walls.setText("Walls: " + player4WallCount);
+            player4Walls.setText((Translate.walls() + ": ") + player4WallCount);
         }
     }
 

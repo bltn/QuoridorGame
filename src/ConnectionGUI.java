@@ -51,15 +51,15 @@ public class ConnectionGUI extends Application {
 		IPAddress = "localhost";
 		portNumber = 33333;
 		pane = new GridPane();
-		joinText = new Text("Join the Game:");
+		joinText = new Text(Translate.joinGame() + ": ");
 		buttonBox = new VBox();
-		createServerButton = new Button("Create game server");
-		connectToServerButton = new Button("Connect to 2P game");
-		connectTo4PServerButton = new Button("Connect to 4P game");
+		createServerButton = new Button(Translate.createServer() + ": ");
+		connectToServerButton = new Button(Translate.connectToGame());
+		connectTo4PServerButton = new Button(Translate.connectToFourPlayerGame());
 		quitButtonBox = new HBox();
 
 		scene = new Scene(pane, 600, 800);
-		IPandPortInfo = new Text("Enter the IP and port address for your machine.");
+		IPandPortInfo = new Text(Translate.enterIPAndPort());
 		IPAddressField = new TextField(IPAddress);
 		portField = new TextField("" + portNumber);
 
@@ -68,35 +68,35 @@ public class ConnectionGUI extends Application {
         ImageView newServerButton = new ImageView(server);
         newServerButton.setFitHeight(20);
         newServerButton.setFitWidth(40);
-        createServerButton = new Button("Create game server",newServerButton);
+        createServerButton = new Button(Translate.createServer(),newServerButton);
 
         //add a icon into the 2P game button
 		Image standard = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newStandardButton = new ImageView(standard);
         newStandardButton.setFitHeight(20);
         newStandardButton.setFitWidth(20);
-        connectToServerButton = new Button("Connect to 2P game",newStandardButton);
+        connectToServerButton = new Button(Translate.connectToTwoPlayerGame(),newStandardButton);
 
         //add a icon into the 4P game button
         Image fourplayer = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView new4PButton = new ImageView(fourplayer);
         new4PButton.setFitHeight(20);
         new4PButton.setFitWidth(45);
-        connectTo4PServerButton = new Button("Connect to 4P game",new4PButton);
+        connectTo4PServerButton = new Button(Translate.connectToFourPlayerGame(),new4PButton);
 
         // add a icon into the quit button
         Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
         ImageView newQuit = new ImageView(quit);
         newQuit.setFitHeight(20);
         newQuit.setFitWidth(20);
-        quitButton = new Button("Quit",newQuit);
+        quitButton = new Button(Translate.quit(),newQuit);
 
         // add a icon into the back button
         Image back = new Image(getClass().getResourceAsStream("icons/back.png"));
         ImageView newBack = new ImageView(back);
         newBack.setFitHeight(20);
         newBack.setFitWidth(20);
-        backButton = new Button("Back",newBack);
+        backButton = new Button(Translate.back(),newBack);
 
         //add a background image
 	    Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -113,7 +113,7 @@ public class ConnectionGUI extends Application {
 	@Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;
-        primaryStage.setTitle("Join Multiplayer");
+        primaryStage.setTitle(Translate.joinGame());
         setButtons();
         setServerPane();
         setTextFields();
@@ -164,11 +164,11 @@ public class ConnectionGUI extends Application {
             	SystemLogger.init();
             	String mode = askForGameMode();
             	GameServer server;
-            	if (mode.equals("2P Challenge")) {
+            	if (mode.equals(Translate.twoPlayerChallenge())) {
             		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)), 2);
-            	} else if (mode.equals("2P Standard")){
+            	} else if (mode.equals(Translate.twoPlayerStandard())){
             		server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
-            	} else if (mode.equals("4P Standard")) {
+            	} else if (mode.equals(Translate.fourPlayerStandard())) {
 					server = new GameServer(new NetworkedGameController(new StandardBoard(4)), 4);
 				} else {
 					server = new GameServer(new NetworkedGameController(new ChallengeBoard(4)), 4);
@@ -246,15 +246,15 @@ public class ConnectionGUI extends Application {
 	private String askForGameMode() {
 		String mode = null;
 		ArrayList<String> choices = new ArrayList();
-		choices.add("2P Standard");
-		choices.add("2P Challenge");
-		choices.add("4P Standard");
-		choices.add("4P Challenge");
+		choices.add(Translate.twoPlayerStandard());
+		choices.add(Translate.twoPlayerChallenge());
+		choices.add(Translate.fourPlayerStandard());
+		choices.add(Translate.fourPlayerChallenge());
 
-		ChoiceDialog<String> dialog = new ChoiceDialog<>("2P Standard", choices);
-		dialog.setTitle("Game modes");
-		dialog.setHeaderText("Choose a game mode");
-		dialog.setContentText("Choose a mode:");
+		ChoiceDialog<String> dialog = new ChoiceDialog<>(Translate.twoPlayerStandard(), choices);
+		dialog.setTitle(Translate.gameModes());
+		dialog.setHeaderText(Translate.chooseGameMode());
+		dialog.setContentText(Translate.mode() + ": ");
 
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {

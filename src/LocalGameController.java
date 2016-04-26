@@ -1,5 +1,7 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -66,8 +68,18 @@ public class LocalGameController<T> implements Controller {
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
-                GameOverGUI gui = new GameOverGUI((Controller) this);
-                gui.start(new Stage());
+				GameOverGUI gameOverGUI;
+				if (board.getPlayer3() == null) {
+					gameOverGUI = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 2);
+				} else {
+					gameOverGUI = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 4);
+				}
+                gameOverGUI.start(new Stage());
+				try {
+					gameOverGUI.writeStatsToCSV();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
     	} catch (IllegalArgumentException e) {
     		gui.displayErrorMessage(e.getMessage());
