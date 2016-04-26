@@ -18,3 +18,27 @@ Apr 25, 2016 7:23:09 PM SystemLogger logInfo
 INFO: Player 2 joined game
 Apr 25, 2016 7:23:09 PM SystemLogger logInfo
 INFO: Game begun
+Apr 26, 2016 9:58:16 PM SystemLogger logInfo
+INFO: Server created
+Apr 26, 2016 9:58:22 PM SystemLogger logInfo
+INFO: Client socket # 1 I/O thread booted up
+Apr 26, 2016 9:58:22 PM SystemLogger logInfo
+INFO: Player 1 joined game
+Apr 26, 2016 9:58:40 PM SystemLogger logInfo
+INFO: Client socket # 2 I/O thread booted up
+Apr 26, 2016 9:58:40 PM SystemLogger logInfo
+INFO: Player 2 joined game
+Apr 26, 2016 9:58:41 PM SystemLogger logInfo
+INFO: Game begun
+Apr 26, 2016 10:13:40 PM SystemLogger logInfo
+INFO: Server created
+Apr 26, 2016 10:13:46 PM SystemLogger logInfo
+INFO: Client socket # 1 I/O thread booted up
+Apr 26, 2016 10:13:46 PM SystemLogger logInfo
+INFO: Player 1 joined game
+Apr 26, 2016 10:13:57 PM SystemLogger logInfo
+INFO: Client socket # 2 I/O thread booted up
+Apr 26, 2016 10:13:57 PM SystemLogger logInfo
+INFO: Player 2 joined game
+Apr 26, 2016 10:13:58 PM SystemLogger logInfo
+INFO: Game begun

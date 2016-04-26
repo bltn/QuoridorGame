@@ -32,3 +32,6 @@ Modes de jeu
 Choisissez un mode de jeu
 mode
 Gagnant
+Jouer
+Terminé
+Des noms
