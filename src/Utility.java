@@ -1,12 +1,10 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
 
-import sun.applet.Main;
+import java.util.Comparator;
+
+import java.util.PriorityQueue;
+
+
+
 
 /**
  * @author Thai Hoang
@@ -15,104 +13,7 @@ import sun.applet.Main;
 
 public class Utility {
 
-	public Utility() {}
-
-	public static void main(String[] args) {
-		Utility u = new Utility();
-		Position start = new Position(10, 10);
-		Position goal = new Position(0, 0);
-	}
-
-	public static int[][] grid1 = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, };
-
-	public boolean A(int[][] grid, Position start, int finish) {
-
-		Comparator<Position> comparator = new PositionComparator();
-		PositionComparator.goal=finish;
-
-		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-
-		boolean done = false; // set true when the finish position is reached
-		Position pos;
-		queue.add(start);
-		grid[start.getX()][start.getY()] = 2;
-		while (!queue.isEmpty()) {
-			pos = queue.remove();
-			if (pos.getX() == finish) {
-				done = true;
-				break;
-			} else {
-				int length = pos.getCostsofar()+1;
-
-				if (grid[pos.getX()][pos.getY() - 1] == 1)
-					add_new_pos(grid, queue, pos.getX(), pos.getY() - 2, length);
-				if (grid[pos.getX()][pos.getY() + 1] == 1)
-					add_new_pos(grid, queue, pos.getX(), pos.getY() + 2, length);
-				if (grid[pos.getX() - 1][pos.getY()] == 1)
-					add_new_pos(grid, queue, pos.getX() - 2, pos.getY(), length);
-				if (grid[pos.getX() + 1][pos.getY()] == 1)
-					add_new_pos(grid, queue, pos.getX() + 2, pos.getY(), length);
-			}
-		}
-		reset(grid);
-		return done;
-	}
-
-	private void reset(int[][] grid) {
-		for (int row = 0; row < grid.length; row++) {
-			for (int column = 0; column < grid[row].length; column++)
-				if (grid[row][column] > 1)
-					grid[row][column] = 1;
-		}
-	}
-
-	private void add_new_pos(int[][] grid, PriorityQueue<Position> stack, int x, int y, int length) {
-		if (valid(grid, x, y)) {
-			Position next = new Position(x, y);
-			next.setCostsofar(length);
-			stack.add(next);
-			grid[x][y] = 2;
-		}
-	}
-
-	private boolean valid(int[][] grid, int row, int column) {
-		boolean result = false;
-		/* Check if cell is in the bounds of the maze */
-		if (row >= 0 && row < grid.length && column >= 0 && column < grid[row].length)
-			/* Check if cell is not blocked and not previously tried */
-			if (grid[row][column] == 1)
-				result = true;
-		return result;
-	}
-
-	public String toString(int[][] grid) {
-		String result = "\n";
-		// Print the grid line by line
-		for (int row = 0; row < grid.length; row++) {
-			// Print each element in a line
-			for (int column = 0; column < grid[row].length; column++)
-				result += grid[row][column] + ".";
-			result += "\n";
-		}
-		return result;
-	}
-
+	
 	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
@@ -151,7 +52,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -186,7 +87,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -214,19 +115,6 @@ public class Utility {
 		}
 		reset(grid);
 		return done;
-	}
-
-	private static String indexof(Position[][] arr,Position pos){
-		String index="";
-		for (int i = 0 ; i < arr.length; i++)
-		    for(int j = 0 ; j < arr[i].length ; j++)
-		    {
-		         if ( arr[i][j] == pos)
-		         {		index=i+":"+j+"";
-		         	break;
-		         }
-		    }
-		return index;
 	}
 
 	private static void reset(Position[][] grid) {
@@ -272,36 +160,9 @@ public class Utility {
 	}
 
 
-	public static Position clone(Position pos){
-		Position clone = new Position(pos.getX(),pos.getY());
-
-			if(pos.hasBottomWall())clone.setHasBottomWall(true);
-			if(!pos.hasBottomWall())clone.setHasBottomWall(false);
-			if(pos.hasTopWall())clone.setHasTopWall(true);
-			if(!pos.hasTopWall())clone.setHasTopWall(false);
-			if(pos.hasLeftWall())clone.setHasLeftWall(true);
-			if(!pos.hasLeftWall())clone.setHasLeftWall(false);
-			if(pos.hasRightWall())clone.setHasRightWall(true);
-			if(!pos.hasRightWall())clone.setHasRightWall(false);
-
-		return clone;
-	}
-
-	public static Position[][] clone(Position[][] grid){
-		Position[][] clone = new Position[grid.length][grid[0].length];
-
-		for (int row = 0; row < grid.length; row++) {
-			for (int column = 0; column < grid[0].length;column++) {
-				clone[row][column]=clone(grid[row][column]);
-			}
-		}
-		return clone;
-	}
-
 	private static class PositionComparator implements Comparator<Position>
 	{
 		public static int goal;
-		public static int costsofar;
 
 		@Override
 	    public int compare(Position x, Position y)
