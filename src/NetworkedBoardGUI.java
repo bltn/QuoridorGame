@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -83,7 +85,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
         grids = new Rectangle[height][width];
-        highlightPositionsButton = new Button(Translate.availableMoves());
+        // Add icon to highlight positions button
+        Image help = new Image(getClass().getResourceAsStream("icons/help.png"));
+        ImageView changeSizeOfHelp = new ImageView(help);
+        changeSizeOfHelp.setFitHeight(20);
+        changeSizeOfHelp.setFitWidth(20);
+        highlightPositionsButton = new Button(Translate.hint(),changeSizeOfHelp);
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
