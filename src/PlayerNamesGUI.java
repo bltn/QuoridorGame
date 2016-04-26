@@ -1,0 +1,139 @@
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+
+public class PlayerNamesGUI extends Application {
+
+    private Scene scene;
+    private GridPane namesPane;
+    private Text namesText;
+    public static TextField player1Name;
+    public static TextField player2Name;
+    public static TextField player3Name;
+    public static TextField player4Name;
+    private HBox nameBoxRow1;
+    private HBox nameBoxRow2;
+    private VBox buttonBox;
+    private Button startButton;
+    private int numberOfPlayers;
+    private String gameMode;
+    private Stage stage;
+
+    /**
+     * A GUI which allows players to set their names. These
+     * names are used to store the win/loss stats in a csv
+     * file.
+     * @param numberOfPlayers The number of players in the game
+     * @param gameMode The name of the game mode
+     */
+    public PlayerNamesGUI(int numberOfPlayers, String gameMode) {
+
+        Translate.setLanguage(SettingsGUI.language);
+        this.numberOfPlayers = numberOfPlayers;
+        this.gameMode = gameMode;
+
+        namesPane = new GridPane();
+        namesText = new Text(Translate.name());
+        player1Name = new TextField("Player 1");
+        player2Name = new TextField("Player 2");
+        player3Name = new TextField("Player 3");
+        player4Name = new TextField("Player 4");
+        nameBoxRow1 = new HBox();
+        nameBoxRow2 = new HBox();
+        buttonBox = new VBox();
+        namesText.setId("text");
+
+        // add a icon into the start button
+        Image start = new Image(getClass().getResourceAsStream("icons/start.png"));
+        ImageView changeSizeOfStart = new ImageView(start);
+        changeSizeOfStart.setFitHeight(20);
+        changeSizeOfStart.setFitWidth(20);
+        startButton = new Button(Translate.play(), changeSizeOfStart);
+
+        //add background image
+        Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
+        BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
+        BackgroundImage bimg = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size);
+
+        namesPane.setBackground(new Background(bimg));
+        scene = new Scene(namesPane, 600, 400);
+        scene.getStylesheets().add(SettingsGUI.theme);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        stage = primaryStage;
+        stage.setTitle("Quoridor");
+        setButtons();
+        setIntroPane();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    /**
+     * create the pane for the title
+     */
+    public void setIntroPane() {
+        namesPane.setAlignment(Pos.CENTER);
+        namesPane.setHgap(25);
+        namesPane.setVgap(50);
+        namesPane.add(buttonBox, 0, 1);
+        namesText.setTextAlignment(TextAlignment.CENTER);
+        namesText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
+        namesPane.add(namesText, 0, 0, 1, 1);
+    }
+
+    /**
+     * Create the buttons for the menu and set their properties
+     */
+    public void setButtons() {
+        buttonBox.setPadding(new Insets(15, 15, 15, 15));
+        buttonBox.setSpacing(10);
+        nameBoxRow1.setSpacing(10);
+        nameBoxRow2.setSpacing(10);
+        nameBoxRow1.getChildren().addAll(player1Name, player2Name);
+        nameBoxRow2.getChildren().addAll(player3Name, player4Name);
+        buttonBox.getChildren().add(nameBoxRow1);
+        if (numberOfPlayers == 4) {
+            buttonBox.getChildren().add(nameBoxRow2);
+        }
+        buttonBox.getChildren().add(startButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        startButton.setPrefWidth(350);
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (gameMode.equals("standard")) {
+                    LocalBoardGUI gui = new LocalBoardGUI(numberOfPlayers);
+                    Board board = new StandardBoard(numberOfPlayers);
+                    Controller controller = new LocalGameController(gui, board);
+                    gui.setController(controller);
+                    gui.start(new Stage());
+                    stage.close();
+                } else if (gameMode.equals("challenge")) {
+                    LocalBoardGUI gui = new LocalBoardGUI(numberOfPlayers);
+                    Board board = new ChallengeBoard(numberOfPlayers);
+                    Controller controller = new LocalGameController(gui, board);
+                    gui.setController(controller);
+                    gui.start(new Stage());
+                    stage.close();
+                }
+            };
+        });
+    }
+}
+
+
