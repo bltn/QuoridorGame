@@ -154,6 +154,7 @@ public class NetworkedGameController implements Controller {
 	public void movePawn(int posX, int posY, int playerID) {
 		if (playerID == board.getCurrentPlayer().getID()) {
 			try {
+				int currentPlayerID = board.getCurrentPlayer().getID();
 				boolean gameOver = board.movePawn(posX, posY);
                 Player prevPlayer = board.getPreviousPlayer();
                 sendPawnUpdate(prevPlayer);
@@ -162,9 +163,9 @@ public class NetworkedGameController implements Controller {
 					GameOverGUI gameOverGUI = new GameOverGUI(this);
 					StatsWriter statsWriter;
 					if (board.getPlayer3() == null) {
-						statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 2);
+						statsWriter = new StatsWriter(currentPlayerID, 2);
 					} else {
-						statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 2);
+						statsWriter = new StatsWriter(currentPlayerID, 2);
 					}
 					statsWriter.writeStatsToCSV();
                 }

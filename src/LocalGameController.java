@@ -63,6 +63,7 @@ public class LocalGameController<T> implements Controller {
 
     public void movePawn(int posX, int posY, int playerID) {
     	try {
+			int currentPlayerID = board.getCurrentPlayer().getID();
     		boolean gameOver = board.movePawn(posX, posY);
 			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
@@ -71,9 +72,9 @@ public class LocalGameController<T> implements Controller {
 				GameOverGUI gameOverGUI = new GameOverGUI((Controller) this);
 				StatsWriter statsWriter;
 				if (board.getPlayer3() == null) {
-					statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 2);
+					statsWriter = new StatsWriter(currentPlayerID, 2);
 				} else {
-					statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 4);
+					statsWriter = new StatsWriter(currentPlayerID, 4);
 				}
                 gameOverGUI.start(new Stage());
 				try {
