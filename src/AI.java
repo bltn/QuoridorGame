@@ -34,14 +34,21 @@ public class AI {
 				continue;
 			move(AIBoard, move);
 
-			if (isBlock(PlayerLenght, AILength, AIBoard, move) == true) {
+			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
+
+
+			if (AILength != 0 && PlayerLenght != 0) {
 				int score = Min(PlayerLenght, AILength, AIBoard, -99999999, 99999999, depth - 1);
 				if (highestScore < score) {
+
 					highestScore = score;
 					bestMove = move;
 				}
 			}
 
+			
+			
 			unmove(AIBoard, move);
 		}
 		return bestMove;
@@ -59,8 +66,11 @@ public class AI {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
+			
+			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-			if (isBlock(PlayerLenght, AILength, board, move) == true) {
+			if (AILength != 0 && PlayerLenght != 0) {
 
 				lowestScore = Math.min(Max(PlayerLenght, AILength, board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
@@ -85,9 +95,11 @@ public class AI {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
+			
+			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-			if (isBlock(PlayerLenght, AILength, board, move) == true) {
-
+			if (AILength != 0 && PlayerLenght != 0) {
 				highestScore = Math.max(Min(PlayerLenght, AILength, board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
@@ -106,7 +118,7 @@ public class AI {
 		// int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
-		return (15 * PlayerLenght - 50 * AILength) - AIManhata + randomNumber;//
+		return (30 * PlayerLenght - 30 * AILength) - AIManhata + randomNumber;//
 	}
 
 	private int evaluateNoWall(Board board) {
@@ -122,10 +134,13 @@ public class AI {
 	public boolean isBlock(int PlayerLenght, int AILength, StandardBoard board, Move move) {
 		boolean valid = true;
 
-		boolean p1block = Utility.AstarSearch(PlayerLenght, board.getPositions(), board.getPlayer1().getPosition(), 8);
-		boolean p2block = Utility.AstarSearch(AILength, board.getPositions(), board.getPlayer2().getPosition(), 0);
+		PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);
+		AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);
 
-		if (p1block == false || p2block == false)
+		//System.out.println(PlayerLenght);
+		//System.out.println(AILength);
+		
+		if (AILength == 0 || PlayerLenght == 0)
 			valid = false;
 
 		return valid;

@@ -40,15 +40,23 @@ public class AIGameController<T> implements Controller {
 		if (board.getCurrentPlayer() == board.getPlayer1()) {
 			return;
 		}
-		//StandardBoard new1 = Utility.clone(board);
-		Move move = AI.Minimax(2);
+
+		Move move = null;
+
+		if (board.getPlayer2().getWallCount() == 0) {
+			move = AI.MoveNoWalls();
+		} else {
+			move = AI.Minimax(3);
+		}
+
+		// StandardBoard new1 = Utility.clone(board);
+
 		if (move.getOrientation() != WallPlacement.NULL) {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 			WallPlacement orientation = move.getOrientation();
 			placeWall(topLeftX, topLeftY, orientation, board.getCurrentPlayer().getID());
-		}
-		else if (move.getOrientation() == WallPlacement.NULL) {
+		} else if (move.getOrientation() == WallPlacement.NULL) {
 			int posX = move.getX();
 			int posY = move.getY();
 			movePawn(posX, posY, board.getCurrentPlayer().getID());
@@ -118,7 +126,8 @@ public class AIGameController<T> implements Controller {
 	}
 
 	@Override
-	public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {/*Can't remove walls in practise mode*/}
+	public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+		/* Can't remove walls in practise mode */}
 
 	@Override
 	public int getPlayer3X() {
