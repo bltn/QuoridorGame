@@ -36,6 +36,9 @@ public class Player
 		return previousPos.pop();
 	}
 
+	public void pushPreviousPos() {		
+    	previousPos.push(getPosition());
+	}
 
     public int getID() {
     	return ID;
@@ -76,7 +79,6 @@ public class Player
     }
 
     public void setPosition(Position position) {
-    	previousPos.push(getPosition());
     	this.position = position;
     }
 

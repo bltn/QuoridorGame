@@ -149,6 +149,7 @@ public class AI {
 	private void move(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
+			Board.getCurrentPlayer().pushPreviousPos();
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
 		} else {
