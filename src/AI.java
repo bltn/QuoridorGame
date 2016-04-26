@@ -103,14 +103,13 @@ public class AI {
 	private int evaluate(int PlayerLenght, int AILength, Board board) {
 
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
-		//int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
+		// int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
 		return (15 * PlayerLenght - 50 * AILength) - AIManhata + randomNumber;//
 	}
 
 	private int evaluateNoWall(Board board) {
-
 
 		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
@@ -119,7 +118,7 @@ public class AI {
 		int randomNumber = random.nextInt(10) + 1;
 		return -50 * AILength - AIManhata + randomNumber;
 	}
-	
+
 	public boolean isBlock(int PlayerLenght, int AILength, StandardBoard board, Move move) {
 		boolean valid = true;
 
@@ -209,6 +208,29 @@ public class AI {
 
 	public ArrayList<Move> PossibleWallMoves() {
 		return PossibleWallMoves;
+	}
+
+	public Move MoveNoWalls() {
+		int highestScore = -99999999;
+		Move bestMove = null;
+
+		ArrayList<Move> moves = PossiblePawnMoves(AIBoard);
+
+		for (Move move : moves) {
+			if (isValid(AIBoard, move) == false)
+				continue;
+			move(AIBoard, move);
+
+			int score = evaluateNoWall(AIBoard);
+
+			if (highestScore < score) {
+				highestScore = score;
+				bestMove = move;
+			}
+
+			unmove(AIBoard, move);
+		}
+		return bestMove;
 	}
 
 }
