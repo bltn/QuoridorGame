@@ -31,6 +31,9 @@ public class PlayerNamesGUI extends Application {
     private int numberOfPlayers;
     private String gameMode;
     private Stage stage;
+    private GameServer server;
+    private String IPAddress;
+    private int portNumber;
 
     /**
      * A GUI which allows players to set their names. These
@@ -40,7 +43,6 @@ public class PlayerNamesGUI extends Application {
      * @param gameMode The name of the game mode
      */
     public PlayerNamesGUI(int numberOfPlayers, String gameMode) {
-
         Translate.setLanguage(SettingsGUI.language);
         this.numberOfPlayers = numberOfPlayers;
         this.gameMode = gameMode;
@@ -71,6 +73,53 @@ public class PlayerNamesGUI extends Application {
         namesPane.setBackground(new Background(bimg));
         scene = new Scene(namesPane, 600, 400);
         scene.getStylesheets().add(SettingsGUI.theme);
+    }
+
+    /**
+     * A GUI which allows players to set their names. These
+     * names are used to store the win/loss stats in a csv
+     * file. This constructor is used for multiplayer games.
+     * @param numberOfPlayers The number of players in the game
+     * @param gameMode The name of the game mode
+     * @param server The server to be used
+     * @param IPAddress IP Address of the server
+     * @param portNumber The port number for the server
+     */
+    public PlayerNamesGUI(int numberOfPlayers, String gameMode, GameServer server, String IPAddress, int portNumber) {
+        Translate.setLanguage(SettingsGUI.language);
+        this.numberOfPlayers = numberOfPlayers;
+        this.gameMode = gameMode;
+        this.server = server;
+        this.IPAddress = IPAddress;
+        this.portNumber = portNumber;
+
+        namesPane = new GridPane();
+        namesText = new Text(Translate.name());
+        player1Name = new TextField("Player 1");
+        player2Name = new TextField("Player 2");
+        player3Name = new TextField("Player 3");
+        player4Name = new TextField("Player 4");
+        nameBoxRow1 = new HBox();
+        nameBoxRow2 = new HBox();
+        buttonBox = new VBox();
+        namesText.setId("text");
+
+        // add a icon into the start button
+        Image start = new Image(getClass().getResourceAsStream("icons/start.png"));
+        ImageView changeSizeOfStart = new ImageView(start);
+        changeSizeOfStart.setFitHeight(20);
+        changeSizeOfStart.setFitWidth(20);
+        startButton = new Button(Translate.play(), changeSizeOfStart);
+
+        //add background image
+        Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
+        BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
+        BackgroundImage bimg = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size);
+
+        namesPane.setBackground(new Background(bimg));
+        scene = new Scene(namesPane, 600, 400);
+        scene.getStylesheets().add(SettingsGUI.theme);
+
     }
 
     @Override
@@ -130,6 +179,8 @@ public class PlayerNamesGUI extends Application {
                     gui.setController(controller);
                     gui.start(new Stage());
                     stage.close();
+                } else if (gameMode.equals("multiplayer")) {
+                    server.initialiseServer(IPAddress, portNumber);
                 }
             };
         });
