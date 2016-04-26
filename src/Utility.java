@@ -1,12 +1,7 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
 
-import sun.applet.Main;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 
 /**
  * @author Thai Hoang
@@ -54,7 +49,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -89,7 +84,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);

@@ -1,10 +1,6 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
 
 public class AI {
 
@@ -30,19 +26,18 @@ public class AI {
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
-		Iterator<Move> iterator = moves.iterator();
 
-		int PlayerLenght=0; int AILength=0;
-		
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
+		int PlayerLenght = 0;
+		int AILength = 0;
+		for (Move move : moves) {
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
 
-			if (isBlock(PlayerLenght,AILength,AIBoard, move) == true) {
-				if (highestScore < Min(PlayerLenght,AILength,AIBoard, -99999999, 99999999, depth - 1)) {
-					highestScore = Min(PlayerLenght,AILength,AIBoard, -99999999, 99999999, depth - 1);
+			if (isBlock(PlayerLenght, AILength, AIBoard, move) == true) {
+				int score = Min(PlayerLenght, AILength, AIBoard, -99999999, 99999999, depth - 1);
+				if (highestScore < score) {
+					highestScore = score;
 					bestMove = move;
 				}
 			}
@@ -52,26 +47,22 @@ public class AI {
 		return bestMove;
 	}
 
-	private int Min(int PlayerLenght, int AILength,StandardBoard board, int a, int b, int depth) {
+	private int Min(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(PlayerLenght,AILength,board);
+			return evaluate(PlayerLenght, AILength, board);
 		}
 
 		int lowestScore = 99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
 
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-
-			Move move = iterator.next();
+		for (Move move : moves) {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
 
-			if (isBlock(PlayerLenght,AILength,board, move) == true) {
+			if (isBlock(PlayerLenght, AILength, board, move) == true) {
 
-				lowestScore = Math.min(Max(PlayerLenght,AILength,board, a, b, depth - 1), lowestScore);
+				lowestScore = Math.min(Max(PlayerLenght, AILength, board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
 			}
 			unmove(board, move);
@@ -82,25 +73,22 @@ public class AI {
 
 	}
 
-	private int Max(int PlayerLenght, int AILength,StandardBoard board, int a, int b, int depth) {
+	private int Max(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(PlayerLenght,AILength,board);
+			return evaluate(PlayerLenght, AILength, board);
 		}
 
 		int highestScore = -99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
-		Iterator<Move> iterator = moves.iterator();
 
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
-
+		for (Move move : moves) {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
 
-			if (isBlock(PlayerLenght,AILength,board, move) == true) {
+			if (isBlock(PlayerLenght, AILength, board, move) == true) {
 
-				highestScore = Math.max(Min(PlayerLenght,AILength,board, a, b, depth - 1), highestScore);
+				highestScore = Math.max(Min(PlayerLenght, AILength, board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
 			unmove(board, move);
@@ -118,15 +106,14 @@ public class AI {
 		int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
-		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
+		return (15 * PlayerLenght - 50 * AILength) - AIManhata;// + randomNumber
 	}
 
-
-	public boolean isBlock(int PlayerLenght, int AILength,StandardBoard board, Move move) {
+	public boolean isBlock(int PlayerLenght, int AILength, StandardBoard board, Move move) {
 		boolean valid = true;
 
-		boolean p1block = Utility.AstarSearch(PlayerLenght,board.getPositions(), board.getPlayer1().getPosition(), 8);
-		boolean p2block = Utility.AstarSearch(AILength,board.getPositions(), board.getPlayer2().getPosition(), 0);
+		boolean p1block = Utility.AstarSearch(PlayerLenght, board.getPositions(), board.getPlayer1().getPosition(), 8);
+		boolean p2block = Utility.AstarSearch(AILength, board.getPositions(), board.getPlayer2().getPosition(), 0);
 
 		if (p1block == false || p2block == false)
 			valid = false;
@@ -176,7 +163,7 @@ public class AI {
 
 	private void unmove(StandardBoard Board, Move move) {
 
-		if (move.getOrientation() == WallPlacement.NULL) {			
+		if (move.getOrientation() == WallPlacement.NULL) {
 			Board.switchPlayer();
 			Position last = Board.getCurrentPlayer().getPreviousPos();
 			Board.getCurrentPlayer().setPosition(last);

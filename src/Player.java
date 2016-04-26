@@ -40,7 +40,6 @@ public class Player
 		previousPos.push(getPosition());
 	}
 	
-	
     public int getID() {
     	return ID;
     }
