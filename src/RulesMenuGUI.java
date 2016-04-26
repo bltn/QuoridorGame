@@ -51,7 +51,7 @@ public class RulesMenuGUI extends Application {
     public RulesMenuGUI() {
     	pane = new GridPane();
         introText = new Text("Rules");
-        buttonBox = new VBox(100);
+        buttonBox = new VBox(70);
         practiseText = new Text(Translate.practiseMode() + ":");
         standardText = new Text(Translate.standardRules() + ":");
         challengeText= new Text(Translate.challengeRules() + ":");
@@ -139,7 +139,7 @@ public class RulesMenuGUI extends Application {
     public void setIntroPane() {
     	pane.setAlignment(Pos.CENTER);
         pane.setHgap(25);
-        pane.setVgap(100);
+        pane.setVgap(70);
         pane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
