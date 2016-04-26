@@ -1,9 +1,6 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class LocalGameController<T> implements Controller {
 
@@ -78,7 +75,7 @@ public class LocalGameController<T> implements Controller {
 				try {
 					gameOverGUI.writeStatsToCSV();
 				} catch (IOException e) {
-					e.printStackTrace();
+					SystemLogger.logError(e.getMessage());
 				}
 			}
     	} catch (IllegalArgumentException e) {
