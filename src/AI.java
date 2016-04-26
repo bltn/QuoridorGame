@@ -2,6 +2,11 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * @author Thai Hoang
+ * @version 26/04/2016
+ */
+
 public class AI {
 
 	private StandardBoard AIBoard;
@@ -26,17 +31,14 @@ public class AI {
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
-
-		int PlayerLenght = 0;
-		int AILength = 0;
+		
 		for (Move move : moves) {
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
-
-			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
-			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
-
+			
+			int PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			int AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
 			if (AILength != 0 && PlayerLenght != 0) {
 				int score = Min(PlayerLenght, AILength, AIBoard, -99999999, 99999999, depth - 1);
@@ -46,9 +48,7 @@ public class AI {
 					bestMove = move;
 				}
 			}
-
-			
-			
+						
 			unmove(AIBoard, move);
 		}
 		return bestMove;
@@ -117,8 +117,9 @@ public class AI {
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
 		// int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
+		int AIWall = board.getPlayer2().getWallCount();
 		int randomNumber = random.nextInt(10) + 1;
-		return (30 * PlayerLenght - 30 * AILength) - AIManhata + randomNumber;//
+		return (35 * PlayerLenght - 45 * AILength) - AIManhata + AIWall*40 + randomNumber;//
 	}
 
 	private int evaluateNoWall(Board board) {
@@ -128,22 +129,7 @@ public class AI {
 
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
-		return -50 * AILength - AIManhata + randomNumber;
-	}
-
-	public boolean isBlock(int PlayerLenght, int AILength, StandardBoard board, Move move) {
-		boolean valid = true;
-
-		PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);
-		AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);
-
-		//System.out.println(PlayerLenght);
-		//System.out.println(AILength);
-		
-		if (AILength == 0 || PlayerLenght == 0)
-			valid = false;
-
-		return valid;
+		return -15 * AILength -15*AIManhata + randomNumber;
 	}
 
 	public boolean isValid(StandardBoard board, Move move) {

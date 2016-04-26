@@ -1,7 +1,11 @@
 
 import java.util.ArrayList;
-
 import javafx.stage.Stage;
+
+/**
+ * @author Thai Hoang
+ * @version 26/04/2016
+ */
 
 public class AIGameController<T> implements Controller {
 
@@ -46,12 +50,14 @@ public class AIGameController<T> implements Controller {
 		if (board.getPlayer2().getWallCount() == 0) {
 			move = AI.MoveNoWalls();
 		} else {
-			move = AI.Minimax(3);
+			move = AI.Minimax(2);
 		}
 
-		// StandardBoard new1 = Utility.clone(board);
-
-		if (move.getOrientation() != WallPlacement.NULL) {
+		if (move == null) {
+			board.switchPlayer();
+			gui.updateActivePlayer(board.getCurrentPlayer().getID());
+			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
+		}else if (move.getOrientation() != WallPlacement.NULL) {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 			WallPlacement orientation = move.getOrientation();
@@ -61,6 +67,7 @@ public class AIGameController<T> implements Controller {
 			int posY = move.getY();
 			movePawn(posX, posY, board.getCurrentPlayer().getID());
 		}
+
 	}
 
 	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
