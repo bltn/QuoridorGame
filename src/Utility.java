@@ -125,7 +125,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);

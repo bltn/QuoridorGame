@@ -32,15 +32,17 @@ public class AI {
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
 		Iterator<Move> iterator = moves.iterator();
 
+		int PlayerLenght=0; int AILength=0;
+		
 		while (iterator.hasNext()) {
 			Move move = iterator.next();
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
 
-			if (isBlock(AIBoard, move) == true) {
-				if (highestScore < Min(AIBoard, -99999999, 99999999, depth - 1)) {
-					highestScore = Min(AIBoard, -99999999, 99999999, depth - 1);
+			if (isBlock(PlayerLenght,AILength,AIBoard, move) == true) {
+				if (highestScore < Min(PlayerLenght,AILength,AIBoard, -99999999, 99999999, depth - 1)) {
+					highestScore = Min(PlayerLenght,AILength,AIBoard, -99999999, 99999999, depth - 1);
 					bestMove = move;
 				}
 			}
@@ -50,9 +52,9 @@ public class AI {
 		return bestMove;
 	}
 
-	private int Min(StandardBoard board, int a, int b, int depth) {
+	private int Min(int PlayerLenght, int AILength,StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(board);
+			return evaluate(PlayerLenght,AILength,board);
 		}
 
 		int lowestScore = 99999999;
@@ -67,9 +69,9 @@ public class AI {
 				continue;
 			move(board, move);
 
-			if (isBlock(board, move) == true) {
+			if (isBlock(PlayerLenght,AILength,board, move) == true) {
 
-				lowestScore = Math.min(Max(board, a, b, depth - 1), lowestScore);
+				lowestScore = Math.min(Max(PlayerLenght,AILength,board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
 			}
 			unmove(board, move);
@@ -80,9 +82,9 @@ public class AI {
 
 	}
 
-	private int Max(StandardBoard board, int a, int b, int depth) {
+	private int Max(int PlayerLenght, int AILength,StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(board);
+			return evaluate(PlayerLenght,AILength,board);
 		}
 
 		int highestScore = -99999999;
@@ -96,9 +98,9 @@ public class AI {
 				continue;
 			move(board, move);
 
-			if (isBlock(board, move) == true) {
+			if (isBlock(PlayerLenght,AILength,board, move) == true) {
 
-				highestScore = Math.max(Min(board, a, b, depth - 1), highestScore);
+				highestScore = Math.max(Min(PlayerLenght,AILength,board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
 			unmove(board, move);
@@ -110,6 +112,16 @@ public class AI {
 		return highestScore;
 	}
 
+	private int evaluate(int PlayerLenght, int AILength, Board board) {
+
+		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
+		int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
+		Random random = new Random();
+		int randomNumber = random.nextInt(10) + 1;
+		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
+	}
+
+	/*
 	private int evaluate(Board board) {
 
 		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);// 8
@@ -120,7 +132,19 @@ public class AI {
 		int randomNumber = random.nextInt(10) + 1;
 		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
 	}
+	*/
+	public boolean isBlock(int PlayerLenght, int AILength,StandardBoard board, Move move) {
+		boolean valid = true;
 
+		boolean p1block = Utility.AstarSearch(PlayerLenght,board.getPositions(), board.getPlayer1().getPosition(), 8);
+		boolean p2block = Utility.AstarSearch(AILength,board.getPositions(), board.getPlayer2().getPosition(), 0);
+
+		if (p1block == false || p2block == false)
+			valid = false;
+
+		return valid;
+	}
+	/*
 	public boolean isBlock(StandardBoard board, Move move) {
 		boolean valid = true;
 
@@ -132,7 +156,7 @@ public class AI {
 
 		return valid;
 	}
-
+*/
 	public boolean isValid(StandardBoard board, Move move) {
 		boolean valid = true;
 

@@ -41,7 +41,7 @@ public class AIGameController<T> implements Controller {
 			return;
 		}
 		//StandardBoard new1 = Utility.clone(board);
-		Move move = AI.Minimax(2);
+		Move move = AI.Minimax(3);
 		if (move.getOrientation() != WallPlacement.NULL) {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
