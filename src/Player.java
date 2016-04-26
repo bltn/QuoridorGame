@@ -1,6 +1,4 @@
 
-import java.util.Stack;
-
 /**
  * @author Jordan Bird
  * @author Ben Lawton
@@ -19,8 +17,6 @@ public class Player
     private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
-    private Stack<Position> previousPos;
-
 
 	public Player(Position position, int ID)
     {
@@ -28,16 +24,9 @@ public class Player
         this.position = position;
         wallCount = 10;
         moveCount = 0;
-        this.previousPos = new Stack<Position>();
+
     }
 	
-	public Position getPreviousPos() {		
-		return previousPos.pop();
-	}
-
-	public void pushPreviousPos() {		
-		previousPos.push(getPosition());
-	}
 	
     public int getID() {
     	return ID;

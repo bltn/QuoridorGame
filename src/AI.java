@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * @author Thai Hoang
@@ -10,8 +11,9 @@ import java.util.Random;
 public class AI {
 
 	private StandardBoard AIBoard;
-
 	private ArrayList<Move> PossibleWallMoves;
+	private Stack<Position> previousPosPlayer1;
+	private Stack<Position> previousPosPlayer2;
 
 	public AI(StandardBoard AIBoard) {
 		this.AIBoard = AIBoard;
@@ -24,6 +26,10 @@ public class AI {
 				PossibleWallMoves.add(WallMove2);
 			}
 		}
+		
+		previousPosPlayer1 = new Stack<Position>();
+		previousPosPlayer2 = new Stack<Position>();
+		
 	}
 
 	public Move Minimax(int depth) {
@@ -138,13 +144,8 @@ public class AI {
 	}
 
 	private int evaluateNoWall(Board board) {
-
-		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
-		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
-
-		Random random = new Random();
-		int randomNumber = random.nextInt(10) + 1;
-		return -15 * AILength - 15 * AIManhata + randomNumber;
+		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);
+		return -25 * AILength;
 	}
 
 	public boolean isValid(StandardBoard board, Move move) {
@@ -174,7 +175,16 @@ public class AI {
 	private void move(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
-			Board.getCurrentPlayer().pushPreviousPos();
+			
+			if(Board.getCurrentPlayer()==Board.getPlayer1()){
+				previousPosPlayer1.push(Board.getCurrentPlayer().getPosition());
+			}
+			else{
+				previousPosPlayer2.push(Board.getCurrentPlayer().getPosition());
+			};
+			
+			
+			
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
 		} else {
@@ -191,7 +201,16 @@ public class AI {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
 			Board.switchPlayer();
-			Position last = Board.getCurrentPlayer().getPreviousPos();
+			Position last=null;
+			if(Board.getCurrentPlayer()==Board.getPlayer1()){
+				last=previousPosPlayer1.pop();
+			}
+			else{
+				last=previousPosPlayer2.pop();
+			};
+			
+			
+			//Position last = Board.getCurrentPlayer().getPreviousPos();
 			Board.getCurrentPlayer().setPosition(last);
 		} else {
 			int topLeftX = move.getX();
@@ -249,4 +268,8 @@ public class AI {
 		return bestMove;
 	}
 
+	
+	
+	
+	
 }
