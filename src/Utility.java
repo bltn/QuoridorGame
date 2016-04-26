@@ -1,12 +1,10 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
 
-import sun.applet.Main;
+import java.util.Comparator;
+
+import java.util.PriorityQueue;
+
+
+
 
 /**
  * @author Thai Hoang
@@ -54,7 +52,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -89,7 +87,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-		Queue<Position> queue1 = new LinkedList<Position>();
+
 		boolean done = false; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
@@ -117,19 +115,6 @@ public class Utility {
 		}
 		reset(grid);
 		return done;
-	}
-
-	private static String indexof(Position[][] arr,Position pos){
-		String index="";
-		for (int i = 0 ; i < arr.length; i++)
-		    for(int j = 0 ; j < arr[i].length ; j++)
-		    {
-		         if ( arr[i][j] == pos)
-		         {		index=i+":"+j+"";
-		         	break;
-		         }
-		    }
-		return index;
 	}
 
 	private static void reset(Position[][] grid) {
@@ -175,49 +160,6 @@ public class Utility {
 	}
 
 
-	private static Position clone(Position pos){
-		Position clone = new Position(pos.getX(),pos.getY());
-
-			if(pos.hasBottomWall())clone.setHasBottomWall(true);
-			if(!pos.hasBottomWall())clone.setHasBottomWall(false);
-			if(pos.hasTopWall())clone.setHasTopWall(true);
-			if(!pos.hasTopWall())clone.setHasTopWall(false);
-			if(pos.hasLeftWall())clone.setHasLeftWall(true);
-			if(!pos.hasLeftWall())clone.setHasLeftWall(false);
-			if(pos.hasRightWall())clone.setHasRightWall(true);
-			if(!pos.hasRightWall())clone.setHasRightWall(false);
-
-		return clone;
-	}
-
-	private static Position[][] clone(Position[][] grid){
-		Position[][] clone = new Position[grid.length][grid[0].length];
-
-		for (int row = 0; row < grid.length; row++) {
-			for (int column = 0; column < grid[0].length;column++) {
-				clone[row][column]=clone(grid[row][column]);
-			}
-		}
-		return clone;
-	}
-
-	public static StandardBoard clone(StandardBoard Board) {
-
-		StandardBoard clone = new StandardBoard(2);
-		Position[][] clonePositions = Utility.clone(Board.getPositions());
-		clone.setPositions(clonePositions);
-
-		clone.setPlayer1(new Player(Board.getPlayer1().getPosition(), Board.getPlayer1().getID()));
-		clone.getPlayer1().setWallCount(Board.getPlayer1().getWallCount());
-		clone.setPlayer2(new Player(Board.getPlayer2().getPosition(), Board.getPlayer2().getID()));
-		clone.getPlayer2().setWallCount(Board.getPlayer2().getWallCount());
-		if (Board.getCurrentPlayer() == Board.getPlayer1()) {
-			clone.setCurrentPlayer(clone.getPlayer1());
-		} else {
-			clone.setCurrentPlayer(clone.getPlayer2());
-		}
-		return clone;
-	}
 	private static class PositionComparator implements Comparator<Position>
 	{
 		public static int goal;

@@ -1,10 +1,7 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
+
 
 public class AI {
 
@@ -30,10 +27,8 @@ public class AI {
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
+		
+		for (Move move : moves) {
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
@@ -58,11 +53,7 @@ public class AI {
 		int lowestScore = 99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
 
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-
-			Move move = iterator.next();
+		for (Move move : moves) {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
@@ -87,10 +78,8 @@ public class AI {
 
 		int highestScore = -99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
+		
+		for (Move move : moves) {
 
 			if (isValid(board, move) == false)
 				continue;
@@ -115,7 +104,7 @@ public class AI {
 		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);// 8
 		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
-		int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
+		//int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
 		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
