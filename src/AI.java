@@ -107,7 +107,7 @@ public class AI {
 		//int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
-		return (15 * PlayerLenght - 25 * AILength) - AIManhata + randomNumber;
+		return (30 * PlayerLenght - 50 * AILength) - AIManhata + randomNumber;
 	}
 
 	public boolean isBlock(StandardBoard board, Move move) {
@@ -137,7 +137,7 @@ public class AI {
 					&& move.getY() == board.getPreviousPlayer().getPosition().getY()) {
 				valid = false;
 			}
-			;
+			
 		} else {
 			if (hasWall == false || wallPlacement == false) {
 				valid = false;
