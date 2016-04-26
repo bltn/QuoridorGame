@@ -31,16 +31,17 @@ public class AI {
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
-		
+
 		for (Move move : moves) {
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
-			
-			int PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+
+			int PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(),
+					8);
 			int AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-			if (AILength != 0 && PlayerLenght != 0) {
+			if (AILength > -1 && PlayerLenght > -1) {
 				int score = Min(PlayerLenght, AILength, AIBoard, -99999999, 99999999, depth - 1);
 				if (highestScore < score) {
 
@@ -48,7 +49,7 @@ public class AI {
 					bestMove = move;
 				}
 			}
-						
+
 			unmove(AIBoard, move);
 		}
 		return bestMove;
@@ -56,6 +57,13 @@ public class AI {
 
 	private int Min(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
+
+			if (AILength == 0) {
+				return 999999;
+			} else if (PlayerLenght == 0) {
+				return -999999;
+			}
+
 			return evaluate(PlayerLenght, AILength, board);
 		}
 
@@ -66,11 +74,11 @@ public class AI {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
-			
+
 			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
 			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-			if (AILength != 0 && PlayerLenght != 0) {
+			if (AILength > -1 && PlayerLenght > -1) {
 
 				lowestScore = Math.min(Max(PlayerLenght, AILength, board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
@@ -85,6 +93,13 @@ public class AI {
 
 	private int Max(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
+			if (AILength == 0) {
+				return 999999;
+
+			} else if (PlayerLenght == 0) {
+				return -999999;
+			}
+
 			return evaluate(PlayerLenght, AILength, board);
 		}
 
@@ -95,11 +110,11 @@ public class AI {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
-			
+
 			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
 			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-			if (AILength != 0 && PlayerLenght != 0) {
+			if (AILength > -1 && PlayerLenght > -1) {
 				highestScore = Math.max(Min(PlayerLenght, AILength, board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
@@ -119,7 +134,7 @@ public class AI {
 		Random random = new Random();
 		int AIWall = board.getPlayer2().getWallCount();
 		int randomNumber = random.nextInt(10) + 1;
-		return (35 * PlayerLenght - 45 * AILength) - AIManhata + AIWall*40 + randomNumber;//
+		return (35 * PlayerLenght - 45 * AILength) - AIManhata + AIWall * 40 + randomNumber;//
 	}
 
 	private int evaluateNoWall(Board board) {
@@ -129,7 +144,7 @@ public class AI {
 
 		Random random = new Random();
 		int randomNumber = random.nextInt(10) + 1;
-		return -15 * AILength -15*AIManhata + randomNumber;
+		return -15 * AILength - 15 * AIManhata + randomNumber;
 	}
 
 	public boolean isValid(StandardBoard board, Move move) {

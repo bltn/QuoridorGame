@@ -17,7 +17,7 @@ public class Utility {
 		PositionComparator.goal=finish;
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
 
-		int done = 0; // set true when the finish position is reached
+		int done = -1; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
 		queue.add(startgrid);
