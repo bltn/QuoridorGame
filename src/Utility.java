@@ -47,41 +47,6 @@ public class Utility {
 		return done;
 	}
 
-	public static boolean shortesrPath(int lenght,Position[][] grid, Position start, int finish) {
-		Comparator<Position> comparator = new PositionComparator();
-		PositionComparator.goal=finish;
-
-		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
-
-		boolean done = false; // set true when the finish position is reached
-		Position startgrid = grid[start.getY()][start.getX()];
-		startgrid.setCostsofar(0);
-		queue.add(startgrid);
-
-		while (!queue.isEmpty()) {
-			Position pos = queue.remove();
-			grid[pos.getY()][pos.getX()].setVisited(true); // this cell has been tried
-
-			if (pos.getY() == finish) {
-				done = true;
-				lenght=pos.getCostsofar();
-				break;
-			} else {
-				int length = pos.getCostsofar()+1;
-				if (!pos.hasTopWall())
-					push_new_pos(grid, queue, pos.getY() - 1, pos.getX(),length);
-				if (!pos.hasBottomWall())
-					push_new_pos(grid, queue, pos.getY() + 1, pos.getX(),length);
-				if (!pos.hasLeftWall())
-					push_new_pos(grid, queue, pos.getY(), pos.getX() - 1,length);
-				if (!pos.hasRightWall())
-					push_new_pos(grid, queue, pos.getY(), pos.getX() + 1,length);
-			}
-		}
-		reset(grid);
-		return done;
-	}
-
 	public static boolean AstarSearch(Position[][] grid, Position start, int finish) {
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
@@ -139,23 +104,6 @@ public class Utility {
 			/* Check if cell is not blocked and not previously tried */
 			if (grid[row][column].isVisited() == false)
 				result = true;
-		return result;
-	}
-
-	public static String toString(Position[][] grid) {
-		String result = "\n";
-		// Print the grid line by line
-		for (int row = 0; row < grid.length; row++) {
-			// Print each element in a line
-			for (int column = 0; column < grid[row].length; column++) {
-				result += grid[row][column].getY() + "" + grid[row][column].getX();
-				result += "|bottom:" + grid[row][column].hasBottomWall();
-				result += "|top:" + grid[row][column].hasTopWall();
-				result += "|left:" + grid[row][column].hasLeftWall();
-				result += "|right:" + grid[row][column].hasRightWall() + "| ";
-			}
-			result += "\n";
-		}
 		return result;
 	}
 

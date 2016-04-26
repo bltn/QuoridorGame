@@ -37,6 +37,7 @@ public class AIGameController<T> implements Controller {
 	}
 
 	public void AImove() {
+		
 		if (board.getCurrentPlayer() == board.getPlayer1()) {
 			return;
 		}
