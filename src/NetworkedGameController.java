@@ -159,13 +159,14 @@ public class NetworkedGameController implements Controller {
                 sendPawnUpdate(prevPlayer);
                 if (gameOver) {
                     resetGame();
-					GameOverGUI gameOverGUI;
+					GameOverGUI gameOverGUI = new GameOverGUI(this);
+					StatsWriter statsWriter;
 					if (board.getPlayer3() == null) {
-						gameOverGUI = new GameOverGUI(this, board.getPreviousPlayer().getID(), 2);
+						statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 2);
 					} else {
-						gameOverGUI = new GameOverGUI(this, board.getPreviousPlayer().getID(), 4);
+						statsWriter = new StatsWriter(board.getPreviousPlayer().getID(), 2);
 					}
-					gameOverGUI.writeStatsToCSV();
+					statsWriter.writeStatsToCSV();
                 }
 			} catch (IllegalArgumentException e) {
 				if (playerID == 1) {
