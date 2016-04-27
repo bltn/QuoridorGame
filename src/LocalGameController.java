@@ -7,9 +7,9 @@ public class LocalGameController<T> implements Controller {
     // The game board and its positions' logic
     private Board board;
     // GUI (View) representing the game board
-    private LocalBoardGUI gui;
+    private GUI gui;
 
-    public LocalGameController(LocalBoardGUI gui, Board board) {
+    public LocalGameController(GUI gui, Board board) {
         this.board = board;
         this.gui = gui;
     }

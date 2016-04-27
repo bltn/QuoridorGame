@@ -10,7 +10,7 @@ public interface GUI {
 
 	public void updatePlayerPawnPosition(int x, int y, int id);
 
-	public void updatePlayerWallCount(int i, int j);
+	public void updatePlayerWallCount(int wallCount, int PlayerID);
 
 	public void resetWalls();
 
