@@ -136,7 +136,7 @@ public class MenuGUI extends Application {
                 connGUI.start(new Stage());
             }
         });
-        settingsButton.setPrefWidth(350);
+        settingsButton.setPrefWidth(200);
         final MenuGUI menuGUIReference = this;
         settingsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
