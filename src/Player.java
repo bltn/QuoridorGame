@@ -1,5 +1,6 @@
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * @author Jordan Bird
@@ -19,7 +20,7 @@ public class Player
     private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
-    private Position previousPos;
+    private Stack<Position> previousPos;
 
 
 	public Player(Position position, int ID)
@@ -28,16 +29,17 @@ public class Player
         this.position = position;
         wallCount = 10;
         moveCount = 0;
-        this.previousPos = null;
+        this.previousPos = new Stack<Position>();
     }
 	
-	public Position getPreviousPos() {
-		return previousPos;
+	public Position getPreviousPos() {		
+		return previousPos.pop();
 	}
 
-	public void setPreviousPos(Position previousPos) {
-		this.previousPos = previousPos;
+	public void pushPreviousPos() {		
+    	previousPos.push(getPosition());
 	}
+
     public int getID() {
     	return ID;
     }
@@ -77,7 +79,6 @@ public class Player
     }
 
     public void setPosition(Position position) {
-    	setPreviousPos(getPosition());
     	this.position = position;
     }
 
