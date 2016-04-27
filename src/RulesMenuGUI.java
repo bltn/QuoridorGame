@@ -51,7 +51,7 @@ public class RulesMenuGUI extends Application {
     public RulesMenuGUI() {
     	pane = new GridPane();
         introText = new Text("Rules");
-        buttonBox = new VBox(100);
+        buttonBox = new VBox(70);
         practiseText = new Text(Translate.practiseMode() + ":");
         standardText = new Text(Translate.standardRules() + ":");
         challengeText= new Text(Translate.challengeRules() + ":");
@@ -139,7 +139,7 @@ public class RulesMenuGUI extends Application {
     public void setIntroPane() {
     	pane.setAlignment(Pos.CENTER);
         pane.setHgap(25);
-        pane.setVgap(100);
+        pane.setVgap(70);
         pane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -200,12 +200,8 @@ public class RulesMenuGUI extends Application {
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override
         	public void handle(ActionEvent event) {
-                LocalBoardGUI gui = new LocalBoardGUI(2);
-            	Board board = new StandardBoard(2);
-            	Controller controller = new LocalGameController(gui, board);
-            	gui.setController(controller);
-            	gui.start(new Stage());
-            	primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "standard");
+                playerNamesGUI.start(primaryStage);
         	}
         });
 
@@ -213,12 +209,8 @@ public class RulesMenuGUI extends Application {
         challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-	            LocalBoardGUI gui = new LocalBoardGUI(2);
-	            Board board = new ChallengeBoard(2);
-	            Controller controller = new LocalGameController(gui, board);
-	            gui.setController(controller);
-	            gui.start(new Stage());
-	            primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "challenge");
+                playerNamesGUI.start(primaryStage);
 			}
         });
 
@@ -226,24 +218,16 @@ public class RulesMenuGUI extends Application {
         fourPlayerStandardButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI(4);
-                Board board = new StandardBoard(4);
-                Controller controller = new LocalGameController(gui, board);
-                gui.setController(controller);
-                gui.start(new Stage());
-                primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "standard");
+                playerNamesGUI.start(primaryStage);
             }
         });
         fourPlayerChallengeButton.setPrefWidth(200);
         fourPlayerChallengeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI(4);
-                Board board = new ChallengeBoard(4);
-                Controller controller = new LocalGameController(gui, board);
-                gui.setController(controller);
-                gui.start(new Stage());
-                primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "challenge");
+                playerNamesGUI.start(primaryStage);
             }
         });
         backButton.setPrefWidth(200);

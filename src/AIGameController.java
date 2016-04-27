@@ -37,18 +37,19 @@ public class AIGameController<T> implements Controller {
 	}
 
 	public void AImove() {
+		
 		if (board.getCurrentPlayer() == board.getPlayer1()) {
 			return;
 		}
-		StandardBoard new1 = AI.clone(board);
-		Move move = AI.Minimax(new1, 2);
+
+		Move move = AI.Minimax(2);
 		if (move.getOrientation() != WallPlacement.NULL) {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 			WallPlacement orientation = move.getOrientation();
 			placeWall(topLeftX, topLeftY, orientation, board.getCurrentPlayer().getID());
 		}
-		if (move.getOrientation() == WallPlacement.NULL) {
+		else if (move.getOrientation() == WallPlacement.NULL) {
 			int posX = move.getX();
 			int posY = move.getY();
 			movePawn(posX, posY, board.getCurrentPlayer().getID());
@@ -76,7 +77,7 @@ public class AIGameController<T> implements Controller {
 					board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
-				GameOverGUI gui = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 2);
+				GameOverGUI gui = new GameOverGUI((Controller) this);
 				gui.start(new Stage());
 			}
 			AImove();

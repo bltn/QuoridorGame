@@ -1,18 +1,15 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class LocalGameController<T> implements Controller {
 
     // The game board and its positions' logic
     private Board board;
     // GUI (View) representing the game board
-    private LocalBoardGUI gui;
+    private GUI gui;
 
-    public LocalGameController(LocalBoardGUI gui, Board board) {
+    public LocalGameController(GUI gui, Board board) {
         this.board = board;
         this.gui = gui;
     }
@@ -63,22 +60,24 @@ public class LocalGameController<T> implements Controller {
 
     public void movePawn(int posX, int posY, int playerID) {
     	try {
+			int currentPlayerID = board.getCurrentPlayer().getID();
     		boolean gameOver = board.movePawn(posX, posY);
 			gui.updatePlayerMoveCount(board.getPreviousPlayer().getMoveCount(), board.getPreviousPlayer().getID());
 			gui.updatePlayerPawnPosition(board.getPreviousPlayer().getPosition().getX(), board.getPreviousPlayer().getPosition().getY(), board.getPreviousPlayer().getID());
 			gui.updateActivePlayer(board.getCurrentPlayer().getID());
 			if (gameOver) {
-				GameOverGUI gameOverGUI;
+				GameOverGUI gameOverGUI = new GameOverGUI((Controller) this);
+				StatsWriter statsWriter;
 				if (board.getPlayer3() == null) {
-					gameOverGUI = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 2);
+					statsWriter = new StatsWriter(currentPlayerID, 2);
 				} else {
-					gameOverGUI = new GameOverGUI((Controller) this, board.getPreviousPlayer().getID(), 4);
+					statsWriter = new StatsWriter(currentPlayerID, 4);
 				}
                 gameOverGUI.start(new Stage());
 				try {
-					gameOverGUI.writeStatsToCSV();
+					statsWriter.writeStatsToCSV();
 				} catch (IOException e) {
-					e.printStackTrace();
+					SystemLogger.logError(e.getMessage());
 				}
 			}
     	} catch (IllegalArgumentException e) {

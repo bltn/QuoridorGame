@@ -1,5 +1,5 @@
-import com.sun.javafx.font.freetype.HBGlyphLayout;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,12 +21,6 @@ public class MenuGUI extends Application {
     private Scene scene;
     private GridPane introPane;
     private Text introText;
-    public static TextField player1Name;
-    public static TextField player2Name;
-    public static TextField player3Name;
-    public static TextField player4Name;
-    private HBox nameBoxRow1;
-    private HBox nameBoxRow2;
     private VBox buttonBox;
     private Button startButton;
     private Button quitButton;
@@ -37,12 +31,6 @@ public class MenuGUI extends Application {
     	Translate.setLanguage(SettingsGUI.language);
     	introPane = new GridPane();
     	introText = new Text("Quoridor");
-        player1Name = new TextField("Player 1");
-        player2Name = new TextField("Player 2");
-        player3Name = new TextField("Player 3");
-        player4Name = new TextField("Player 4");
-        nameBoxRow1 = new HBox();
-        nameBoxRow2 = new HBox();
     	buttonBox = new VBox();
     	introText.setId("text");
 
@@ -67,8 +55,12 @@ public class MenuGUI extends Application {
     	NewMultiplayer.setFitWidth(20);
     	multiplayerButton = new Button(Translate.multiplayer(),NewMultiplayer);
 
-        // Settings button
-        settingsButton = new Button(Translate.settings());
+    	//add a icon into the settings button
+    	Image settings = new Image(getClass().getResourceAsStream("icons/settingsicon.png"));
+    	ImageView newsettings = new ImageView(settings);
+    	newsettings.setFitHeight(20);
+    	newsettings.setFitWidth(20);
+    	settingsButton = new Button(Translate.settings(),newsettings);
 
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -98,7 +90,7 @@ public class MenuGUI extends Application {
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
         introPane.setHgap(25);
-        introPane.setVgap(5);
+        introPane.setVgap(75);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -111,11 +103,6 @@ public class MenuGUI extends Application {
     public void setButtons() {
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        nameBoxRow1.setSpacing(10);
-        nameBoxRow2.setSpacing(10);
-        nameBoxRow1.getChildren().addAll(player1Name, player2Name);
-        nameBoxRow2.getChildren().addAll(player3Name, player4Name);
-        buttonBox.getChildren().addAll(nameBoxRow1, nameBoxRow2);
         buttonBox.getChildren().add(startButton);
         buttonBox.getChildren().add(multiplayerButton);
         buttonBox.getChildren().add(settingsButton);
@@ -144,8 +131,8 @@ public class MenuGUI extends Application {
                 connGUI.start(new Stage());
             }
         });
-        settingsButton.setPrefWidth(350);
-        MenuGUI menuGUIReference = this;
+        settingsButton.setPrefWidth(200);
+        final MenuGUI menuGUIReference = this;
         settingsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

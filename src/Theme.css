@@ -1,16 +1,14 @@
 .background {
+ 	-fx-background-color: #222222;
+}
 
- 	-fx-background-color: #2E9AFE;
-
- }
 
 .button {
-    -fx-padding: 10 25 10 25;
-    -fx-border-color: #81BEF7;
-    -fx-border-width: 5;
-    -fx-background-radius: 0;
-    -fx-background-color: #2E9AFE;
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #222222;
+    -fx-font-family: "Arial Narrow", Helvetica, Arial, sans-serif;
     -fx-font-size: 12pt;
     -fx-text-fill: #FFFFFF;
 }
