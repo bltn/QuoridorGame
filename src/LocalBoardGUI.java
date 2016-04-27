@@ -90,7 +90,7 @@ public class LocalBoardGUI extends Application implements GUI {
         ImageView changeSizeOfHelp = new ImageView(help);
         changeSizeOfHelp.setFitHeight(20);
         changeSizeOfHelp.setFitWidth(20);
-        highlightPositionsButton = new Button(Translate.hint(),changeSizeOfHelp);
+        highlightPositionsButton = new Button(Translate.availableMoves(),changeSizeOfHelp);
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
