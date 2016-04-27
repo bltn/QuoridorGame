@@ -1,10 +1,7 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
+
 
 public class AI {
 
@@ -25,27 +22,25 @@ public class AI {
 		}
 	}
 
-	public Move Minimax(StandardBoard board, int depth) {
-		int highestScore = -10000;
+	public Move Minimax(int depth) {
+		int highestScore = -99999999;
 		Move bestMove = null;
 
-		ArrayList<Move> moves = PossibleMoves(board);
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
-			if (isValid(board, move) == false)
+		ArrayList<Move> moves = PossibleMoves(AIBoard);
+		
+		for (Move move : moves) {
+			if (isValid(AIBoard, move) == false)
 				continue;
-			StandardBoard result = move(board, move);
+			move(AIBoard, move);
 
-			if (isBlock(board, move) == true) {
-				if(highestScore<Min(board, -10000, 10000, depth - 1)){
-					highestScore=Min(board, -10000, 10000, depth - 1);
+			if (isBlock(AIBoard, move) == true) {
+				if (highestScore < Min(AIBoard, -99999999, 99999999, depth - 1)) {
+					highestScore = Min(AIBoard, -99999999, 99999999, depth - 1);
 					bestMove = move;
 				}
 			}
 
-			unmove(board, move);
+			unmove(AIBoard, move);
 		}
 		return bestMove;
 	}
@@ -55,17 +50,13 @@ public class AI {
 			return evaluate(board);
 		}
 
-		int lowestScore = 10000;
+		int lowestScore = 99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
 
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-
-			Move move = iterator.next();
+		for (Move move : moves) {
 			if (isValid(board, move) == false)
 				continue;
-			StandardBoard result = move(board, move);
+			move(board, move);
 
 			if (isBlock(board, move) == true) {
 
@@ -85,16 +76,14 @@ public class AI {
 			return evaluate(board);
 		}
 
-		int highestScore = -10000;
+		int highestScore = -99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
-		Iterator<Move> iterator = moves.iterator();
-
-		while (iterator.hasNext()) {
-			Move move = iterator.next();
+		
+		for (Move move : moves) {
 
 			if (isValid(board, move) == false)
 				continue;
-			StandardBoard result = move(board, move);
+			move(board, move);
 
 			if (isBlock(board, move) == true) {
 
@@ -112,12 +101,13 @@ public class AI {
 
 	private int evaluate(Board board) {
 
-		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);//8
-
-		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(),0);//0
+		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);// 8
+		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
+		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
+		//int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
-		int randomNumber = random.nextInt(2);
-		return (PlayerLenght- AILength)+ randomNumber;
+		int randomNumber = random.nextInt(10) + 1;
+		return (30 * PlayerLenght - 50 * AILength) - AIManhata + randomNumber;
 	}
 
 	public boolean isBlock(StandardBoard board, Move move) {
@@ -143,7 +133,11 @@ public class AI {
 		if (move.getOrientation() == WallPlacement.NULL) {
 			if (!validPawnMove) {
 				valid = false;
+			} else if (move.getX() == board.getPreviousPlayer().getPosition().getX()
+					&& move.getY() == board.getPreviousPlayer().getPosition().getY()) {
+				valid = false;
 			}
+			
 		} else {
 			if (hasWall == false || wallPlacement == false) {
 				valid = false;
@@ -152,10 +146,10 @@ public class AI {
 		return valid;
 	}
 
-	// Return a new board after the move apply to current board
-	public StandardBoard move(StandardBoard Board, Move move) {
+	private void move(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
+			Board.getCurrentPlayer().pushPreviousPos();
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
 		} else {
@@ -165,42 +159,24 @@ public class AI {
 			Board.assignWallsFromTopLeftClockwise(topLeft, move.getOrientation());
 			Board.switchPlayer();
 		}
-		return Board;
+
 	}
 
-	public static StandardBoard unmove(StandardBoard Board, Move move) {
+	private void unmove(StandardBoard AIboard, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
-			Board.switchPlayer();
-			Position last = Board.getCurrentPlayer().getPreviousPos();
-			Board.getCurrentPlayer().setPosition(last);
+			AIboard.switchPlayer();
+			Position last = AIboard.getCurrentPlayer().getPreviousPos();
+			AIboard.getCurrentPlayer().setPosition(last);
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 
-			Position topLeft = Board.getPosition(topLeftX, topLeftY);
-			Board.unassignWalls(topLeft, move.getOrientation());
-			Board.switchPlayer();
+			Position topLeft = AIboard.getPosition(topLeftX, topLeftY);
+			AIboard.unassignWalls(topLeft, move.getOrientation());
+			AIboard.switchPlayer();
 		}
-		return Board;
-	}
 
-	public StandardBoard clone(StandardBoard Board) {
-
-		StandardBoard clone = new StandardBoard(2);
-		Position[][] clonePositions = Utility.clone(Board.getPositions());
-		clone.setPositions(clonePositions);
-
-		clone.setPlayer1(new Player(Board.getPlayer1().getPosition(), Board.getPlayer1().getID()));
-		clone.getPlayer1().setWallCount(Board.getPlayer1().getWallCount());
-		clone.setPlayer2(new Player(Board.getPlayer2().getPosition(), Board.getPlayer2().getID()));
-		clone.getPlayer2().setWallCount(Board.getPlayer2().getWallCount());
-		if (Board.getCurrentPlayer() == Board.getPlayer1()) {
-			clone.setCurrentPlayer(clone.getPlayer1());
-		} else {
-			clone.setCurrentPlayer(clone.getPlayer2());
-		}
-		return clone;
 	}
 
 	public ArrayList<Move> PossiblePawnMoves(StandardBoard currentBoard) {
@@ -223,31 +199,6 @@ public class AI {
 
 	public ArrayList<Move> PossibleWallMoves() {
 		return PossibleWallMoves;
-	}
-
-	public StandardBoard getBoard() {
-		return AIBoard;
-	}
-
-	public void setBoard(StandardBoard AIBoard) {
-		this.AIBoard = AIBoard;
-	}
-
-	public static void main(String[] args) {
-		StandardBoard board = new StandardBoard(2);
-		Position pos = board.getPositions()[0][4];
-		Position pos2 = board.getPositions()[4][0];
-		AI AI = new AI(board);
-
-		Move move3 = new Move(pos2.getX(), pos2.getY(), WallPlacement.VERTICAL);
-		Move move4 = new Move(pos.getX(), pos.getY(), WallPlacement.VERTICAL);
-		Move move2 = new Move(pos2.getX(), pos2.getY(), WallPlacement.HORIZONTAL);
-		Move move = new Move(pos.getX(), pos.getY(), WallPlacement.HORIZONTAL);
-
-		StandardBoard result1 = AI.move(board, move2);
-		StandardBoard result2 = AI.move(result1, move3);
-		StandardBoard result3 = AI.move(result2, move4);
-		StandardBoard result = AI.move(result3, move);
 	}
 
 }
