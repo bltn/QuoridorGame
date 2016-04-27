@@ -56,7 +56,7 @@ public class MenuGUI extends Application {
     	multiplayerButton = new Button(Translate.multiplayer(),NewMultiplayer);
 
     	//add a icon into the settings button
-    	Image settings = new Image(getClass().getResourceAsStream("icons/settings.png"));
+    	Image settings = new Image(getClass().getResourceAsStream("icons/settingsicon.png"));
     	ImageView newsettings = new ImageView(settings);
     	newsettings.setFitHeight(20);
     	newsettings.setFitWidth(20);
