@@ -65,7 +65,7 @@ public class MenuGUI extends Application {
     	ImageView newsettings = new ImageView(settings);
     	newsettings.setFitHeight(20);
     	newsettings.setFitWidth(20);
-    	settingsButton = new Button("Settings",newsettings);
+    	settingsButton = new Button(Translate.settings(),newsettings);
 
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
