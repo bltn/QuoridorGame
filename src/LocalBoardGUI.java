@@ -31,8 +31,6 @@ public class LocalBoardGUI extends Application implements GUI {
     private final HBox player4StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
-    private final HBox currentPlayerPane = new HBox();
-
     private final HBox errorPane = new HBox();
     private Text errorPaneText;
 
@@ -44,21 +42,24 @@ public class LocalBoardGUI extends Application implements GUI {
     private GridPane boardPane;
     //amount of moves the player has made
     private Text player1Moves;
-    private Text currentPlayerText;
+    private Text player1Title;
     //amount of walls the player has
     private int player1WallCount;
     private Text player1Walls;
     //same as player one move
     private Text player2Moves;
+    private Text player2Title;
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
 
     private Text player3Moves;
+    private Text player3Title;
     private int player3WallCount;
     private Text player3Walls;
 
     private Text player4Moves;
+    private Text player4Title;
     private int player4WallCount;
     private Text player4Walls;
 
@@ -98,7 +99,6 @@ public class LocalBoardGUI extends Application implements GUI {
         fourthPawn = new Circle(15);
         drawing = true;
         player1Moves = new Text((Translate.moves() + ": ") + 0);
-        currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
         player1Walls = new Text((Translate.walls() + ": ") + player1WallCount);
         player2Moves = new Text((Translate.moves() + ": ") + 0);
@@ -111,7 +111,13 @@ public class LocalBoardGUI extends Application implements GUI {
         player4WallCount = 10;
         player4Walls = new Text((Translate.walls() + ": ") + player3WallCount);
         errorPaneText = new Text("");
+        player1Title = new Text("Player 1");
+        player2Title = new Text("Player 2");
         this.numberOfPlayers = numberOfPlayers;
+        if (numberOfPlayers == 4) {
+            player3Title = new Text("Player 3");
+            player4Title = new Text("Player 4");
+        }
     }
 
     public void setController(Controller controller) {
@@ -163,20 +169,17 @@ public class LocalBoardGUI extends Application implements GUI {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player1Moves.setTextAlignment(TextAlignment.CENTER);
-        currentPlayerText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.ITALIC, 15));
         errorPaneText.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         errorPaneText.setFill(Color.RED);
         player1Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        Text player1Title = new Text("Player 1");
         player1Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+        player1Title.setFill(Color.ORANGE);
         player1StatsPane.getChildren().addAll(player1Moves, player1Title, player1Walls);
-        currentPlayerPane.getChildren().addAll(currentPlayerText);
         errorPane.getChildren().addAll(errorPaneText);
         player2Walls.setTextAlignment(TextAlignment.CENTER);
         player2Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player2Moves.setTextAlignment(TextAlignment.CENTER);
         player2Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-        Text player2Title = new Text("Player 2");
         player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
         if (numberOfPlayers == 4) {
@@ -184,15 +187,12 @@ public class LocalBoardGUI extends Application implements GUI {
             player3Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
             player3Moves.setTextAlignment(TextAlignment.CENTER);
             player3Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-            Text player3Title = new Text("Player 3");
             player3Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
             player3StatsPane.getChildren().addAll(player3Moves, player3Title, player3Walls);
-
             player4Walls.setTextAlignment(TextAlignment.CENTER);
             player4Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
             player4Moves.setTextAlignment(TextAlignment.CENTER);
             player4Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
-            Text player4Title = new Text("Player 4");
             player4Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
             player4StatsPane.getChildren().addAll(player4Moves, player4Title, player4Walls);
         }
@@ -319,14 +319,36 @@ public class LocalBoardGUI extends Application implements GUI {
      */
     public void updateActivePlayer(int playerID) {
         if (playerID == 1) {
-            currentPlayerText.setText("Player 1's turn...");
+            player1Title.setFill(Color.ORANGE);
+            player2Title.setFill(Color.BLACK);
+            if (numberOfPlayers == 4) {
+            	player3Title.setFill(Color.BLACK);
+            	player4Title.setFill(Color.BLACK);
+            }
         }
         else if (playerID == 2) {
-            currentPlayerText.setText("Player 2's turn...");
+        	player1Title.setFill(Color.BLACK);
+        	player2Title.setFill(Color.GREEN);
+        	if (numberOfPlayers == 4) {
+            	player3Title.setFill(Color.BLACK);
+            	player4Title.setFill(Color.BLACK);
+        	}
+        	player3Title.setFill(Color.BLACK);
+        	player4Title.setFill(Color.BLACK);
         } else if (playerID == 3) {
-            currentPlayerText.setText("Player 3's turn...");
+        	player1Title.setFill(Color.BLACK);
+        	player2Title.setFill(Color.BLACK);
+        	if (numberOfPlayers == 4) {
+            	player3Title.setFill(Color.BLUE);
+            	player4Title.setFill(Color.BLACK);
+        	}
         } else if (playerID == 4) {
-            currentPlayerText.setText("Player 4's turn...");
+        	player1Title.setFill(Color.BLACK);
+        	player2Title.setFill(Color.BLACK);
+        	if (numberOfPlayers == 4) {
+            	player3Title.setFill(Color.BLACK);
+            	player4Title.setFill(Color.RED);
+        	}
         }
     }
 
@@ -455,7 +477,6 @@ public class LocalBoardGUI extends Application implements GUI {
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
         player1StatsPane.setAlignment(Pos.CENTER);
-        currentPlayerPane.setAlignment(Pos.CENTER_RIGHT);
         errorPane.setAlignment(Pos.CENTER);
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
@@ -463,9 +484,9 @@ public class LocalBoardGUI extends Application implements GUI {
         //boardPane.setHgap(5);
         //boardPane.setVgap(5);
         if (numberOfPlayers == 2) {
-            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+            rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
         } else {
-            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);
+            rootPane.getChildren().addAll(player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);
         }
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
@@ -473,7 +494,6 @@ public class LocalBoardGUI extends Application implements GUI {
         player3StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player4StatsPane.setAlignment(Pos.CENTER);
         player4StatsPane.setPadding(new Insets(5, 0, 5, 0));
-        currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
         errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
 
