@@ -167,7 +167,7 @@ public class PlayerNamesGUI extends Application {
         }
         buttonBox.getChildren().add(startButton);
         buttonBox.setAlignment(Pos.CENTER);
-        startButton.setPrefWidth(350);
+        startButton.setPrefWidth(300);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
