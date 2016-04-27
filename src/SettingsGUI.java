@@ -21,6 +21,8 @@ public class SettingsGUI extends Application{
     private GridPane settingsPane;
     private Text languageText;
     private Text colourText;
+    private VBox buttonBox;
+    private HBox doneBox;
     private HBox languageBox;
     private HBox colourBox;
     private Button englishButton;
@@ -31,24 +33,26 @@ public class SettingsGUI extends Application{
     private Button protanopiaButton;
     private Button tritanopiaButton;
     private Button deuteranopiaButton;
+    private Button doneButton;
     private MenuGUI menuGUI;
+    private Stage stage;
 
     public static String language = "English";
     public static String theme = "Theme.css";
 
     public SettingsGUI(MenuGUI menuGUI) {
         this.menuGUI = menuGUI;
-
         settingsPane = new GridPane();
-
+        buttonBox = new VBox();
         languageText = new Text("Language");
         languageBox = new HBox();
         languageText.setId("text");
+        doneBox = new HBox();
 
         colourText = new Text("Colour");
         colourBox = new HBox();
         colourText.setId("text");
-        
+
         // add a icon into the English button
     	Image english = new Image(getClass().getResourceAsStream("icons/gbr.png"));
     	ImageView newEnglishButton = new ImageView(english);
@@ -76,11 +80,18 @@ public class SettingsGUI extends Application{
     	newChineseButton.setFitHeight(20);
     	newChineseButton.setFitWidth(20);
     	chineseButton = new Button("Chinese",newChineseButton);
-   
+
         standardButton = new Button("Standard");
         protanopiaButton = new Button("Protanopia");
         tritanopiaButton = new Button("Tritanopia");
         deuteranopiaButton = new Button("Deuteranopia");
+
+        // add a icon into the done button
+    	Image done = new Image(getClass().getResourceAsStream("icons/done.png"));
+    	ImageView newDoneButton = new ImageView(done);
+    	newDoneButton.setFitHeight(20);
+    	newDoneButton.setFitWidth(20);
+    	doneButton = new Button("Done",newDoneButton);
 
         // Background
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -88,12 +99,13 @@ public class SettingsGUI extends Application{
         BackgroundImage bimg = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size);
 
         settingsPane.setBackground(new Background(bimg));
-        scene = new Scene(settingsPane, 800, 400);
+        scene = new Scene(settingsPane, 1000, 400);
         scene.getStylesheets().add(theme);
     }
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         stage.setTitle("Settings");
         setButtons();
         setSettingsPane();
@@ -102,10 +114,25 @@ public class SettingsGUI extends Application{
     }
 
     public void setButtons() {
+        languageText.setTextAlignment(TextAlignment.CENTER);
+        languageText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
+
+        colourText.setTextAlignment(TextAlignment.CENTER);
+        colourText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
+
+        buttonBox.setPadding(new Insets(15, 15, 15, 15));
+        buttonBox.setSpacing(10);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(languageText, languageBox, colourText, colourBox, doneBox);
+
         languageBox.setPadding(new Insets(15, 15, 15, 15));
         languageBox.setSpacing(10);
         languageBox.getChildren().addAll(englishButton, frenchButton, spanishButton, chineseButton);
         languageBox.setAlignment(Pos.CENTER);
+        
+        doneBox.getChildren().addAll(doneButton);
+        doneBox.setAlignment(Pos.CENTER);
+
 
         englishButton.setPrefWidth(175);
         englishButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -191,12 +218,21 @@ public class SettingsGUI extends Application{
                 menuGUI.updateTheme();
             };
         });
+
+        doneButton.setPrefWidth(175);
+        doneButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            };
+        });
     }
 
     public void setSettingsPane() {
         settingsPane.setAlignment(Pos.CENTER);
         settingsPane.setHgap(25);
         settingsPane.setVgap(10);
+        settingsPane.add(buttonBox, 0, 1);
 
         settingsPane.add(languageBox, 0, 1);
         languageText.setTextAlignment(TextAlignment.CENTER);
@@ -206,7 +242,9 @@ public class SettingsGUI extends Application{
         settingsPane.add(colourBox, 0, 5);
         colourText.setTextAlignment(TextAlignment.CENTER);
         colourText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
-        settingsPane.add(colourText, 0, 0, 1, 13);
+        settingsPane.add(colourText, 0, 0, 1, 11);
+        
+        settingsPane.add(doneBox, 0, 10);
     }
 
     private void updateTheme() {
