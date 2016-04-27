@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -54,8 +55,12 @@ public class MenuGUI extends Application {
     	NewMultiplayer.setFitWidth(20);
     	multiplayerButton = new Button(Translate.multiplayer(),NewMultiplayer);
 
-        // Settings button
-        settingsButton = new Button(Translate.settings());
+    	//add a icon into the settings button
+    	Image settings = new Image(getClass().getResourceAsStream("icons/settings.png"));
+    	ImageView newsettings = new ImageView(settings);
+    	newsettings.setFitHeight(20);
+    	newsettings.setFitWidth(20);
+    	settingsButton = new Button(Translate.settings(),newsettings);
 
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -126,8 +131,8 @@ public class MenuGUI extends Application {
                 connGUI.start(new Stage());
             }
         });
-        settingsButton.setPrefWidth(350);
-        MenuGUI menuGUIReference = this;
+        settingsButton.setPrefWidth(200);
+        final MenuGUI menuGUIReference = this;
         settingsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

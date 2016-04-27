@@ -1,8 +1,7 @@
 .background {
+ 	-fx-background-color: #222222;
+}
 
- 	-fx-background-color: #2E9AFE;
-
- }
 
 .button {
     -fx-padding: 10 25 10 25;
