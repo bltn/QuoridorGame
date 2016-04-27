@@ -1,15 +1,3 @@
-
-import java.util.LinkedList;
-import java.util.Stack;
-
-/**
- * @author Jordan Bird
- * @author Ben Lawton
- *
- *  @version 12/02/2016
- */
-
-
 public class Player
 {
 	private int ID;
@@ -20,8 +8,6 @@ public class Player
     private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
-    private Stack<Position> previousPos;
-
 
 	public Player(Position position, int ID)
     {
@@ -29,16 +15,8 @@ public class Player
         this.position = position;
         wallCount = 10;
         moveCount = 0;
-        this.previousPos = new Stack<Position>();
-    }
-	
-	public Position getPreviousPos() {		
-		return previousPos.pop();
-	}
 
-	public void pushPreviousPos() {		
-    	previousPos.push(getPosition());
-	}
+    }
 
     public int getID() {
     	return ID;
@@ -59,8 +37,8 @@ public class Player
     public void decrementWallCount() {
     	wallCount--;
     }
-    
-    
+
+
 	public int getMoveCount() {
     	return moveCount;
     }

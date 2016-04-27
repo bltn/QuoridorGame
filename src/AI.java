@@ -1,13 +1,13 @@
-
 import java.util.ArrayList;
 import java.util.Random;
-
+import java.util.Stack;
 
 public class AI {
 
 	private StandardBoard AIBoard;
-
 	private ArrayList<Move> PossibleWallMoves;
+	private Stack<Position> previousPosPlayer1;
+	private Stack<Position> previousPosPlayer2;
 
 	public AI(StandardBoard AIBoard) {
 		this.AIBoard = AIBoard;
@@ -20,6 +20,10 @@ public class AI {
 				PossibleWallMoves.add(WallMove2);
 			}
 		}
+
+		previousPosPlayer1 = new Stack<Position>();
+		previousPosPlayer2 = new Stack<Position>();
+
 	}
 
 	public Move Minimax(int depth) {
@@ -27,15 +31,20 @@ public class AI {
 		Move bestMove = null;
 
 		ArrayList<Move> moves = PossibleMoves(AIBoard);
-		
 		for (Move move : moves) {
 			if (isValid(AIBoard, move) == false)
 				continue;
 			move(AIBoard, move);
 
-			if (isBlock(AIBoard, move) == true) {
-				if (highestScore < Min(AIBoard, -99999999, 99999999, depth - 1)) {
-					highestScore = Min(AIBoard, -99999999, 99999999, depth - 1);
+			int PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(),
+					8);
+			int AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
+
+			if (AILength > -1 && PlayerLenght > -1) {
+				int score = Min(PlayerLenght, AILength, AIBoard, -99999999, 99999999, depth - 1);
+				if (highestScore < score) {
+
+					highestScore = score;
 					bestMove = move;
 				}
 			}
@@ -45,9 +54,16 @@ public class AI {
 		return bestMove;
 	}
 
-	private int Min(StandardBoard board, int a, int b, int depth) {
+	private int Min(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(board);
+
+			if (AILength == 0) {
+				return 999999;
+			} else if (PlayerLenght == 0) {
+				return -999999;
+			}
+
+			return evaluate(PlayerLenght, AILength, board);
 		}
 
 		int lowestScore = 99999999;
@@ -58,9 +74,12 @@ public class AI {
 				continue;
 			move(board, move);
 
-			if (isBlock(board, move) == true) {
+			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-				lowestScore = Math.min(Max(board, a, b, depth - 1), lowestScore);
+			if (AILength > -1 && PlayerLenght > -1) {
+
+				lowestScore = Math.min(Max(PlayerLenght, AILength, board, a, b, depth - 1), lowestScore);
 				b = Math.min(b, lowestScore);
 			}
 			unmove(board, move);
@@ -71,23 +90,31 @@ public class AI {
 
 	}
 
-	private int Max(StandardBoard board, int a, int b, int depth) {
+	private int Max(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
-			return evaluate(board);
+			if (AILength == 0) {
+				return 999999;
+
+			} else if (PlayerLenght == 0) {
+				return -999999;
+			}
+
+			return evaluate(PlayerLenght, AILength, board);
 		}
 
 		int highestScore = -99999999;
 		ArrayList<Move> moves = PossibleMoves(board);
-		
-		for (Move move : moves) {
 
+		for (Move move : moves) {
 			if (isValid(board, move) == false)
 				continue;
 			move(board, move);
 
-			if (isBlock(board, move) == true) {
+			PlayerLenght = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer1().getPosition(), 8);
+			AILength = Utility.shortestPathLenght(AIBoard.getPositions(), AIBoard.getPlayer2().getPosition(), 0);
 
-				highestScore = Math.max(Min(board, a, b, depth - 1), highestScore);
+			if (AILength > -1 && PlayerLenght > -1) {
+				highestScore = Math.max(Min(PlayerLenght, AILength, board, a, b, depth - 1), highestScore);
 				a = Math.max(a, highestScore);
 			}
 			unmove(board, move);
@@ -99,27 +126,18 @@ public class AI {
 		return highestScore;
 	}
 
-	private int evaluate(Board board) {
+	private int evaluate(int PlayerLenght, int AILength, Board board) {
 
-		int PlayerLenght = Utility.shortestPathLenght(board.getPositions(), board.getPlayer1().getPosition(), 8);// 8
-		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);// 0
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
-		//int PlayerManhata = 8 - board.getPlayer1().getPosition().getY();
 		Random random = new Random();
+		int AIWall = board.getPlayer2().getWallCount();
 		int randomNumber = random.nextInt(10) + 1;
-		return (30 * PlayerLenght - 50 * AILength) - AIManhata + randomNumber;
+		return (35 * PlayerLenght - 45 * AILength) - AIManhata + AIWall * 40 + randomNumber;//
 	}
 
-	public boolean isBlock(StandardBoard board, Move move) {
-		boolean valid = true;
-
-		boolean p1block = Utility.AstarSearch(board.getPositions(), board.getPlayer1().getPosition(), 8);
-		boolean p2block = Utility.AstarSearch(board.getPositions(), board.getPlayer2().getPosition(), 0);
-
-		if (p1block == false || p2block == false)
-			valid = false;
-
-		return valid;
+	private int evaluateNoWall(Board board) {
+		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);
+		return -25 * AILength;
 	}
 
 	public boolean isValid(StandardBoard board, Move move) {
@@ -137,7 +155,7 @@ public class AI {
 					&& move.getY() == board.getPreviousPlayer().getPosition().getY()) {
 				valid = false;
 			}
-			
+
 		} else {
 			if (hasWall == false || wallPlacement == false) {
 				valid = false;
@@ -149,7 +167,14 @@ public class AI {
 	private void move(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
-			Board.getCurrentPlayer().pushPreviousPos();
+
+			if(Board.getCurrentPlayer()==Board.getPlayer1()){
+				previousPosPlayer1.push(Board.getCurrentPlayer().getPosition());
+			}
+			else{
+				previousPosPlayer2.push(Board.getCurrentPlayer().getPosition());
+			};
+
 			Board.getCurrentPlayer().setPosition(Board.getPosition(move.getX(), move.getY()));
 			Board.switchPlayer();
 		} else {
@@ -162,19 +187,28 @@ public class AI {
 
 	}
 
-	private void unmove(StandardBoard AIboard, Move move) {
+	private void unmove(StandardBoard Board, Move move) {
 
 		if (move.getOrientation() == WallPlacement.NULL) {
-			AIboard.switchPlayer();
-			Position last = AIboard.getCurrentPlayer().getPreviousPos();
-			AIboard.getCurrentPlayer().setPosition(last);
+			Board.switchPlayer();
+			Position last=null;
+			if(Board.getCurrentPlayer()==Board.getPlayer1()){
+				last=previousPosPlayer1.pop();
+			}
+			else{
+				last=previousPosPlayer2.pop();
+			};
+
+
+			//Position last = Board.getCurrentPlayer().getPreviousPos();
+			Board.getCurrentPlayer().setPosition(last);
 		} else {
 			int topLeftX = move.getX();
 			int topLeftY = move.getY();
 
-			Position topLeft = AIboard.getPosition(topLeftX, topLeftY);
-			AIboard.unassignWalls(topLeft, move.getOrientation());
-			AIboard.switchPlayer();
+			Position topLeft = Board.getPosition(topLeftX, topLeftY);
+			Board.unassignWalls(topLeft, move.getOrientation());
+			Board.switchPlayer();
 		}
 
 	}
@@ -200,5 +234,32 @@ public class AI {
 	public ArrayList<Move> PossibleWallMoves() {
 		return PossibleWallMoves;
 	}
+
+	public Move MoveNoWalls() {
+		int highestScore = -99999999;
+		Move bestMove = null;
+
+		ArrayList<Move> moves = PossiblePawnMoves(AIBoard);
+
+		for (Move move : moves) {
+			if (isValid(AIBoard, move) == false)
+				continue;
+			move(AIBoard, move);
+
+			int score = evaluateNoWall(AIBoard);
+
+			if (highestScore < score) {
+				highestScore = score;
+				bestMove = move;
+			}
+
+			unmove(AIBoard, move);
+		}
+		return bestMove;
+	}
+
+
+
+
 
 }
