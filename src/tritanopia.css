@@ -13,10 +13,10 @@
     -fx-border-width: 2;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
-    -fx-background-color: #222222;
+    -fx-background-color: #FF0080;
     -fx-font-family: "Arial Narrow", Helvetica, Arial, sans-serif;
     -fx-font-size: 12pt;
-    -fx-text-fill: #e9e9e9;
+    -fx-text-fill: #000000;
 }
 
 .button:hover {

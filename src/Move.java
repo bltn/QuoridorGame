@@ -1,3 +1,7 @@
+/**
+ * @author Thai Hoang
+ * @version 06/04/2016
+ */
 
 
 public class Move {

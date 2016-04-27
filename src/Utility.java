@@ -1,26 +1,17 @@
-
 import java.util.Comparator;
-
 import java.util.PriorityQueue;
-
-
-
-
-/**
- * @author Thai Hoang
- * @version 06/04/2016
- */
+import java.util.PriorityQueue;
 
 public class Utility {
 
-	
+
 	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
 		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
 
-		int done = 0; // set true when the finish position is reached
+		int done = -1; // set true when the finish position is reached
 		Position startgrid = grid[start.getY()][start.getX()];
 		startgrid.setCostsofar(0);
 		queue.add(startgrid);
@@ -106,7 +97,6 @@ public class Utility {
 				result = true;
 		return result;
 	}
-
 
 	private static class PositionComparator implements Comparator<Position>
 	{
