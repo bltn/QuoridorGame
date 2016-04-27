@@ -189,20 +189,41 @@ public abstract class Board {
     public ArrayList<Position> getCurrentPlayerOccupiablePositions() {
         ArrayList<Position> localPositions = new ArrayList<Position>();
         Position currentPosition = currentPlayer.getPosition();
-        if (!currentPosition.hasTopWall()) {
+        if (!currentPosition.hasTopWall() && !positionOccupiedByPlayer(currentPosition.getX(), (currentPosition.getY() - 1))) {
                 localPositions.add(positions[currentPosition.getY()-1][currentPosition.getX()]);
         }
-        if (!currentPosition.hasRightWall()) {
+        if (!currentPosition.hasRightWall() && !positionOccupiedByPlayer((currentPosition.getX() + 1), currentPosition.getY())) {
                 localPositions.add(positions[currentPosition.getY()][currentPosition.getX()+1]);
         }
-        if (!currentPosition.hasBottomWall()) {
+        if (!currentPosition.hasBottomWall() && !positionOccupiedByPlayer(currentPosition.getX(), (currentPosition.getY() + 1))) {
                 localPositions.add(positions[currentPosition.getY()+1][currentPosition.getX()]);
         }
-        if (!currentPosition.hasLeftWall()) {
+        if (!currentPosition.hasLeftWall() && !positionOccupiedByPlayer((currentPosition.getX() - 1), currentPosition.getY())) {
                 localPositions.add(positions[currentPosition.getY()][currentPosition.getX()-1]);
         }
         return localPositions;
     }
+
+    public boolean positionOccupiedByPlayer(int x, int y) {
+		boolean occupied = false;
+
+		if (x == getPlayer1().getPosition().getX() && y == getPlayer1().getPosition().getY()) {
+			occupied = true;
+		}
+		if (x == getPlayer2().getPosition().getX() && y == getPlayer2().getPosition().getY()) {
+			occupied = true;
+		}
+
+		if (getPlayer3() != null) {
+			if (x == getPlayer3().getPosition().getX() && y == getPlayer3().getPosition().getY()) {
+				occupied = true;
+			}
+			else if (x == getPlayer4().getPosition().getX() && y == getPlayer4().getPosition().getY()) {
+				occupied = true;
+			}
+		}
+		return occupied;
+	}
 
     public boolean isValidMove(Player player, int newX, int newY) {
 	    boolean isValid = false;

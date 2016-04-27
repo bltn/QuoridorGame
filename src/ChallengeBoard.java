@@ -128,7 +128,7 @@ public class ChallengeBoard extends Board {
     public boolean movePawn(int posX, int posY) {
         if (getPlayer3() == null) {
             if (getCurrentPlayer() == getPlayer1()) {
-                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
@@ -147,7 +147,7 @@ public class ChallengeBoard extends Board {
                 }
             }
             else if (getCurrentPlayer() == getPlayer2()) {
-                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
@@ -168,7 +168,7 @@ public class ChallengeBoard extends Board {
         }
         else {
             if (getCurrentPlayer() == getPlayer1()) {
-                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 } else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -185,7 +185,7 @@ public class ChallengeBoard extends Board {
                     }
                 }
             } else if (getCurrentPlayer() == getPlayer2()) {
-                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 } else {
                     if (isValidMove(getCurrentPlayer(), posX, posY)) {
@@ -203,7 +203,7 @@ public class ChallengeBoard extends Board {
                 }
             }
             else if (getCurrentPlayer() == getPlayer3()) {
-                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
@@ -223,7 +223,7 @@ public class ChallengeBoard extends Board {
                 }
             }
             else if (getCurrentPlayer() == getPlayer4()) {
-                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY()) {
+                if (positionOccupiedByPlayer(posX, posY)) {
                     throw new IllegalArgumentException(Translate.positionOccupied());
                 }
                 else {
