@@ -64,21 +64,21 @@ public class SettingsGUI extends Application{
     	newEnglishButton.setFitHeight(20);
     	newEnglishButton.setFitWidth(20);
     	englishButton = new Button("English",newEnglishButton);
-
+    	
         // add a icon into the French button
     	Image french = new Image(getClass().getResourceAsStream("icons/fr.png"));
     	ImageView newFrenchButton = new ImageView(french);
     	newFrenchButton.setFitHeight(20);
     	newFrenchButton.setFitWidth(20);
-    	frenchButton = new Button("Franï¿½ais",newFrenchButton);
-
+    	frenchButton = new Button("Français",newFrenchButton);
+    	
         // add a icon into the Spanish button
     	Image spanish = new Image(getClass().getResourceAsStream("icons/sp.png"));
     	ImageView newSpanishButton = new ImageView(spanish);
     	newSpanishButton.setFitHeight(20);
     	newSpanishButton.setFitWidth(20);
-    	spanishButton = new Button("Espaï¿½ol",newSpanishButton);
-
+    	spanishButton = new Button("Español",newSpanishButton);
+    	
         // add a icon into the Chinese button
     	Image chinese = new Image(getClass().getResourceAsStream("icons/cn.png"));
     	ImageView newChineseButton = new ImageView(chinese);
