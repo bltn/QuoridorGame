@@ -50,7 +50,7 @@ public class RulesMenuGUI extends Application {
 
     public RulesMenuGUI() {
     	pane = new GridPane();
-        introText = new Text("Rules");
+        introText = new Text(Translate.rules());
         buttonBox = new VBox(70);
         practiseText = new Text(Translate.practiseMode() + ":");
         standardText = new Text(Translate.standardRules() + ":");

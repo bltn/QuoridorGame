@@ -46,6 +46,10 @@ public class Translate {
 	private static String play;
 	private static String done;
 	private static String name;
+	private static String enterNames;
+	private static String languages;
+	private static String colour;
+	private static String rules;
 
 	public static void setLanguage(String language) {
 		switch (language) {
@@ -112,6 +116,10 @@ public class Translate {
 			play = br.readLine();
 			done = br.readLine();
 			name = br.readLine();
+			enterNames = br.readLine();
+			languages = br.readLine();
+			colour = br.readLine();
+			rules = br.readLine();
 		} catch (FileNotFoundException e) {
 			SystemLogger.logError(e.getMessage());
 		} catch (IOException e) {
@@ -445,7 +453,40 @@ public class Translate {
 			return name;
 		}
 		else {
-			return "name";
+			return "Names";
 		}
 	}
+
+	public static String enterNames() {
+		if (enterNames != null) {
+			return enterNames;
+		} else {
+			return "Enter Your Names";
+		}
+	}
+
+	public static String languages() {
+		if (languages != null) {
+			return languages;
+		} else {
+			return "Language";
+		}
+	}
+
+	public static String colour() {
+		if (colour != null) {
+			return colour;
+		} else {
+			return "Colour";
+		}
+	}
+
+	public static String rules() {
+		if (rules != null) {
+			return rules;
+		} else {
+			return "Enter Your Names";
+		}
+	}
+
 }

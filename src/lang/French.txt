@@ -35,3 +35,7 @@ Gagnant
 Jouer
 Terminé
 Des noms
+Entrez vos noms
+La langue
+Couleur
+Règles

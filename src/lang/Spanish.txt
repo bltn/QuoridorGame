@@ -35,3 +35,7 @@ Ganador
 Jugar
 Hecho
 Nombres
+Introduzca sus nombres
+Idioma
+Color
+Reglas
