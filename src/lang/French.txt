@@ -1,0 +1,37 @@
+Jeu local
+Mode multijoueur
+Quitter
+Déplacer
+Joueur 1
+Joueur 2
+Mur
+Indice
+Rejoins une partie
+Entrez l'adresse IP et l'adresse de port pour votre machine
+Créer serveur
+Se connecter au jeu
+Paramètres
+Vous ne pouvez pas bloquer complètement un autre joueur
+Move est invalide
+Vous ne disposez pas de tous les murs
+Position est occupée
+mode Practise
+règles standard
+règles de défi
+norme 2 joueurs
+norme 4 joueurs
+challenge 2 joueurs
+challenge 4 joueurs
+reculer
+mouvements disponibles
+Jeu terminé
+Nouveau jeu
+Connectez-vous à 4 joueurs jeu
+Connectez-vous à 2 joueurs jeu
+Modes de jeu
+Choisissez un mode de jeu
+mode
+Gagnant
+Jouer
+Terminé
+Des noms

@@ -1,7 +1,8 @@
-
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,7 +33,7 @@ public class ConnectionGUI extends Application {
 	private GridPane pane;
 	private Text joinText;
 	private VBox buttonBox;
-	private HBox quitbuttonBox;
+	private HBox quitButtonBox;
 	private Button createServerButton;
 	private Button connectToServerButton;
 	private Button connectTo4PServerButton;
@@ -41,59 +42,62 @@ public class ConnectionGUI extends Application {
 	private TextField portField;
 	private String IPAddress;
 	private int portNumber;
+
     private Button backButton;
     private Button quitButton;
     private Stage primaryStage;
-
 
 	public ConnectionGUI() {
 		IPAddress = "localhost";
 		portNumber = 33333;
 		pane = new GridPane();
-		joinText = new Text("Join the Game:");
+		joinText = new Text(Translate.joinGame() + ": ");
 		buttonBox = new VBox();
-		quitbuttonBox = new HBox();
-	
+		createServerButton = new Button(Translate.createServer() + ": ");
+		connectToServerButton = new Button(Translate.connectToGame());
+		connectTo4PServerButton = new Button(Translate.connectToFourPlayerGame());
+		quitButtonBox = new HBox();
+
 		scene = new Scene(pane, 600, 800);
-		IPandPortInfo = new Text("Enter the IP and port address for your machine.");
+		IPandPortInfo = new Text(Translate.enterIPAndPort());
 		IPAddressField = new TextField(IPAddress);
 		portField = new TextField("" + portNumber);
-		
+
         //add a icon into the game server button
 		Image server = new Image(getClass().getResourceAsStream("icons/server.png"));
         ImageView newServerButton = new ImageView(server);
         newServerButton.setFitHeight(20);
         newServerButton.setFitWidth(40);
-        createServerButton = new Button("Create game server",newServerButton);
-		
+        createServerButton = new Button(Translate.createServer(),newServerButton);
+
         //add a icon into the 2P game button
 		Image standard = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newStandardButton = new ImageView(standard);
         newStandardButton.setFitHeight(20);
         newStandardButton.setFitWidth(20);
-        connectToServerButton = new Button("Connect to 2P game",newStandardButton);
-        
+        connectToServerButton = new Button(Translate.connectToTwoPlayerGame(),newStandardButton);
+
         //add a icon into the 4P game button
         Image fourplayer = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView new4PButton = new ImageView(fourplayer);
         new4PButton.setFitHeight(20);
         new4PButton.setFitWidth(45);
-        connectTo4PServerButton = new Button("Connect to 4P game",new4PButton);
-        
+        connectTo4PServerButton = new Button(Translate.connectToFourPlayerGame(),new4PButton);
+
         // add a icon into the quit button
         Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
         ImageView newQuit = new ImageView(quit);
         newQuit.setFitHeight(20);
         newQuit.setFitWidth(20);
-        quitButton = new Button("Quit",newQuit);
-        
+        quitButton = new Button(Translate.quit(),newQuit);
+
         // add a icon into the back button
         Image back = new Image(getClass().getResourceAsStream("icons/back.png"));
         ImageView newBack = new ImageView(back);
         newBack.setFitHeight(20);
         newBack.setFitWidth(20);
-        backButton = new Button("Back",newBack);
-        
+        backButton = new Button(Translate.back(),newBack);
+
         //add a background image
 	    Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
 	    BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
@@ -102,14 +106,14 @@ public class ConnectionGUI extends Application {
 	    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 	    BackgroundPosition.CENTER, size);
 	    pane.setBackground(new Background(bimg));
-	   
-	    scene.getStylesheets().add("Theme.css");
+
+	    scene.getStylesheets().add(SettingsGUI.theme);
 	}
 
 	@Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;
-        primaryStage.setTitle("Join Multiplayer");
+        primaryStage.setTitle(Translate.joinGame());
         setButtons();
         setServerPane();
         setTextFields();
@@ -143,40 +147,49 @@ public class ConnectionGUI extends Application {
 		connectTo4PServerButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
 		IPandPortInfo.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
 		backButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
-    
+
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton, connectTo4PServerButton, quitbuttonBox);
+        buttonBox.getChildren().addAll(IPandPortInfo, IPAddressField, portField, createServerButton, connectToServerButton, connectTo4PServerButton, quitButtonBox);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
 		quitButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
-    	quitbuttonBox.getChildren().addAll(backButton, quitButton);
-    	quitbuttonBox.setSpacing(10);
-    	quitbuttonBox.setAlignment(Pos.CENTER);
+    	quitButtonBox.getChildren().addAll(backButton, quitButton);
+    	quitButtonBox.setSpacing(10);
+    	quitButtonBox.setAlignment(Pos.CENTER);
         createServerButton.setPrefWidth(250);
         createServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	SystemLogger.init();
             	String mode = askForGameMode();
             	GameServer server;
-            	if (mode.equals("2P Challenge")) {
+				IPAddress = IPAddressField.getText();
+				portNumber = Integer.parseInt(portField.getText());
+            	if (mode.equals(Translate.twoPlayerChallenge())) {
             		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)), 2);
-            	} else if (mode.equals("2P Standard")){
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "multiplayer", server, IPAddress, portNumber);
+					playerNamesGUI.start(new Stage());
+            	} else if (mode.equals(Translate.twoPlayerStandard())){
             		server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
-            	} else if (mode.equals("4P Standard")) {
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "multiplayer", server, IPAddress, portNumber);
+					playerNamesGUI.start(new Stage());
+            	} else if (mode.equals(Translate.fourPlayerStandard())) {
 					server = new GameServer(new NetworkedGameController(new StandardBoard(4)), 4);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "multiplayer", server, IPAddress, portNumber);
+					playerNamesGUI.start(new Stage());
 				} else {
 					server = new GameServer(new NetworkedGameController(new ChallengeBoard(4)), 4);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "multiplayer", server, IPAddress, portNumber);
+					playerNamesGUI.start(new Stage());
 				}
-                IPAddress = IPAddressField.getText();
-                portNumber = Integer.parseInt(portField.getText());
-                server.initialiseServer(IPAddress, portNumber);
             }
         });
         connectToServerButton.setPrefWidth(250);
         connectToServerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	SystemLogger.init();
                 IPAddress = IPAddressField.getText();
                 portNumber = Integer.parseInt(portField.getText());
                 GUI gui = new NetworkedBoardGUI(2);
@@ -186,7 +199,7 @@ public class ConnectionGUI extends Application {
                 	try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						System.out.println(e.getMessage());
+						SystemLogger.logError(e.getMessage());
 					}
                 	if (client.guiCanBeLaunched()) {
                 		client.setGUILaunched(true);
@@ -209,7 +222,7 @@ public class ConnectionGUI extends Application {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						System.out.println(e.getMessage());
+						SystemLogger.logError(e.getMessage());
 					}
 					if (client.guiCanBeLaunched()) {
 						client.setGUILaunched(true);
@@ -219,16 +232,13 @@ public class ConnectionGUI extends Application {
 				}
 			}
 		});
-		
         backButton.setPrefWidth(120);
         backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-              
                         MenuGUI gui = new MenuGUI();
                         gui.start(new Stage());
                         primaryStage.close();
-
             }
         });
         quitButton.setPrefWidth(120);
@@ -243,15 +253,15 @@ public class ConnectionGUI extends Application {
 	private String askForGameMode() {
 		String mode = null;
 		ArrayList<String> choices = new ArrayList();
-		choices.add("2P Standard");
-		choices.add("2P Challenge");
-		choices.add("4P Standard");
-		choices.add("4P Challenge");
+		choices.add(Translate.twoPlayerStandard());
+		choices.add(Translate.twoPlayerChallenge());
+		choices.add(Translate.fourPlayerStandard());
+		choices.add(Translate.fourPlayerChallenge());
 
-		ChoiceDialog<String> dialog = new ChoiceDialog<>("2P Standard", choices);
-		dialog.setTitle("Game modes");
-		dialog.setHeaderText("Choose a game mode");
-		dialog.setContentText("Choose a mode:");
+		ChoiceDialog<String> dialog = new ChoiceDialog<>(Translate.twoPlayerStandard(), choices);
+		dialog.setTitle(Translate.gameModes());
+		dialog.setHeaderText(Translate.chooseGameMode());
+		dialog.setContentText(Translate.mode() + ": ");
 
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {

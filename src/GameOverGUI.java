@@ -17,14 +17,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import static javafx.application.Application.launch;
 
 import javax.sound.midi.SysexMessage;
 
-/**
- * @author Khadija Patel
- */
 public class GameOverGUI extends Application {
 
     private Scene scene;
@@ -33,20 +31,24 @@ public class GameOverGUI extends Application {
     private VBox buttonBox;
     private Button quitButton;
     private Button newGameButton;
+    private Controller controller;
+    private Stage primaryStage;
 
 
-    public GameOverGUI() {
+    public GameOverGUI(Controller controller) {
+    	this.controller = controller;
         introPane = new GridPane();
-        introText = new Text("Game Over");
+        introText = new Text(Translate.gameOver());
         buttonBox = new VBox();
-        quitButton = new Button("Quit");
-        newGameButton = new Button("New Game");
+        quitButton = new Button(Translate.quit());
+        newGameButton = new Button(Translate.newGame());
         scene = new Scene(introPane, 600, 400);
-        scene.getStylesheets().add("Theme.css");
+        scene.getStylesheets().add(SettingsGUI.theme);
     }
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setTitle("Quoridor");
         setButtons();
         setIntroPane();
@@ -84,13 +86,13 @@ public class GameOverGUI extends Application {
                 System.exit(0);
             }
         });
-        
+
         newGameButton.setPrefWidth(150);
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	MenuGUI gui = new MenuGUI();
-            	gui.start(new Stage());
+            	controller.resetGame();
+            	primaryStage.close();
             };
         });
     }

@@ -1,3 +1,7 @@
+
+import java.util.LinkedList;
+import java.util.Stack;
+
 /**
  * @author Jordan Bird
  * @author Ben Lawton
@@ -5,22 +9,36 @@
  *  @version 12/02/2016
  */
 
+
 public class Player
 {
 	private int ID;
     private Position position;
     private boolean startedAtTop;
     private boolean startedAtBottom;
+    private boolean startedAtLeft;
+    private boolean startedAtRight;
     private int wallCount;
     private int moveCount;
+    private Stack<Position> previousPos;
 
-    public Player(Position position, int ID)
+
+	public Player(Position position, int ID)
     {
     	this.ID = ID;
         this.position = position;
         wallCount = 10;
         moveCount = 0;
+        this.previousPos = new Stack<Position>();
     }
+	
+	public Position getPreviousPos() {		
+		return previousPos.pop();
+	}
+
+	public void pushPreviousPos() {		
+    	previousPos.push(getPosition());
+	}
 
     public int getID() {
     	return ID;
@@ -41,8 +59,9 @@ public class Player
     public void decrementWallCount() {
     	wallCount--;
     }
-
-    public int getMoveCount() {
+    
+    
+	public int getMoveCount() {
     	return moveCount;
     }
 
@@ -64,22 +83,46 @@ public class Player
     }
 
     public void setStartedAtTop() {
-    	if (!startedAtBottom) {
+    	if (!startedAtBottom && !startedAtLeft && !startedAtRight) {
     		startedAtTop = true;
     	}
     }
 
     public void setStartedAtBottom() {
-    	if (!startedAtTop) {
+    	if (!startedAtTop && !startedAtLeft && !startedAtRight) {
     		startedAtBottom = true;
     	}
     }
 
+    public void setStartedAtLeft() {
+        if (!startedAtBottom && !startedAtTop && !startedAtRight) {
+            startedAtLeft = true;
+        }
+    }
+
+    public void setStartedAtRight() {
+        if (!startedAtBottom && !startedAtTop && !startedAtLeft) {
+            startedAtRight = true;
+        }
+    }
+
     public boolean startedAtTop() {
-    	return startedAtTop;
+        return startedAtTop;
     }
 
     public boolean startedAtBottom() {
-    	return startedAtBottom;
+        return startedAtBottom;
     }
+
+    public boolean startedAtLeft() {
+        return startedAtLeft;
+    }
+
+    public boolean startedAtRight() {
+        return startedAtRight;
+    }
+
+	public void incrementWallCount() {
+		wallCount++;
+	}
 }

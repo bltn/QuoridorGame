@@ -9,3 +9,4 @@
 *.iws
 /out/
 .idea_modules/
+*.log

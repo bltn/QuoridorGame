@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -16,14 +18,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-/**
- * @author Junaid Rasheed
- * @author Jack Zhang
- * @author Ben Lawton
- * @author Jordan Bird
- *
- * @version 12/02/2016
- */
+import java.util.Set;
+
 public class NetworkedBoardGUI extends Application implements GUI {
 
 	//the scene used to display in the window
@@ -31,6 +27,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private final int width = 17;
     private final int height = 17;
     private final HBox player2StatsPane = new HBox(120);
+    private final HBox player3StatsPane = new HBox(120);
+    private final HBox player4StatsPane = new HBox(120);
     private final HBox buttonPane = new HBox(10);
 
     private final HBox currentPlayerPane = new HBox();
@@ -55,45 +53,67 @@ public class NetworkedBoardGUI extends Application implements GUI {
     //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
+
+    private Text player3Moves;
+    private int player3WallCount;
+    private Text player3Walls;
+
+    private Text player4Moves;
+    private int player4WallCount;
+    private Text player4Walls;
+
     //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
     private Circle firstPawn;
     private Circle secondPawn;
-    private boolean drawing;
-
+    private Circle thirdPawn;
+    private Circle fourthPawn;
     private Text assignedIDText;
 
     private GameClient client;
 
-    private Controller controller;
+    private int numberOfPlayers;
 
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
+     * @param numberOfPlayers Number of players in the game
      */
-    public NetworkedBoardGUI() {
+    public NetworkedBoardGUI(int numberOfPlayers) {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
         grids = new Rectangle[height][width];
-        highlightPositionsButton = new Button("Hint");
+        // Add icon to highlight positions button
+        Image help = new Image(getClass().getResourceAsStream("icons/help.png"));
+        ImageView changeSizeOfHelp = new ImageView(help);
+        changeSizeOfHelp.setFitHeight(20);
+        changeSizeOfHelp.setFitWidth(20);
+        highlightPositionsButton = new Button(Translate.hint(),changeSizeOfHelp);
         scene = new Scene(rootPane, 800, 800);
         firstPawn = new Circle(15);
         secondPawn = new Circle(15);
-        drawing = true;
-        player1Moves = new Text("Moves: " + 0);
+        thirdPawn = new Circle(15);
+        fourthPawn = new Circle(15);
+        player1Moves = new Text((Translate.moves() + ": ") + 0);
         currentPlayerText = new Text("Player 1's turn...");
         player1WallCount = 10;
-        player1Walls = new Text("Walls: " + player1WallCount);
-        player2Moves = new Text("Moves: " + 0);
+        player1Walls = new Text((Translate.walls() + ": ") + player1WallCount);
+        player2Moves = new Text((Translate.moves() + ": ") + 0);
         player2WallCount = 10;
-        player2Walls = new Text("Walls: " + player2WallCount);
+        player2Walls = new Text((Translate.walls() + ": ") + player2WallCount);
+        player3Moves = new Text((Translate.moves() + ": ") + 0);
+        player3WallCount = 10;
+        player3Walls = new Text((Translate.walls() + ": ") + player3WallCount);
+        player4Moves = new Text((Translate.moves() + ": ") + 0);
+        player4WallCount = 10;
+        player4Walls = new Text((Translate.walls() + ": ") + player3WallCount);
         errorPaneText = new Text("");
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void setController(Controller controller) {
-    	this.controller = controller;
     }
 
     public void setClient(GameClient client) {
@@ -107,12 +127,28 @@ public class NetworkedBoardGUI extends Application implements GUI {
         setPanes();
         setButtons();
         setPlayerStats();
-        setPawn(firstPawn, Color.BLUE, 8, 0);
-        setPawn(secondPawn, Color.RED, 8, 16);
-        scene.getStylesheets().add("Theme.css");
+        client.requestInitialPlayerPawnPositions();
+        scene.getStylesheets().add(SettingsGUI.theme);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BOARD");
         primaryStage.show();
+    }
+
+    public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y, int player3X, int player3Y, int player4X, int player4Y) {
+    	player1X *= 2;
+    	player1Y *= 2;
+        player2X *= 2;
+        player2Y *= 2;
+    	setPawn(firstPawn, Color.ORANGE, player1X, player1Y);
+    	setPawn(secondPawn, Color.GREEN, player2X, player2Y);
+        if (numberOfPlayers == 4) {
+            player3X *= 2;
+            player3Y *= 2;
+            player4X *= 2;
+            player4Y *= 2;
+            setPawn(thirdPawn, Color.BLUE, player3X, player3Y);
+            setPawn(fourthPawn, Color.RED, player4X, player4Y);
+        }
     }
 
     /**
@@ -127,9 +163,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
-        rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        if (numberOfPlayers == 2) {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
+        } else {
+            rootPane.getChildren().addAll(currentPlayerPane, player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);
+        }
         player1StatsPane.setPadding(new Insets(5, 0, 5, 0));
         player2StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player3StatsPane.setAlignment(Pos.CENTER);
+        player3StatsPane.setPadding(new Insets(5, 0, 5, 0));
+        player4StatsPane.setAlignment(Pos.CENTER);
+        player4StatsPane.setPadding(new Insets(5, 0, 5, 0));
         currentPlayerPane.setPadding(new Insets(0, 180, 0, 0));
         errorPane.setPadding(new Insets(5, 0, 0, 0));
     }
@@ -140,24 +184,22 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
     		for(int y = 0; y < width; y++){
-                final int X = x;
-                final int Y = y;
     			grids[y][x] = new Rectangle();
     			// middle points between walls
     			if(x % 2 != 0 && y % 2 != 0) {
-                    setUnusedSquare(x, y, X, Y);
+                    initialiseUnusedSquare(x, y);
     			}
     			// occupiable position
     			if(x % 2 == 0 && y % 2 == 0) {
-                    setOccupiablePosition(x, y, X, Y);
+                    initialiseOccupiableGrid(x, y);
     			}
     			// wide, short walls
     			if(x % 2 == 0 && y % 2 != 0) {
-                    setWideWall(x, y, X, Y);
+                    initialiseWideWall(x, y);
     			}
     			// tall, thin walls
     			if(x % 2 != 0 && y % 2 == 0) {
-                    setThinWall(x, y, X, Y);
+                    initialiseThinWall(x, y);
     			}
     		}
     	}
@@ -173,32 +215,14 @@ public class NetworkedBoardGUI extends Application implements GUI {
     /**
      * Allows a user to place a wall on a wall space that is available
      */
-   public void setWall(int x, int y) {
+   public void placeWall(int x, int y) {
        // tall, thin wall
 	   if (x % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (y < 16) {
-                   if (grids[y + 2][x].getFill() == Color.GREY) {
-                       // avoid making a cross with the walls
-                       if (grids[y + 1][x - 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                           placeThinWall(x, y);
-                       }
-                   }
-               }
-           }
+           placeThinWall(x, y);
        }
        //short, wide wall
        if (y % 2 != 0) {
-           if (grids[y][x].getFill() == Color.GREY) {
-               if (x < 16) {
-                       if (grids[y][x + 2].getFill() == Color.GREY) {
-                           // avoid making a cross with the walls
-                           if (grids[y - 1][x + 1].getFill() == Color.GREY || grids[y + 1][x + 1].getFill() == Color.GREY) {
-                               placeWideWall(x, y);
-                           }
-                       }
-               }
-           }
+           placeWideWall(x, y);
        }
    }
 
@@ -220,9 +244,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
 	   }
    }
 
-/**
- * Sets the player stats so they can be displayed in the UI
- */
+	/**
+	 * Sets the player stats so they can be displayed in the UI
+	 */
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -246,6 +270,23 @@ public class NetworkedBoardGUI extends Application implements GUI {
         Text player2Title = new Text("Player 2");
         player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
+        if (numberOfPlayers == 4) {
+            player3Walls.setTextAlignment(TextAlignment.CENTER);
+            player3Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player3Moves.setTextAlignment(TextAlignment.CENTER);
+            player3Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player3Title = new Text("Player 3");
+            player3Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player3StatsPane.getChildren().addAll(player3Moves, player3Title, player3Walls);
+
+            player4Walls.setTextAlignment(TextAlignment.CENTER);
+            player4Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            player4Moves.setTextAlignment(TextAlignment.CENTER);
+            player4Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
+            Text player4Title = new Text("Player 4");
+            player4Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
+            player4StatsPane.getChildren().addAll(player4Moves, player4Title, player4Walls);
+        }
     }
 
     /**
@@ -262,22 +303,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
         pawn.setTranslateX(5);
         boardPane.setConstraints(pawn, x, y);
         boardPane.getChildren().add(pawn);
-    }
-
-    /**
-     *  Checks whether the program is currently drawing
-     * @return		the value of isDrawing
-     */
-    public boolean isDrawing() {
-        return drawing;
-    }
-
-    /**
-     * Sets the drawing boolean to the passed boolean
-     * @param b		is the program drawing or not
-     */
-    public void setDrawing(boolean b) {
-        drawing = b;
     }
 
     /**
@@ -309,22 +334,36 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
     public void updatePlayerMoveCount(int moveCount, int playerID) {
     	if (playerID == 1) {
-    		player1Moves.setText("Moves: " + moveCount);
+    		player1Moves.setText((Translate.moves() + ": ") + moveCount);
     	}
     	else if (playerID == 2) {
-    		player2Moves.setText("Moves: " + moveCount);
+    		player2Moves.setText((Translate.moves() + ": ") + moveCount);
     	}
+        else if (playerID == 3) {
+            player3Moves.setText((Translate.moves() + ": ") + moveCount);
+        }
+        else if (playerID == 4) {
+            player4Moves.setText((Translate.moves() + ": ") + moveCount);
+        }
     }
 
     public void updatePlayerWallCount(int wallCount, int playerID) {
     	if (playerID == 1) {
     		player1WallCount = wallCount;
-            player1Walls.setText("Walls: " + player1WallCount);
+            player1Walls.setText((Translate.walls() + ": ") + player1WallCount);
     	}
     	else if (playerID == 2) {
     		player2WallCount = wallCount;
-            player2Walls.setText("Walls: " + player2WallCount);
-    	}
+            player2Walls.setText((Translate.walls() + ": ") + player2WallCount);
+        }
+        else if (playerID == 3) {
+            player3WallCount = wallCount;
+            player3Walls.setText((Translate.walls() + ": ") + player3WallCount);
+        }
+        else if (playerID == 4) {
+            player4WallCount = wallCount;
+            player4Walls.setText((Translate.walls() + ": ") + player4WallCount);
+        }
     }
 
     public void updatePlayerPawnPosition(int x, int y, int playerID) {
@@ -342,6 +381,16 @@ public class NetworkedBoardGUI extends Application implements GUI {
             boardPane.setConstraints(secondPawn, eighteenByEighteenX, eighteenByEighteenY);
             boardPane.getChildren().add(secondPawn);
     	}
+        else if (playerID == 3) {
+            boardPane.getChildren().remove(thirdPawn);
+            boardPane.setConstraints(thirdPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(thirdPawn);
+        }
+        else if (playerID == 4) {
+            boardPane.getChildren().remove(fourthPawn);
+            boardPane.setConstraints(fourthPawn, eighteenByEighteenX, eighteenByEighteenY);
+            boardPane.getChildren().add(fourthPawn);
+        }
     }
 
     /**
@@ -353,34 +402,81 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     	else if (playerID == 2) {
     		currentPlayerText.setText("Player 2's turn...");
-    	}
+        } else if (playerID == 3) {
+            currentPlayerText.setText("Player 3's turn...");
+        } else if (playerID == 4) {
+            currentPlayerText.setText("Player 4's turn...");
+        }
     }
 
-    public void updateActivePlayer() {/*Do nothing*/}
+    public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
 
-    /**
-     * Set the occupiable positions
-     * @param x
-     * @param y
-     * @param X
-     * @param Y
-     */
-    private void setOccupiablePosition(int x, int y, int X, int Y) {
-        grids[y][x].setHeight(40);
-        grids[y][x].setWidth(40);
-        grids[y][x].setStroke(Color.WHITE);
-        grids[y][x].setFill(Color.WHITE);
-        boardPane.setConstraints(grids[y][x],x,y);
-        boardPane.getChildren().add(grids[y][x]);
-        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
-                int nineByNineX = X / 2;
-                int nineByNineY = Y / 2;
-            	client.sendMove(nineByNineX, nineByNineY);
+    		if (playerID == 1) {
+	    		grids[topY][topX].setFill(Color.ORANGE);
+	    		grids[topY][topX].setStroke(Color.ORANGE);
+	    		grids[bottomY][bottomX].setFill(Color.ORANGE);
+	    		grids[bottomY][bottomX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[topY][topX].setFill(Color.GREEN);
+	    		grids[topY][topX].setStroke(Color.GREEN);
+	    		grids[bottomY][bottomX].setFill(Color.GREEN);
+	    		grids[bottomY][bottomX].setStroke(Color.GREEN);
+            } else if (playerID == 3) {
+                grids[topY][topX].setFill(Color.BLUE);
+                grids[topY][topX].setStroke(Color.BLUE);
+                grids[bottomY][bottomX].setFill(Color.BLUE);
+                grids[bottomY][bottomX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[topY][topX].setFill(Color.RED);
+                grids[topY][topX].setStroke(Color.RED);
+                grids[bottomY][bottomX].setFill(Color.RED);
+                grids[bottomY][bottomX].setStroke(Color.RED);
             }
-        });
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            	@Override
+            	public void handle(MouseEvent event) {
+            		client.sendWallRemoval((topX / 2), (topY / 2), WallPlacement.VERTICAL);
+            	}
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+    		if (playerID == 1) {
+    			grids[leftY][leftX].setFill(Color.ORANGE);
+	    		grids[leftY][leftX].setStroke(Color.ORANGE);
+	    		grids[rightY][rightX].setFill(Color.ORANGE);
+	    		grids[rightY][rightX].setStroke(Color.ORANGE);
+    		} else if (playerID == 2) {
+    			grids[leftY][leftX].setFill(Color.GREEN);
+	    		grids[leftY][leftX].setStroke(Color.GREEN);
+	    		grids[rightY][rightX].setFill(Color.GREEN);
+	    		grids[rightY][rightX].setStroke(Color.GREEN);
+            } else if (playerID == 3) {
+                grids[leftY][leftX].setFill(Color.BLUE);
+                grids[leftY][leftX].setStroke(Color.BLUE);
+                grids[rightY][rightX].setFill(Color.BLUE);
+                grids[rightY][rightX].setStroke(Color.BLUE);
+            } else if (playerID == 4) {
+                grids[leftY][leftX].setFill(Color.RED);
+                grids[leftY][leftX].setStroke(Color.RED);
+                grids[rightY][rightX].setFill(Color.RED);
+                grids[rightY][rightX].setStroke(Color.RED);
+            }
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            	@Override
+            	public void handle(MouseEvent event) {
+            		client.sendWallRemoval((leftX / 2), (leftY / 2), WallPlacement.HORIZONTAL);
+            	}
+            });
+    	}
     }
 
     public void displayErrorMessage(String message) {
@@ -396,7 +492,66 @@ public class NetworkedBoardGUI extends Application implements GUI {
         );
     }
 
-    private void setWideWall(int x, int y, int X, int Y) {
+    public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
+    	if (orientation == WallPlacement.VERTICAL) {
+    		int topX = ((topLeftX * 2) + 1);
+    		int topY = topLeftY * 2;
+    		int bottomX = topX;
+    		int bottomY = topY + 2;
+
+			grids[topY][topX].setFill(Color.GREY);
+    		grids[topY][topX].setStroke(Color.GREY);
+    		grids[bottomY][bottomX].setFill(Color.GREY);
+    		grids[bottomY][bottomX].setStroke(Color.GREY);
+    		grids[topY][topX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(topX, topY);
+                }
+            });
+    	} else if (orientation == WallPlacement.HORIZONTAL) {
+    		int leftX = topLeftX * 2;
+    		int leftY = ((topLeftY * 2) + 1);
+    		int rightX = leftX + 2;
+    		int rightY = leftY;
+
+			grids[leftY][leftX].setFill(Color.GREY);
+    		grids[leftY][leftX].setStroke(Color.GREY);
+    		grids[rightY][rightX].setFill(Color.GREY);
+    		grids[rightY][rightX].setStroke(Color.GREY);
+    		grids[leftY][leftX].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    placeWall(leftX, leftY);
+                }
+            });
+    	}
+    }
+
+    /**
+     * Set the occupiable positions
+     * @param x
+     * @param y
+     */
+    private void initialiseOccupiableGrid(int x, int y) {
+        grids[y][x].setHeight(40);
+        grids[y][x].setWidth(40);
+        grids[y][x].setStroke(Color.WHITE);
+        grids[y][x].setFill(Color.WHITE);
+        boardPane.setConstraints(grids[y][x],x,y);
+        boardPane.getChildren().add(grids[y][x]);
+        grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                // convert the 18x18 GUI coordinates to the 9x9 coordinates for the controller (the controller has a 9x9 model of the board)
+                int nineByNineX = x / 2;
+                int nineByNineY = y / 2;
+            	client.sendMove(nineByNineX, nineByNineY);
+            }
+        });
+    }
+
+    private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
         grids[y][x].setStroke(Color.GREY);
@@ -406,12 +561,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                placeWall(x, y);
             }
         });
     }
 
-    private void setThinWall(int x, int y, int X, int Y) {
+    private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
         grids[y][x].setStroke(Color.GREY);
@@ -421,12 +576,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         grids[y][x].setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                setWall(X, Y);
+                placeWall(x, y);
             }
         });
     }
 
-    private void setUnusedSquare(int x, int y, int X, int Y) {
+    private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
         grids[y][x].setStroke(Color.LIGHTSKYBLUE);
@@ -439,52 +594,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the horizontal wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the horizontal wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the horizontal wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation left = PositionWallLocation.LEFT;
-        PositionWallLocation right = PositionWallLocation.RIGHT;
-
-        client.sendWallMove(topLeftPosX, topLeftPosY, right, topRightPosX, topRightPosY, left, bottomLeftPosX, bottomLeftPosY, right, bottomRightPosX, bottomRightPosY, left);
-    }
-
-    public void displayWall(int x, int y) {
-    	grids[y][x].setFill(Color.ORANGE);
-    	grids[y][x].setStroke(Color.ORANGE);
+        client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
     }
 
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;
         int topLeftPosY = y / 2;
-        // coordinates of the position to the bottom left of the vertical wall
-        int bottomLeftPosX = topLeftPosX;
-        int bottomLeftPosY = topLeftPosY + 1;
-        // coordinates of the position to the top right of the vertical wall
-        int topRightPosX = topLeftPosX + 1;
-        int topRightPosY = topLeftPosY;
-        // coordinates of the position to the bottom right of the vertical wall
-        int bottomRightPosX = topLeftPosX + 1;
-        int bottomRightPosY = bottomLeftPosY;
-        PositionWallLocation top = PositionWallLocation.TOP;
-        PositionWallLocation bottom = PositionWallLocation.BOTTOM;
-
-        client.sendWallMove(topLeftPosX, topLeftPosY, bottom, bottomLeftPosX, bottomLeftPosY, top, topRightPosX, topRightPosY, bottom, bottomRightPosX, bottomRightPosY, top);
+        client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.HORIZONTAL);
     }
 
-    public void resetBoard() {
-    	resetWalls();
-    	updatePlayerPawnPosition(4, 0, 1);
-    	updatePlayerPawnPosition(4, 8, 2);
-    	updatePlayerWallCount(10, 1);
-    	updatePlayerWallCount(10, 2);
-    	updatePlayerMoveCount(0, 1);
-    	updatePlayerMoveCount(0, 2);
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 }

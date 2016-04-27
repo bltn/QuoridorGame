@@ -1,10 +1,12 @@
+
 /**
  * Models the coordination of any board object
  *
  * @author Jordan Bird
  * @author Ben Lawton
- * 
+ * @author Thai Hoang
  */
+
 public class Position
 {
 	// Position's coordinates on the grid
@@ -14,18 +16,51 @@ public class Position
     // is at the top or bottom of the grid
     private boolean isTop;
     private boolean isBottom;
-    
-    //is at the top corner or bottom corner of the grid
-    private boolean isTopCorner;
-    private boolean isBottomCorner;
+
+    // is at the left or right of the grid
+    private boolean isLeft;
+    private boolean isRight;
+
+    private boolean isTopLeftCorner;
+    private boolean isBottomRightCorner;
+    private boolean isTopRightCorner;
+    private boolean isBottomLeftCorner;
+
 
     // whether the position has a right, left, top or bottom wall assigned to it
     private boolean hasTopWall;
     private boolean hasRightWall;
     private boolean hasBottomWall;
     private boolean hasLeftWall;
+    
+    private Position camefrom;
+    public Position getCamefrom() {
+		return camefrom;
+	}
 
-    /**
+	public void setCamefrom(Position camefrom) {
+		this.camefrom = camefrom;
+	}
+
+	private boolean Visited=false;
+    public boolean isVisited() {
+		return Visited;
+	}
+
+	public void setVisited(boolean visited) {
+		Visited = visited;
+	}
+
+	private int costsofar;
+	public int getCostsofar() {
+		return costsofar;
+	}
+
+	public void setCostsofar(int costsofar) {
+		this.costsofar = costsofar;
+	}
+
+	/**
      * Constructor for objects of class Position
      * @param  x   the X value
      * @param  y   the Y value
@@ -67,19 +102,41 @@ public class Position
 	public boolean isBottom() {
 		return isBottom;
 	}
-/**
-     * @return whether it's at the top of the board
+    /**
+     * @return whether it's at the left of the board
      */
-	public boolean isTopCorner() {
-		return isTopCorner;
+    public boolean isLeft() {
+    	return isLeft;
+    }
+    /**
+     * @return whether it's at the right of the board
+     */
+    public boolean isRight() {
+    	return isRight;
+    }
+    /**
+     * @return whether it's at the top left of the board
+     */
+	public boolean isTopLeftCorner() {
+		return isTopLeftCorner;
 	}
 
 	/**
-	 * @return whether it's at the bottom of the board
+	 * @return whether it's at the bottom right of the board
 	 */
-	public boolean isBottomCorner() {
-		return isBottomCorner;
+	public boolean isBottomRightCorner() {
+		return isBottomRightCorner;
 	}
+
+    /**
+     * @return whether it's at the top right of the board
+     */
+    public boolean isTopRightCorner() { return isTopRightCorner; }
+
+    /**
+     * @return whether it's at the bottom left of the board
+     */
+    public boolean isBottomLeftCorner() { return isBottomLeftCorner; }
 	/**
 	 * set as a top of the board position
 	 */
@@ -97,26 +154,62 @@ public class Position
 			isBottom = true;
 		}
 	}
-        
-        	/**
-	 * set as a top corner of the board position
+
+    /**
+     * set as a left of the board position
+     */
+    public void setLeft() {
+        if (!isRight) {
+            isLeft = true;
+        }
+    }
+
+    /**
+     * set as a right of the board position
+     */
+    public void setRight() {
+        if (!isLeft) {
+            isRight = true;
+        }
+    }
+
+    /**
+	 * set as a top left corner of the board position
 	 */
-	public void setTopCorner() {
-		if (!isBottomCorner) {
-			isTopCorner = true;
+	public void setTopLeftCorner() {
+		if (!isBottomRightCorner && !isBottomLeftCorner && !isTopRightCorner) {
+			isTopLeftCorner = true;
 		}
 	}
 
 	/**
-	 * set as a bottom corner of the board position
+	 * set as a bottom right corner of the board position
 	 */
-	public void setBottomCorner() {
-		if (!isTopCorner) {
-			isBottomCorner = true;
+	public void setBottomRightCorner() {
+		if (!isTopLeftCorner && !isTopRightCorner && !isBottomLeftCorner) {
+			isBottomRightCorner = true;
 		}
 	}
 
-	/**
+    /**
+     * set as a top right corner of the board
+     */
+    public void setTopRightCorner() {
+        if (!isTopLeftCorner && !isBottomRightCorner && !isBottomLeftCorner) {
+            isBottomRightCorner = true;
+        }
+    }
+
+    /**
+     * set as a bottom left corner of the baord
+     */
+    public void setBottomLeftCorner() {
+        if (!isTopLeftCorner && !isTopRightCorner && !isBottomRightCorner) {
+            isBottomLeftCorner = true;
+        }
+    }
+
+    /**
 	 * Assign or remove a top wall
 	 */
 	public void setHasTopWall(boolean hasWall) {

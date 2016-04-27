@@ -20,6 +20,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import java.io.IOException;
+import java.util.Set;
+
+import javax.sound.midi.SysexMessage;
 
 public class RulesMenuGUI extends Application {
 
@@ -28,12 +32,16 @@ public class RulesMenuGUI extends Application {
     private Text introText;
     private Text standardText;
     private Text challengeText;
+    private Text practiseText;
     private VBox buttonBox;
     private HBox standardButtonBox;
     private HBox challengeButtonBox;
+    private HBox practiseButtonBox;
+    private Button startButton;
     private HBox quitButtonBox;
     private Button backButton;
     private Button quitButton;
+	private Button practiseButton;
     private Button standardButton;
     private Button fourPlayerStandardButton;
     private Button challengeButton;
@@ -43,56 +51,65 @@ public class RulesMenuGUI extends Application {
     public RulesMenuGUI() {
     	pane = new GridPane();
         introText = new Text("Rules");
-        buttonBox = new VBox(100);
-        standardText = new Text("Standard Rules:");
-        challengeText= new Text("Challenge Rules:");
-        
+        buttonBox = new VBox(70);
+        practiseText = new Text(Translate.practiseMode() + ":");
+        standardText = new Text(Translate.standardRules() + ":");
+        challengeText= new Text(Translate.challengeRules() + ":");
+
+        practiseButtonBox = new HBox(10);
         standardButtonBox = new HBox(10);
         challengeButtonBox = new HBox(10);
         quitButtonBox = new HBox(10);
+
+        // add icon to the practise mode button
+        Image practiseImg = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
+        ImageView newPractiseImg = new ImageView(practiseImg);
+        newPractiseImg.setFitHeight(20);
+        newPractiseImg.setFitWidth(20);
+        practiseButton = new Button(Translate.practiseMode(), newPractiseImg);
 
         //add a icon into the 2P standard button
         Image standard2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newStandard2 = new ImageView(standard2);
         newStandard2.setFitHeight(20);
         newStandard2.setFitWidth(20);
-        standardButton = new Button("2P Standard",newStandard2);
-        
+        standardButton = new Button(Translate.twoPlayerStandard(), newStandard2);
+
         //add a icon into the 4P standard button
         Image standard4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView newStandard4 = new ImageView(standard4);
         newStandard4.setFitHeight(20);
         newStandard4.setFitWidth(45);
-        fourPlayerStandardButton = new Button("4P Standard",newStandard4);
-        
+        fourPlayerStandardButton = new Button(Translate.fourPlayerStandard(), newStandard4);
+
         //add a icon into the 2P challenge button
         Image challenge2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView NewChallenge2 = new ImageView(challenge2);
         NewChallenge2.setFitHeight(20);
         NewChallenge2.setFitWidth(20);
-        challengeButton = new Button("2P Challenge",NewChallenge2);
-       
+        challengeButton = new Button(Translate.twoPlayerChallenge(), NewChallenge2);
+
         //add a icon into the 4P challenge button
         Image challenge4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView NewChallenge4 = new ImageView(challenge4);
         NewChallenge4.setFitHeight(20);
         NewChallenge4.setFitWidth(45);
-        fourPlayerChallengeButton = new Button("4P Challenge",NewChallenge4);
-        
+        fourPlayerChallengeButton = new Button(Translate.fourPlayerChallenge(), NewChallenge4);
+
         // add a icon into the quit button
         Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
         ImageView newQuit = new ImageView(quit);
         newQuit.setFitHeight(20);
         newQuit.setFitWidth(20);
-        quitButton = new Button("Quit",newQuit);
-        
+        quitButton = new Button(Translate.quit(), newQuit);
+
         // add a icon into the back button
         Image back = new Image(getClass().getResourceAsStream("icons/back.png"));
         ImageView newBack = new ImageView(back);
         newBack.setFitHeight(20);
         newBack.setFitWidth(20);
-        backButton = new Button("Back",newBack);
-        
+        backButton = new Button(Translate.back(), newBack);
+
         //add background image
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
@@ -100,10 +117,10 @@ public class RulesMenuGUI extends Application {
         BackgroundImage bimg = new BackgroundImage(background,
         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
         BackgroundPosition.CENTER, size);
-        
+
         pane.setBackground(new Background(bimg));
         scene = new Scene(pane, 600, 400);
-        scene.getStylesheets().add("Theme.css");     
+        scene.getStylesheets().add(SettingsGUI.theme);
     }
 
     @Override
@@ -122,56 +139,69 @@ public class RulesMenuGUI extends Application {
     public void setIntroPane() {
     	pane.setAlignment(Pos.CENTER);
         pane.setHgap(25);
-        pane.setVgap(100);
+        pane.setVgap(70);
         pane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
         pane.add(introText, 0, 0, 1, 1);
         introText.setId("text");
-
     }
 
     /**
      * Create the buttons for the menu and set their properties
      */
     public void setButtons() {
+    	practiseText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         standardText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         challengeText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(introText, standardButtonBox, challengeButtonBox,quitButtonBox);
+        buttonBox.getChildren().addAll(introText, practiseButtonBox, standardButtonBox, challengeButtonBox,quitButtonBox);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
-        
+
 		backButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
 		quitButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
     	quitButtonBox.getChildren().addAll(backButton, quitButton);
     	quitButtonBox.setSpacing(10);
     	quitButtonBox.setAlignment(Pos.CENTER_RIGHT);
-    	
+
+    	practiseButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+    	practiseButtonBox.getChildren().addAll(practiseText, practiseButton);
+    	practiseButtonBox.setSpacing(10);
+    	practiseButtonBox.setAlignment(Pos.CENTER);
 
     	standardButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
     	fourPlayerStandardButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
     	standardButtonBox.getChildren().addAll(standardText, standardButton, fourPlayerStandardButton);
     	standardButtonBox.setSpacing(10);
     	standardButtonBox.setAlignment(Pos.CENTER);
-    	
+
     	challengeButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
     	fourPlayerChallengeButton.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
     	challengeButtonBox.getChildren().addAll(challengeText, challengeButton, fourPlayerChallengeButton);
     	challengeButtonBox.setSpacing(10);
     	challengeButtonBox.setAlignment(Pos.CENTER);
-    	
+
+        practiseButton.setPrefWidth(200);
+        practiseButton.setOnAction(new EventHandler<ActionEvent>(){
+        	@Override
+        	public void handle(ActionEvent event) {
+    			LocalBoardGUI gui = new LocalBoardGUI(2);
+    			StandardBoard board = new StandardBoard(2);
+            	Controller controller = new AIGameController(gui, board);
+            	gui.setController(controller);
+            	gui.start(new Stage());
+            	primaryStage.close();
+        	}
+        });
+
         standardButton.setPrefWidth(200);
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override
         	public void handle(ActionEvent event) {
-                LocalBoardGUI gui = new LocalBoardGUI(2);
-            	Board board = new StandardBoard(2);
-            	Controller controller = new LocalGameController(gui, board);
-            	gui.setController(controller);
-            	gui.start(new Stage());
-            	primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "standard");
+                playerNamesGUI.start(primaryStage);
         	}
         });
 
@@ -179,12 +209,8 @@ public class RulesMenuGUI extends Application {
         challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-	            LocalBoardGUI gui = new LocalBoardGUI(2);
-	            Board board = new ChallengeBoard(2);
-	            Controller controller = new LocalGameController(gui, board);
-	            gui.setController(controller);
-	            gui.start(new Stage());
-	            primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "challenge");
+                playerNamesGUI.start(primaryStage);
 			}
         });
 
@@ -192,32 +218,23 @@ public class RulesMenuGUI extends Application {
         fourPlayerStandardButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI(4);
-                Board board = new StandardBoard(4);
-                Controller controller = new LocalGameController(gui, board);
-                gui.setController(controller);
-                gui.start(new Stage());
-                primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "standard");
+                playerNamesGUI.start(primaryStage);
             }
         });
         fourPlayerChallengeButton.setPrefWidth(200);
         fourPlayerChallengeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalBoardGUI gui = new LocalBoardGUI(4);
-                Board board = new ChallengeBoard(4);
-                Controller controller = new LocalGameController(gui, board);
-                gui.setController(controller);
-                gui.start(new Stage());
-                primaryStage.close();
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "challenge");
+                playerNamesGUI.start(primaryStage);
             }
         });
-        
         backButton.setPrefWidth(200);
         backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-              
+
                         MenuGUI gui = new MenuGUI();
                         gui.start(new Stage());
 

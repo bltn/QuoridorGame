@@ -1,111 +1,259 @@
-
 import java.util.ArrayList;
 
-/**
- *
- * @author Khadija Patel
- */
+public class StandardBoard extends Board {
 
-public class StandardBoard extends Board{
-    
-    public StandardBoard() {
-            super();
-            initialiseBoard();
-            player1 = new Player(positions[0][4], 1);
-            player2 = new Player(positions[8][4], 2);  
-            currentPlayer = player1;
+    public StandardBoard(int numberOfPlayers) {
+		super("Standard", numberOfPlayers);
+		initialisePlayer1(getPosition(4, 0));
+		initialisePlayer2(getPosition(4, 8));
+		if (numberOfPlayers == 4) {
+			initialisePlayer3(getPosition(0, 4));
+			initialisePlayer4(getPosition(8, 4));
+		}
+		setCurrentPlayer(getPlayer1());
     }
-    
+
     public boolean movePawn(int posX, int posY) {
-            if (currentPlayer == player1) {
-            if (posX == player2.getPosition().getX() && posY == player2.getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
+        if (getPlayer3() == null) {
+            if (getCurrentPlayer() == getPlayer1()) {
+                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer1().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isBottom()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException(Translate.invalidMove());
+                    }
+                }
             }
-            else {
-                    if (isValidMove(currentPlayer, posX, posY)) {
-                            player1.setPosition(getPosition(posX, posY));
-                            currentPlayer.incrementMoveCount();
-                            if (getPosition(posX, posY).isBottom()) {
-                                    reset();
-                                    return true;
-                            }
-                            switchPlayer();
-                            return false;
+            else if (getCurrentPlayer() == getPlayer2()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer2().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isTop()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException(Translate.invalidMove());
+                    }
+                }
+            }
+        }
+        else {
+            if (getCurrentPlayer() == getPlayer1()) {
+                if (posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                } else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer1().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isBottom()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException(Translate.invalidMove());
+                    }
+                }
+            } else if (getCurrentPlayer() == getPlayer2()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                } else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer2().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isTop()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
+                    } else {
+                        throw new IllegalArgumentException(Translate.invalidMove());
+                    }
+                }
+            }
+            else if (getCurrentPlayer() == getPlayer3()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer4().getPosition().getX() && posY == getPlayer4().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer3().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isRight()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
                     }
                     else {
-                            throw new IllegalArgumentException("That isn't a valid move");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
+                }
             }
-    }
-    else if (currentPlayer == player2) {
-            if (posX == player1.getPosition().getX() && posY == player1.getPosition().getY()) {
-                    throw new IllegalArgumentException("Position is occupied");
-            }
-            else {
-                    if (isValidMove(currentPlayer, posX, posY)) {
-                            player2.setPosition(getPosition(posX, posY));
-                            currentPlayer.incrementMoveCount();
-                            if (getPosition(posX, posY).isTop()) {
-                                    reset();
-                                    return true;
-                            }
-                            switchPlayer();
-                            return false;
+            else if (getCurrentPlayer() == getPlayer4()) {
+                if (posX == getPlayer1().getPosition().getX() && posY == getPlayer1().getPosition().getY() || posX == getPlayer2().getPosition().getX() && posY == getPlayer2().getPosition().getY() || posX == getPlayer3().getPosition().getX() && posY == getPlayer3().getPosition().getY()) {
+                    throw new IllegalArgumentException(Translate.positionOccupied());
+                }
+                else {
+                    if (isValidMove(getCurrentPlayer(), posX, posY)) {
+                        getPlayer4().setPosition(getPosition(posX, posY));
+                        getCurrentPlayer().incrementMoveCount();
+                        if (getPosition(posX, posY).isLeft()) {
+                            reset();
+                            return true;
+                        }
+                        switchPlayer();
+                        return false;
                     }
                     else {
-                            throw new IllegalArgumentException("That isn't a valid move.");
+                        throw new IllegalArgumentException(Translate.invalidMove());
                     }
+                }
             }
-    }
-            return false;
+        }
+        return false;
     }
 
     private void reset() {
-            player1.setMoveCount(0);
-            player2.setMoveCount(0);
-            player1.setWallCount(10);
-            player2.setWallCount(10);
-            player1.setPosition(getPosition(4, 0));
-            player2.setPosition(getPosition(4, 8));
-            currentPlayer = player1;
-            resetWalledOffPositions();
+        getPlayer1().setMoveCount(0);
+        getPlayer2().setMoveCount(0);
+        getPlayer1().setWallCount(10);
+        getPlayer2().setWallCount(10);
+        getPlayer1().setPosition(getPosition(4, 0));
+        getPlayer2().setPosition(getPosition(4, 8));
+        if (getPlayer3() != null) {
+            getPlayer3().setMoveCount(0);
+            getPlayer4().setMoveCount(0);
+            getPlayer3().setWallCount(10);
+            getPlayer4().setWallCount(10);
+            getPlayer3().setPosition(getPosition(0, 4));
+            getPlayer4().setPosition(getPosition(8, 4));
+        }
+        setCurrentPlayer(getPlayer1());
+        resetWalledOffPositions();
     }
-	/**
-	 * Assign borders to the board and set top and bottom grids as winning positions
-	 */
-   private void initialiseBoard() {
-            positions = new Position[9][9];
 
-            //initialise Position objects
-            for (int x = 0; x < 9; x++) {
-                    for (int y = 0; y < 9; y++) {
-                            positions[y][x] = new Position(x, y);
-                    }
-            }
-            //mark top positions as winners
-            for (int x = 0; x < 9; x++) {
-                    positions[0][x].setTop();
-            }
-            //mark bottom positions as winners
-            for (int x = 0; x < 9; x++) {
-                    positions[8][x].setBottom();
-            }
+    public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {
+		if (getCurrentPlayer().hasWalls()) {
+			if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
+				Position topLeft = getPosition(topLeftX, topLeftY);
+				if (wallPlacementIsValid(topLeft, orientation)) {
+					assignWallsFromTopLeftClockwise(topLeft, orientation);
 
-            //set the board's top borders (walls)
-            for (int x = 0; x < 9; x++) {
-                    positions[0][x].setHasTopWall(true);
-            }
-            //set the board's right borders (walls)
-            for (int y = 0; y < 9; y++) {
-                    positions[y][8].setHasRightWall(true);
-            }
-            //set the board's bottom borders (walls)
-            for (int x = 0; x < 9; x++) {
-                    positions[8][x].setHasBottomWall(true);
-            }
-            //set the board's left borders (walls)
-            for (int y = 0; y < 9; y++) {
-                    positions[y][0].setHasLeftWall(true);
-            }
-    }
+					if (!Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
+							|| !Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
+
+						unassignWalls(topLeft, orientation);
+						throw new IllegalStateException(Translate.blockingMove());
+					}
+
+					getCurrentPlayer().incrementMoveCount();
+					getCurrentPlayer().decrementWallCount();
+					switchPlayer();
+				} else {
+					throw new IllegalStateException(Translate.invalidMove());
+				}
+			} else {
+				throw new IllegalStateException(Translate.invalidMove());
+			}
+		} else {
+			throw new IllegalStateException(Translate.invalidMove());
+		}
+	}
+
+	public void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
+		Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
+		Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
+		Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
+
+		if (orientation == WallPlacement.VERTICAL) {
+			topLeft.setHasRightWall(true);
+			addWalledOffPosition(topLeft);
+			topRight.setHasLeftWall(true);
+			addWalledOffPosition(topRight);
+			bottomRight.setHasLeftWall(true);
+			addWalledOffPosition(bottomRight);
+			bottomLeft.setHasRightWall(true);
+			addWalledOffPosition(bottomLeft);
+		} else if (orientation == WallPlacement.HORIZONTAL) {
+			topLeft.setHasBottomWall(true);
+			addWalledOffPosition(topLeft);
+			topRight.setHasBottomWall(true);
+			addWalledOffPosition(topRight);
+			bottomRight.setHasTopWall(true);
+			addWalledOffPosition(bottomRight);
+			bottomLeft.setHasTopWall(true);
+			addWalledOffPosition(bottomLeft);
+		}
+	}
+
+	public void unassignWalls(Position topLeft, WallPlacement orientation) {
+		Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
+		Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
+		Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
+		if (orientation == WallPlacement.VERTICAL) {
+			topLeft.setHasRightWall(false);
+			topRight.setHasLeftWall(false);
+			bottomRight.setHasLeftWall(false);
+			bottomLeft.setHasRightWall(false);
+		} else if (orientation == WallPlacement.HORIZONTAL) {
+			topLeft.setHasBottomWall(false);
+			topRight.setHasBottomWall(false);
+			bottomRight.setHasTopWall(false);
+			bottomLeft.setHasTopWall(false);
+		}
+	}
+
+	public boolean wallPlacementIsValid(Position topLeft, WallPlacement orientation) {
+		boolean isValid = true;
+
+		if (orientation == WallPlacement.VERTICAL) {
+			if (topLeft.hasRightWall()) {
+				isValid = false;
+			}
+			if (topLeft.getY() == 8) {
+				isValid = false;
+			} else if (getPosition(topLeft.getX(), (topLeft.getY() + 1)).hasRightWall()) {
+				isValid = false;
+			}
+			if (topLeft.hasBottomWall() && getPosition((topLeft.getX() + 1), topLeft.getY()).hasBottomWall()) {
+				isValid = false;
+			}
+		} else if (orientation == WallPlacement.HORIZONTAL) {
+			if (topLeft.hasBottomWall()) {
+				isValid = false;
+			}
+			if (topLeft.getX() == 8) {
+				isValid = false;
+			} else if (getPosition((topLeft.getX() + 1), topLeft.getY()).hasBottomWall()) {
+				isValid = false;
+			}
+			if (topLeft.hasRightWall() && getPosition(topLeft.getX(), (topLeft.getY() + 1)).hasRightWall()) {
+				isValid = false;
+			}
+		} else {
+			isValid = false;
+		}
+		return isValid;
+	}
 }

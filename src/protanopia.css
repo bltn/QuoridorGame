@@ -1,8 +1,10 @@
+/**
+ * Stylesheet for Quoridor - Team 16
+ * @author Jordan Bird
+ */
 
- .background {
-
+.background {
  	-fx-background-color: #81BEF7;
-
  }
 
 .button {

@@ -6,8 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -15,11 +15,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 
 public class MenuGUI extends Application {
 
@@ -65,7 +60,7 @@ public class MenuGUI extends Application {
     	ImageView newsettings = new ImageView(settings);
     	newsettings.setFitHeight(20);
     	newsettings.setFitWidth(20);
-    	settingsButton = new Button("Settings",newsettings);
+    	settingsButton = new Button(Translate.settings(),newsettings);
 
     	//add background image
     	Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -95,7 +90,7 @@ public class MenuGUI extends Application {
     public void setIntroPane() {
         introPane.setAlignment(Pos.CENTER);
         introPane.setHgap(25);
-        introPane.setVgap(70);
+        introPane.setVgap(75);
         introPane.add(buttonBox, 0, 1);
         introText.setTextAlignment(TextAlignment.CENTER);
         introText.setFont(Font.font("Agency FB", FontWeight.BOLD, 70));
@@ -113,7 +108,7 @@ public class MenuGUI extends Application {
         buttonBox.getChildren().add(settingsButton);
         buttonBox.getChildren().add(quitButton);
         buttonBox.setAlignment(Pos.CENTER);
-        startButton.setPrefWidth(200);
+        startButton.setPrefWidth(350);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -121,14 +116,14 @@ public class MenuGUI extends Application {
             	gui.start(new Stage());
             };
         });
-        quitButton.setPrefWidth(200);
+        quitButton.setPrefWidth(350);
         quitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.exit(0);
+            	System.exit(0);
             }
         });
-        multiplayerButton.setPrefWidth(200);
+        multiplayerButton.setPrefWidth(350);
         multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

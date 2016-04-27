@@ -5,7 +5,6 @@ import java.net.Socket;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 public class GameClient extends Thread {
 
@@ -66,7 +65,7 @@ public class GameClient extends Thread {
 				initThread();
                 showAlert("Connected to server");
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				SystemLogger.logError(e.getMessage());
                 showAlert("Error connecting to server");
 			}
 		}
@@ -76,19 +75,21 @@ public class GameClient extends Thread {
 		out.println("move " + x + " " + y + " " + playerID);
 	}
 
-	public void sendWallMove(int topLeftX, int topLeftY, PositionWallLocation border1, int bottomLeftX, int bottomLeftY, PositionWallLocation border2,
-			int topRightX, int topRightY, PositionWallLocation border3, int bottomRightX, int bottomRightY, PositionWallLocation border4) {
-		out.println("wall " + topLeftX + " " + topLeftY + " " + border1 + " " + bottomLeftX + " " + bottomLeftY + " " + border2 + " " + topRightX + " " +
-			topRightY + " " + border3 + " " + bottomRightX + " " + bottomRightY + " " + border4 + " " + playerID);
+	public void sendWallMove(int topLeftX, int topLeftY, WallPlacement orientation) {
+		out.println("wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
+	}
+
+	public void sendWallRemoval(int topLeftX, int topLeftY, WallPlacement orientation) {
+
+		out.println("remove-wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
 	}
 
 	public void requestCurrentPlayerAvailableMoves() {
 		out.println("available");
 	}
 
-	public void sendMessageToServer(String message) {
-		System.out.println("Message to be sent: " + message);
-		out.println(message);
+	public void requestInitialPlayerPawnPositions() {
+		out.println("start-coordinates");
 	}
 
 	public boolean guiIsLaunched() {
@@ -133,38 +134,55 @@ public class GameClient extends Thread {
 				else if (commands[0].equals("reset")) {
                     gui.resetWalls();
                 }
+				else if (commands[0].equals("remove-wall-display")) {
+					removeWallDisplay(commands);
+				}
+				else if (commands[0].equals("coordinate")) {
+					int player1X = Integer.parseInt(commands[1]);
+					int player1Y = Integer.parseInt(commands[2]);
+					int player2X = Integer.parseInt(commands[3]);
+					int player2Y = Integer.parseInt(commands[4]);
+					int player3X;
+					int player3Y;
+					int player4X;
+					int player4Y;
+                    if (gui.getNumberOfPlayers() == 2) {
+                        player3X = -1;
+                        player3Y = -1;
+                        player4X = -1;
+                        player4Y = -1;
+                    } else {
+                        player3X = Integer.parseInt(commands[5]);
+                        player3Y = Integer.parseInt(commands[6]);
+                        player4X = Integer.parseInt(commands[7]);
+                        player4Y = Integer.parseInt(commands[8]);
+                    }
+					Platform.runLater(new Runnable() {
+					   @Override
+					   public void run() {
+					       gui.setInitialPawnPositions(player1X, player1Y, player2X, player2Y, player3X, player3Y, player4X, player4Y);
+					   }
+					});
+				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			SystemLogger.logError(e.getMessage());
 		}
 	}
 
-    private void updateWallPosition(String[] commands) {
-        int x = Integer.parseInt(commands[1]);
-        int y = Integer.parseInt(commands[2]);
-        PositionWallLocation border = PositionWallLocation.valueOf(commands[3]);
-        x *= 2;
-        y *= 2;
+	private void removeWallDisplay(String[] commands) {
+		int topLeftX = Integer.parseInt(commands[1]);
+		int topLeftY = Integer.parseInt(commands[2]);
+		WallPlacement orientation = WallPlacement.valueOf(commands[3]);
+		gui.removeWallDisplay(topLeftX, topLeftY, orientation);
+	}
 
-        switch (border) {
-            case LEFT: {
-                x -= 1;
-                break;
-            }
-            case RIGHT: {
-                x += 1;
-                break;
-            }
-            case TOP: {
-                y -= 1;
-                break;
-            }
-            case BOTTOM: {
-                y += 1;
-                break;
-            }
-        }
-        gui.displayWall(x, y);
+    private void updateWallPosition(String[] commands) {
+        int topLeftX = Integer.parseInt(commands[1]);
+        int topLeftY = Integer.parseInt(commands[2]);
+        WallPlacement orientation = WallPlacement.valueOf(commands[3]);
+        int playerID = Integer.parseInt(commands[4]);
+        gui.displayWall(topLeftX, topLeftY, orientation, playerID);
     }
 
     private void displayErrorMessage(String[] commands) {
