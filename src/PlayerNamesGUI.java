@@ -20,6 +20,7 @@ public class PlayerNamesGUI extends Application {
     private Scene scene;
     private GridPane namesPane;
     private Text namesText;
+    private Text instructionsText;
     public static TextField player1Name;
     public static TextField player2Name;
     public static TextField player3Name;
@@ -49,6 +50,7 @@ public class PlayerNamesGUI extends Application {
 
         namesPane = new GridPane();
         namesText = new Text(Translate.name());
+        instructionsText = new Text(Translate.enterNames());
         player1Name = new TextField("Player 1");
         player2Name = new TextField("Player 2");
         player3Name = new TextField("Player 3");
@@ -95,6 +97,7 @@ public class PlayerNamesGUI extends Application {
 
         namesPane = new GridPane();
         namesText = new Text(Translate.name());
+        instructionsText = new Text(Translate.enterNames());
         player1Name = new TextField("Player 1");
         player2Name = new TextField("Player 2");
         player3Name = new TextField("Player 3");
@@ -155,13 +158,16 @@ public class PlayerNamesGUI extends Application {
         nameBoxRow2.setSpacing(10);
         nameBoxRow1.getChildren().addAll(player1Name, player2Name);
         nameBoxRow2.getChildren().addAll(player3Name, player4Name);
+        instructionsText.setTextAlignment(TextAlignment.CENTER);
+        instructionsText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
+        buttonBox.getChildren().add(instructionsText);
         buttonBox.getChildren().add(nameBoxRow1);
         if (numberOfPlayers == 4) {
             buttonBox.getChildren().add(nameBoxRow2);
         }
         buttonBox.getChildren().add(startButton);
         buttonBox.setAlignment(Pos.CENTER);
-        startButton.setPrefWidth(350);
+        startButton.setPrefWidth(300);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

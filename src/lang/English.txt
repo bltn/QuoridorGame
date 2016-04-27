@@ -35,3 +35,7 @@ Winner
 Play
 Done
 Names
+Enter Your Names
+Language
+Colour
+Rules

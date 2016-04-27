@@ -44,12 +44,12 @@ public class SettingsGUI extends Application{
         this.menuGUI = menuGUI;
         settingsPane = new GridPane();
         buttonBox = new VBox();
-        languageText = new Text("Language");
+        languageText = new Text(Translate.languages());
         languageBox = new HBox();
         languageText.setId("text");
         doneBox = new HBox();
 
-        colourText = new Text("Colour");
+        colourText = new Text(Translate.colour());
         colourBox = new HBox();
         colourText.setId("text");
 
@@ -145,6 +145,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "English";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -155,6 +156,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "French";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -165,6 +167,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "Spanish";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -175,6 +178,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "Chinese";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -257,5 +261,10 @@ public class SettingsGUI extends Application{
         scene.getStylesheets().remove(scene.getStylesheets().get(0));
         // Add the new stylesheet.
         scene.getStylesheets().add(theme);
+    }
+
+    private void updateLanguage() {
+        languageText.setText(Translate.languages());
+        colourText.setText(Translate.colour());
     }
 }
