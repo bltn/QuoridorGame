@@ -22,6 +22,7 @@ public class SettingsGUI extends Application{
     private Text languageText;
     private Text colourText;
     private VBox buttonBox;
+    private HBox doneBox;
     private HBox languageBox;
     private HBox colourBox;
     private Button englishButton;
@@ -46,6 +47,7 @@ public class SettingsGUI extends Application{
         languageText = new Text("Language");
         languageBox = new HBox();
         languageText.setId("text");
+        doneBox = new HBox();
 
         colourText = new Text("Colour");
         colourBox = new HBox();
@@ -89,7 +91,12 @@ public class SettingsGUI extends Application{
         tritanopiaButton = new Button("Tritanopia");
         deuteranopiaButton = new Button("Deuteranopia");
 
-        doneButton = new Button(Translate.done());
+        // add a icon into the done button
+    	Image done = new Image(getClass().getResourceAsStream("icons/done.png"));
+    	ImageView newDoneButton = new ImageView(done);
+    	newDoneButton.setFitHeight(20);
+    	newDoneButton.setFitWidth(20);
+    	doneButton = new Button("Done",newDoneButton);
 
         // Background
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -121,12 +128,16 @@ public class SettingsGUI extends Application{
         buttonBox.setPadding(new Insets(15, 15, 15, 15));
         buttonBox.setSpacing(10);
         buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().addAll(languageText, languageBox, colourText, colourBox, doneButton);
+        buttonBox.getChildren().addAll(languageText, languageBox, colourText, colourBox, doneBox);
 
         languageBox.setPadding(new Insets(15, 15, 15, 15));
         languageBox.setSpacing(10);
         languageBox.getChildren().addAll(englishButton, frenchButton, spanishButton, chineseButton);
         languageBox.setAlignment(Pos.CENTER);
+
+        doneBox.getChildren().addAll(doneButton);
+        doneBox.setAlignment(Pos.CENTER);
+
 
         englishButton.setPrefWidth(175);
         englishButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -236,7 +247,9 @@ public class SettingsGUI extends Application{
         settingsPane.add(colourBox, 0, 5);
         colourText.setTextAlignment(TextAlignment.CENTER);
         colourText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
-        settingsPane.add(colourText, 0, 0, 1, 13);
+        settingsPane.add(colourText, 0, 0, 1, 11);
+
+        settingsPane.add(doneBox, 0, 10);
     }
 
     private void updateTheme() {
