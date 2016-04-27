@@ -41,11 +41,8 @@ public class SettingsGUI extends Application{
 
     public SettingsGUI(MenuGUI menuGUI) {
         this.menuGUI = menuGUI;
-
         settingsPane = new GridPane();
-
         buttonBox = new VBox();
-
         languageText = new Text("Language");
         languageBox = new HBox();
         languageText.setId("text");
@@ -58,6 +55,34 @@ public class SettingsGUI extends Application{
         frenchButton = new Button("Français");
         spanishButton = new Button("Español");
         chineseButton = new Button("中文");
+
+        // add a icon into the English button
+    	Image english = new Image(getClass().getResourceAsStream("icons/gbr.png"));
+    	ImageView newEnglishButton = new ImageView(english);
+    	newEnglishButton.setFitHeight(20);
+    	newEnglishButton.setFitWidth(20);
+    	englishButton = new Button("English",newEnglishButton);
+
+        // add a icon into the French button
+    	Image french = new Image(getClass().getResourceAsStream("icons/fr.png"));
+    	ImageView newFrenchButton = new ImageView(french);
+    	newFrenchButton.setFitHeight(20);
+    	newFrenchButton.setFitWidth(20);
+    	frenchButton = new Button("Fran�ais",newFrenchButton);
+
+        // add a icon into the Spanish button
+    	Image spanish = new Image(getClass().getResourceAsStream("icons/sp.png"));
+    	ImageView newSpanishButton = new ImageView(spanish);
+    	newSpanishButton.setFitHeight(20);
+    	newSpanishButton.setFitWidth(20);
+    	spanishButton = new Button("Espa�ol",newSpanishButton);
+
+        // add a icon into the Chinese button
+    	Image chinese = new Image(getClass().getResourceAsStream("icons/cn.png"));
+    	ImageView newChineseButton = new ImageView(chinese);
+    	newChineseButton.setFitHeight(20);
+    	newChineseButton.setFitWidth(20);
+    	chineseButton = new Button("Chinese",newChineseButton);
 
         standardButton = new Button("Standard");
         protanopiaButton = new Button("Protanopia");
@@ -202,6 +227,16 @@ public class SettingsGUI extends Application{
         settingsPane.setHgap(25);
         settingsPane.setVgap(10);
         settingsPane.add(buttonBox, 0, 1);
+
+        settingsPane.add(languageBox, 0, 1);
+        languageText.setTextAlignment(TextAlignment.CENTER);
+        languageText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
+        settingsPane.add(languageText, 0, 0, 1, 1);
+
+        settingsPane.add(colourBox, 0, 5);
+        colourText.setTextAlignment(TextAlignment.CENTER);
+        colourText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
+        settingsPane.add(colourText, 0, 0, 1, 13);
     }
 
     private void updateTheme() {
