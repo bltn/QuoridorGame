@@ -12,44 +12,51 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.Set;
-
+/**
+ * LocalBoardGUI draws an 18x18 board for game that is being played locally. The
+ * stats for each player are also displayed on the window. This class acts as a
+ * view for the game. It extends the Application class from JavaFX and also
+ * implements the GUI interface
+ *
+ * @autho Jack Zhang
+ * @author Junaid Rasheed
+ * @author Ben Lawton
+ * @author Jordan Bird
+ */
 public class LocalBoardGUI extends Application implements GUI {
 
-	//the scene used to display in the window
+	// The scene used to display in the window
     private final Scene scene;
     private final int width = 17;
     private final int height = 17;
+
+    // root pane which contains all the information from board to stats
+    private VBox rootPane;
+
+    private GridPane boardPane;
+
+    private final HBox player1StatsPane = new HBox(120);
     private final HBox player2StatsPane = new HBox(120);
     private final HBox player3StatsPane = new HBox(120);
     private final HBox player4StatsPane = new HBox(120);
-    private final HBox buttonPane = new HBox(10);
 
+    private final HBox buttonPane = new HBox(10);
     private final HBox errorPane = new HBox();
     private Text errorPaneText;
 
-    //root pane which contain all the information from board to statistic
-    private VBox rootPane;
-    // player one stats
-    private final HBox player1StatsPane = new HBox(120);
-    // player two stats
-    private GridPane boardPane;
-    //amount of moves the player has made
+    // Stats for each player
     private Text player1Moves;
     private Text player1Title;
-    //amount of walls the player has
     private int player1WallCount;
     private Text player1Walls;
-    //same as player one move
+
     private Text player2Moves;
     private Text player2Title;
-    //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
 
@@ -63,7 +70,6 @@ public class LocalBoardGUI extends Application implements GUI {
     private int player4WallCount;
     private Text player4Walls;
 
-    //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
     private Circle firstPawn;
@@ -79,7 +85,7 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
-     * @param fourPlayerMode
+     * @param fourPlayerMode false: two players, true: four players
      */
     public LocalBoardGUI(boolean fourPlayerMode) {
         rootPane = new VBox();
@@ -124,6 +130,10 @@ public class LocalBoardGUI extends Application implements GUI {
     	this.controller = controller;
     }
 
+    /**
+     * Set up the game window and then draw it
+     * @param primaryStage The window to draw to
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
@@ -162,9 +172,9 @@ public class LocalBoardGUI extends Application implements GUI {
 	   }
    }
 
-/**
- * Sets the player stats so they can be displayed in the UI
- */
+    /**
+     * Draw and position the player stats onto the scene
+     */
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
         player1Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
@@ -201,10 +211,10 @@ public class LocalBoardGUI extends Application implements GUI {
     /**
      * Draw a player piece at a position on the board
      *
-     * @param pawn	the Player to be drawn
-     * @param colour	the colour of the piece
-     * @param x		the horizontal co-ordinate of the player
-     * @param y		the vertical co-ordinate of the player
+     * @param pawn	    The Player to be drawn
+     * @param colour	The colour of the piece
+     * @param x		    The horizontal co-ordinate of the player
+     * @param y		    The vertical co-ordinate of the player
      */
     public void setPawn(Circle pawn, Color colour, int x, int y) {
         pawn.setFill(colour);
@@ -215,7 +225,7 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
-     *  Checks whether the program is currently drawing
+     * Checks whether the program is currently drawing
      * @return		the value of isDrawing
      */
     public boolean isDrawing() {
@@ -232,8 +242,8 @@ public class LocalBoardGUI extends Application implements GUI {
 
     /**
      * Highlights all of the surrounding valid places for the player to occupy
-     * @param x		the x co-ordinate
-     * @param y		the y co-ordinate
+     * @param x		the x co-ordinate of a valid position to move to
+     * @param y		the y co-ordinate of a valid position to move to
      */
     public void highlightPositionAvailability(int x, int y) {
 
@@ -257,6 +267,11 @@ public class LocalBoardGUI extends Application implements GUI {
         );
     }
 
+    /**
+     * Updates the move count stat for a specified player
+     * @param moveCount The new move count
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerMoveCount(int moveCount, int playerID) {
     	if (playerID == 1) {
     		player1Moves.setText((Translate.moves() + ": ") + moveCount);
@@ -270,6 +285,11 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Update the wall count for a specified player
+     * @param wallCount The new wall count
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerWallCount(int wallCount, int playerID) {
     	if (playerID == 1) {
     		player1WallCount = wallCount;
@@ -287,6 +307,12 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Update the position of the pawn for a specified player
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerPawnPosition(int x, int y, int playerID) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
@@ -315,7 +341,7 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
-     * change the active player to the next player
+     * Set the active player to the next player
      */
     public void updateActivePlayer(int playerID) {
         if (playerID == 1) {
@@ -350,6 +376,13 @@ public class LocalBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Display a wall that has been placed onto the GUI
+     * @param topLeftX The X coordinate that is at the top left of the wall
+     * @param topLeftY The Y coordinate that is at the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     * @param playerID The ID of the player that placed the wall
+     */
     public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	if (orientation == WallPlacement.VERTICAL) {
     		int topX = ((topLeftX * 2) + 1);
@@ -420,6 +453,12 @@ public class LocalBoardGUI extends Application implements GUI {
     	}
     }
 
+    /**
+     * Remove a wall from the GUI that has been removed by one of the players
+     * @param topLeftX The X coordinate that is at the top left of the wall
+     * @param topLeftY The Y coordinate that is at the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     */
     public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
     	if (orientation == WallPlacement.VERTICAL) {
     		int topX = ((topLeftX * 2) + 1);
@@ -456,6 +495,10 @@ public class LocalBoardGUI extends Application implements GUI {
     	}
     }
 
+    /**
+     * Display an error message to the player
+     * @param message The message to display
+     */
     public void displayErrorMessage(String message) {
     	errorPaneText.setText(message);
     	new java.util.Timer().schedule(
@@ -470,7 +513,7 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Set the alignment of all instantiated fields to the centre of the pane
+     * Set the alignment of all instantiated fields to the centre of the pane and then add everything to the root pane
      */
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
@@ -494,7 +537,8 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Create the board spaces and add them to the 2D array
+     * Create the board spaces and add them to a 2D array. Also adds the highlight positions button to the bottom
+     * of the board
      */
     private void initialiseBoardSpaces() {
     	for(int x = 0 ; x < width; x++){
@@ -528,7 +572,8 @@ public class LocalBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Allows a user to place a wall on a wall space that is available
+     * Allows a user to place a wall on a wall space that is available. This method calls the appropriate method for
+     * placing a thin wall or for placing a wide wall.
      */
    private void placeWall(int x, int y) {
        // tall, thin wall
@@ -543,8 +588,8 @@ public class LocalBoardGUI extends Application implements GUI {
 
     /**
      * Set the occupiable positions
-     * @param x
-     * @param y
+     * @param x The X coordinate of an occupiable position
+     * @param y The Y coordinate of an occupiable position
      */
     private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
@@ -564,6 +609,11 @@ public class LocalBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw a wide wall space
+     * @param x The X coordinate of a wide wall
+     * @param y The Y coordinate of a wide wall
+     */
     private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
@@ -579,6 +629,11 @@ public class LocalBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw a thin wall space
+     * @param x The X coordinate of a thin wall
+     * @param y The Y coordinate of a thin wall
+     */
     private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
@@ -594,6 +649,11 @@ public class LocalBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw the space that is unused in the 18x18 grid
+     * @param x The X coordinate of an unused space
+     * @param y The Y coordinate of an unused space
+     */
     private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
@@ -603,6 +663,11 @@ public class LocalBoardGUI extends Application implements GUI {
         boardPane.getChildren().add(grids[y][x]);
     }
 
+    /**
+     * Place a thin wall
+     * @param x The X coordinate of the wall to be placed
+     * @param y The Y coordinate of the wall to be placed
+     */
     private void placeThinWall(int x, int y) {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
@@ -610,6 +675,11 @@ public class LocalBoardGUI extends Application implements GUI {
         controller.placeWall(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL, controller.getCurrentPlayer().getID());
     }
 
+    /**
+     * Place a wide wall
+     * @param x The X coordinate of the wall to be placed
+     * @param y The Y coordinate of the wall to be placed
+     */
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;

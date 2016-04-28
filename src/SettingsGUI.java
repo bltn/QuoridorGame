@@ -14,6 +14,15 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+/**
+ * SettingsGUI draws a GUI which allows a player to change the language and the
+ * theme of the game. After a new language or theme is chosen. The settings GUI
+ * and the main menu GUI is updated to reflect the new change.
+ *
+ * @author Junaid Rasheed
+ * @author Khadija Patel
+ * @author Ben Lawton
+ */
 public class SettingsGUI extends Application{
 
     private Scene scene;
@@ -52,28 +61,28 @@ public class SettingsGUI extends Application{
         colourBox = new HBox();
         colourText.setId("text");
 
-        // add a icon into the English button
+        // add an icon into the English button
     	Image english = new Image(getClass().getResourceAsStream("icons/gbr.png"));
     	ImageView newEnglishButton = new ImageView(english);
     	newEnglishButton.setFitHeight(20);
     	newEnglishButton.setFitWidth(20);
     	englishButton = new Button("English",newEnglishButton);
 
-        // add a icon into the French button
+        // add an icon into the French button
     	Image french = new Image(getClass().getResourceAsStream("icons/fr.png"));
     	ImageView newFrenchButton = new ImageView(french);
     	newFrenchButton.setFitHeight(20);
     	newFrenchButton.setFitWidth(20);
     	frenchButton = new Button("Français",newFrenchButton);
 
-        // add a icon into the Spanish button
+        // add an icon into the Spanish button
     	Image spanish = new Image(getClass().getResourceAsStream("icons/sp.png"));
     	ImageView newSpanishButton = new ImageView(spanish);
     	newSpanishButton.setFitHeight(20);
     	newSpanishButton.setFitWidth(20);
     	spanishButton = new Button("Español",newSpanishButton);
 
-        // add a icon into the Chinese button
+        // add an icon into the Chinese button
     	Image chinese = new Image(getClass().getResourceAsStream("icons/cn.png"));
     	ImageView newChineseButton = new ImageView(chinese);
     	newChineseButton.setFitHeight(20);
@@ -85,7 +94,7 @@ public class SettingsGUI extends Application{
         tritanopiaButton = new Button("Tritanopia");
         deuteranopiaButton = new Button("Deuteranopia");
 
-        // add a icon into the done button
+        // add an icon into the done button
     	Image done = new Image(getClass().getResourceAsStream("icons/done.png"));
     	ImageView newDoneButton = new ImageView(done);
     	newDoneButton.setFitHeight(20);
@@ -102,6 +111,10 @@ public class SettingsGUI extends Application{
         scene.getStylesheets().add(theme);
     }
 
+    /**
+     * Set up the GUI and then draw it
+     * @param stage The window to use to draw the GUI
+     */
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -112,6 +125,9 @@ public class SettingsGUI extends Application{
         stage.show();
     }
 
+    /**
+     * Set up the properties for each button
+     */
     public void setButtons() {
         languageText.setTextAlignment(TextAlignment.CENTER);
         languageText.setFont(Font.font("Agency FB", FontWeight.BOLD, 50));
@@ -231,8 +247,9 @@ public class SettingsGUI extends Application{
         });
     }
 
-
-
+    /**
+     * Add the button boxes to the main settings pane and centralise everything
+     */
     public void setSettingsPane() {
         settingsPane.setAlignment(Pos.CENTER);
         settingsPane.setHgap(25);
@@ -252,6 +269,9 @@ public class SettingsGUI extends Application{
         settingsPane.add(doneBox, 0, 10);
     }
 
+    /**
+     * Update the theme after it has been changed
+     */
     private void updateTheme() {
         // Remove the stylesheet currently in use
         scene.getStylesheets().remove(scene.getStylesheets().get(0));
@@ -259,6 +279,9 @@ public class SettingsGUI extends Application{
         scene.getStylesheets().add(theme);
     }
 
+    /**
+     * Update the language after it has been changed
+     */
     private void updateLanguage() {
         languageText.setText(Translate.languages());
         colourText.setText(Translate.colour());

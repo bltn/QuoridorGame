@@ -1,16 +1,21 @@
 import javafx.scene.text.Text;
-
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * StatsWriter uses the player names to store the players and the winners
+ * of each game into a CSV file. First, the names of each of the players
+ * who played in the game is stored and then the name of the winner
+ * is written to the CSV file.
+ *
+ * @author Junaid Rasheed
+ */
 public class StatsWriter {
 
-    private int winnerID;
     private Text winnerName;
     private int numberOfPlayers;
 
     public StatsWriter(int winnerID, int numberOfPlayers) {
-        this.winnerID = winnerID;
         this.numberOfPlayers = numberOfPlayers;
         switch (winnerID) {
             case 1:

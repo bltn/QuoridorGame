@@ -1,5 +1,13 @@
-import java.util.ArrayList;
-
+/**
+ * StandardBoard is used as model class to model a board being played with
+ * the standard rule set. It models a 9x9 board for the game. It also extends
+ * the Board class.
+ *
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ * @author Khadija Patel
+ * @author Thai Hoang
+ */
 public class StandardBoard extends Board {
 
     public StandardBoard(boolean fourPlayerMode) {
@@ -13,6 +21,12 @@ public class StandardBoard extends Board {
 		setCurrentPlayer(getPlayer1());
     }
 
+    /**
+     * Move the currently active pawn to it's new position
+     * @param posX The X coordinate to move the pawn to
+     * @param posY The Y coordinate to move the pawn to
+     * @return True if the pawn has moved to it's winning position
+     */
     public boolean movePawn(int posX, int posY) {
         if (getPlayer3() == null) {
             if (getCurrentPlayer() == getPlayer1()) {
@@ -134,6 +148,9 @@ public class StandardBoard extends Board {
         return false;
     }
 
+    /**
+     * Move each player to their starting positions and reset their stats
+     */
     private void reset() {
         getPlayer1().setMoveCount(0);
         getPlayer2().setMoveCount(0);
@@ -153,6 +170,12 @@ public class StandardBoard extends Board {
         resetWalledOffPositions();
     }
 
+    /**
+     * Place a wall onto the board
+     * @param topLeftX The X coordinate to the top left of the wall
+     * @param topLeftY The Y coordinate to the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     */
     public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation) {
 		if (getCurrentPlayer().hasWalls()) {
 			if ((topLeftX >= 0 && topLeftX <= 8) && (topLeftY >= 0 && topLeftY <= 8)) {
@@ -163,7 +186,7 @@ public class StandardBoard extends Board {
 					if (!Utility.AstarSearch(getPositions(), getPlayer1().getPosition(), 8)
 							|| !Utility.AstarSearch(getPositions(), getPlayer2().getPosition(), 0)) {
 
-						unassignWalls(topLeft, orientation);
+						removeWalls(topLeft, orientation);
 						throw new IllegalStateException(Translate.blockingMove());
 					}
 
@@ -181,6 +204,11 @@ public class StandardBoard extends Board {
 		}
 	}
 
+    /**
+     * Assign a wall to a position
+     * @param topLeft The position to the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     */
 	public void assignWallsFromTopLeftClockwise(Position topLeft, WallPlacement orientation) {
 		Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
 		Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
@@ -207,7 +235,12 @@ public class StandardBoard extends Board {
 		}
 	}
 
-	public void unassignWalls(Position topLeft, WallPlacement orientation) {
+    /**
+     * Remove a wall from a position
+     * @param topLeft The position to the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     */
+	public void removeWalls(Position topLeft, WallPlacement orientation) {
 		Position topRight = getPosition((topLeft.getX() + 1), topLeft.getY());
 		Position bottomRight = getPosition((topLeft.getX() + 1), (topLeft.getY() + 1));
 		Position bottomLeft = getPosition(topLeft.getX(), (topLeft.getY() + 1));
@@ -224,6 +257,12 @@ public class StandardBoard extends Board {
 		}
 	}
 
+    /**
+     * Whether the position is valid for a wall to be placed on it
+     * @param topLeft The position to the top elft of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     * @return
+     */
 	public boolean wallPlacementIsValid(Position topLeft, WallPlacement orientation) {
 		boolean isValid = true;
 
