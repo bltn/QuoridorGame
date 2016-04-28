@@ -500,7 +500,7 @@ public class Translate {
 		if (rules != null) {
 			return rules;
 		} else {
-			return "Enter Your Names";
+			return "Rules";
 		}
 	}
 
