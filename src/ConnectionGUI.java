@@ -29,6 +29,7 @@ import javafx.scene.text.TextAlignment;
  * @author Ben Lawton
  * @author Khadija Patel
  * @author Junaid Rasheed
+ * @author Jack Zhang
  *
  * GUI for setting up a networked game. Game hosts use it to set up the game server for other players to connect to,
  * while players use it to connect to games in the same LAN.
