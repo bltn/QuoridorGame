@@ -4,15 +4,27 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ *
+ * ClientSocketIOThread runs a thread dedicated to listening for input from and sending input to a client socket
+ * Each ClientSocketIOThread has its own dedicated client...
+ * ...for a game with n clients, there needs to be n ClientSocketIOThread instances
+ *
+ * When it receives input from its client, it processes it and calls the appropriate controller action. Its
+ * send*() methods are called by the controller to send messages to the client
+ *
+ */
+
 public class ClientSocketIOThread extends Thread {
 
-	private Socket socket = null;
-	private Socket sisterSocket = null;
+	// Client socket
+	private Socket socket;
 
+	// Client input and output streams
 	private PrintWriter out;
 	private BufferedReader in;
-
-	private PrintWriter sisterOut;
 
 	private NetworkedGameController controller;
 
@@ -20,9 +32,17 @@ public class ClientSocketIOThread extends Thread {
 		super("ClientSocketInputThread");
 		this.socket = socket;
 		this.controller = controller;
-		init();
+		try {
+			out = new PrintWriter(socket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (IOException e) {
+			SystemLogger.logError(e.getMessage());
+		}
 	}
 
+	/**
+	 * Listen for and process input from the client socket
+	 */
 	public void run() {
 		try {
 			String inputLine;
@@ -92,25 +112,6 @@ public class ClientSocketIOThread extends Thread {
 
 	public Socket getSocket() {
 		return this.socket;
-	}
-
-	public void setSisterSocket(Socket socket) {
-		this.sisterSocket = socket;
-
-		try {
-			this.sisterOut = new PrintWriter(sisterSocket.getOutputStream(), true);
-		} catch (IOException e) {
-			SystemLogger.logError(e.getMessage());
-		}
-	}
-
-	private void init() {
-		try {
-			out = new PrintWriter(socket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (IOException e) {
-			SystemLogger.logError(e.getMessage());
-		}
 	}
 
     private void movePawn(String[] commands) {

@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import javafx.stage.Stage;
 

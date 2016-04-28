@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class StandardBoard extends Board {
 
     public StandardBoard(boolean fourPlayerMode) {
-		super("Standard", fourPlayerMode);
+		super(GameMode.STANDARD, fourPlayerMode);
 		initialisePlayer1(getPosition(4, 0));
 		initialisePlayer2(getPosition(4, 8));
 		if (fourPlayerMode) {

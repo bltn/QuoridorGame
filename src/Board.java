@@ -1,12 +1,16 @@
+import java.util.ArrayList;
 
 /**
- *
  * @author Ben Lawton
- * @author Thai Hoang
+ * @author Junaid Rasheed
  * @author Khadija Patel
+ *
+ * Board models Quoridor's 9x9 game board by providing a 2d array of Position objects, each
+ * representing a grid on the board
+ *
+ * It acts as the model and has two extending subclasses, ChallengeBoard and StandardBoard.
+ *
  */
-
-import java.util.ArrayList;
 
 public abstract class Board {
 
@@ -25,15 +29,69 @@ public abstract class Board {
     private boolean fourPlayerMode;
 
     /**
-     * Constructor for an object of class Board
+     * Constructor
+     *
+     * @param gameMode the rules for the game; either standard or challenge rules
+     * @param fourPlayerMode whether or not the game is in 4 player mode; if not, it's in 2 player mode
      */
-    public Board(String gameMode, boolean fourPlayerMode) {
+    public Board(GameMode gameMode, boolean fourPlayerMode) {
         walledOffPositions = new ArrayList<Position>();
         this.fourPlayerMode = fourPlayerMode;
-        if (gameMode.equals("Challenge")) {
+        if (gameMode == GameMode.CHALLENGE) {
         	initialiseBoardWithChallengeRules();
-        } else if (gameMode.equals("Standard")) {
+        } else {
         	initialiseBoardWithStandardRules();
+        }
+    }
+
+    /**
+     * If the move is valid, moves the current player's pawn to the specified board coordinates
+     * @param posX position-to-be-occupied's x coordinates
+     * @param posY position-to-beoccupied's y coordinates
+     * @return whether or not the move was actually made (might not be if it's an illegal move)
+     */
+    abstract public boolean movePawn(int posX, int posY);
+
+    /**
+     * Assign a wall to four positions in a 4x4 grid of positions, their coordinates being calculated
+     * relative to the provided top left position in the 4x4 grid's coordinates
+     *
+     * IMPORTANT: the given coordinates *MUST* be for the top left position in the 4x4 grid (illustrated below)
+     * of positions being blocked off/assigned a wall
+     *
+     * 			_this_|____
+     * 				  |
+     *
+     * ^ Coordinates for the other positions being given a wall are calculated by working out their position
+     * relative to the top left one
+     *
+     * @param topLeftX top left position's x coordinates
+     * @param topLeftY top left position's y coordinates
+     * @param orientation
+     */
+    abstract public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation);
+
+    public void initialisePlayer1(Position startingPosition) {
+    	if (player1 == null) {
+    		player1 = new Player(startingPosition, 1);
+    	}
+    }
+
+    public void initialisePlayer2(Position startingPosition) {
+        if (player2 == null) {
+            player2 = new Player(startingPosition, 2);
+        }
+    }
+
+    public void initialisePlayer3(Position startingPosition) {
+        if (player3 == null) {
+            player3 = new Player(startingPosition, 3);
+        }
+    }
+
+    public void initialisePlayer4(Position startingPosition) {
+        if (player4 == null) {
+            player4 = new Player(startingPosition, 4);
         }
     }
 
@@ -61,30 +119,21 @@ public abstract class Board {
     	return player4;
     }
 
-    public void initialisePlayer1(Position startingPosition) {
-    	if (player1 == null) {
-    		player1 = new Player(startingPosition, 1);
+    public Position[][] getPositions() {
+		return positions;
+	}
+
+    public Position getPosition(int posX, int posY) {
+    	Position position = null;
+    	if (posX <= 8 && posY <= 8) {
+    		position = positions[posY][posX];
     	}
+    	return position;
     }
 
-    public void initialisePlayer2(Position startingPosition) {
-        if (player2 == null) {
-            player2 = new Player(startingPosition, 2);
-        }
-    }
-
-    public void initialisePlayer3(Position startingPosition) {
-        if (player3 == null) {
-            player3 = new Player(startingPosition, 3);
-        }
-    }
-
-    public void initialisePlayer4(Position startingPosition) {
-        if (player4 == null) {
-            player4 = new Player(startingPosition, 4);
-        }
-    }
-
+    /**
+     * @return the player who last made a turn
+     */
     public Player getPreviousPlayer() {
         if (!fourPlayerMode) {
             if (currentPlayer == player1) {
@@ -105,6 +154,10 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Switch to the player whose turn it is next
+     * Should be called after a player makes a (successful) move
+     */
     public void switchPlayer() {
         if (currentPlayer == player1) {
             currentPlayer = player2;
@@ -122,30 +175,8 @@ public abstract class Board {
         }
     }
 
-    public Position[][] getPositions() {
-		return positions;
-	}
-
-
     /**
-     * @param posX x coordinates of the position
-     * @param posY y coordinates of the position
-     * @return position at the given coordinates
-     */
-    public Position getPosition(int posX, int posY) {
-    	Position position = null;
-    	if (posX <= 8 && posY <= 8) {
-    		position = positions[posY][posX];
-    	}
-    	return position;
-    }
-
-    abstract public boolean movePawn(int posX, int posY);
-
-    abstract public void placeWalls(int topLeftX, int topLeftY, WallPlacement orientation);
-
-    /**
-     * Adds a position to the collection of positions with walls assigned to them
+     * Add a position to the collection of positions with walls assigned to them
      * @param pos position with wall assigned to it
      */
     public void addWalledOffPosition(Position pos) {
@@ -155,7 +186,7 @@ public abstract class Board {
     }
 
     /**
-     * Removes all non-border walls from positions with walls assigned to them
+     * Remove all non-border walls from positions with walls assigned to them
      */
     public void resetWalledOffPositions() {
         for (Position pos : walledOffPositions) {
@@ -174,6 +205,10 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Give the positions the current player could legally move to
+     * @return The occupiable positions
+     */
     public ArrayList<Position> getCurrentPlayerOccupiablePositions() {
         ArrayList<Position> localPositions = new ArrayList<Position>();
         Position currentPosition = currentPlayer.getPosition();
@@ -192,6 +227,9 @@ public abstract class Board {
         return localPositions;
     }
 
+    /**
+     * Determine whether or not a position with the given coordinates is occupied by a player
+     */
     public boolean positionOccupiedByPlayer(int x, int y) {
 		boolean occupied = false;
 
@@ -213,6 +251,10 @@ public abstract class Board {
 		return occupied;
 	}
 
+    /**
+     * Validate a pawn relocation move if the pawn's desired location is to the top, right, bottom or left of it
+     * and isn't blocked off by a wall or other player
+     */
     public boolean isValidMove(Player player, int newX, int newY) {
 	    boolean isValid = false;
 	    Position playerPos = player.getPosition();
@@ -242,7 +284,9 @@ public abstract class Board {
     }
 
     /**
-     * Assign borders to the board and set top and bottom grids as winning positions
+     * Initialise the board's positions
+     * Set the board's borders
+     * Set the corner positions as "winning" positions
      */
     private void initialiseBoardWithChallengeRules() {
         positions = new Position[9][9];
@@ -281,7 +325,9 @@ public abstract class Board {
     }
 
     /**
-	 * Assign borders to the board and set top and bottom grids as winning positions
+	 * Initialise the board's positions
+	 * Set the board's borders
+	 * Set the top row and bottom row of the board as winning positions
 	 */
    private void initialiseBoardWithStandardRules() {
         positions = new Position[9][9];
