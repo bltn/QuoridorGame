@@ -165,7 +165,7 @@ public class NetworkedGameController implements Controller {
 					if (board.getPlayer3() == null) {
 						statsWriter = new StatsWriter(currentPlayerID, 2);
 					} else {
-						statsWriter = new StatsWriter(currentPlayerID, 2);
+						statsWriter = new StatsWriter(currentPlayerID, 4);
 					}
 					statsWriter.writeStatsToCSV();
                 }
