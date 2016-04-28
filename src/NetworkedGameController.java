@@ -253,12 +253,12 @@ public class NetworkedGameController implements Controller {
         Player player2 = board.getPlayer2();
         // send updates to player 1's GUI
         player1IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), player1.getID());
-        player1IO.sendStatsUpdate(player2.getMoveCount(), player2.getMoveCount(), player2.getID());
+        player1IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), player2.getID());
         player1IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
         player1IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
         // send updates for player 2's GUI
         player2IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), player2.getID());
-        player2IO.sendStatsUpdate(player1.getMoveCount(), player1.getMoveCount(), player1.getID());
+        player2IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), player1.getID());
         player2IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
         player2IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
         // send commands to reset both GUI's walls
@@ -269,28 +269,28 @@ public class NetworkedGameController implements Controller {
 			Player player4 = board.getPlayer4();
 			// send updates to player 1's GUI
 			player1IO.sendStatsUpdate(player3.getMoveCount(), player3.getWallCount(), player3.getID());
-			player1IO.sendStatsUpdate(player4.getMoveCount(), player4.getMoveCount(), player4.getID());
+			player1IO.sendStatsUpdate(player4.getMoveCount(), player4.getWallCount(), player4.getID());
 			player1IO.sendPawnUpdate(player3.getPosition().getX(), player3.getPosition().getY(), player3.getID());
 			player1IO.sendPawnUpdate(player4.getPosition().getX(), player4.getPosition().getY(), player4.getID());
 			// send updates for player 2's GUI
 			player2IO.sendStatsUpdate(player3.getMoveCount(), player3.getWallCount(), player3.getID());
-			player2IO.sendStatsUpdate(player4.getMoveCount(), player4.getMoveCount(), player4.getID());
+			player2IO.sendStatsUpdate(player4.getMoveCount(), player4.getWallCount(), player4.getID());
 			player2IO.sendPawnUpdate(player3.getPosition().getX(), player3.getPosition().getY(), player3.getID());
 			player2IO.sendPawnUpdate(player4.getPosition().getX(), player4.getPosition().getY(), player4.getID());
 			// send updates to player 3's GUI
-			player3IO.sendStatsUpdate(player1.getMoveCount(), player1.getMoveCount(), player1.getID());
+			player3IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), player1.getID());
 			player3IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), player2.getID());
 			player3IO.sendStatsUpdate(player3.getMoveCount(), player3.getWallCount(), player3.getID());
-			player3IO.sendStatsUpdate(player4.getMoveCount(), player4.getMoveCount(), player4.getID());
+			player3IO.sendStatsUpdate(player4.getMoveCount(), player4.getWallCount(), player4.getID());
 			player3IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
 			player3IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
 			player3IO.sendPawnUpdate(player3.getPosition().getX(), player3.getPosition().getY(), player3.getID());
 			player3IO.sendPawnUpdate(player4.getPosition().getX(), player4.getPosition().getY(), player4.getID());
 			// send updates to player 4's GUI
-			player4IO.sendStatsUpdate(player1.getMoveCount(), player1.getMoveCount(), player1.getID());
+			player4IO.sendStatsUpdate(player1.getMoveCount(), player1.getWallCount(), player1.getID());
 			player4IO.sendStatsUpdate(player2.getMoveCount(), player2.getWallCount(), player2.getID());
 			player4IO.sendStatsUpdate(player3.getMoveCount(), player3.getWallCount(), player3.getID());
-			player4IO.sendStatsUpdate(player4.getMoveCount(), player4.getMoveCount(), player4.getID());
+			player4IO.sendStatsUpdate(player4.getMoveCount(), player4.getWallCount(), player4.getID());
 			player4IO.sendPawnUpdate(player1.getPosition().getX(), player1.getPosition().getY(), player1.getID());
 			player4IO.sendPawnUpdate(player2.getPosition().getX(), player2.getPosition().getY(), player2.getID());
 			player4IO.sendPawnUpdate(player3.getPosition().getX(), player3.getPosition().getY(), player3.getID());
