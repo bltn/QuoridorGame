@@ -5,7 +5,7 @@ public class ChallengeBoard extends Board {
     private WallOwnershipCollection wallOwnershipRecords;
 
     public ChallengeBoard(boolean fourPlayerMode) {
-        super("Challenge", fourPlayerMode);
+        super(GameMode.CHALLENGE, fourPlayerMode);
         initialisePlayer1(getPosition(0, 0));
         initialisePlayer2(getPosition(8, 8));
 		if (fourPlayerMode) {

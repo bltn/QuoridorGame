@@ -1,8 +1,6 @@
-
 /**
- *
  * @author Ben Lawton
- * @author Thai Hoang
+ * @author Junaid Rasheed
  * @author Khadija Patel
  */
 
@@ -25,14 +23,17 @@ public abstract class Board {
     private boolean fourPlayerMode;
 
     /**
-     * Constructor for an object of class Board
+     * Constructor
+     *
+     * @param gameMode
+     * @param fourPlayerMode
      */
-    public Board(String gameMode, boolean fourPlayerMode) {
+    public Board(GameMode gameMode, boolean fourPlayerMode) {
         walledOffPositions = new ArrayList<Position>();
         this.fourPlayerMode = fourPlayerMode;
-        if (gameMode.equals("Challenge")) {
+        if (gameMode == GameMode.CHALLENGE) {
         	initialiseBoardWithChallengeRules();
-        } else if (gameMode.equals("Standard")) {
+        } else {
         	initialiseBoardWithStandardRules();
         }
     }
