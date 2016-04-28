@@ -66,12 +66,16 @@ public class StandardBoardTest {
      * Test that the players switch turns correctly
      */
     public void testSwitchPlayer() {
-        board.switchPlayer();
-        assertEquals(player2, board.getCurrentPlayer());
-        assertEquals(player1, board.getPreviousPlayer());
-        board.switchPlayer();
-        assertEquals(player1, board.getCurrentPlayer());
-        assertEquals(player2, board.getPreviousPlayer());
+    	// two player board
+    	if (board.getCurrentPlayer().getID() == 1) {
+    		assertEquals(player1, board.getCurrentPlayer());
+    		board.switchPlayer();
+    		assertEquals(player2, board.getCurrentPlayer());
+    	} else {
+    		assertEquals(player2, board.getCurrentPlayer());
+    		board.switchPlayer();
+    		assertEquals(player1, board.getCurrentPlayer());
+    	}
     }
 
     @Test (expected = IllegalArgumentException.class)
