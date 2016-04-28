@@ -1,3 +1,14 @@
+/**
+ * The Player class is used to create an object for each player. This object
+ * stores the ID of the plyaer, the current position of the player,
+ * where the player started from, and the move and wall counts for the
+ * player.
+ *
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ * @author Jordan Bird
+ * @author Thai Hoang
+ */
 public class Player
 {
 	private int ID;
@@ -9,6 +20,11 @@ public class Player
     private int wallCount;
     private int moveCount;
 
+    /**
+     * Setup a player object
+     * @param position The starting position of a player
+     * @param ID The ID assigned to a player
+     */
 	public Player(Position position, int ID)
     {
     	this.ID = ID;

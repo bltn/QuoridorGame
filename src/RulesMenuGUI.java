@@ -20,11 +20,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.util.Set;
 
-import javax.sound.midi.SysexMessage;
-
+/**
+ * RulesMenuGUI allows a player to choose the rules for the game they are about to play.
+ * It is only used for a local game. It allows to player to choose whether the game is
+ * two players or four players and whether the game is going to use the standard rules
+ * or the challenge rules. It also allows the player to play a practice game against an
+ * AI player. This class extends the Application class from JavaFX.
+ *
+ * @author Khadija Patel
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ * @author Thai Hoang
+ */
 public class RulesMenuGUI extends Application {
 
     private Scene scene;
@@ -60,56 +68,56 @@ public class RulesMenuGUI extends Application {
         challengeButtonBox = new HBox(10);
         quitButtonBox = new HBox(10);
 
-        // add icon to the practise mode button
+        // add an icon to the practise mode button
         Image practiseImg = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newPractiseImg = new ImageView(practiseImg);
         newPractiseImg.setFitHeight(20);
         newPractiseImg.setFitWidth(20);
         practiseButton = new Button(Translate.practiseMode(), newPractiseImg);
 
-        //add a icon into the 2P standard button
+        //add an icon into the 2P standard button
         Image standard2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView newStandard2 = new ImageView(standard2);
         newStandard2.setFitHeight(20);
         newStandard2.setFitWidth(20);
         standardButton = new Button(Translate.twoPlayerStandard(), newStandard2);
 
-        //add a icon into the 4P standard button
+        //add an icon into the 4P standard button
         Image standard4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView newStandard4 = new ImageView(standard4);
         newStandard4.setFitHeight(20);
         newStandard4.setFitWidth(45);
         fourPlayerStandardButton = new Button(Translate.fourPlayerStandard(), newStandard4);
 
-        //add a icon into the 2P challenge button
+        //add an icon into the 2P challenge button
         Image challenge2 = new Image(getClass().getResourceAsStream("icons/multiplayers.png"));
         ImageView NewChallenge2 = new ImageView(challenge2);
         NewChallenge2.setFitHeight(20);
         NewChallenge2.setFitWidth(20);
         challengeButton = new Button(Translate.twoPlayerChallenge(), NewChallenge2);
 
-        //add a icon into the 4P challenge button
+        //add an icon into the 4P challenge button
         Image challenge4 = new Image(getClass().getResourceAsStream("icons/4players.png"));
         ImageView NewChallenge4 = new ImageView(challenge4);
         NewChallenge4.setFitHeight(20);
         NewChallenge4.setFitWidth(45);
         fourPlayerChallengeButton = new Button(Translate.fourPlayerChallenge(), NewChallenge4);
 
-        // add a icon into the quit button
+        // add an icon into the quit button
         Image quit = new Image(getClass().getResourceAsStream("icons/quit.png"));
         ImageView newQuit = new ImageView(quit);
         newQuit.setFitHeight(20);
         newQuit.setFitWidth(20);
         quitButton = new Button(Translate.quit(), newQuit);
 
-        // add a icon into the back button
+        // add an icon into the back button
         Image back = new Image(getClass().getResourceAsStream("icons/back.png"));
         ImageView newBack = new ImageView(back);
         newBack.setFitHeight(20);
         newBack.setFitWidth(20);
         backButton = new Button(Translate.back(), newBack);
 
-        //add background image
+        // add background image
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO,
         BackgroundSize.AUTO, false, false, true, true);
@@ -122,6 +130,10 @@ public class RulesMenuGUI extends Application {
         scene.getStylesheets().add(SettingsGUI.theme);
     }
 
+    /**
+     * Set up the GUI and then draw it
+     * @param primaryStage The window to use to draw the GUI
+     */
     @Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;

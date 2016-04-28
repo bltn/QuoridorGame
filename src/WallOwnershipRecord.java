@@ -1,4 +1,9 @@
-
+/**
+ * WallOwnershipRecord stores the position to the top left of the wall, the orientation
+ * of the wall, and the ID of the player who placed the wall.
+ *
+ * @author Ben Lawton
+ */
 public class WallOwnershipRecord {
 
 	private int playerID;

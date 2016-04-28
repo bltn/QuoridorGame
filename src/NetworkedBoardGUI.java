@@ -12,44 +12,46 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.Set;
-
+/**
+ * This class is used to draw the 18x18 board for Quoridor when playing a networked game.
+ * It also shows the stats of the player for the game. It extends the JavaFX Application
+ * class and also implements the GUI interface.
+ *
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ */
 public class NetworkedBoardGUI extends Application implements GUI {
 
-	//the scene used to display in the window
     private final Scene scene;
     private final int width = 17;
     private final int height = 17;
+
+
+    // root pane which contains all the information from board to stats
+    private VBox rootPane;
+
+    private final HBox player1StatsPane = new HBox(120);
     private final HBox player2StatsPane = new HBox(120);
     private final HBox player3StatsPane = new HBox(120);
     private final HBox player4StatsPane = new HBox(120);
-    private final HBox buttonPane = new HBox(10);
 
+    private GridPane boardPane;
+    private final HBox buttonPane = new HBox(10);
     private final HBox errorPane = new HBox();
     private Text errorPaneText;
 
-    //root pane which contain all the information from board to statistic
-    private VBox rootPane;
-    // player one stats
-    private final HBox player1StatsPane = new HBox(120);
-    // player two stats
-    private GridPane boardPane;
-    //amount of move the player has make
     private Text player1Moves;
     private Text player1Title;
-    //amount of walls the player has
     private int player1WallCount;
     private Text player1Walls;
-    //same as player one move
+
     private Text player2Moves;
     private Text player2Title;
-    //same as player one place wall
     private int player2WallCount;
     private Text player2Walls;
 
@@ -63,7 +65,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
     private int player4WallCount;
     private Text player4Walls;
 
-    //draw the wall and movement in the board
     private Rectangle[][] grids;
     private Button highlightPositionsButton;
     private Circle firstPawn;
@@ -121,6 +122,10 @@ public class NetworkedBoardGUI extends Application implements GUI {
     public void setController(Controller controller) {
     }
 
+    /**
+     * Set up the GameClient and then set the appropriate player title for each player
+     * @param client The GameClient associated with the player
+     */
     public void setClient(GameClient client) {
     	this.client = client;
     	if (client.getPlayerID() == 1) {
@@ -137,6 +142,10 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     }
 
+    /**
+     * Set up the game window and then draw it
+     * @param primaryStage The window to draw to
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
@@ -150,6 +159,17 @@ public class NetworkedBoardGUI extends Application implements GUI {
         primaryStage.show();
     }
 
+    /**
+     * Place all the pawns into their initial positions
+     * @param player1X The X coordinate for Player 1
+     * @param player1Y The Y coordinate for Player 1
+     * @param player2X The X coordinate for Player 2
+     * @param player2Y The Y coordinate for Player 2
+     * @param player3X The X coordinate for Player 3
+     * @param player3Y The Y coordinate for Player 3
+     * @param player4X The X coordinate for Player 4
+     * @param player4Y The Y coordinate for Player 4
+     */
     public void setInitialPawnPositions(int player1X, int player1Y, int player2X, int player2Y, int player3X, int player3Y, int player4X, int player4Y) {
     	player1X *= 2;
     	player1Y *= 2;
@@ -168,7 +188,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Set the alignment of all instantiated fields to the centre of the pane
+     * Set the alignment of all instantiated fields to the centre of the pane and then add everything to the root pane
      */
     private void setPanes() {
         rootPane.setAlignment(Pos.CENTER);
@@ -192,7 +212,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Create the board spaces and add them to the 2D array
+     * Create the board spaces and add them to the 2D array. Then create the highlight positions button
+     * and add it to the bottom of the board.
      */
     private void setButtons() {
     	for(int x = 0 ; x < width; x++){
@@ -226,7 +247,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Allows a user to place a wall on a wall space that is available
+     * Allows a user to place a wall on a wall space that is available and then call the appropriate method
+     * for whether the wall to be placed is a thin wall or a wide wall
      */
    public void placeWall(int x, int y) {
        // tall, thin wall
@@ -258,7 +280,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
    }
 
 	/**
-	 * Sets the player stats so they can be displayed in the UI
+	 * Set up the player stats so they can be displayed in the UI
 	 */
     public void setPlayerStats() {
         player1Walls.setTextAlignment(TextAlignment.CENTER);
@@ -297,10 +319,10 @@ public class NetworkedBoardGUI extends Application implements GUI {
     /**
      * Draw a player piece at a position on the board
      *
-     * @param pawn	the Player to be drawn
+     * @param pawn	    the Player to be drawn
      * @param colour	the colour of the piece
-     * @param x		the horizontal co-ordinate of the player
-     * @param y		the vertical co-ordinate of the player
+     * @param x		    the X coordinate of the player
+     * @param y		    the Y coordinate of the player
      */
     public void setPawn(Circle pawn, Color colour, int x, int y) {
         pawn.setFill(colour);
@@ -311,9 +333,9 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     /**
-     * Highlights all of the surrounding valid places for the player to occupy
-     * @param x		the x co-ordinate
-     * @param y		the y co-ordinate
+     * Highlights a position that a player can move to
+     * @param x		the X coordinate of the position
+     * @param y		the Y coordinate of the position
      */
     public void highlightPositionAvailability(int x, int y) {
 
@@ -337,6 +359,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         );
     }
 
+    /**
+     * Updates the move count stat for a specified player
+     * @param moveCount The new move count
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerMoveCount(int moveCount, int playerID) {
     	if (playerID == 1) {
     		player1Moves.setText((Translate.moves() + ": ") + moveCount);
@@ -352,6 +379,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Update the wall count for a specified player
+     * @param wallCount The new wall count
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerWallCount(int wallCount, int playerID) {
     	if (playerID == 1) {
     		player1WallCount = wallCount;
@@ -371,6 +403,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Update the position of the pawn for a specified player
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     * @param playerID The ID of the player to update
+     */
     public void updatePlayerPawnPosition(int x, int y, int playerID) {
     	// convert the 9x9 coordinates from the controller to 18x8 coordinates for the GUI
     	int eighteenByEighteenX = x * 2;
@@ -399,7 +437,7 @@ public class NetworkedBoardGUI extends Application implements GUI {
     }
 
     /**
-     * change the active player to the next player
+     * Set the active player to the next player
      */
     public void updateActivePlayer(int playerID) {
     	if (playerID == 1) {
@@ -434,6 +472,13 @@ public class NetworkedBoardGUI extends Application implements GUI {
         }
     }
 
+    /**
+     * Display a wall that has been placed onto the GUI
+     * @param topLeftX The X coordinate that is at the top left of the wall
+     * @param topLeftY The Y coordinate that is at the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     * @param playerID The ID of the player that placed the wall
+     */
     public void displayWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	if (orientation == WallPlacement.VERTICAL) {
     		int topX = ((topLeftX * 2) + 1);
@@ -504,6 +549,10 @@ public class NetworkedBoardGUI extends Application implements GUI {
     	}
     }
 
+    /**
+     * Display an error message to the player
+     * @param message The message to display
+     */
     public void displayErrorMessage(String message) {
     	errorPaneText.setText(message);
     	new java.util.Timer().schedule(
@@ -517,6 +566,12 @@ public class NetworkedBoardGUI extends Application implements GUI {
         );
     }
 
+    /**
+     * Remove a wall from the GUI that has been removed by one of the players
+     * @param topLeftX The X coordinate that is at the top left of the wall
+     * @param topLeftY The Y coordinate that is at the top left of the wall
+     * @param orientation Whether the wall is horizontal or vertical
+     */
     public void removeWallDisplay(int topLeftX, int topLeftY, WallPlacement orientation) {
     	if (orientation == WallPlacement.VERTICAL) {
     		int topX = ((topLeftX * 2) + 1);
@@ -555,8 +610,8 @@ public class NetworkedBoardGUI extends Application implements GUI {
 
     /**
      * Set the occupiable positions
-     * @param x
-     * @param y
+     * @param x The X coordinate of an occupiable position
+     * @param y The Y coordinate of an occupiable position
      */
     private void initialiseOccupiableGrid(int x, int y) {
         grids[y][x].setHeight(40);
@@ -576,6 +631,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw a wide wall space
+     * @param x The X coordinate of a wide wall
+     * @param y The Y coordinate of a wide wall
+     */
     private void initialiseWideWall(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(40);
@@ -591,6 +651,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw a thin wall space
+     * @param x The X coordinate of a thin wall
+     * @param y The Y coordinate of a thin wall
+     */
     private void initialiseThinWall(int x, int y) {
         grids[y][x].setWidth(10);
         grids[y][x].setHeight(40);
@@ -606,6 +671,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         });
     }
 
+    /**
+     * Draw the space that is unused in the 18x18 grid
+     * @param x The X coordinate of an unused space
+     * @param y The Y coordinate of an unused space
+     */
     private void initialiseUnusedSquare(int x, int y) {
         grids[y][x].setHeight(10);
         grids[y][x].setWidth(10);
@@ -615,6 +685,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         boardPane.getChildren().add(grids[y][x]);
     }
 
+    /**
+     * Place a thin wall
+     * @param x The X coordinate of the wall to be placed
+     * @param y The Y coordinate of the wall to be placed
+     */
     private void placeThinWall(int x, int y) {
         // coordinates of the position to the top left of the horizontal wall
         int topLeftPosX = x / 2;
@@ -622,6 +697,11 @@ public class NetworkedBoardGUI extends Application implements GUI {
         client.sendWallMove(topLeftPosX, topLeftPosY, WallPlacement.VERTICAL);
     }
 
+    /**
+     * Place a wide wall
+     * @param x The X coordinate of the wall to be placed
+     * @param y The Y coordinate of the wall to be placed
+     */
     private void placeWideWall(int x, int y) {
         // coordinates of the position to the top left of the vertical wall
         int topLeftPosX = x / 2;

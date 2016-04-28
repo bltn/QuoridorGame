@@ -4,6 +4,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Translate stores every string used in the game as a static variable.
+ * The language file that is set to be read from is then assigned to each
+ * variable in this class. A public static getter is then used by other
+ * classes to show any text needed for the game.
+ *
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ */
 public class Translate {
 
 	private static String filePath;
@@ -51,6 +60,10 @@ public class Translate {
 	private static String colour;
 	private static String rules;
 
+	/**
+	 * Choose a language and then set up the variables to point to the translated strings
+	 * @param language The language for the game
+     */
 	public static void setLanguage(String language) {
 		switch (language) {
 			case "English": {
@@ -75,6 +88,8 @@ public class Translate {
 			}
 		}
 
+		// Read the translations and store them in a variable associated with
+		// the english meaning for a translation
 		FileInputStream fs;
 		try {
 			fs = new FileInputStream(filePath);
