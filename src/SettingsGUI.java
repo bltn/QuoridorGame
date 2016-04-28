@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -44,19 +43,14 @@ public class SettingsGUI extends Application{
         this.menuGUI = menuGUI;
         settingsPane = new GridPane();
         buttonBox = new VBox();
-        languageText = new Text("Language");
+        languageText = new Text(Translate.languages());
         languageBox = new HBox();
         languageText.setId("text");
         doneBox = new HBox();
 
-        colourText = new Text("Colour");
+        colourText = new Text(Translate.colour());
         colourBox = new HBox();
         colourText.setId("text");
-
-        englishButton = new Button("English");
-        frenchButton = new Button("Français");
-        spanishButton = new Button("Español");
-        chineseButton = new Button("中文");
 
         // add a icon into the English button
     	Image english = new Image(getClass().getResourceAsStream("icons/gbr.png"));
@@ -64,27 +58,27 @@ public class SettingsGUI extends Application{
     	newEnglishButton.setFitHeight(20);
     	newEnglishButton.setFitWidth(20);
     	englishButton = new Button("English",newEnglishButton);
-
+    	
         // add a icon into the French button
     	Image french = new Image(getClass().getResourceAsStream("icons/fr.png"));
     	ImageView newFrenchButton = new ImageView(french);
     	newFrenchButton.setFitHeight(20);
     	newFrenchButton.setFitWidth(20);
-    	frenchButton = new Button("Fran�ais",newFrenchButton);
-
+    	frenchButton = new Button("Français",newFrenchButton);
+    	
         // add a icon into the Spanish button
     	Image spanish = new Image(getClass().getResourceAsStream("icons/sp.png"));
     	ImageView newSpanishButton = new ImageView(spanish);
     	newSpanishButton.setFitHeight(20);
     	newSpanishButton.setFitWidth(20);
-    	spanishButton = new Button("Espa�ol",newSpanishButton);
-
+    	spanishButton = new Button("Español",newSpanishButton);
+    	
         // add a icon into the Chinese button
     	Image chinese = new Image(getClass().getResourceAsStream("icons/cn.png"));
     	ImageView newChineseButton = new ImageView(chinese);
     	newChineseButton.setFitHeight(20);
     	newChineseButton.setFitWidth(20);
-    	chineseButton = new Button("Chinese",newChineseButton);
+    	chineseButton = new Button("中文",newChineseButton);
 
         standardButton = new Button("Standard");
         protanopiaButton = new Button("Protanopia");
@@ -96,7 +90,7 @@ public class SettingsGUI extends Application{
     	ImageView newDoneButton = new ImageView(done);
     	newDoneButton.setFitHeight(20);
     	newDoneButton.setFitWidth(20);
-    	doneButton = new Button("Done",newDoneButton);
+    	doneButton = new Button(Translate.done(),newDoneButton);
 
         // Background
         Image background = new Image(getClass().getResourceAsStream("icons/backgrounds.png"));
@@ -145,6 +139,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "English";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -155,6 +150,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "French";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -165,6 +161,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "Spanish";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -175,6 +172,7 @@ public class SettingsGUI extends Application{
             public void handle(ActionEvent event) {
                 language = "Chinese";
                 Translate.setLanguage(language);
+                updateLanguage();
                 menuGUI.updateLanguage();
             };
         });
@@ -233,6 +231,8 @@ public class SettingsGUI extends Application{
         });
     }
 
+
+    
     public void setSettingsPane() {
         settingsPane.setAlignment(Pos.CENTER);
         settingsPane.setHgap(25);
@@ -257,5 +257,11 @@ public class SettingsGUI extends Application{
         scene.getStylesheets().remove(scene.getStylesheets().get(0));
         // Add the new stylesheet.
         scene.getStylesheets().add(theme);
+    }
+
+    private void updateLanguage() {
+        languageText.setText(Translate.languages());
+        colourText.setText(Translate.colour());
+        doneButton.setText(Translate.done());
     }
 }
