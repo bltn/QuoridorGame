@@ -167,20 +167,20 @@ public class ConnectionGUI extends Application {
 				IPAddress = IPAddressField.getText();
 				portNumber = Integer.parseInt(portField.getText());
             	if (mode.equals(Translate.twoPlayerChallenge())) {
-            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(2)), 2);
-					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "multiplayer", server, IPAddress, portNumber);
+            		server = new GameServer(new NetworkedGameController(new ChallengeBoard(false)), 2);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
             	} else if (mode.equals(Translate.twoPlayerStandard())){
-            		server = new GameServer(new NetworkedGameController(new StandardBoard(2)), 2);
-					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "multiplayer", server, IPAddress, portNumber);
+            		server = new GameServer(new NetworkedGameController(new StandardBoard(false)), 2);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
             	} else if (mode.equals(Translate.fourPlayerStandard())) {
-					server = new GameServer(new NetworkedGameController(new StandardBoard(4)), 4);
-					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "multiplayer", server, IPAddress, portNumber);
+					server = new GameServer(new NetworkedGameController(new StandardBoard(true)), 4);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
 				} else {
-					server = new GameServer(new NetworkedGameController(new ChallengeBoard(4)), 4);
-					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "multiplayer", server, IPAddress, portNumber);
+					server = new GameServer(new NetworkedGameController(new ChallengeBoard(true)), 4);
+					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
 				}
             }

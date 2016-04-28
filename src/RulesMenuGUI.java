@@ -187,8 +187,8 @@ public class RulesMenuGUI extends Application {
         practiseButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override
         	public void handle(ActionEvent event) {
-    			LocalBoardGUI gui = new LocalBoardGUI(2);
-    			StandardBoard board = new StandardBoard(2);
+    			LocalBoardGUI gui = new LocalBoardGUI(false);
+    			StandardBoard board = new StandardBoard(false);
             	Controller controller = new AIGameController(gui, board);
             	gui.setController(controller);
             	gui.start(new Stage());
@@ -200,7 +200,7 @@ public class RulesMenuGUI extends Application {
         standardButton.setOnAction(new EventHandler<ActionEvent>(){
         	@Override
         	public void handle(ActionEvent event) {
-                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "standard");
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "standard");
                 playerNamesGUI.start(primaryStage);
         	}
         });
@@ -209,7 +209,7 @@ public class RulesMenuGUI extends Application {
         challengeButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(2, "challenge");
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "challenge");
                 playerNamesGUI.start(primaryStage);
 			}
         });
@@ -218,7 +218,7 @@ public class RulesMenuGUI extends Application {
         fourPlayerStandardButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "standard");
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "standard");
                 playerNamesGUI.start(primaryStage);
             }
         });
@@ -226,7 +226,7 @@ public class RulesMenuGUI extends Application {
         fourPlayerChallengeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(4, "challenge");
+                PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "challenge");
                 playerNamesGUI.start(primaryStage);
             }
         });

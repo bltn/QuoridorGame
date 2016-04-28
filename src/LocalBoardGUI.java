@@ -73,15 +73,15 @@ public class LocalBoardGUI extends Application implements GUI {
     private boolean drawing;
 
     private Controller controller;
-    private int numberOfPlayers;
+    private boolean fourPlayerMode;
 
 
     /**
      * Constructor for objects of class BoardGUI
      * Models and creates a GUI for the game itself
-     * @param numberOfPlayers
+     * @param fourPlayerMode
      */
-    public LocalBoardGUI(int numberOfPlayers) {
+    public LocalBoardGUI(boolean fourPlayerMode) {
         rootPane = new VBox();
         boardPane = new GridPane();
         boardPane.setGridLinesVisible(true);
@@ -113,8 +113,8 @@ public class LocalBoardGUI extends Application implements GUI {
         errorPaneText = new Text("");
         player1Title = new Text("Player 1");
         player2Title = new Text("Player 2");
-        this.numberOfPlayers = numberOfPlayers;
-        if (numberOfPlayers == 4) {
+        this.fourPlayerMode = fourPlayerMode;
+        if (fourPlayerMode) {
             player3Title = new Text("Player 3");
             player4Title = new Text("Player 4");
         }
@@ -132,7 +132,7 @@ public class LocalBoardGUI extends Application implements GUI {
         setPlayerStats();
         setPawn(firstPawn, Color.ORANGE, (controller.getPlayer1X() * 2), (controller.getPlayer1Y() * 2));
         setPawn(secondPawn, Color.GREEN, (controller.getPlayer2X() * 2), (controller.getPlayer2Y() * 2));
-        if (numberOfPlayers == 4) {
+        if (fourPlayerMode) {
             setPawn(thirdPawn, Color.BLUE, (controller.getPlayer3X() * 2), (controller.getPlayer3Y() * 2));
             setPawn(fourthPawn, Color.RED, (controller.getPlayer4X() * 2), (controller.getPlayer4Y() * 2));
         }
@@ -182,7 +182,7 @@ public class LocalBoardGUI extends Application implements GUI {
         player2Moves.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
         player2Title.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
         player2StatsPane.getChildren().addAll(player2Moves, player2Title, player2Walls);
-        if (numberOfPlayers == 4) {
+        if (fourPlayerMode) {
             player3Walls.setTextAlignment(TextAlignment.CENTER);
             player3Walls.setFont(Font.font("Calibri", FontWeight.NORMAL, 15));
             player3Moves.setTextAlignment(TextAlignment.CENTER);
@@ -321,7 +321,7 @@ public class LocalBoardGUI extends Application implements GUI {
         if (playerID == 1) {
             player1Title.setFill(Color.ORANGE);
             player2Title.setFill(Color.BLACK);
-            if (numberOfPlayers == 4) {
+            if (fourPlayerMode) {
             	player3Title.setFill(Color.BLACK);
             	player4Title.setFill(Color.BLACK);
             }
@@ -329,21 +329,21 @@ public class LocalBoardGUI extends Application implements GUI {
         else if (playerID == 2) {
         	player1Title.setFill(Color.BLACK);
         	player2Title.setFill(Color.GREEN);
-        	if (numberOfPlayers == 4) {
+        	if (fourPlayerMode) {
             	player3Title.setFill(Color.BLACK);
             	player4Title.setFill(Color.BLACK);
         	}
         } else if (playerID == 3) {
         	player1Title.setFill(Color.BLACK);
         	player2Title.setFill(Color.BLACK);
-        	if (numberOfPlayers == 4) {
+        	if (fourPlayerMode) {
             	player3Title.setFill(Color.BLUE);
             	player4Title.setFill(Color.BLACK);
         	}
         } else if (playerID == 4) {
         	player1Title.setFill(Color.BLACK);
         	player2Title.setFill(Color.BLACK);
-        	if (numberOfPlayers == 4) {
+        	if (fourPlayerMode) {
             	player3Title.setFill(Color.BLACK);
             	player4Title.setFill(Color.RED);
         	}
@@ -479,9 +479,7 @@ public class LocalBoardGUI extends Application implements GUI {
         player2StatsPane.setAlignment(Pos.CENTER);
         boardPane.setAlignment(Pos.CENTER);
         buttonPane.setAlignment(Pos.CENTER);
-        //boardPane.setHgap(5);
-        //boardPane.setVgap(5);
-        if (numberOfPlayers == 2) {
+        if (!fourPlayerMode) {
             rootPane.getChildren().addAll(player1StatsPane, boardPane, player2StatsPane, buttonPane, errorPane);
         } else {
             rootPane.getChildren().addAll(player1StatsPane, player3StatsPane, boardPane, player2StatsPane, player4StatsPane, buttonPane, errorPane);

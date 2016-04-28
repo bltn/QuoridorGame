@@ -29,7 +29,7 @@ public class PlayerNamesGUI extends Application {
     private HBox nameBoxRow2;
     private VBox buttonBox;
     private Button startButton;
-    private int numberOfPlayers;
+    private boolean fourPlayerMode;
     private String gameMode;
     private Stage stage;
     private GameServer server;
@@ -43,9 +43,9 @@ public class PlayerNamesGUI extends Application {
      * @param numberOfPlayers The number of players in the game
      * @param gameMode The name of the game mode
      */
-    public PlayerNamesGUI(int numberOfPlayers, String gameMode) {
+    public PlayerNamesGUI(boolean fourPlayerMode, String gameMode) {
         Translate.setLanguage(SettingsGUI.language);
-        this.numberOfPlayers = numberOfPlayers;
+        this.fourPlayerMode = fourPlayerMode;
         this.gameMode = gameMode;
 
         namesPane = new GridPane();
@@ -87,9 +87,9 @@ public class PlayerNamesGUI extends Application {
      * @param IPAddress IP Address of the server
      * @param portNumber The port number for the server
      */
-    public PlayerNamesGUI(int numberOfPlayers, String gameMode, GameServer server, String IPAddress, int portNumber) {
+    public PlayerNamesGUI(boolean fourPlayerMode, String gameMode, GameServer server, String IPAddress, int portNumber) {
         Translate.setLanguage(SettingsGUI.language);
-        this.numberOfPlayers = numberOfPlayers;
+        this.fourPlayerMode = fourPlayerMode;
         this.gameMode = gameMode;
         this.server = server;
         this.IPAddress = IPAddress;
@@ -162,7 +162,7 @@ public class PlayerNamesGUI extends Application {
         instructionsText.setFont(Font.font("Arial Narrow", FontWeight.BOLD, 15));
         buttonBox.getChildren().add(instructionsText);
         buttonBox.getChildren().add(nameBoxRow1);
-        if (numberOfPlayers == 4) {
+        if (fourPlayerMode) {
             buttonBox.getChildren().add(nameBoxRow2);
         }
         buttonBox.getChildren().add(startButton);
@@ -172,15 +172,15 @@ public class PlayerNamesGUI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if (gameMode.equals("standard")) {
-                    LocalBoardGUI gui = new LocalBoardGUI(numberOfPlayers);
-                    Board board = new StandardBoard(numberOfPlayers);
+                    LocalBoardGUI gui = new LocalBoardGUI(fourPlayerMode);
+                    Board board = new StandardBoard(fourPlayerMode);
                     Controller controller = new LocalGameController(gui, board);
                     gui.setController(controller);
                     gui.start(new Stage());
                     stage.close();
                 } else if (gameMode.equals("challenge")) {
-                    LocalBoardGUI gui = new LocalBoardGUI(numberOfPlayers);
-                    Board board = new ChallengeBoard(numberOfPlayers);
+                    LocalBoardGUI gui = new LocalBoardGUI(fourPlayerMode);
+                    Board board = new ChallengeBoard(fourPlayerMode);
                     Controller controller = new LocalGameController(gui, board);
                     gui.setController(controller);
                     gui.start(new Stage());

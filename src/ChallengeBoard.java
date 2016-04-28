@@ -4,11 +4,11 @@ public class ChallengeBoard extends Board {
 
     private WallOwnershipCollection wallOwnershipRecords;
 
-    public ChallengeBoard(int numberOfPlayers) {
-        super("Challenge", numberOfPlayers);
+    public ChallengeBoard(boolean fourPlayerMode) {
+        super("Challenge", fourPlayerMode);
         initialisePlayer1(getPosition(0, 0));
         initialisePlayer2(getPosition(8, 8));
-		if (numberOfPlayers == 4) {
+		if (fourPlayerMode) {
 			initialisePlayer3(getPosition(0, 8));
 			initialisePlayer4(getPosition(8, 0));
 		}

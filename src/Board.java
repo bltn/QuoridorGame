@@ -10,38 +10,26 @@ import java.util.ArrayList;
 
 public abstract class Board {
 
-    // 2D array for Positions
+    // Models a Quoridor board of grids
     private Position positions[][];
-
-    public void setPositions(Position[][] positions) {
-		this.positions = positions;
-	}
-
-	// Positions with walls assigned to them, tracked for a more efficient reset
+	// Positions with non-border walls assigned to them, tracked so they can be reset upon game over
     private ArrayList<Position> walledOffPositions;
 
-    public void setPlayer1(Player player1) {
-		this.player1 = player1;
-	}
-
-	public void setPlayer2(Player player2) {
-		this.player2 = player2;
-	}
-
+    private Player currentPlayer;
 	private Player player1;
     private Player player2;
     private Player player3;
     private Player player4;
 
-    private Player currentPlayer;
-    private int numberOfPlayers;
+    // True: Board models a four player game; false: board models a two player game
+    private boolean fourPlayerMode;
 
     /**
      * Constructor for an object of class Board
      */
-    public Board(String gameMode, int numberOfPlayers) {
+    public Board(String gameMode, boolean fourPlayerMode) {
         walledOffPositions = new ArrayList<Position>();
-        this.numberOfPlayers = numberOfPlayers;
+        this.fourPlayerMode = fourPlayerMode;
         if (gameMode.equals("Challenge")) {
         	initialiseBoardWithChallengeRules();
         } else if (gameMode.equals("Standard")) {
@@ -51,6 +39,10 @@ public abstract class Board {
 
     public void setCurrentPlayer(Player player) {
     	currentPlayer = player;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public Player getPlayer1() {
@@ -93,12 +85,8 @@ public abstract class Board {
         }
     }
 
-    public Player getCurrentPlayer() {
-            return currentPlayer;
-    }
-
     public Player getPreviousPlayer() {
-        if (numberOfPlayers == 2) {
+        if (!fourPlayerMode) {
             if (currentPlayer == player1) {
                 return player2;
             } else {
@@ -121,10 +109,10 @@ public abstract class Board {
         if (currentPlayer == player1) {
             currentPlayer = player2;
         }
-        else if (currentPlayer == player2 && numberOfPlayers == 2) {
+        else if (currentPlayer == player2 && fourPlayerMode) {
             currentPlayer = player1;
         }
-        else if (currentPlayer == player2 && numberOfPlayers == 4) {
+        else if (currentPlayer == player2 && fourPlayerMode) {
             currentPlayer = player3;
         } else if (currentPlayer == player3) {
             currentPlayer = player4;

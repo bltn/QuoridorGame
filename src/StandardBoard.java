@@ -2,11 +2,11 @@ import java.util.ArrayList;
 
 public class StandardBoard extends Board {
 
-    public StandardBoard(int numberOfPlayers) {
-		super("Standard", numberOfPlayers);
+    public StandardBoard(boolean fourPlayerMode) {
+		super("Standard", fourPlayerMode);
 		initialisePlayer1(getPosition(4, 0));
 		initialisePlayer2(getPosition(4, 8));
-		if (numberOfPlayers == 4) {
+		if (fourPlayerMode) {
 			initialisePlayer3(getPosition(0, 4));
 			initialisePlayer4(getPosition(8, 4));
 		}

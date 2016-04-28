@@ -4,9 +4,7 @@ import java.util.PriorityQueue;
 
 public class Utility {
 
-
 	public static int shortestPathLenght(Position[][] grid, Position start, int finish) {
-		//Stack<Position> stack = new Stack();
 		Comparator<Position> comparator = new PositionComparator();
 		PositionComparator.goal=finish;
 		PriorityQueue<Position> queue = new PriorityQueue<Position>(80, comparator);
