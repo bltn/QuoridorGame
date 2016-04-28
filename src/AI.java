@@ -14,7 +14,7 @@ public class AI {
 	private Stack<Position> previousPosPlayer2;
 
         /**
-         * Initialise all the wall moves
+         * Constructor initialise all the wall moves
          */
 
 	public AI(StandardBoard AIBoard) {
@@ -36,7 +36,8 @@ public class AI {
 
 
         /**
-         * Minimax algorithm
+         * Minimax algorithm with alpha-beta pruning 
+         *@return the best move
          */
 
 	public Move Minimax(int depth) {
@@ -71,6 +72,9 @@ public class AI {
 
         /**
          * helper method Min
+         * If depth is 0, pass the board to evaluate method then return the result.
+         * Else loop through all possible moves then call Max method recursively.
+         * @return score of a state with lowest score
          */
 
 	private int Min(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
@@ -111,7 +115,10 @@ public class AI {
 
 
         /**
-         * helper method Max
+         * helper method Max.
+         * If depth is 0, pass the board to evaluate method then return the result.
+         * Else loop through all possible moves then call Min method recursively.
+         * @return score of the state with the highest score
          */
 
 	private int Max(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
@@ -169,7 +176,7 @@ public class AI {
 	}
 
         /**
-         * check if the move is valid
+         * check if a move is valid
          */
 
 	public boolean isValid(StandardBoard board, Move move) {
@@ -254,7 +261,7 @@ public class AI {
 	}
 
         /**
-         * return list of possible pawn moves
+         * return a list of possible pawn moves
          */
 
 	public ArrayList<Move> PossiblePawnMoves(StandardBoard currentBoard) {
@@ -269,7 +276,7 @@ public class AI {
 	}
         
         /**
-         * return list of possible wall moves
+         * return a list of possible wall moves
          */
 
 	public ArrayList<Move> PossibleMoves(StandardBoard currentBoard) {
@@ -285,7 +292,7 @@ public class AI {
 
 
         /**
-         * method that devide which move to make when the AI has no wall
+         * method decides which move to make when the AI has no wall
          */
 
 	public Move MoveNoWalls() {
