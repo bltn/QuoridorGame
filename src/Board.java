@@ -159,19 +159,25 @@ public abstract class Board {
      * Should be called after a player makes a (successful) move
      */
     public void switchPlayer() {
-        if (currentPlayer == player1) {
-            currentPlayer = player2;
-        }
-        else if (currentPlayer == player2 && fourPlayerMode) {
-            currentPlayer = player1;
-        }
-        else if (currentPlayer == player2 && fourPlayerMode) {
-            currentPlayer = player3;
-        } else if (currentPlayer == player3) {
-            currentPlayer = player4;
-        }
-        else if (currentPlayer == player4) {
-            currentPlayer = player1;
+        if (!fourPlayerMode) { // two player mode
+        	if (currentPlayer == player1) {
+        		currentPlayer = player2;
+        	} else {
+        		currentPlayer = player1;
+        	}
+        } else { // four player mode
+        	if (currentPlayer == player1) {
+        		currentPlayer = player2;
+        	}
+        	else if (currentPlayer == player2) {
+        		currentPlayer = player3;
+        	}
+        	else if (currentPlayer == player3) {
+        		currentPlayer = player4;
+        	}
+        	else if (currentPlayer == player4) {
+        		currentPlayer = player1;
+        	}
         }
     }
 
