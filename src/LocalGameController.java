@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Junaid Rasheed
  * @author Jordan Bird
  */
-public class LocalGameController implements Controller {
+public class LocalGameController<T> implements Controller {
 
     // The game board and its positions' logic
     private Board board;
