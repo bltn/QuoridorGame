@@ -73,7 +73,7 @@ public class AI {
         /**
          * helper method Min
          * If depth is 0, pass the board to evaluate method then return the result.
-         * Else loop through all possible moves then call Max method recursively.
+         * Else loop through all possible moves then call Max method.
          * @return score of a state with lowest score
          */
 
@@ -117,7 +117,7 @@ public class AI {
         /**
          * helper method Max.
          * If depth is 0, pass the board to evaluate method then return the result.
-         * Else loop through all possible moves then call Min method recursively.
+         * Else loop through all possible moves then call Min method.
          * @return score of the state with the highest score
          */
 
