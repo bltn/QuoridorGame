@@ -207,7 +207,7 @@ public class AI {
 			int topLeftY = move.getY();
 
 			Position topLeft = Board.getPosition(topLeftX, topLeftY);
-			Board.unassignWalls(topLeft, move.getOrientation());
+			Board.removeWalls(topLeft, move.getOrientation());
 			Board.switchPlayer();
 		}
 

@@ -15,6 +15,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+/**
+ * PlayerNamesGUI is used to draw a GUI which allows a player to enter their names.
+ * The GUI is shown before the game is started and when a player has finished
+ * entering their names, this GUI is closed and the game starts. This class also
+ * extends the Application class from JavaFX.
+ *
+ * @author Junaid Ali Rasheed
+ */
 public class PlayerNamesGUI extends Application {
 
     private Scene scene;

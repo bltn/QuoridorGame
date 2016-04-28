@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * WallOwnerShip collection stores every WallOwnershipRecord into an ArrayList. It allows
+ * you to add and remove records and retrieve the size of a record. You can also retrieve
+ * a record from a given position
+ *
+ * @author Ben Lawton
+ */
 public class WallOwnershipCollection {
 
 	private ArrayList<WallOwnershipRecord> ownershipRecords;
@@ -30,6 +37,12 @@ public class WallOwnershipCollection {
 		}
 	}
 
+	/**
+	 * Get the wall ownership record for a specified position
+	 * @param x The X coordinate to the top left of the wall
+	 * @param y The Y coordinate to the top left of the wall
+     * @return The ownership record for the wall
+     */
 	public WallOwnershipRecord getRecordByCoordinates(int x, int y) {
 		WallOwnershipRecord ownershipRecord = null;
 		for (WallOwnershipRecord record : this.ownershipRecords) {

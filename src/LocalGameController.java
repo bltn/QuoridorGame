@@ -2,13 +2,29 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LocalGameController<T> implements Controller {
+/**
+ * LocalGameController acts as the controller object for a game being played locally.
+ * It updates the backend when a move is made in the frontend and updates the frontend
+ * after changes in the backend have been performed. It also implements the Controller
+ * interface.
+ *
+ * @author Ben Lawton
+ * @author Khadija Patel
+ * @author Junaid Rasheed
+ * @author Jordan Bird
+ */
+public class LocalGameController implements Controller {
 
     // The game board and its positions' logic
     private Board board;
     // GUI (View) representing the game board
     private GUI gui;
 
+	/**
+	 * Create a LocalGameController object and link it to a board and a gui object
+	 * @param gui The GUI object to link to the controller
+	 * @param board The Board object to link to the controller
+     */
     public LocalGameController(GUI gui, Board board) {
         this.board = board;
         this.gui = gui;
@@ -32,6 +48,13 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
+	/**
+	 * Place a wall in the board class then update the GUI
+	 * @param topLeftX The X position to the top left of the wall
+	 * @param topLeftY The Y position to the top left of the wall
+	 * @param orientation Whether the wall is horizontal or vertical
+	 * @param playerID The ID of the player that placed the wall
+     */
     public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	try {
     		board.placeWalls(topLeftX, topLeftY, orientation);
@@ -44,6 +67,13 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
+	/**
+	 * Remove a wall in the board class then update the GUI
+	 * @param topLeftX The X position to the top left of the wall
+	 * @param topLeftY The Y position to the top left of the wall
+	 * @param orientation Whether the wall is horizontal or vertical
+	 * @param playerID The ID of the player that removed the wall
+     */
     public void removeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
     	if (this.board instanceof ChallengeBoard) {
     		boolean wallsRemoved = ((ChallengeBoard) board).removeWalls(topLeftX, topLeftY, orientation);
@@ -58,6 +88,12 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
+	/**
+	 * Move a pawn in the board class then update the GUI
+	 * @param posX The X coordinate to move the pawn to
+	 * @param posY The Y coordinate to move the pawn to
+	 * @param playerID The ID of the player to move
+     */
     public void movePawn(int posX, int posY, int playerID) {
     	try {
 			int currentPlayerID = board.getCurrentPlayer().getID();
@@ -85,6 +121,9 @@ public class LocalGameController<T> implements Controller {
     	}
     }
 
+	/**
+	 * Reset the game in the board class then update the GUI
+	 */
     public void resetGame() {
     	Player player1 = board.getPlayer1();
     	Player player2 = board.getPlayer2();

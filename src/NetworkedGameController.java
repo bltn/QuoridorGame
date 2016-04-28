@@ -1,6 +1,15 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * NetworkedGameController acts as the controller object for a game being played on a
+ * network. It updates the backend when a move is made in the frontend and updates
+ * the frontend after changes in the backend have been performed.
+ * It also implements the Controller interface.
+ *
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ */
 public class NetworkedGameController implements Controller {
 
 	private ClientSocketIOThread player1IO;
@@ -59,6 +68,9 @@ public class NetworkedGameController implements Controller {
 		return board.getCurrentPlayer();
 	}
 
+	/**
+	 * Get the available positions a player can move into and then highlight them in the GUI
+	 */
 	@Override
 	public void showCurrentPlayerMoves() {
 		ArrayList<Position> availablePositions = board.getCurrentPlayerOccupiablePositions();
@@ -76,6 +88,13 @@ public class NetworkedGameController implements Controller {
     	}
 	}
 
+	/**
+	 * Place a wall in the board class then update the GUI
+	 * @param topLeftX The position to the top left of the wall
+	 * @param topLeftY The position to the top right of the wall
+	 * @param orientation Whether the wall is horizontal or vertical
+	 * @param playerID The ID of the player that placed the wall
+	 */
 	public void placeWall(int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
 		if (board.getCurrentPlayer().getID() == playerID) {
 			try {
@@ -151,6 +170,12 @@ public class NetworkedGameController implements Controller {
 	@Override
 	public int getPlayer4Y() { return board.getPlayer4().getPosition().getY(); }
 
+	/**
+	 * Move a pawn in the board class then update the GUI
+	 * @param posX The X coordinate to move the pawn to
+	 * @param posY The Y coordinate to move the pawn to
+	 * @param playerID The ID of the player to move
+	 */
 	public void movePawn(int posX, int posY, int playerID) {
 		if (playerID == board.getCurrentPlayer().getID()) {
 			try {
@@ -213,6 +238,13 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
+	/**
+	 * Remove a wall in the board class then update the GUI
+	 * @param topLeftX The position to the top left of the wall
+	 * @param topLeftY The position to the top right of the wall
+	 * @param orientation Whether the wall is horizontal or vertical
+	 * @param playerID The ID of the player that removed the wall
+	 */
 	public void removeWall (int topLeftX, int topLeftY, WallPlacement orientation, int playerID) {
 		if (board.getCurrentPlayer().getID() == playerID) {
 			if (this.board instanceof ChallengeBoard) {
@@ -248,6 +280,9 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
+	/**
+	 * Reset the game in the board class then update the GUI
+	 */
 	public void resetGame() {
         Player player1 = board.getPlayer1();
         Player player2 = board.getPlayer2();
@@ -302,6 +337,12 @@ public class NetworkedGameController implements Controller {
 		}
     }
 
+	/**
+	 * Send an update to each player to remove a wall
+	 * @param topLeftX The top left X coordinate of the wall to remove
+	 * @param topLeftY The top left Y coordinate of the wall to remove
+	 * @param orientation Whether the wall is horizontal or vertical
+     */
 	private void sendWallRemovalUpdate(int topLeftX, int topLeftY, WallPlacement orientation) {
 
 		player1IO.sendRemoveWallDisplay(topLeftX, topLeftY, orientation);
@@ -347,6 +388,12 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
+	/**
+	 * Send an update to each player to place a wall
+	 * @param topLeftX The X coordinate to the top left of the wall
+	 * @param topLeftY The Y coordinate to the top left of the wall
+	 * @param orientation Whether the wall is horizontal or vertical
+     */
 	private void sendWallUpdate(int topLeftX, int topLeftY, WallPlacement orientation) {
         player1IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
         player2IO.sendWallUpdate(topLeftX, topLeftY, orientation, board.getPreviousPlayer().getID());
@@ -371,6 +418,10 @@ public class NetworkedGameController implements Controller {
 		}
 	}
 
+	/**
+	 * Send an update to each player to move a pawn
+	 * @param prevPlayer The position of the player whose pawn has moved
+     */
     private void sendPawnUpdate(Player prevPlayer) {
         player1IO.sendPawnUpdate(prevPlayer.getPosition().getX(), prevPlayer.getPosition().getY(), prevPlayer.getID());
         player1IO.sendStatsUpdate(prevPlayer.getMoveCount(), prevPlayer.getWallCount(), prevPlayer.getID());
