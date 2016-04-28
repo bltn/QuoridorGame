@@ -1,3 +1,10 @@
+/**
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ *
+ * High-level contract for controllers (C) in the application's MVC architecture
+ */
+
 
 public interface Controller {
 

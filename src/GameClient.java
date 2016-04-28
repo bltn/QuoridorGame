@@ -6,20 +6,36 @@ import java.net.Socket;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
+/**
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ *
+ * Thread dedicated to interacting with the game server. Responsibilities:
+ *
+ * - Listening for/parsing input from the server
+ * - Sending input to the server
+ * - Updating the GUI based on input received from the server
+ */
+
 public class GameClient extends Thread {
 
+	// Game server socket
 	private Socket serverSocket;
 
+	// Server socket input/output
 	private PrintWriter out;
 	private BufferedReader in;
 
 	private NetworkedBoardGUI gui;
 
+	// Flagged by the server to say whether or not the Board GUI can (should) be launched
 	private boolean guiCanBeLaunched;
+	// Flag to let the game server know whether or not the Board GUI has been launched
 	private boolean guiIsLaunched;
 
+	// ID belonging to the client's player; player 1's ID would be, well... 1
 	private int playerID;
-	private boolean idIsAssigned;
+	private boolean IDIsAssigned;
 
     private Alert alert;
 
@@ -27,7 +43,7 @@ public class GameClient extends Thread {
 		this.gui = (NetworkedBoardGUI) gui;
 		guiCanBeLaunched = false;
 		guiIsLaunched = false;
-		idIsAssigned = false;
+		IDIsAssigned = false;
         alert = new Alert(Alert.AlertType.CONFIRMATION, "");
 	}
 
@@ -38,9 +54,9 @@ public class GameClient extends Thread {
 	}
 
 	public void setPlayerID(int id) {
-		if (!idIsAssigned) {
+		if (!IDIsAssigned) {
 			this.playerID = id;
-			idIsAssigned = true;
+			IDIsAssigned = true;
 		}
 	}
 
@@ -63,6 +79,7 @@ public class GameClient extends Thread {
 				out = new PrintWriter(serverSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 				initThread();
+				SystemLogger.logInfo("Connected to server");
                 showAlert("Connected to server");
 			} catch (Exception e) {
 				SystemLogger.logError(e.getMessage());
@@ -71,35 +88,7 @@ public class GameClient extends Thread {
 		}
 	}
 
-	public void sendMove(int x, int y) {
-		out.println("move " + x + " " + y + " " + playerID);
-	}
-
-	public void sendWallMove(int topLeftX, int topLeftY, WallPlacement orientation) {
-		out.println("wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
-	}
-
-	public void sendWallRemoval(int topLeftX, int topLeftY, WallPlacement orientation) {
-
-		out.println("remove-wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
-	}
-
-	public void requestCurrentPlayerAvailableMoves() {
-		out.println("available");
-	}
-
-	public void requestInitialPlayerPawnPositions() {
-		out.println("start-coordinates");
-	}
-
-	public boolean guiIsLaunched() {
-		return guiIsLaunched;
-	}
-
-	public void setGUILaunched(boolean booted) {
-		this.guiIsLaunched = booted;
-	}
-
+	// Listen for and parse input from the server
 	public void listenForServerInput() {
 		String fromServer;
 
@@ -168,6 +157,35 @@ public class GameClient extends Thread {
 		} catch (Exception e) {
 			SystemLogger.logError(e.getMessage());
 		}
+	}
+
+	public void sendMove(int x, int y) {
+		out.println("move " + x + " " + y + " " + playerID);
+	}
+
+	public void sendWallMove(int topLeftX, int topLeftY, WallPlacement orientation) {
+		out.println("wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
+	}
+
+	public void sendWallRemoval(int topLeftX, int topLeftY, WallPlacement orientation) {
+
+		out.println("remove-wall " + topLeftX + " " + topLeftY + " " + orientation + " " + playerID);
+	}
+
+	public void requestCurrentPlayerAvailableMoves() {
+		out.println("available");
+	}
+
+	public void requestInitialPlayerPawnPositions() {
+		out.println("start-coordinates");
+	}
+
+	public boolean guiIsLaunched() {
+		return guiIsLaunched;
+	}
+
+	public void setGUILaunched(boolean booted) {
+		this.guiIsLaunched = booted;
 	}
 
 	private void removeWallDisplay(String[] commands) {

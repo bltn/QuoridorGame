@@ -1,8 +1,6 @@
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Set;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +24,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+/**
+ * @author Ben Lawton
+ * @author Khadija Patel
+ * @author Junaid Rasheed
+ *
+ * GUI for setting up a networked game. Game hosts use it to set up the game server for other players to connect to,
+ * while players use it to connect to games in the same LAN.
+ */
 
 public class ConnectionGUI extends Application {
 
@@ -166,18 +173,22 @@ public class ConnectionGUI extends Application {
             	GameServer server;
 				IPAddress = IPAddressField.getText();
 				portNumber = Integer.parseInt(portField.getText());
-            	if (mode.equals(Translate.twoPlayerChallenge())) {
+            	// Create a two player (challenge rules) game server instance
+				if (mode.equals(Translate.twoPlayerChallenge())) {
             		server = new GameServer(new NetworkedGameController(new ChallengeBoard(false)), 2);
 					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
+					// Create a two player (challenge rules) game server instance
             	} else if (mode.equals(Translate.twoPlayerStandard())){
             		server = new GameServer(new NetworkedGameController(new StandardBoard(false)), 2);
 					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(false, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
+					// Create a four player (standard rules) game server instance
             	} else if (mode.equals(Translate.fourPlayerStandard())) {
 					server = new GameServer(new NetworkedGameController(new StandardBoard(true)), 4);
 					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "multiplayer", server, IPAddress, portNumber);
 					playerNamesGUI.start(new Stage());
+					// Create a four player (challenge rules) game server instance
 				} else {
 					server = new GameServer(new NetworkedGameController(new ChallengeBoard(true)), 4);
 					PlayerNamesGUI playerNamesGUI = new PlayerNamesGUI(true, "multiplayer", server, IPAddress, portNumber);
@@ -197,6 +208,7 @@ public class ConnectionGUI extends Application {
                 client.connectToServer(IPAddress, portNumber);
                 while (client.guiIsLaunched() == false) {
                 	try {
+                		// give client threads time to catch up, else they might not all initialise a BoardGUI
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						SystemLogger.logError(e.getMessage());
@@ -220,6 +232,7 @@ public class ConnectionGUI extends Application {
 				client.connectToServer(IPAddress, portNumber);
 				while (client.guiIsLaunched() == false) {
 					try {
+						// give client threads time to catch up, else they might not all initialise a BoardGUI
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						SystemLogger.logError(e.getMessage());
@@ -252,7 +265,7 @@ public class ConnectionGUI extends Application {
 
 	private String askForGameMode() {
 		String mode = null;
-		ArrayList<String> choices = new ArrayList();
+		ArrayList<String> choices = new ArrayList<String>();
 		choices.add(Translate.twoPlayerStandard());
 		choices.add(Translate.twoPlayerChallenge());
 		choices.add(Translate.fourPlayerStandard());

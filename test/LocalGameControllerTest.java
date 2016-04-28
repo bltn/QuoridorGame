@@ -11,7 +11,7 @@ public class LocalGameControllerTest {
 
 	@Before
 	public void setup() {
-		board = new StandardBoard(2);
+		board = new StandardBoard(false);
 		gui = new GUIMock();
 		controller = new LocalGameController<>(gui, board);
 		gui.setController(controller);
@@ -19,7 +19,7 @@ public class LocalGameControllerTest {
 
 	@Test
 	public void removeWallTest() {
-		board = new ChallengeBoard(2);
+		board = new ChallengeBoard(false);
 
 		int player1InitialWallCount = board.getPlayer1().getWallCount();
 		int player2InitialMoveCount = board.getPlayer2().getMoveCount();

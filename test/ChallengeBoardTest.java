@@ -13,7 +13,7 @@ public class ChallengeBoardTest {
 
 	@Before
 	public void setUp() {
-		board = new ChallengeBoard(2);
+		board = new ChallengeBoard(false);
 		player1 = board.getPlayer1();
 		player2 = board.getPlayer2();
 	}

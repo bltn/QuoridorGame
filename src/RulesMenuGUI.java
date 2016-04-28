@@ -37,7 +37,6 @@ public class RulesMenuGUI extends Application {
     private HBox standardButtonBox;
     private HBox challengeButtonBox;
     private HBox practiseButtonBox;
-    private Button startButton;
     private HBox quitButtonBox;
     private Button backButton;
     private Button quitButton;

@@ -4,10 +4,21 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
+/**
+ * @author Ben Lawton
+ * @author Junaid Rasheed
+ *
+ * Similar to the service a web server provides. It owns the client input/output threads, and acts as the "organiser" for
+ * interactions between the application controller, the client I/O threads and the ServerSocket.
+ *
+ *
+ */
+
 public class GameServer {
 
 	private ServerSocket serverSocket;
 
+	// Dedicated threads for I/O with their own client
 	private ClientSocketIOThread player1IOThread;
 	private ClientSocketIOThread player2IOThread;
 	private ClientSocketIOThread player3IOThread;
@@ -37,6 +48,11 @@ public class GameServer {
 		}
 	}
 
+	/**
+	 * Listen for client socket connection requests. When received, initialise a dedicated I/O thread
+	 * for interacting with the client socket. Responsible for booting up the game application when n
+	 * requests are received, where n is the appropriate number of players to join a game
+	 */
 	public void listenForConnectionRequests() {
 		try {
             showAlert("Waiting for players to join");
@@ -68,8 +84,6 @@ public class GameServer {
 				}
 				socketCount++;
 			}
-			player1IOThread.setSisterSocket(player2IOThread.getSocket());
-			player2IOThread.setSisterSocket(player1IOThread.getSocket());
 			controller.setPlayer1IO(player1IOThread);
 			controller.setPlayer2IO(player2IOThread);
 			initThreads();

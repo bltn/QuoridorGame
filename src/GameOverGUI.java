@@ -23,6 +23,12 @@ import static javafx.application.Application.launch;
 
 import javax.sound.midi.SysexMessage;
 
+/**
+ * @author Khadija Patel
+ * @author Junaid Rasheed
+ * @author Ben Lawton
+ */
+
 public class GameOverGUI extends Application {
 
     private Scene scene;

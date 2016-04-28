@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
+/**
+ * @author Thai Hoang
+ */
+
 public class AI {
 
 	private StandardBoard AIBoard;
