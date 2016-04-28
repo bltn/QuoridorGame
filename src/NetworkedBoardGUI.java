@@ -417,8 +417,6 @@ public class NetworkedBoardGUI extends Application implements GUI {
             	player3Title.setFill(Color.BLACK);
             	player4Title.setFill(Color.BLACK);
         	}
-        	player3Title.setFill(Color.BLACK);
-        	player4Title.setFill(Color.BLACK);
         } else if (playerID == 3) {
         	player1Title.setFill(Color.BLACK);
         	player2Title.setFill(Color.BLACK);
