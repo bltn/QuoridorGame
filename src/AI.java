@@ -13,6 +13,10 @@ public class AI {
 	private Stack<Position> previousPosPlayer1;
 	private Stack<Position> previousPosPlayer2;
 
+        /**
+         * Initialise all the wall moves
+         */
+
 	public AI(StandardBoard AIBoard) {
 		this.AIBoard = AIBoard;
 		PossibleWallMoves = new ArrayList<Move>(128);
@@ -29,6 +33,11 @@ public class AI {
 		previousPosPlayer2 = new Stack<Position>();
 
 	}
+
+
+        /**
+         * Minimax algorithm
+         */
 
 	public Move Minimax(int depth) {
 		int highestScore = -99999999;
@@ -57,6 +66,12 @@ public class AI {
 		}
 		return bestMove;
 	}
+
+
+
+        /**
+         * helper method Min
+         */
 
 	private int Min(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
@@ -94,6 +109,11 @@ public class AI {
 
 	}
 
+
+        /**
+         * helper method Max
+         */
+
 	private int Max(int PlayerLenght, int AILength, StandardBoard board, int a, int b, int depth) {
 		if (depth == 0) {
 			if (AILength == 0) {
@@ -130,6 +150,10 @@ public class AI {
 		return highestScore;
 	}
 
+        /**
+         * Evaluation functions
+         */
+        
 	private int evaluate(int PlayerLenght, int AILength, Board board) {
 
 		int AIManhata = board.getPlayer2().getPosition().getY() - 0;
@@ -143,6 +167,10 @@ public class AI {
 		int AILength = Utility.shortestPathLenght(board.getPositions(), board.getPlayer2().getPosition(), 0);
 		return -25 * AILength;
 	}
+
+        /**
+         * check if the move is valid
+         */
 
 	public boolean isValid(StandardBoard board, Move move) {
 		boolean valid = true;
@@ -167,6 +195,10 @@ public class AI {
 		}
 		return valid;
 	}
+        
+        /**
+         * helper method apply move to the board
+         */
 
 	private void move(StandardBoard Board, Move move) {
 
@@ -190,6 +222,10 @@ public class AI {
 		}
 
 	}
+
+        /**
+         * helper method unapply move to the board
+         */
 
 	private void unmove(StandardBoard Board, Move move) {
 
@@ -217,6 +253,10 @@ public class AI {
 
 	}
 
+        /**
+         * return list of possible pawn moves
+         */
+
 	public ArrayList<Move> PossiblePawnMoves(StandardBoard currentBoard) {
 		ArrayList<Move> PossiblePawnMoves = new ArrayList<Move>(5);
 		ArrayList<Position> availablePositions = currentBoard.getCurrentPlayerOccupiablePositions();
@@ -227,6 +267,10 @@ public class AI {
 		}
 		return PossiblePawnMoves;
 	}
+        
+        /**
+         * return list of possible wall moves
+         */
 
 	public ArrayList<Move> PossibleMoves(StandardBoard currentBoard) {
 		ArrayList<Move> PossibleMoves = new ArrayList<Move>(132);
@@ -238,6 +282,11 @@ public class AI {
 	public ArrayList<Move> PossibleWallMoves() {
 		return PossibleWallMoves;
 	}
+
+
+        /**
+         * method that devide which move to make when the AI has no wall
+         */
 
 	public Move MoveNoWalls() {
 		int highestScore = -99999999;
