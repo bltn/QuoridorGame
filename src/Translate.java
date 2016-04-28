@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -67,33 +68,32 @@ public class Translate {
 	public static void setLanguage(String language) {
 		switch (language) {
 			case "English": {
-				filePath = "src/lang/English.txt";
+				filePath = "/lang/English.txt";
 				break;
 			}
 			case "French": {
-				filePath = "src/lang/French.txt";
+				filePath = "/lang/French.txt";
 				break;
 			}
 			case "Spanish": {
-				filePath = "src/lang/Spanish.txt";
+				filePath = "/lang/Spanish.txt";
 				break;
 			}
 			case "Chinese": {
-				filePath = "src/lang/Chinese.txt";
+				filePath = "/lang/Chinese.txt";
 				break;
 			}
 			default: {
-				filePath = "src/lang/English.txt";
+				filePath = "/lang/English.txt";
 				break;
 			}
 		}
 
 		// Read the translations and store them in a variable associated with
 		// the english meaning for a translation
-		FileInputStream fs;
 		try {
-			fs = new FileInputStream(filePath);
-			br = new BufferedReader(new InputStreamReader(fs));
+			InputStream in = Translate.class.getResourceAsStream(filePath);
+			br = new BufferedReader(new InputStreamReader(in));
 			start = br.readLine();
 			multiplayer = br.readLine();
 			quit = br.readLine();
